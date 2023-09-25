@@ -1,0 +1,34 @@
+Combatant {
+    Attack () {
+        Animator.Play(Animations.Swing).OnAnimationEnd(() => {
+            Enemy.Damage(10);
+        })
+    }
+
+    Attack () {
+        Animator.Play(Animations.Swing.OnEnd(() => {
+            Enemy.Damage(10);
+        })))
+    }
+
+    Attack () {
+        Animator.Play(Animations.Swing);
+        Animations.Swing.Frames[2].OnEnd(() => {
+            Enemy.Damage(10);
+        });
+    }
+
+    vvv THIS ONE vvv
+    Attack () {
+        Animator.Play(Animations.Swing)
+            .Frames[2].OnEnd(() => {
+                Enemy.Damage(5);
+            })
+            .Frames[3].OnEnd(() => {
+                Enemy.Damage(5);
+            })
+            .OnEnd(() => {
+                Enemy.Damage(1);
+            })
+    }
+}

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://cem47bjg5lp8o"]
+
+[ext_resource type="Texture2D" uid="uid://dqblkshaj8xg0" path="res://tobi/animations/idle/frames/texture_0.png" id="1_hawth"]
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimationFrame.cs" id="2_sc4gf"]
+
+[resource]
+script = ExtResource("2_sc4gf")
+Duration = 150.0
+Texture = ExtResource("1_hawth")

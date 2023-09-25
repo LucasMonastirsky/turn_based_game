@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Godot;
+
+namespace Combat {
+    public class DiceRoll {
+        public int Amount, Size;
+        public DiceRoll (int amount, int size) {
+            this.Amount = amount;
+            this.Size = size;
+        }
+    }
+
+    public class Roll {
+        public class Result {
+            public int DiceResult;
+            public int Bonus;
+            public int Total { get => DiceResult + Bonus; }
+
+            public Result () {}
+
+            public Result (int dice_result, int bonus) {
+                DiceResult = dice_result;
+                Bonus = bonus;
+            }
+
+            public override string ToString() {
+                return $"{Total} ({DiceResult}+{Bonus})";
+            }
+        }
+
+        public string[] Tags;
+        public DiceRoll[] DiceRolls;
+        public int Advantage = 0, Bonus = 0;
+
+        public Roll (DiceRoll dice_roll, string[] tags) {
+            DiceRolls = new DiceRoll[] { dice_roll };
+            Tags = tags;
+        }
+
+        public Roll (DiceRoll[] dice_rolls, string[] tags) {
+            DiceRolls = dice_rolls;
+            Tags = tags;
+        }
+
+        public Result Calculate () {
+            var random = new RandomNumberGenerator();
+            random.Randomize();
+
+            int sum = 0;
+
+            foreach (var dice_roll in DiceRolls) {
+                for (int i = 0; i < dice_roll.Amount; i++) {
+                    if (Advantage == 0){
+                        sum += random.RandiRange(1, dice_roll.Size);
+                    }
+                    else {
+                        var absolute = Math.Abs(Advantage);
+                        var rolls = new int[absolute];
+                        for (var j = 0; j < absolute; i++) {
+                            rolls[j] = random.RandiRange(1, dice_roll.Size);
+                        }
+                        if (Advantage > 0) sum += rolls.Max();
+                        else sum += rolls.Min();
+                    }
+                }
+            }
+
+            return new Result(sum, Bonus);
+        }
+    }
+}

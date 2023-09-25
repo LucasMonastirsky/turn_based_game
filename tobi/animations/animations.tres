@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://d14wktoihjppf"]
+
+[ext_resource type="Resource" uid="uid://do03y1gboaeqi" path="res://tobi/animations/hurt/animation.tres" id="1_nlxkr"]
+[ext_resource type="Resource" uid="uid://cbr54n2cyueue" path="res://tobi/animations/idle/animation.tres" id="2_n7yxd"]
+[ext_resource type="Script" path="res://tobi/TobiAnimations.cs" id="3_7ytl2"]
+
+[resource]
+script = ExtResource("3_7ytl2")
+Idle = ExtResource("2_n7yxd")
+Hurt = ExtResource("1_nlxkr")

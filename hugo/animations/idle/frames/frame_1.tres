@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://ciqd2ukjbrchu"]
+
+[ext_resource type="Texture2D" uid="uid://drdfh00farvq6" path="res://hugo/animations/idle/frames/texture_1.png" id="1_fqi68"]
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimationFrame.cs" id="2_t03pm"]
+
+[resource]
+script = ExtResource("2_t03pm")
+Duration = 114.245
+Texture = ExtResource("1_fqi68")

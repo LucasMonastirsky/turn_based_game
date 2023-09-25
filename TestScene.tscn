@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://dnalyaw5laeeg"]
+
+[ext_resource type="PackedScene" uid="uid://bjhowdf0435l2" path="res://hugo/Hugo.tscn" id="1_2nlix"]
+[ext_resource type="Script" path="res://scripts/combat/Battle.cs" id="1_au6c8"]
+[ext_resource type="PackedScene" uid="uid://cc8a6opl23ahh" path="res://tobi/Tobi.tscn" id="2_1tv3w"]
+[ext_resource type="Script" path="res://scripts/combat/controllers/KeyboardController.cs" id="4_qebrv"]
+
+[node name="TestScene" type="Node2D"]
+scale = Vector2(4.015, 4.015)
+script = ExtResource("1_au6c8")
+
+[node name="Hugo" parent="." instance=ExtResource("1_2nlix")]
+position = Vector2(27.6463, 30.3861)
+
+[node name="Tobi" parent="." instance=ExtResource("2_1tv3w")]
+position = Vector2(81.6936, 29.6389)
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("4_qebrv")

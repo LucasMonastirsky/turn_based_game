@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://qqqi1ejn4yjj"]
+
+[ext_resource type="Resource" uid="uid://bax6vfj4ikfv7" path="res://hugo/animations/swing/frames/frame_0.tres" id="1_mswsx"]
+[ext_resource type="Resource" uid="uid://cia2vvks4hbrv" path="res://hugo/animations/swing/frames/frame_1.tres" id="2_638v2"]
+[ext_resource type="Resource" uid="uid://dxlf8dctogfar" path="res://hugo/animations/swing/frames/frame_2.tres" id="3_t7mi8"]
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimation.cs" id="4_bvcfo"]
+
+[resource]
+script = ExtResource("4_bvcfo")
+Name = "Swing"
+IsLoop = false
+Frames = [ExtResource("1_mswsx"), ExtResource("2_638v2"), ExtResource("3_t7mi8")]

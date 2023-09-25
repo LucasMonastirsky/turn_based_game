@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://dx7mcvotacj5o"]
+
+[ext_resource type="Resource" uid="uid://bliawgrs18em5" path="res://hugo/animations/idle/frames/frame_0.tres" id="1_uf1o4"]
+[ext_resource type="Resource" uid="uid://ciqd2ukjbrchu" path="res://hugo/animations/idle/frames/frame_1.tres" id="2_ccqio"]
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimation.cs" id="3_l12wm"]
+
+[resource]
+script = ExtResource("3_l12wm")
+Name = "Idle"
+IsLoop = true
+Frames = [ExtResource("1_uf1o4"), ExtResource("2_ccqio")]

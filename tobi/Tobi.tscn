@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cc8a6opl23ahh"]
+
+[ext_resource type="Script" path="res://tobi/Tobi.cs" id="1_bfw76"]
+[ext_resource type="Resource" uid="uid://d14wktoihjppf" path="res://tobi/animations/animations.tres" id="2_074nt"]
+[ext_resource type="PackedScene" uid="uid://q4ltehv7dfhb" path="res://scripts/combat/animation/CombatAnimator.tscn" id="3_ryk5e"]
+
+[node name="Tobi" type="Node2D"]
+script = ExtResource("1_bfw76")
+Animations = ExtResource("2_074nt")
+
+[node name="Animator" parent="." instance=ExtResource("3_ryk5e")]

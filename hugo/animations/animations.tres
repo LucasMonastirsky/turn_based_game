@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://bhj7urv688mo7"]
+
+[ext_resource type="Resource" uid="uid://dx7mcvotacj5o" path="res://hugo/animations/idle/animation.tres" id="1_77ik8"]
+[ext_resource type="Resource" uid="uid://qqqi1ejn4yjj" path="res://hugo/animations/swing/animation.tres" id="2_ucs7r"]
+[ext_resource type="Script" path="res://hugo/HugoAnimationStore.cs" id="3_piixn"]
+
+[resource]
+script = ExtResource("3_piixn")
+Idle = ExtResource("1_77ik8")
+Swing = ExtResource("2_ucs7r")

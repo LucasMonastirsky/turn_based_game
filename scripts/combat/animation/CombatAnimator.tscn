@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://q4ltehv7dfhb"]
+
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimator.cs" id="1_mmtmo"]
+
+[node name="Animator" type="Sprite2D"]
+script = ExtResource("1_mmtmo")
