@@ -60,6 +60,7 @@ namespace Combat {
 		}
 
 		public EventManager Play (CombatAnimation animation) {
+			Dev.Log(Dev.TAG.ANIMATION, "Playing animation: " + animation.Name);
 			if (animation == null) {
 				Dev.Error($"Received null animation in animator of {GetParent()?.Name}");
 				return null; // bad practice

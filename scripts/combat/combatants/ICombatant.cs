@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 namespace Combat {
@@ -15,5 +16,6 @@ namespace Combat {
         public abstract Row Row { get; set; }
 
         public abstract int Damage (int value, string[] tags);
+        public abstract void ReceiveAttack (AttackResult attack_result);
     }
 }

@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 project/assembly_name="Turn Based Game"
 
+[filesystem]
+
+import/blender/enabled=false
+import/fbx/enabled=false
+
 [input]
 
 Test1={

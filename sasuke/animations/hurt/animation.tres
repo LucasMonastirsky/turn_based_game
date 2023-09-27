@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://3bsf2qpbx3gd"]
+
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimation.cs" id="1_53g33"]
+[ext_resource type="Resource" uid="uid://252dc7r4f7ih" path="res://sasuke/animations/hurt/frames/frame_0.tres" id="1_nt36k"]
+
+[resource]
+script = ExtResource("1_53g33")
+Name = "Hurt"
+IsLoop = false
+Frames = [ExtResource("1_nt36k")]

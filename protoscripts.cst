@@ -1,34 +1,22 @@
-Combatant {
-    Attack () {
-        Animator.Play(Animations.Swing).OnAnimationEnd(() => {
-            Enemy.Damage(10);
-        })
+swing () {
+    user.Play(user.Animations.Swing)
+    .Frames[1].OnEnd(() => {
+        if (await target.Attack().Success) target.Damage(10);
+
+        
+    })
+}
+
+StandardCombatant user;
+await user.StandardAttack(target, attack_data)
+user.ReturnToRow()
+
+public void StandardAttack (ICombatant target) {
+    var result = target.Defend(user)
+
+    if (result.hit) {
+        target.Damage(10)
     }
 
-    Attack () {
-        Animator.Play(Animations.Swing.OnEnd(() => {
-            Enemy.Damage(10);
-        })))
-    }
-
-    Attack () {
-        Animator.Play(Animations.Swing);
-        Animations.Swing.Frames[2].OnEnd(() => {
-            Enemy.Damage(10);
-        });
-    }
-
-    vvv THIS ONE vvv
-    Attack () {
-        Animator.Play(Animations.Swing)
-            .Frames[2].OnEnd(() => {
-                Enemy.Damage(5);
-            })
-            .Frames[3].OnEnd(() => {
-                Enemy.Damage(5);
-            })
-            .OnEnd(() => {
-                Enemy.Damage(1);
-            })
-    }
+    await target.Respond()
 }

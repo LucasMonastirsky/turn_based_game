@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=6 format=3 uid="uid://bn0uwrhwc5f2s"]
+
+[ext_resource type="Resource" uid="uid://3bsf2qpbx3gd" path="res://sasuke/animations/hurt/animation.tres" id="1_76fpd"]
+[ext_resource type="Resource" uid="uid://c7xhxjgcrrhl" path="res://sasuke/animations/idle/animation.tres" id="2_ojfax"]
+[ext_resource type="Resource" uid="uid://cao2jw2aj6rqr" path="res://sasuke/animations/parry/animation.tres" id="3_827aj"]
+[ext_resource type="Resource" uid="uid://bbm4ffxt725yv" path="res://sasuke/animations/swing/animation.tres" id="4_g4hnt"]
+[ext_resource type="Script" path="res://sasuke/SasukeAnimationStore.cs" id="5_femus"]
+
+[resource]
+script = ExtResource("5_femus")
+Idle = ExtResource("2_ojfax")
+Hurt = ExtResource("1_76fpd")
+Parry = ExtResource("3_827aj")
+Swing = ExtResource("4_g4hnt")

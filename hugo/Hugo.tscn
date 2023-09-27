@@ -7,5 +7,9 @@
 [node name="Hugo" type="Node2D"]
 script = ExtResource("1_bnjw3")
 Animations = ExtResource("2_5wqqs")
+Health = null
+Armor = null
 
 [node name="Animator" parent="." instance=ExtResource("3_1h4h5")]
+frame_index = null
+frame_time = null

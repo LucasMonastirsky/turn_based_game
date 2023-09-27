@@ -5,11 +5,12 @@ using System;
 using System.Threading.Tasks;
 
 public partial class KeyboardController : Node, IController {
-    public ICombatant hugo, tobi;
+    public ICombatant hugo, tobi, sasuke;
 
     public override void _Ready () {
         hugo = GetNode<StandardCombatant>("../Hugo");
         tobi = GetNode<StandardCombatant>("../Tobi");
+        sasuke = GetNode<StandardCombatant>("../Sasuke");
     }
 
     public override void _Process(double delta) {
@@ -20,7 +21,7 @@ public partial class KeyboardController : Node, IController {
     }
 
     public async Task<ICombatant> RequestSingleTarget (TargetSelector selector) {
-        await Task.Delay(500);
-        return tobi;
+        await Task.Delay(1);
+        return sasuke;
     }
 }

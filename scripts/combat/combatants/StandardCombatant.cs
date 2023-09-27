@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CustomDebug;
 using Godot;
 
@@ -9,6 +10,8 @@ namespace Combat {
         public abstract string CombatName { get; }
         [Export] public int Health { get; protected set; }
         [Export] public int Armor { get; protected set; }
+
+        public bool CanParry { get; set; }
 
         public Side Side { get; set; }
         public Row Row { get; set; }
@@ -27,6 +30,27 @@ namespace Combat {
 
             return value;
         }
+
+        public bool ParriedLastAttack { get; set; } = false;
+        public bool DodgedLastAttack { get; set; } = false;
+
+        public virtual void ReceiveAttack (AttackResult attack_result) {
+            Dev.Log($"{CombatName}.RespondAttack ({attack_result})");
+
+            if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
+            else if (attack_result.Parried) OnAttackParried(attack_result);
+            else if (attack_result.Dodged) OnAttackDodged(attack_result);
+        }
+
+        protected virtual void OnAttackParried (AttackResult attack_result) {
+            Animator.Play(StandardAnimations.Parry);
+            InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
+        }
+        protected virtual void OnAttackDodged (AttackResult attack_result) {}
+        protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
+            OnAttackParried(attack_result);
+        }
+        #pragma warning restore 1998
 
         #region Roll
         private RollManager roll_manager = new RollManager();
@@ -59,6 +83,7 @@ namespace Combat {
         public abstract partial class AnimationStore : Resource {
             public abstract CombatAnimation Idle { get; set; }
             public abstract CombatAnimation Hurt { get; set; }
+            public abstract CombatAnimation Parry { get; set; }
         }
         protected abstract AnimationStore StandardAnimations { get; }
         #endregion
@@ -69,6 +94,9 @@ namespace Combat {
 
             if (Animator == null) {
                 Dev.Error("Animator is null");
+                Animator = new CombatAnimator();
+                AddChild(Animator);
+                Dev.Log("New animator: " + Animator.GetPath());
             }
 
             Animator.Play(StandardAnimations.Idle);

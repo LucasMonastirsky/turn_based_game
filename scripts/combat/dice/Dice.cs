@@ -2,32 +2,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using CustomDebug;
 using Godot;
 
 namespace Combat {
     public class DiceRoll {
         public int Amount, Size;
+
         public DiceRoll (int amount, int size) {
             this.Amount = amount;
+            this.Size = size;
+        }
+
+        public DiceRoll (int size) {
+            this.Amount = 1;
             this.Size = size;
         }
     }
 
     public class Roll {
         public class Result {
+            public string[] Tags;
             public int DiceResult;
             public int Bonus;
             public int Total { get => DiceResult + Bonus; }
 
             public Result () {}
 
-            public Result (int dice_result, int bonus) {
+            public Result (int dice_result, int bonus, string[] tags) {
                 DiceResult = dice_result;
                 Bonus = bonus;
+                Tags = tags;
+
+                Dev.Log($"Roll result: {this}");
             }
 
             public override string ToString() {
-                return $"{Total} ({DiceResult}+{Bonus})";
+                return $"{Total} ({DiceResult}+{Bonus}) [{Tags.Aggregate("", (x, y) => $"{x} {y}")}]";
+            }
+
+            public static bool operator <= (Result a, Result b) => a.Total <= b.Total;
+            public static bool operator >= (Result a, Result b) => a.Total >= b.Total;
+            public static bool operator == (Result a, Result b) => a.Total == b.Total;
+            public static bool operator != (Result a, Result b) => a.Total != b.Total;
+
+            public override bool Equals (object o) {
+                var other = o as Result;
+                if (other == null) return false;
+                else return other.Total == this.Total;
+            }
+
+            public override int GetHashCode() {
+                return base.GetHashCode();
             }
         }
 
@@ -68,7 +94,7 @@ namespace Combat {
                 }
             }
 
-            return new Result(sum, Bonus);
+            return new Result(sum, Bonus, Tags);
         }
     }
 }

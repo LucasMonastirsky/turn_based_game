@@ -10,7 +10,7 @@ namespace CustomDebug {
         private static Dictionary<TAG, bool> tags = new Dictionary<TAG, bool> {
             { TAG.INPUT, true },
             { TAG.TARGETING, true },
-            { TAG.ANIMATION, false },
+            { TAG.ANIMATION, true },
         };
 
         public static void Log (TAG tag, string message) {
