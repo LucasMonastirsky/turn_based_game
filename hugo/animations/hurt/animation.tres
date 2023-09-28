@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://ijyd23e0p2t4"]
+
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimation.cs" id="1_4ch0o"]
+[ext_resource type="Resource" uid="uid://de3s42fh8hkrn" path="res://hugo/animations/hurt/frames/frame_0.tres" id="1_25ebh"]
+
+[resource]
+script = ExtResource("1_4ch0o")
+Name = ""
+IsLoop = false
+Frames = [ExtResource("1_25ebh")]

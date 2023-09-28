@@ -1,7 +1,5 @@
 using CustomDebug;
 using Godot;
-using System;
-using System.Linq;
 
 namespace Combat {
 	public partial class Battle : Node {
@@ -15,15 +13,11 @@ namespace Combat {
 
 			combatants = new ICombatant[] {
 				GetNode("Hugo") as ICombatant,
-				GetNode("Tobi") as ICombatant,
+				GetNode("Sasuke") as ICombatant,
 			};
 
 			combatants[0].Side = Side.Left;
 			combatants[1].Side = Side.Right;
-
-			foreach (var x in combatants) {
-				Dev.Log(x.CombatName);
-			}
 		}
 	}
 }

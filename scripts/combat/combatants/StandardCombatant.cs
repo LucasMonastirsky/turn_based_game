@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using CustomDebug;
 using Godot;
 
@@ -8,12 +7,20 @@ namespace Combat {
         public IController Controller { get; protected set; }
 
         public abstract string CombatName { get; }
-        [Export] public int Health { get; protected set; }
+        [Export] public int Health { get; protected set; } = 50;
         [Export] public int Armor { get; protected set; }
 
         public bool CanParry { get; set; }
 
-        public Side Side { get; set; }
+        private Side _side;
+        public Side Side {
+            get => _side;
+            set {
+                _side = value;
+                Animator.Flipped = value == Side.Right;
+            }
+        }
+
         public Row Row { get; set; }
 
         public CombatAnimator.EventManager Play (CombatAnimation animation) {
@@ -21,12 +28,13 @@ namespace Combat {
         }
 
         public int Damage(int value, string[] tags) {
-            var total = Math.Clamp(value - Armor, 0, double.PositiveInfinity);
+            var total = Math.Clamp(value - Armor, 0, 999);
 
-            Dev.Log($"{CombatName} received {total} damage ({value} - {Armor})");
+            Health -= total;
+            Dev.Log($"{CombatName} received {total} damage ({value} - {Armor}). Health: {Health}");
 
-            Animator.Play(StandardAnimations.Hurt)
-            .OnEnd(() => { Animator.Play(StandardAnimations.Idle); });
+            Animator.Play(StandardAnimations.Hurt);
+            InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
 
             return value;
         }
@@ -35,8 +43,6 @@ namespace Combat {
         public bool DodgedLastAttack { get; set; } = false;
 
         public virtual void ReceiveAttack (AttackResult attack_result) {
-            Dev.Log($"{CombatName}.RespondAttack ({attack_result})");
-
             if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
             else if (attack_result.Parried) OnAttackParried(attack_result);
             else if (attack_result.Dodged) OnAttackDodged(attack_result);
@@ -46,11 +52,13 @@ namespace Combat {
             Animator.Play(StandardAnimations.Parry);
             InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
         }
-        protected virtual void OnAttackDodged (AttackResult attack_result) {}
+        protected virtual void OnAttackDodged (AttackResult attack_result) {
+            Animator.Play(StandardAnimations.Dodge);
+            InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
+        }
         protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
             OnAttackParried(attack_result);
         }
-        #pragma warning restore 1998
 
         #region Roll
         private RollManager roll_manager = new RollManager();
@@ -84,6 +92,7 @@ namespace Combat {
             public abstract CombatAnimation Idle { get; set; }
             public abstract CombatAnimation Hurt { get; set; }
             public abstract CombatAnimation Parry { get; set; }
+            public abstract CombatAnimation Dodge { get; set; }
         }
         protected abstract AnimationStore StandardAnimations { get; }
         #endregion

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://cvs4ouifushho"]
+
+[ext_resource type="Texture2D" uid="uid://e5x22jc6pen1" path="res://sasuke/animations/dodge/frames/texture_0.png" id="1_2jcgu"]
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimationFrame.cs" id="1_hayxg"]
+
+[resource]
+script = ExtResource("1_hayxg")
+Duration = 0.0
+Texture = ExtResource("1_2jcgu")

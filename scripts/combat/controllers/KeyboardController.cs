@@ -5,11 +5,10 @@ using System;
 using System.Threading.Tasks;
 
 public partial class KeyboardController : Node, IController {
-    public ICombatant hugo, tobi, sasuke;
+    public ICombatant hugo, sasuke;
 
     public override void _Ready () {
         hugo = GetNode<StandardCombatant>("../Hugo");
-        tobi = GetNode<StandardCombatant>("../Tobi");
         sasuke = GetNode<StandardCombatant>("../Sasuke");
     }
 

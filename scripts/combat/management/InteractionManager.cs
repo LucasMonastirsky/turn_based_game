@@ -1,24 +1,24 @@
+using CustomDebug;
 using Godot;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Combat {
     public partial class InteractionManager : Node {
         protected static InteractionManager current = new InteractionManager();
 
-        public delegate Task StackEvent ();
-        public StackEvent[] Stack = {};
-        public static void AddStackEVent (StackEvent action) {
-            current.Stack = current.Stack.Append(action).ToArray();
+        public delegate Task QueueAction ();
+        public Queue<QueueAction> Queue = new ();
+        public static void AddStackEvent (QueueAction action) {
+            current.Queue.Enqueue(action);
         }
-        public static async Task ResolveStack () {
-            foreach (var stack_event in current.Stack) {
-                await stack_event();
-            }
 
-            current.Stack = new StackEvent[] {};
+        public static async Task ResolveQueue () {
+            do {
+                await Task.Delay(500);
+                await current.Queue.Dequeue()();
+            } while(current.Queue.Count > 0);
         }
 
         public delegate void OnActionEndEvent ();

@@ -2,10 +2,17 @@ using CustomDebug;
 using Godot;
 using System;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Threading.Tasks;
 
 namespace Combat {
 	public partial class CombatAnimator : Sprite2D {
 		#region State
+		private bool _flipped;
+		public bool Flipped {
+			get => _flipped;
+			set { _flipped = FlipH = value; }
+		}
 		private CombatAnimation current_animation;
 		private CombatAnimationFrame current_frame { get => current_animation.Frames[frame_index]; }
 		[Export] private bool IsActive = true;
@@ -24,14 +31,17 @@ namespace Combat {
 				}
 			}
 
-			public delegate void EventHandler ();
+			private TaskCompletionSource task_completion_source = new ();
+			public Task Task { get => task_completion_source.Task; }
 
+			public delegate void EventHandler ();
 			private EventHandler[] on_end_handlers = new EventHandler[] {};
 			public EventManager OnEnd (EventHandler handler) {
 				on_end_handlers = on_end_handlers.Append(handler).ToArray();
 				return this;
 			}
 			public void TriggerEnd () {
+				task_completion_source.TrySetResult();
 				foreach (var handler in on_end_handlers) {
 					handler();
 				}
@@ -46,12 +56,16 @@ namespace Combat {
 					this.event_manager = event_manager;
 				}
 
+				private TaskCompletionSource task_completion_source = new ();
+				public Task Task { get => task_completion_source.Task; }
+
 				private EventHandler[] on_end_handlers = new EventHandler[] {};
 				public EventManager OnEnd (EventHandler handler) {
 					on_end_handlers = on_end_handlers.Append(handler).ToArray();
 					return event_manager;
 				}
 				public void TriggerEnd () {
+					task_completion_source.TrySetResult();
 					foreach (var handler in on_end_handlers) {
 						handler();
 					}
@@ -60,11 +74,12 @@ namespace Combat {
 		}
 
 		public EventManager Play (CombatAnimation animation) {
-			Dev.Log(Dev.TAG.ANIMATION, "Playing animation: " + animation.Name);
 			if (animation == null) {
 				Dev.Error($"Received null animation in animator of {GetParent()?.Name}");
-				return null; // bad practice
+				throw new Exception($"Null animation in {GetParent()?.Name}");
 			}
+
+			Dev.Log(Dev.TAG.ANIMATION, "Playing animation: " + animation.Name);
 
 			event_manager = new EventManager(animation);
 			current_animation = animation;

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dm7m5xg42pa43"]
+
+[ext_resource type="Resource" uid="uid://cvs4ouifushho" path="res://sasuke/animations/dodge/frames/frame_0.tres" id="1_re6gi"]
+[ext_resource type="Script" path="res://scripts/combat/animation/CombatAnimation.cs" id="1_unqfl"]
+
+[resource]
+script = ExtResource("1_unqfl")
+Name = "Dodge"
+IsLoop = false
+Frames = [ExtResource("1_re6gi")]

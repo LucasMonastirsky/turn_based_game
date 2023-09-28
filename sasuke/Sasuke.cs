@@ -7,4 +7,11 @@ public partial class Sasuke : StandardCombatant {
 
     protected override AnimationStore StandardAnimations { get => Animations; }
     [Export] protected SasukeAnimationStore Animations { get; set; }
+
+    protected override void OnAttackParried(AttackResult attack_result) {
+        Animator.Play(Animations.Parry);
+        InteractionManager.AddStackEvent(async () => {
+            await new ActionStore.Swing(this).Run(attack_result.Attacker);
+        });
+    }
 }

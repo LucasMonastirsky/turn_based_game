@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6gukwgnjijqq"
-path="res://.godot/imported/texture_1.png-41a4bc4becc20c204ac759e0d689f542.ctex"
+uid="uid://e5x22jc6pen1"
+path="res://.godot/imported/texture_0.png-561a4f07411facb94ddf45ae5f16adb9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tobi/animations/idle/frames/texture_1.png"
-dest_files=["res://.godot/imported/texture_1.png-41a4bc4becc20c204ac759e0d689f542.ctex"]
+source_file="res://sasuke/animations/dodge/frames/texture_0.png"
+dest_files=["res://.godot/imported/texture_0.png-561a4f07411facb94ddf45ae5f16adb9.ctex"]
 
 [params]
 

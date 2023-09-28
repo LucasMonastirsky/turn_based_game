@@ -7,6 +7,10 @@
 [node name="Sasuke" type="Node2D"]
 script = ExtResource("1_o0mbg")
 Animations = ExtResource("2_n3h40")
+Health = null
+Armor = null
 
 [node name="Animator" type="Sprite2D" parent="."]
 script = ExtResource("3_v22x1")
+frame_index = null
+frame_time = null

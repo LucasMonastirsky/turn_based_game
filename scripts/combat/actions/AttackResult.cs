@@ -1,5 +1,7 @@
 namespace Combat {
     public struct AttackResult {
+        public ICombatant Attacker, Defender;
+
         public int ParryDelta { get; init; }
         public int DodgeDelta { get; init; }
 

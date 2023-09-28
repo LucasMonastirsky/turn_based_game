@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CustomDebug;
 
 namespace Combat {
@@ -12,17 +13,17 @@ namespace Combat {
             this.user = user;
         }
 
-        public abstract void RequestTargetsAndRun ();
+        public abstract Task RequestTargetsAndRun ();
     }
 
     public abstract class SingleTargetAction : Action {
         protected TargetSelector selector { get; }
         public SingleTargetAction (ICombatant user) : base (user) {}
-        public abstract void Run (ICombatant target);
-        public override async void RequestTargetsAndRun () {
+        public abstract Task Run (ICombatant target);
+        public override async Task RequestTargetsAndRun () {
             Dev.Log($"Requesting targets for {Name}");
             var target = await user.Controller.RequestSingleTarget(selector);
-            Run(target);
+            await Run(target);
         }
     }
 

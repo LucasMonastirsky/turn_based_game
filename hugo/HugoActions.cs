@@ -11,32 +11,21 @@ public partial class Hugo {
             protected new Hugo user { get => base.user as Hugo; }
             public Swing (ICombatant user) : base(user) {}
 
-            public override void Run (ICombatant target) {
-                user.Play(user.Animations.Swing)
-                .Frames[1].OnEnd(async () => {
-                    var hit_roll = user.Roll(new DiceRoll(10), new string[] { "Attack" });
-                    var parry_roll = target.Roll(new DiceRoll(10), new string[] { "Parry" });
-                    var dodge_roll = target.Roll(new DiceRoll(10), new string[] { "Dodge" });
+            public override async Task Run (ICombatant target) {
+                await user.Play(user.Animations.Swing).Frames[1].Task;
 
-                    var attack_result = new AttackResult {
-                        ParryDelta = parry_roll.Total - hit_roll.Total,
-                        DodgeDelta = dodge_roll.Total - hit_roll.Total,
-                    };
-
-                    if (attack_result.Hit) {
-                        target.Damage(10, new string[] { "Cut" });
-                    }
-                    else {
-                        target.ReceiveAttack(attack_result);
-                    }
-
-                    await Task.Delay(500);
-
-                    await InteractionManager.ResolveStack();
-
-                    user.Play(user.Animations.Idle);
-                    InteractionManager.EndAction();
+                var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
+                    ParryNegation = -10, DodgeNegation = 10,
                 });
+
+                if (attack_result.Hit) {
+                    target.Damage(10, new string[] { "Cut" });
+                }
+
+                await InteractionManager.ResolveQueue();
+
+                user.Play(user.Animations.Idle);
+                InteractionManager.EndAction();
             }
 
         }
