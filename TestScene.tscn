@@ -11,6 +11,8 @@ script = ExtResource("1_au6c8")
 
 [node name="Hugo" parent="." instance=ExtResource("1_2nlix")]
 position = Vector2(27.6463, 30.3861)
+Health = null
+Armor = null
 
 [node name="Sasuke" parent="." instance=ExtResource("4_lnx80")]
 position = Vector2(64.5081, 30.6351)

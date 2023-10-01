@@ -10,15 +10,17 @@ namespace Combat {
 
         public delegate Task QueueAction ();
         public Queue<QueueAction> Queue = new ();
-        public static void AddStackEvent (QueueAction action) {
+        public static void AddQueueEvent (QueueAction action) {
             current.Queue.Enqueue(action);
         }
 
         public static async Task ResolveQueue () {
-            do {
-                await Task.Delay(500);
+            await Task.Delay(500);
+
+            while(current.Queue.Count > 0) {
                 await current.Queue.Dequeue()();
-            } while(current.Queue.Count > 0);
+                await Task.Delay(500);
+            }
         }
 
         public delegate void OnActionEndEvent ();

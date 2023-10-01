@@ -1,7 +1,6 @@
 using Combat;
 using CustomDebug;
 using Godot;
-using System;
 using System.Threading.Tasks;
 
 public partial class KeyboardController : Node, IController {
@@ -15,7 +14,8 @@ public partial class KeyboardController : Node, IController {
     public override void _Process(double delta) {
         if (Input.IsActionJustPressed("Test1")) {
             Dev.Log(Dev.TAG.INPUT, "Pressed Test1");
-            new Hugo.ActionStore.Swing(hugo).RequestTargetsAndRun();
+
+            _ = new Hugo.ActionStore.Swing(hugo).RequestTargetsAndRun();
         }
     }
 

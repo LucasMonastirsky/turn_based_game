@@ -10,7 +10,7 @@ public partial class Sasuke : StandardCombatant {
 
     protected override void OnAttackParried(AttackResult attack_result) {
         Animator.Play(Animations.Parry);
-        InteractionManager.AddStackEvent(async () => {
+        InteractionManager.AddQueueEvent(async () => {
             await new ActionStore.Swing(this).Run(attack_result.Attacker);
         });
     }
