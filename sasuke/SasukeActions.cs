@@ -5,6 +5,11 @@ public partial class Sasuke {
     public class ActionStore {
         public class Swing : SingleTargetAction {
             public override string Name { get => "Swing"; }
+            public override TargetSelector Selector {
+                get => new TargetSelector {
+                    Side = TargetSelector.SideCondition.Opposite,
+                };
+            }
 
             protected new Sasuke user { get => base.user as Sasuke; }
             

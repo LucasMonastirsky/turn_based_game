@@ -1,13 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://dnalyaw5laeeg"]
+[gd_scene load_steps=6 format=3 uid="uid://dnalyaw5laeeg"]
 
 [ext_resource type="PackedScene" uid="uid://bjhowdf0435l2" path="res://hugo/Hugo.tscn" id="1_2nlix"]
-[ext_resource type="Script" path="res://scripts/combat/Battle.cs" id="1_au6c8"]
+[ext_resource type="Script" path="res://scripts/combat/battle/Battle.cs" id="1_au6c8"]
+[ext_resource type="PackedScene" uid="uid://cxdr5gal8jxh1" path="res://StandardPositioner.tscn" id="2_r2ikq"]
 [ext_resource type="PackedScene" uid="uid://duuc6g182jcfc" path="res://sasuke/Sasuke.tscn" id="4_lnx80"]
 [ext_resource type="Script" path="res://scripts/combat/controllers/KeyboardController.cs" id="4_qebrv"]
 
 [node name="TestScene" type="Node2D"]
+position = Vector2(256, 128)
 scale = Vector2(4.015, 4.015)
 script = ExtResource("1_au6c8")
+
+[node name="Positioner" parent="." instance=ExtResource("2_r2ikq")]
+center_distance = 15
+vertical_distance = 5
+horizontal_distance = 5
+vertical_offset = 0
 
 [node name="Hugo" parent="." instance=ExtResource("1_2nlix")]
 position = Vector2(27.6463, 30.3861)

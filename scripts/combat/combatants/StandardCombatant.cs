@@ -10,8 +10,6 @@ namespace Combat {
         [Export] public int Health { get; protected set; } = 50;
         [Export] public int Armor { get; protected set; }
 
-        public bool CanParry { get; set; }
-
         private Side _side;
         public Side Side {
             get => _side;
@@ -21,10 +19,26 @@ namespace Combat {
             }
         }
 
-        public Row Row { get; set; }
+        public int Row { get; private set; }
+        public int RowPos { get; private set; }
 
-        public CombatAnimator.EventManager Play (CombatAnimation animation) {
-            return Animator.Play(animation);
+        #region Management
+        public void LoadIn (Position position) {
+            Side = position.Side;
+            Row = position.Row;
+            RowPos = position.RowPos;
+
+            var world_pos = Battle.Current.Positioner.GetWorldPosition(position);
+            Position = world_pos;
+        }
+        #endregion
+
+        public void SwitchWith(ICombatant target) {
+            throw new NotImplementedException();
+        }
+
+        public void SwitchTo(Position position) {
+            throw new NotImplementedException();
         }
 
         public int Damage(int value, string[] tags) {
@@ -38,9 +52,6 @@ namespace Combat {
 
             return value;
         }
-
-        public bool ParriedLastAttack { get; set; } = false;
-        public bool DodgedLastAttack { get; set; } = false;
 
         public virtual void ReceiveAttack (AttackResult attack_result) {
             if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
@@ -95,6 +106,10 @@ namespace Combat {
             public abstract CombatAnimation Dodge { get; set; }
         }
         protected abstract AnimationStore StandardAnimations { get; }
+
+        public CombatAnimator.EventManager Play (CombatAnimation animation) {
+            return Animator.Play(animation);
+        }
         #endregion
 
         #region Godot

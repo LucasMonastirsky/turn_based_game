@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Combat;
 using CustomDebug;
@@ -7,6 +6,13 @@ public partial class Hugo {
     public class ActionStore {
         public class Swing : SingleTargetAction {
             public override string Name { get => "Swing"; }
+
+            public override TargetSelector Selector {
+                get => new TargetSelector {
+                    Side = TargetSelector.SideCondition.Opposite,
+                    Row = 0,
+                };
+            }
 
             protected new Hugo user { get => base.user as Hugo; }
             public Swing (ICombatant user) : base(user) {}
