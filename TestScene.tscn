@@ -36,3 +36,8 @@ Armor = null
 position = Vector2(64.5081, 30.6351)
 Health = null
 Armor = null
+
+[node name="Sasuke3" parent="." instance=ExtResource("4_lnx80")]
+position = Vector2(64.5081, 30.6351)
+Health = null
+Armor = null

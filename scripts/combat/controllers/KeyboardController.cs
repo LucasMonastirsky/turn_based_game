@@ -59,7 +59,7 @@ public partial class KeyboardController : Node2D, IController {
 			markers.Dequeue().QueueFree();
 		}
 
-		return sasuke;
+		return result;
 	}
 
 	public void SelectTargets (ICombatant[] combatants) {
