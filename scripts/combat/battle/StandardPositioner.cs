@@ -4,6 +4,7 @@ using Godot;
 
 namespace Combat {
     [Tool] public partial class StandardPositioner : Node2D, IPositioner {
+        #region Exports
         [Export] private bool Calculate { get => false; set { calculate_both_sides(); } }
         [Export] protected int LeftRowCount, LeftRowSize, RightRowCount, RightRowSize;
 
@@ -36,6 +37,7 @@ namespace Combat {
                 calculate_both_sides();
             }
         }
+        #endregion
 
         private Vector2[,] left_positions, right_positions;
 
@@ -67,16 +69,6 @@ namespace Combat {
             left_positions = calculate_side_positions(-1, LeftRowCount, LeftRowSize);
             right_positions = calculate_side_positions(1, RightRowCount, RightRowSize);
             QueueRedraw();
-            var s = "";
-            foreach (var pos in left_positions) {
-                s += $"({pos.X},{pos.Y})";
-            }
-            s += "\n";
-            foreach (var pos in right_positions) {
-                s += $"({pos.X},{pos.Y})";
-            }
-            s += "\n";
-            Dev.Log(s);
         }
 
         public override void _Ready () {

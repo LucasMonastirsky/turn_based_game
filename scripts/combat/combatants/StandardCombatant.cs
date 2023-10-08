@@ -21,6 +21,7 @@ namespace Combat {
 
         public int Row { get; private set; }
         public int RowPos { get; private set; }
+        public Vector2 WorldPos { get => Position; }
 
         #region Management
         public void LoadIn (Position position) {

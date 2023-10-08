@@ -10,6 +10,6 @@ public partial class Hugo : StandardCombatant {
 
 	public override void _Ready () {
 		base._Ready();
-		Controller = GetNode<KeyboardController>("../Node");
+		Controller = GetNode<KeyboardController>("../KeyboardController");
 	}
 }

@@ -1,3 +1,5 @@
+using Godot;
+
 namespace Combat {
     public interface ICombatant : IRoller {
         public IController Controller { get; }
@@ -8,6 +10,7 @@ namespace Combat {
         public abstract Side Side { get; }
         public abstract int Row { get; }
         public abstract int RowPos { get; }
+        public abstract Vector2 WorldPos { get; }
 
         public abstract void LoadIn (Position position);
 

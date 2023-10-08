@@ -34,7 +34,7 @@ namespace Combat {
         public abstract Task Run (ICombatant target);
         public override async Task RequestTargetsAndRun () {
             Dev.Log($"Requesting targets for {Name}");
-            var target = await user.Controller.RequestSingleTarget(Selector);
+            var target = await user.Controller.RequestSingleTarget(user, Selector);
             await Run(target);
         }
     }

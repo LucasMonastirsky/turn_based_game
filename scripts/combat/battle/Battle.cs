@@ -7,6 +7,7 @@ namespace Combat {
 		public static Battle Current { get => current; }
 
 		private ICombatant[] combatants;
+		public ICombatant[] Combatants { get => combatants; }
 		public IPositioner Positioner { get; protected set; }
 
 		public override void _Ready () {
