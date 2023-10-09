@@ -1,22 +1,37 @@
 using System;
+using CustomDebug;
 using Godot;
+using ResourceHelpers;
 
 namespace Combat {
 	public partial class SimpleSprite : Resource {
 		public Texture2D Texture;
-		public Vector2 Offset;
+		public Vector2 Offset = new Vector2(0, 0);
+
+		public SimpleSprite () {}
+		public SimpleSprite (string folder_path, string texture_name, Vector2 offset = new Vector2()) {
+			Texture = Resources.LoadTexture(folder_path, texture_name);
+			Offset = offset;
+		}
 	}
 
 	public partial class SimpleAnimation : Resource {
 		public SimpleSprite[] Sprites;
-		public double FrameDuration;
+		public double FrameDuration = 0.250;
 	}
 
 	public partial class NewCombatAnimator : Sprite2D {
+		public bool Flipped { get => FlipH; set => FlipH = value; }
+
 		private double elapsed_time;
 		private int frame_index;
 
 		private void SetSprite (SimpleSprite sprite) {
+			if (sprite == null) {
+				Dev.Error($"Null sprite in animator");
+				return;
+			}
+
 			Texture = sprite.Texture;
 			Position = sprite.Offset;
 		}

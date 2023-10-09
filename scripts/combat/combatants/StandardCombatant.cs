@@ -4,7 +4,7 @@ using Godot;
 
 namespace Combat {
     public abstract partial class StandardCombatant : Node2D, ICombatant {
-        public IController Controller { get; protected set; }
+        public IController Controller { get; set; }
 
         public abstract string CombatName { get; }
         [Export] public int Health { get; protected set; } = 50;
@@ -99,31 +99,20 @@ namespace Combat {
         #endregion
 
         #region Animation
-        protected CombatAnimator Animator;
-        public abstract partial class AnimationStore : Resource {
-            public abstract CombatAnimation Idle { get; set; }
-            public abstract CombatAnimation Hurt { get; set; }
-            public abstract CombatAnimation Parry { get; set; }
-            public abstract CombatAnimation Dodge { get; set; }
+        protected NewCombatAnimator Animator;
+        public abstract partial class StandardAnimationStore {
+            public abstract SimpleAnimation Idle { get; set; }
+            public abstract SimpleSprite Hurt { get; set; }
+            public abstract SimpleSprite Parry { get; set; }
+            public abstract SimpleSprite Dodge { get; set; }
         }
-        protected abstract AnimationStore StandardAnimations { get; }
-
-        public CombatAnimator.EventManager Play (CombatAnimation animation) {
-            return Animator.Play(animation);
-        }
+        protected abstract StandardAnimationStore StandardAnimations { get; }
         #endregion
 
         #region Godot
         public override void _Ready () {
-            Animator = GetNode<CombatAnimator>("Animator");
-
-            if (Animator == null) {
-                Dev.Error("Animator is null");
-                Animator = new CombatAnimator();
-                AddChild(Animator);
-                Dev.Log("New animator: " + Animator.GetPath());
-            }
-
+            Animator = new NewCombatAnimator();
+            AddChild(Animator);
             Animator.Play(StandardAnimations.Idle);
         }
         #endregion

@@ -2,7 +2,7 @@ using Godot;
 
 namespace Combat {
     public interface ICombatant : IRoller {
-        public IController Controller { get; }
+        public IController Controller { get; set; }
 
         public abstract string CombatName { get; }
         public abstract int Health { get; }

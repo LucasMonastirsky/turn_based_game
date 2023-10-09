@@ -7,21 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 
 public partial class KeyboardController : Node2D, IController {
-	[Export] private float marker_radius = 5.0f;
-	[Export] private Color marker_color = Colors.Red;
-
-	[Export] private string state = "idle";
-	private ICombatant[] state_selectables = new ICombatant[] {};
-	private TaskCompletionSource<ICombatant[]> selection_completion_source;
-
 	[Export] private PackedScene SingleMarkerScene;
-	[Export] private Texture2D marker_texture;
 
-	public ICombatant hugo, sasuke;
+	public ICombatant hugo;
 
 	public override void _Ready () {
 		hugo = GetNode<StandardCombatant>("../Hugo");
-		sasuke = GetNode<StandardCombatant>("../Sasuke");
+		hugo.Controller = this;
 	}
 
 	public override void _Process(double delta) {
@@ -60,9 +52,5 @@ public partial class KeyboardController : Node2D, IController {
 		}
 
 		return result;
-	}
-
-	public void SelectTargets (ICombatant[] combatants) {
-		selection_completion_source.SetResult(combatants);
 	}
 }

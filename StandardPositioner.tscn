@@ -2,16 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/combat/battle/StandardPositioner.cs" id="1_g1gw3"]
 
-[node name="StandardPositioner" type="Node2D"]
+[node name="Positioner" type="Node2D"]
 script = ExtResource("1_g1gw3")
-CenterDistance = 15
-VerticalDistance = 5
-HorizontalDistance = 5
 LeftRowCount = 2
 LeftRowSize = 3
 RightRowCount = 2
-RightRowSize = 2
-center_distance = 15
-vertical_distance = 5
-horizontal_distance = 5
-vertical_offset = 0
+RightRowSize = 3
+CenterDistance = 100
+VerticalDistance = 150
+HorizontalDistance = 100

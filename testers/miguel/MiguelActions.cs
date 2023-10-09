@@ -1,23 +1,20 @@
 using System.Threading.Tasks;
 using Combat;
-using CustomDebug;
 
-public partial class Hugo {
+public partial class Miguel {
     public class ActionStore {
         public class Swing : SingleTargetAction {
-            public override string Name { get => "Swing"; }
+            public override string Name => "Swing";
 
-            public override TargetSelector Selector {
-                get => new TargetSelector {
-                    Side = TargetSelector.SideCondition.Opposite,
-                    Row = 0,
-                };
-            }
+            public override TargetSelector Selector => new TargetSelector() {
+                Side = TargetSelector.SideCondition.Opposite,
+                Row = 0,
+            };
 
-            protected new Hugo user { get => base.user as Hugo; }
-            public Swing (ICombatant user) : base(user) {}
+            protected new Miguel user => base.user as Miguel;
+            public Swing (Miguel user) : base (user) {}
 
-            public override async Task Run (ICombatant target) {
+            public override async Task Run(ICombatant target) {
                 user.Animator.Play(user.Animations.Swing);
 
                 var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
@@ -25,7 +22,7 @@ public partial class Hugo {
                 });
 
                 if (attack_result.Hit) {
-                    target.Damage(10, new string[] { "Cut" });
+                    target.Damage(8, new string[] { "Cut" });
                 }
 
                 await InteractionManager.ResolveQueue();
@@ -33,7 +30,6 @@ public partial class Hugo {
                 user.Animator.Play(user.Animations.Idle);
                 InteractionManager.EndAction();
             }
-
         }
     }
 }

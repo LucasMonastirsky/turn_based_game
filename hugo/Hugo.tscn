@@ -1,11 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjhowdf0435l2"]
+[gd_scene load_steps=2 format=3 uid="uid://b2bysfu7g8w7w"]
 
 [ext_resource type="Script" path="res://hugo/Hugo.cs" id="1_bnjw3"]
-[ext_resource type="Resource" uid="uid://bhj7urv688mo7" path="res://hugo/animations/animations.tres" id="2_5wqqs"]
-[ext_resource type="PackedScene" uid="uid://q4ltehv7dfhb" path="res://scripts/combat/animation/CombatAnimator.tscn" id="3_1h4h5"]
 
 [node name="Hugo" type="Node2D"]
 script = ExtResource("1_bnjw3")
-Animations = ExtResource("2_5wqqs")
-
-[node name="Animator" parent="." instance=ExtResource("3_1h4h5")]

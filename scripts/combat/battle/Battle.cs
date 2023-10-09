@@ -17,13 +17,12 @@ namespace Combat {
 
 			combatants = new ICombatant[] {
 				GetNode("Hugo") as ICombatant,
-				GetNode("Sasuke") as ICombatant,
-				GetNode("Sasuke3") as ICombatant,
+				GetNode("Miguel") as ICombatant,
 			};
 
 			combatants[0].LoadIn(new Position { Side = Side.Left, Row = 0, RowPos = 0, });
 			combatants[1].LoadIn(new Position { Side = Side.Right, Row = 0, RowPos = 0, });
-			combatants[2].LoadIn(new Position { Side = Side.Right, Row = 1, RowPos = 0, });
+			//combatants[2].LoadIn(new Position { Side = Side.Right, Row = 1, RowPos = 0, });
 		}
 	}
 }
