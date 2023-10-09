@@ -1,28 +1,11 @@
+using System.Collections.Generic;
 using CustomDebug;
 using Godot;
 
 namespace Combat {
-	public partial class Battle : Node {
-		private static Battle current;
-		public static Battle Current { get => current; }
-
-		private ICombatant[] combatants;
-		public ICombatant[] Combatants { get => combatants; }
-		public IPositioner Positioner { get; protected set; }
-
-		public override void _Ready () {
-			Battle.current = this;
-
-			Positioner = GetNode<StandardPositioner>("Positioner"); // TODO: uhhhhhhh
-
-			combatants = new ICombatant[] {
-				GetNode("Hugo") as ICombatant,
-				GetNode("Miguel") as ICombatant,
-			};
-
-			combatants[0].LoadIn(new Position { Side = Side.Left, Row = 0, RowPos = 0, });
-			combatants[1].LoadIn(new Position { Side = Side.Right, Row = 0, RowPos = 0, });
-			//combatants[2].LoadIn(new Position { Side = Side.Right, Row = 1, RowPos = 0, });
-		}
+	public static class Battle {
+		public static IBattle Current { get; set; }
+		public static List<ICombatant> Combatants => Current.Combatants;
+		public static IPositioner Positioner => Current.Positioner;
 	}
 }

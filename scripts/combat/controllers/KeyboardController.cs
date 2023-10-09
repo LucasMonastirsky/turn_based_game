@@ -30,7 +30,7 @@ public partial class KeyboardController : Node2D, IController {
 		if (selector.Side != null) {
 			selectables = Battle.Current.Combatants.Where(
 				x => (int) x.Side * (int) selector.Side == (int) user.Side
-			).ToArray();
+			).ToList();
 		}
 
 		var markers = new Queue<KeyboardSelectionMarker>();
