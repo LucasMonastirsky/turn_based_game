@@ -6,6 +6,6 @@ public partial class MiguelController : Controller {
     private Miguel miguel => User as Miguel;
 
     public override void OnTurnStart() {
-        _ = new Miguel.ActionStore.Swing(miguel).Run(Battle.Combatants.Find(x => x.CombatName == "Hugo"));
+        _ = miguel.Actions.Swing.Run(Battle.Combatants.Find(x => x.CombatName == "Hugo"));
     }
 }

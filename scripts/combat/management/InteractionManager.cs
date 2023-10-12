@@ -1,7 +1,6 @@
 using CustomDebug;
 using Godot;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -26,11 +25,11 @@ namespace Combat {
 
             resolving = true;
 
-            await Task.Delay(500);
+            await Timing.Delay();
 
             while(current.Queue.Count > 0) {
                 await current.Queue.Dequeue()();
-                await Task.Delay(500);
+                await Timing.Delay();
             }
 
             resolving = false;
@@ -48,7 +47,7 @@ namespace Combat {
                 combatant.OnActionEnd();
             }
 
-            await Task.Delay(500);
+            await Timing.Delay();
 
             TurnManager.EndTurn();
         }

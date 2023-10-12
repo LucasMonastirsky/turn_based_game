@@ -2,7 +2,17 @@ using System.Threading.Tasks;
 using Combat;
 
 public partial class Miguel {
+    public ActionStore Actions;
+
     public class ActionStore {
+        public ActionClasses.Swing Swing;
+
+        public ActionStore (Miguel miguel) {
+            Swing = new (miguel);
+        }
+    }
+
+    public class ActionClasses {
         public class Swing : SingleTargetAction {
             public override string Name => "Swing";
 

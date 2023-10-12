@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 public partial class KeyboardController : Controller {
 	[Export] private PackedScene SingleMarkerScene;
 
-	public ICombatant hugo;
+	public Hugo hugo;
 
 	public override void _Ready () {
-		hugo = GetNode<StandardCombatant>("../Hugo");
+		hugo = GetNode<Hugo>("../Hugo");
 		hugo.Controller = this;
 	}
 
 	public override void _Process(double delta) {
 		if (Input.IsActionJustPressed("Test1")) {
-			_ = new Hugo.ActionStore.Swing(hugo).RequestTargetsAndRun();
+			_ = hugo.Actions.Swing.RequestTargetsAndRun();
 		}
 	}
 
 	public override void OnTurnStart () {
-		_ = new Hugo.ActionStore.Swing(hugo).RequestTargetsAndRun();
+		_ = hugo.Actions.Swing.RequestTargetsAndRun();
 	}
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {

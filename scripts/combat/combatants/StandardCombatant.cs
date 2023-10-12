@@ -24,6 +24,10 @@ namespace Combat {
         public Vector2 WorldPos { get => Position; }
 
         #region Management
+        protected virtual void Setup () {
+
+        }
+
         public void LoadIn (Position position) {
             Side = position.Side;
             Row = position.Row;
@@ -31,6 +35,8 @@ namespace Combat {
 
             var world_pos = Battle.Current.Positioner.GetWorldPosition(position);
             Position = world_pos;
+
+            Setup();
         }
 
         public virtual void OnActionEnd () {
@@ -112,13 +118,10 @@ namespace Combat {
         #endregion
 
         #region Godot
-        protected virtual void Initialize () {}
         public override void _Ready () {
             Animator = new NewCombatAnimator();
             AddChild(Animator);
             Animator.Play(StandardAnimations.Idle);
-
-            Initialize();
         }
         #endregion
     }

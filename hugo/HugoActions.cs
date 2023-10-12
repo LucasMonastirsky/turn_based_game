@@ -1,9 +1,18 @@
 using System.Threading.Tasks;
 using Combat;
-using CustomDebug;
 
 public partial class Hugo {
+    public ActionStore Actions;
+
     public class ActionStore {
+        public HugoActions.Swing Swing;
+
+        public ActionStore (Hugo hugo) {
+            Swing = new (hugo);
+        }
+    }
+
+    public abstract class HugoActions {
         public class Swing : SingleTargetAction {
             public override string Name { get => "Swing"; }
 
