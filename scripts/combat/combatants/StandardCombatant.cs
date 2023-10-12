@@ -4,7 +4,7 @@ using Godot;
 
 namespace Combat {
     public abstract partial class StandardCombatant : Node2D, ICombatant {
-        public IController Controller { get; set; }
+        public Controller Controller { get; set; }
 
         public abstract string CombatName { get; }
         [Export] public int Health { get; protected set; } = 50;
@@ -32,6 +32,11 @@ namespace Combat {
             var world_pos = Battle.Current.Positioner.GetWorldPosition(position);
             Position = world_pos;
         }
+
+        public virtual void OnActionEnd () {
+            Dev.Log($"OnActionEnd {CombatName}");
+            Animator.Play(StandardAnimations.Idle);
+        }
         #endregion
 
         public void SwitchWith(ICombatant target) {
@@ -49,7 +54,6 @@ namespace Combat {
             Dev.Log($"{CombatName} received {total} damage ({value} - {Armor}). Health: {Health}");
 
             Animator.Play(StandardAnimations.Hurt);
-            InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
 
             return value;
         }
@@ -62,11 +66,9 @@ namespace Combat {
 
         protected virtual void OnAttackParried (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Parry);
-            InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
         }
         protected virtual void OnAttackDodged (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Dodge);
-            InteractionManager.OnActionEnd(() => Animator.Play(StandardAnimations.Idle));
         }
         protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
             OnAttackParried(attack_result);
@@ -110,10 +112,13 @@ namespace Combat {
         #endregion
 
         #region Godot
+        protected virtual void Initialize () {}
         public override void _Ready () {
             Animator = new NewCombatAnimator();
             AddChild(Animator);
             Animator.Play(StandardAnimations.Idle);
+
+            Initialize();
         }
         #endregion
     }

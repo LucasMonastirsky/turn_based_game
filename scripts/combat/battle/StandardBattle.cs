@@ -33,6 +33,9 @@ namespace Combat {
 
                 combatants.AddRange(rows[i]);
             }
+
+			TurnManager.LoadIn();
+			TurnManager.Start();
 		}
 	}
 }

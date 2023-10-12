@@ -1,8 +1,8 @@
 using Godot;
 
 namespace Combat {
-    public interface ICombatant : IRoller {
-        public IController Controller { get; set; }
+    public interface ICombatant : IRoller { // add IController DefaultController
+        public Controller Controller { get; set; }
 
         public abstract string CombatName { get; }
         public abstract int Health { get; }
@@ -13,6 +13,7 @@ namespace Combat {
         public abstract Vector2 WorldPos { get; }
 
         public abstract void LoadIn (Position position);
+        public abstract void OnActionEnd ();
 
         public abstract void SwitchWith (ICombatant target);
         public abstract void SwitchTo (Position position);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -5,18 +6,20 @@ namespace CustomDebug {
     public static class Dev {
         public static bool IsActive = true;
         public enum TAG {
-            GLOBAL, INPUT, TARGETING, ANIMATION,
+            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT_MANAGEMENT, ROLL,
         }
         private static Dictionary<TAG, bool> tags = new Dictionary<TAG, bool> {
             { TAG.GLOBAL, true },
-            { TAG.INPUT, true },
-            { TAG.TARGETING, true },
-            { TAG.ANIMATION, false },
+            { TAG.INPUT, false },
+            { TAG.TARGETING, false },
+            { TAG.ANIMATION, true },
+            { TAG.COMBAT_MANAGEMENT, true },
+            { TAG.ROLL, false },
         };
 
         public static void Log (TAG tag, string message) {
             if (tags[tag]) {
-                GD.Print(message);
+                GD.Print($"{DateTime.Now.ToString("HH:mm:ss:fff")}: {message}");
             }
         }
         public static void Log (string message) {

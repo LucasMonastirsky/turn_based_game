@@ -34,7 +34,7 @@ namespace Combat {
                 Bonus = bonus;
                 Tags = tags;
 
-                Dev.Log($"Roll result: {this}");
+                Dev.Log(Dev.TAG.ROLL, $"Roll result: {this}");
             }
 
             public override string ToString() {

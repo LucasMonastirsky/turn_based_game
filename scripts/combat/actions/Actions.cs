@@ -16,19 +16,19 @@ namespace Combat {
 
     }
 
-    public abstract class Action {
+    public abstract class CombatAction {
         public abstract string Name { get; }
 
         protected ICombatant user;
 
-        public Action (ICombatant user) {
+        public CombatAction (ICombatant user) {
             this.user = user;
         }
 
         public abstract Task RequestTargetsAndRun ();
     }
 
-    public abstract class SingleTargetAction : Action {
+    public abstract class SingleTargetAction : CombatAction {
         public abstract TargetSelector Selector { get; }
         public SingleTargetAction (ICombatant user) : base (user) {}
         public abstract Task Run (ICombatant target);

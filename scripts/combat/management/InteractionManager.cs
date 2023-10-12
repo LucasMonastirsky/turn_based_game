@@ -14,29 +14,43 @@ namespace Combat {
             current.Queue.Enqueue(action);
         }
 
+        private static bool resolving;
+
         public static async Task ResolveQueue () {
+            if (resolving) {
+                Dev.Log($"Attempted to resolve while resolving");
+                return;
+            }
+
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Resolving queue");
+
+            resolving = true;
+
             await Task.Delay(500);
 
             while(current.Queue.Count > 0) {
                 await current.Queue.Dequeue()();
                 await Task.Delay(500);
             }
+
+            resolving = false;
         }
 
-        public delegate void OnActionEndEvent ();
-        private OnActionEndEvent[] on_action_end_events = {};
-
-        /// <summary>
-        /// Use this to reset positions, animations, etc... Fire and forget. Do not use for mechanics.
-        /// </summary>
-        public static void OnActionEnd (OnActionEndEvent handler) {
-            current.on_action_end_events = current.on_action_end_events.Append(handler).ToArray();
-        }
-        public static void EndAction () {
-            foreach (var handler in current.on_action_end_events) {
-                handler();
+        public static async void EndAction () {
+            if (resolving) {
+                Dev.Log($"Attempted to end action while resolving");
+                return;
             }
-            current.on_action_end_events = new OnActionEndEvent[] {};
+
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
+
+            foreach (var combatant in Battle.Combatants) {
+                combatant.OnActionEnd();
+            }
+
+            await Task.Delay(500);
+
+            TurnManager.EndTurn();
         }
     }
 }
