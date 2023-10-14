@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomDebug;
 
@@ -37,11 +37,5 @@ namespace Combat {
             var target = await user.Controller.RequestSingleTarget(user, Selector);
             await Run(target);
         }
-    }
-
-    // public abstract class GroupTargetAction
-
-    public interface IActionStore {
-
     }
 }

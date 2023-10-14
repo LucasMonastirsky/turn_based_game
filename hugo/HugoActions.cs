@@ -1,7 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
 
 public partial class Hugo {
+    public override List<CombatAction> ActionList => new (new CombatAction[] {
+        Actions.Swing,
+    });
+
     public ActionStore Actions;
 
     public class ActionStore {

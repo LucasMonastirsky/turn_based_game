@@ -3,5 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>TurnBasedGame</RootNamespace>
+
+    <NoWarn>4014</NoWarn>
   </PropertyGroup>
 </Project>

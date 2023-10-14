@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CustomDebug;
 using Godot;
 
@@ -23,6 +24,8 @@ namespace Combat {
         public int RowPos { get; private set; }
         public Vector2 WorldPos { get => Position; }
 
+        public abstract List<CombatAction> ActionList { get; }
+
         #region Management
         protected virtual void Setup () {
 
@@ -45,6 +48,7 @@ namespace Combat {
         }
         #endregion
 
+        #region Combat Interactions
         public void SwitchWith(ICombatant target) {
             throw new NotImplementedException();
         }
@@ -79,6 +83,7 @@ namespace Combat {
         protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
             OnAttackParried(attack_result);
         }
+        #endregion
 
         #region Roll
         private RollManager roll_manager = new RollManager();

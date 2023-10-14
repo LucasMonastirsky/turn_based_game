@@ -9,6 +9,7 @@ public partial class KeyboardController : Controller {
 	[Export] private PackedScene SingleMarkerScene;
 
 	public Hugo hugo;
+	private CombatPlayerInterface player_interface;
 
 	public override void _Ready () {
 		hugo = GetNode<Hugo>("../Hugo");
@@ -17,12 +18,12 @@ public partial class KeyboardController : Controller {
 
 	public override void _Process(double delta) {
 		if (Input.IsActionJustPressed("Test1")) {
-			_ = hugo.Actions.Swing.RequestTargetsAndRun();
+			hugo.Actions.Swing.RequestTargetsAndRun();
 		}
 	}
 
 	public override void OnTurnStart () {
-		_ = hugo.Actions.Swing.RequestTargetsAndRun();
+		CombatPlayerInterface.ShowActionList(hugo.ActionList);
 	}
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {

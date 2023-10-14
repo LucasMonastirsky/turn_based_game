@@ -6,7 +6,7 @@ namespace CustomDebug {
     public static class Dev {
         public static bool IsActive = true;
         public enum TAG {
-            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT_MANAGEMENT, ROLL,
+            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT_MANAGEMENT, ROLL, UI,
         }
         private static Dictionary<TAG, bool> tags = new Dictionary<TAG, bool> {
             { TAG.GLOBAL, true },
@@ -15,6 +15,7 @@ namespace CustomDebug {
             { TAG.ANIMATION, true },
             { TAG.COMBAT_MANAGEMENT, true },
             { TAG.ROLL, false },
+            { TAG.UI, true },
         };
 
         public static void Log (TAG tag, string message) {
