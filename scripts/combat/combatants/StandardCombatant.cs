@@ -36,10 +36,11 @@ namespace Combat {
             Row = position.Row;
             RowPos = position.RowPos;
 
-            var world_pos = Battle.Current.Positioner.GetWorldPosition(position);
-            Position = world_pos;
-
             Setup();
+        }
+
+        public void UpdateWorldPos () {
+            Position = Battle.Positioner.GetWorldPosition(new Position() { Side = Side, Row = Row, RowPos = RowPos });
         }
 
         public virtual void OnActionEnd () {

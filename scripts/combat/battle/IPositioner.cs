@@ -9,6 +9,7 @@ namespace Combat {
     }
 
     public interface IPositioner {
+        public void Setup ();
         public Vector2 GetWorldPosition (Position position);
         public bool IsValidPosition (Position position);
     }

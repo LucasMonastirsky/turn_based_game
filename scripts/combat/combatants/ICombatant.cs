@@ -13,6 +13,7 @@ namespace Combat {
         public abstract Vector2 WorldPos { get; }
 
         public abstract void LoadIn (Position position);
+        public abstract void UpdateWorldPos ();
         public abstract void OnActionEnd ();
 
         public abstract void SwitchWith (ICombatant target);

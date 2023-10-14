@@ -1,13 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using CustomDebug;
 using Godot;
 
 namespace Combat {
     [Tool] public partial class StandardPositioner : Node2D, IPositioner {
-        #region Exports
-        [Export] private bool Calculate { get => false; set { calculate_both_sides(); } }
-        [Export] protected int LeftRowCount, LeftRowSize, RightRowCount, RightRowSize;
+        private const int MAX_ROW_COUNT = 2;
+        private const int MAX_ROW_SIZE = 5;
 
+        #region Exports
         protected int center_distance, vertical_distance, horizontal_distance, vertical_offset;
         [Export] protected int CenterDistance {
             get => center_distance;
@@ -38,54 +40,63 @@ namespace Combat {
             }
         }
         #endregion
+    
+        private Vector2[,] world_positions = new Vector2[MAX_ROW_COUNT, MAX_ROW_SIZE];
+        private List<ICombatant>[] left_combatants, right_combatants;
+        private List<ICombatant> all_combatants => Battle.Combatants;
 
-        private Vector2[,] left_positions, right_positions;
+        public void Setup () {
+            left_combatants = new List<ICombatant>[2]; // TODO: this is so dirty
+            left_combatants[0] = Battle.Combatants.Where(combatant => combatant.Side == Side.Left && combatant.Row == 0).ToList();
+            left_combatants[1] = Battle.Combatants.Where(combatant => combatant.Side == Side.Left && combatant.Row == 1).ToList();
+
+            right_combatants = new List<ICombatant>[2];
+            right_combatants[0] = Battle.Combatants.Where(combatant => combatant.Side == Side.Right && combatant.Row == 0).ToList();
+            right_combatants[1] = Battle.Combatants.Where(combatant => combatant.Side == Side.Right && combatant.Row == 1).ToList();
+
+            foreach (var combatant in all_combatants) {
+                combatant.UpdateWorldPos();
+            }
+        }
+
+        private void calculate_both_sides () {
+            for (var row_index = 0; row_index < MAX_ROW_COUNT; row_index++) {
+                for (var row_pos_index = 0; row_pos_index < MAX_ROW_SIZE; row_pos_index++) {
+                    var x = center_distance + horizontal_distance * row_index;
+                    var y = vertical_offset + vertical_distance * row_pos_index / MAX_ROW_SIZE;
+                    y -= vertical_distance / MAX_ROW_SIZE * 2;
+
+                    world_positions[row_index, row_pos_index] = new Vector2(x, y);
+                }
+            }
+
+            QueueRedraw();
+        }
 
         public Vector2 GetWorldPosition(Position position) {
-            return (position.Side == Side.Left ? left_positions : right_positions)[position.Row, position.RowPos];
+            var rows = position.Side == Side.Left ? left_combatants : right_combatants;
+            var row_size = rows[position.Row].Count;
+
+            int[] possible_indexes;
+            
+            if (row_size == 3) possible_indexes = new int[] { 0, 2, 4 };
+            else if (row_size == 2) possible_indexes = new int[] { 1, 3 };
+            else possible_indexes = new int[] { 2 };
+
+            var pos = world_positions[position.Row, possible_indexes[position.RowPos]];
+            return pos with { X = pos.X * (int) position.Side };
         }
 
         public bool IsValidPosition(Position position)
         {
-            throw new System.NotImplementedException();
-        }
-
-        private Vector2[,] calculate_side_positions (int side, int row_count, int row_size) {
-            var result = new Vector2[row_count, row_size];
-
-            for (var r = 0; r < row_count; r++) {
-                for (var p = 0; p < row_size; p++) {
-                    result[r, p] = new Vector2(
-                        side * (CenterDistance + (r * HorizontalDistance)),
-                        VerticalOffset + (p * vertical_distance - (row_size / 2 * vertical_distance)) + (0.5f - (float) row_size / 2 % 1) * vertical_distance  
-                    );
-                }
-            }
-
-            return result;
-        }
-
-        private void calculate_both_sides () {
-            left_positions = calculate_side_positions(-1, LeftRowCount, LeftRowSize);
-            right_positions = calculate_side_positions(1, RightRowCount, RightRowSize);
-            QueueRedraw();
-        }
-
-        public override void _Ready () {
-            calculate_both_sides();
+            throw new NotImplementedException();
         }
 
         public override void _Draw () {
-            void DrawPos (Vector2 pos) {
-                DrawCircle(pos, 1.0f, Colors.Beige);
-            }
-
-            foreach (var pos in right_positions) {
-                DrawPos(pos);
-            }
-
-            foreach (var pos in left_positions) {
-                DrawPos(pos);
+            for (var side = -1; side < 2; side += 2) {
+                foreach (var pos in world_positions) {
+                    DrawCircle(pos with { X = pos.X * side }, 7.5f, Colors.Red);
+                }
             }
         }
     }

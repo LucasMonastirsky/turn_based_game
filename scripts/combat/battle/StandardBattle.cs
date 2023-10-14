@@ -13,8 +13,6 @@ namespace Combat {
 		public override void _Ready () {
 			Battle.Current = this;
 
-			Positioner = GetNode<StandardPositioner>("Positioner"); // TODO: uhhhhhhh
-
 			combatants = new List<ICombatant> {
 				GetNode("Hugo") as ICombatant,
 			};
@@ -33,6 +31,9 @@ namespace Combat {
 
                 combatants.AddRange(rows[i]);
             }
+
+			Positioner = GetNode<IPositioner>("Positioner");
+			Positioner.Setup();
 
 			TurnManager.LoadIn();
 			TurnManager.Start();

@@ -4,10 +4,7 @@
 
 [node name="Positioner" type="Node2D"]
 script = ExtResource("1_g1gw3")
-LeftRowCount = 2
-LeftRowSize = 3
-RightRowCount = 2
-RightRowSize = 3
-CenterDistance = 100
-VerticalDistance = 150
-HorizontalDistance = 100
+CenterDistance = 60
+VerticalDistance = 325
+HorizontalDistance = 155
+VerticalOffset = -35
