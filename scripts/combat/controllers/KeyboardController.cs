@@ -1,6 +1,7 @@
 using Combat;
 using CustomDebug;
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,11 +29,20 @@ public partial class KeyboardController : Controller {
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
 		var selectables = Battle.Current.Combatants;
-		if (selector.Side != null) {
-			selectables = Battle.Current.Combatants.Where(
-				x => (int) x.Side * (int) selector.Side == (int) user.Side
-			).ToList();
-		}
+
+		var predicates = new List<Predicate<ICombatant>> ();
+
+		if (selector.Side != null) predicates.Add(x => (int) x.Side * (int) selector.Side == (int) user.Side);
+		if (selector.Row != null) predicates.Add(x => x.Row == selector.Row);
+		if (selector.Validator != null) predicates.Add(selector.Validator);
+
+		selectables = selectables.Where(combatant => {
+			foreach (var predicate in predicates) {
+				if (!predicate(combatant)) return false;
+			}
+
+			return true;
+		}).ToList();
 
 		var markers = new Queue<KeyboardSelectionMarker>();
 		var selection = new TaskCompletionSource<ICombatant>();

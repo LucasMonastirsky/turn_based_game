@@ -22,18 +22,17 @@ public partial class Hugo {
         public class Swing : SingleTargetAction {
             public override string Name { get => "Swing"; }
 
-            public override TargetSelector Selector {
-                get => new TargetSelector {
-                    Side = TargetSelector.SideCondition.Opposite,
-                    Row = 0,
-                };
-            }
+            public override TargetSelector Selector => new () {
+                Side = TargetSelector.SideCondition.Opposite,
+                Row = 0,
+            };
 
             protected new Hugo user { get => base.user as Hugo; }
             public Swing (ICombatant user) : base(user) {}
 
             public override async Task Run (ICombatant target) {
                 user.Animator.Play(user.Animations.Swing);
+                await user.MoveToMelee(target);
 
                 var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
@@ -44,6 +43,8 @@ public partial class Hugo {
                 }
 
                 await InteractionManager.ResolveQueue();
+
+                await user.MoveTo(Battle.Positioner.GetWorldPosition(user.CombatPosition));
 
                 user.Animator.Play(user.Animations.Idle);
                 InteractionManager.EndAction();

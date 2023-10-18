@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomDebug;
@@ -11,8 +12,7 @@ namespace Combat {
         public SideCondition? Side { get; init; }
         public int? Row { get; init; }
 
-        public delegate bool ValidatorDelegate (ICombatant target);
-        public ValidatorDelegate Validator { get; init; }
+        public Predicate<ICombatant> Validator { get; init; }
 
     }
 

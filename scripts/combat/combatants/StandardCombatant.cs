@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CustomDebug;
 using Godot;
 
@@ -23,6 +24,7 @@ namespace Combat {
         public int Row { get; private set; }
         public int RowPos { get; private set; }
         public Vector2 WorldPos { get => Position; }
+        public Combat.Position CombatPosition => new Position() { Side = Side, Row = Row, RowPos = RowPos };
 
         public abstract List<CombatAction> ActionList { get; }
 
@@ -40,7 +42,7 @@ namespace Combat {
         }
 
         public void UpdateWorldPos () {
-            Position = Battle.Positioner.GetWorldPosition(new Position() { Side = Side, Row = Row, RowPos = RowPos });
+            Position = Battle.Positioner.GetWorldPosition(CombatPosition);
         }
 
         public virtual void OnActionEnd () {
@@ -83,6 +85,30 @@ namespace Combat {
         }
         protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
             OnAttackParried(attack_result);
+        }
+
+        private double movement_duration = Timing.MoveDuration; 
+        private bool moving = false;
+        private Vector2 moving_from, moving_towards;
+        private double moving_time;
+        private TaskCompletionSource move_completion_source;
+
+        public Task MoveTo (Vector2 target_position) {
+            move_completion_source = new TaskCompletionSource();
+            moving = true;
+            moving_from = Position;
+            moving_towards = target_position;
+            moving_time = 0;
+
+            return move_completion_source.Task;
+        }
+
+        public Task MoveBack () {
+            return MoveTo(Battle.Positioner.GetWorldPosition(CombatPosition));
+        }
+
+        public Task MoveToMelee (ICombatant target) {
+            return MoveTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) Side }); // TODO: put melee range var somewhere
         }
         #endregion
 
@@ -128,6 +154,17 @@ namespace Combat {
             Animator = new NewCombatAnimator();
             AddChild(Animator);
             Animator.Play(StandardAnimations.Idle);
+        }
+
+        public override void _Process (double delta) {
+            if (moving) { // TODO: this is kinda dirty, use callback list?
+                moving_time += delta;
+                Position = moving_from.Lerp(moving_towards, (float) (moving_time / movement_duration));
+                if (moving_time >= movement_duration) {
+                    moving = false;
+                    move_completion_source.TrySetResult();
+                }
+            }
         }
         #endregion
     }

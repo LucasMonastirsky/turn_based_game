@@ -31,6 +31,7 @@ public partial class Miguel {
 
             public override async Task Run(ICombatant target) {
                 user.Animator.Play(user.Animations.Swing);
+                await user.MoveToMelee(target);
 
                 var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
@@ -41,6 +42,8 @@ public partial class Miguel {
                 }
 
                 await InteractionManager.ResolveQueue();
+
+                await user.MoveTo(Battle.Positioner.GetWorldPosition(user.CombatPosition));
 
                 user.Animator.Play(user.Animations.Idle);
                 InteractionManager.EndAction();
