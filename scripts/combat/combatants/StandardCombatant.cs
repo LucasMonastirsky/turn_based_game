@@ -24,7 +24,7 @@ namespace Combat {
         public int Row { get; private set; }
         public int RowPos { get; private set; }
         public Vector2 WorldPos { get => Position; }
-        public Combat.Position CombatPosition => new Position() { Side = Side, Row = Row, RowPos = RowPos };
+        public CombatPosition CombatPosition => new CombatPosition() { Side = Side, Row = Row, RowPos = RowPos };
 
         public abstract List<CombatAction> ActionList { get; }
 
@@ -33,7 +33,7 @@ namespace Combat {
 
         }
 
-        public void LoadIn (Position position) {
+        public void LoadIn (CombatPosition position) {
             Side = position.Side;
             Row = position.Row;
             RowPos = position.RowPos;
@@ -56,7 +56,7 @@ namespace Combat {
             throw new NotImplementedException();
         }
 
-        public void SwitchTo(Position position) {
+        public void SwitchTo(CombatPosition position) {
             throw new NotImplementedException();
         }
 
@@ -72,6 +72,8 @@ namespace Combat {
         }
 
         public virtual void ReceiveAttack (AttackResult attack_result) {
+            Battle.Positioner.GetAvailablePositions(Side);
+
             if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
             else if (attack_result.Parried) OnAttackParried(attack_result);
             else if (attack_result.Dodged) OnAttackDodged(attack_result);

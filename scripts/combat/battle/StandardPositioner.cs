@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CustomDebug;
 using Godot;
 
 namespace Combat {
     [Tool] public partial class StandardPositioner : Node2D, IPositioner {
-        private const int MAX_ROW_COUNT = 2;
-        private const int MAX_ROW_SIZE = 5;
+        private const int MAX_ROW_COUNT = 2; // if this changes, everything breaks
+        private const int MAX_ROW_SIZE = 3;
+        private const int ROW_SLOT_COUNT = MAX_ROW_SIZE * 2 - 1;
 
         #region Exports
         protected int center_distance, vertical_distance, horizontal_distance, vertical_offset;
@@ -40,9 +42,13 @@ namespace Combat {
         }
         #endregion
     
-        private Vector2[,] world_positions = new Vector2[MAX_ROW_COUNT, MAX_ROW_SIZE];
+        private Vector2[,] world_positions = new Vector2[MAX_ROW_COUNT, ROW_SLOT_COUNT];
         private List<ICombatant>[] left_combatants, right_combatants;
         private List<ICombatant> all_combatants => Battle.Combatants;
+
+        private List<ICombatant>[] get_rows_on_side (Side side) {
+            return side == Side.Left ? left_combatants : right_combatants;
+        }
 
         public void Setup () {
             left_combatants = new List<ICombatant>[2]; // TODO: this is so dirty
@@ -60,10 +66,10 @@ namespace Combat {
 
         private void calculate_both_sides () {
             for (var row_index = 0; row_index < MAX_ROW_COUNT; row_index++) {
-                for (var row_pos_index = 0; row_pos_index < MAX_ROW_SIZE; row_pos_index++) {
+                for (var row_pos_index = 0; row_pos_index < ROW_SLOT_COUNT; row_pos_index++) {
                     var x = center_distance + horizontal_distance * row_index;
-                    var y = vertical_offset + vertical_distance * row_pos_index / MAX_ROW_SIZE;
-                    y -= vertical_distance / MAX_ROW_SIZE * 2;
+                    var y = vertical_offset + vertical_distance * row_pos_index / ROW_SLOT_COUNT;
+                    y -= vertical_distance / ROW_SLOT_COUNT * 2;
 
                     world_positions[row_index, row_pos_index] = new Vector2(x, y);
                 }
@@ -72,7 +78,7 @@ namespace Combat {
             QueueRedraw();
         }
 
-        public Vector2 GetWorldPosition(Position position) {
+        public Vector2 GetWorldPosition (CombatPosition position) {
             var rows = position.Side == Side.Left ? left_combatants : right_combatants;
             var row_size = rows[position.Row].Count;
 
@@ -82,13 +88,57 @@ namespace Combat {
             else if (row_size == 2) possible_indexes = new int[] { 1, 3 };
             else possible_indexes = new int[] { 2 };
 
+            if (row_size == MAX_ROW_SIZE && (position.RowPos < 0 || position.RowPos >= MAX_ROW_SIZE)) {
+                throw new Exception("Tried to get world position outside max row size");
+            }
+
+            if (position.RowPos < 0) {
+                return world_positions[position.Row, possible_indexes[0] - 1];
+            }
+
+            if (position.RowPos >= possible_indexes.Length) {
+                
+            }
+
             var pos = world_positions[position.Row, possible_indexes[position.RowPos]];
             return pos with { X = pos.X * (int) position.Side };
         }
 
-        public bool IsValidPosition(Position position)
-        {
-            throw new NotImplementedException();
+        public bool IsPositionAvailable (CombatPosition position) {
+            var rows = get_rows_on_side(position.Side);
+
+            var target_row = rows[position.Row];
+            var other_row = rows[position.Row == 1 ? 0 : 1];
+
+            if (target_row.Count >= MAX_ROW_SIZE || target_row.Count <= other_row.Count) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        public List<CombatPosition> GetAvailablePositions (Side side) {
+            // !!! change positioning to use absolute slots instead
+
+            var rows = get_rows_on_side(side);
+
+            var available_positions = new List<CombatPosition>();
+
+            for (var i = 0; i < MAX_ROW_COUNT; i++) {
+                var current_row = rows[i];
+                var other_row = rows[i == 1 ? 0 : 1];
+
+                if (current_row.Count < other_row.Count && other_row.Count > 1) {
+                    available_positions.Add(new CombatPosition() { Side = side, Row = i, RowPos = -1, });
+
+                    for (var j = 0; j < current_row.Count; j++) {
+                        available_positions.Add(new CombatPosition() { Side = side, Row = i, RowPos = j + 1, });
+                    }
+                }
+            }
+
+            return available_positions;
         }
 
         public override void _Draw () {

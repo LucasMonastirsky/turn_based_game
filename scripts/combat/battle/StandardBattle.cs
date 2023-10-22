@@ -15,9 +15,13 @@ namespace Combat {
 
 			combatants = new List<ICombatant> {
 				GetNode("Hugo") as ICombatant,
+				//GetNode("Hugo2") as ICombatant,
+				//GetNode("Hugo3") as ICombatant,
 			};
 
-            combatants[0].LoadIn(new Position { Side = Side.Left, Row = 0, RowPos = 0, });
+            combatants[0].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, RowPos = 0, });
+			//combatants[1].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, RowPos = 1, });
+			//combatants[2].LoadIn(new CombatPosition { Side = Side.Left, Row = 1, RowPos = 0, });
 
             var rows = new List<ICombatant>[] { 
                 GetNode("Enemies/Front").GetChildren().Select(node => node as ICombatant).ToList(),
@@ -26,7 +30,7 @@ namespace Combat {
 
             for (var i = 0; i < rows.Count(); i++) {
                 for (var j = 0; j < rows[i].Count; j++) {
-                    rows[i][j].LoadIn(new Position { Side = Side.Right, Row = i, RowPos = j, });
+                    rows[i][j].LoadIn(new CombatPosition { Side = Side.Right, Row = i, RowPos = j, });
                 }
 
                 combatants.AddRange(rows[i]);

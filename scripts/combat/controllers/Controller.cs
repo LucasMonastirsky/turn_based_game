@@ -9,5 +9,9 @@ namespace Combat {
         public virtual Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
             throw new NotImplementedException("RequestSingleTarget not implemented in controller");
         }
+
+        public virtual Task<CombatPosition> RequestPosition () {
+            throw new NotImplementedException("RequestPosition not implemented in controller");
+        }
     }
 }

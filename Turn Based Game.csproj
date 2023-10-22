@@ -4,6 +4,6 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>TurnBasedGame</RootNamespace>
 
-    <NoWarn>4014</NoWarn>
+    <NoWarn>1998,4014</NoWarn>
   </PropertyGroup>
 </Project>

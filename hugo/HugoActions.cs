@@ -6,15 +6,18 @@ using Combat;
 public partial class Hugo {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
         Actions.Swing,
+        Actions.Move,
     });
 
     public ActionStore Actions;
 
     public class ActionStore {
         public HugoActions.Swing Swing;
+        public HugoActions.Move Move;
 
         public ActionStore (Hugo hugo) {
             Swing = new (hugo);
+            Move = new (hugo);
         }
     }
 
@@ -51,5 +54,16 @@ public partial class Hugo {
             }
 
         }
+    
+        public class Move : CombatAction {
+            public override string Name { get => "Move"; }
+
+            public Move (ICombatant user) : base (user) {}
+
+            public override async Task RequestTargetsAndRun() {
+                var target_position = await user.Controller.RequestPosition();
+            }
+        }
+    
     }
 }

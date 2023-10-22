@@ -12,12 +12,12 @@ namespace Combat {
         public abstract int RowPos { get; }
         public abstract Vector2 WorldPos { get; }
 
-        public abstract void LoadIn (Position position);
+        public abstract void LoadIn (CombatPosition position);
         public abstract void UpdateWorldPos ();
         public abstract void OnActionEnd ();
 
         public abstract void SwitchWith (ICombatant target);
-        public abstract void SwitchTo (Position position);
+        public abstract void SwitchTo (CombatPosition position);
 
         public abstract int Damage (int value, string[] tags);
         public abstract void ReceiveAttack (AttackResult attack_result);

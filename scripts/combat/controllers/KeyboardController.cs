@@ -64,4 +64,19 @@ public partial class KeyboardController : Controller {
 
 		return result;
 	}
+
+	public override async Task<CombatPosition> RequestPosition () {
+		var available_positions = Battle.Positioner.GetAvailablePositions(hugo.Side);
+
+		foreach (var position in available_positions) {
+			var marker = SingleMarkerScene.Instantiate<KeyboardSelectionMarker>();
+			marker.Position = Battle.Positioner.GetWorldPosition(position);
+			marker.OnCombatantSelected = () => {
+				Dev.Log($"POSITION CLICKED");
+			};
+			AddChild(marker);
+		}
+
+		return new CombatPosition() { Side = hugo.Side, Row = 1, RowPos = 0, };
+	}
 }
