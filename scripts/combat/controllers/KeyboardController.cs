@@ -32,8 +32,8 @@ public partial class KeyboardController : Controller {
 
 		var predicates = new List<Predicate<ICombatant>> ();
 
-		if (selector.Side != null) predicates.Add(x => (int) x.Side * (int) selector.Side == (int) user.Side);
-		if (selector.Row != null) predicates.Add(x => x.Row == selector.Row);
+		if (selector.Side != null) predicates.Add(x => (int) x.CombatPosition.Side * (int) selector.Side == (int) user.CombatPosition.Side);
+		if (selector.Row != null) predicates.Add(x => x.CombatPosition.Row == selector.Row);
 		if (selector.Validator != null) predicates.Add(selector.Validator);
 
 		selectables = selectables.Where(combatant => {
@@ -66,7 +66,7 @@ public partial class KeyboardController : Controller {
 	}
 
 	public override async Task<CombatPosition> RequestPosition () {
-		var available_positions = Battle.Positioner.GetAvailablePositions(hugo.Side);
+		var available_positions = Battle.Positioner.GetAvailablePositions();
 
 		foreach (var position in available_positions) {
 			var marker = SingleMarkerScene.Instantiate<KeyboardSelectionMarker>();
@@ -77,6 +77,6 @@ public partial class KeyboardController : Controller {
 			AddChild(marker);
 		}
 
-		return new CombatPosition() { Side = hugo.Side, Row = 1, RowPos = 0, };
+		return new CombatPosition() { Side = hugo.CombatPosition.Side, Row = 1, RowPos = 0, };
 	}
 }

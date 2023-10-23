@@ -7,9 +7,7 @@ namespace Combat {
         public abstract string CombatName { get; }
         public abstract int Health { get; }
 
-        public abstract Side Side { get; }
-        public abstract int Row { get; }
-        public abstract int RowPos { get; }
+        public abstract CombatPosition CombatPosition { get; set; }
         public abstract Vector2 WorldPos { get; }
 
         public abstract void LoadIn (CombatPosition position);

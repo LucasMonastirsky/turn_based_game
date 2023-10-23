@@ -12,19 +12,16 @@ namespace Combat {
         [Export] public int Health { get; protected set; } = 50;
         [Export] public int Armor { get; protected set; }
 
-        private Side _side;
-        public Side Side {
-            get => _side;
+        private CombatPosition _combat_position;
+        public CombatPosition CombatPosition {
+            get => _combat_position;
             set {
-                _side = value;
-                Animator.Flipped = value == Side.Right;
+                _combat_position = value;
+                Animator.Flipped = _combat_position.Side == Side.Right;
             }
         }
 
-        public int Row { get; private set; }
-        public int RowPos { get; private set; }
         public Vector2 WorldPos { get => Position; }
-        public CombatPosition CombatPosition => new CombatPosition() { Side = Side, Row = Row, RowPos = RowPos };
 
         public abstract List<CombatAction> ActionList { get; }
 
@@ -34,9 +31,7 @@ namespace Combat {
         }
 
         public void LoadIn (CombatPosition position) {
-            Side = position.Side;
-            Row = position.Row;
-            RowPos = position.RowPos;
+            CombatPosition = position;
 
             Setup();
         }
@@ -72,8 +67,6 @@ namespace Combat {
         }
 
         public virtual void ReceiveAttack (AttackResult attack_result) {
-            Battle.Positioner.GetAvailablePositions(Side);
-
             if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
             else if (attack_result.Parried) OnAttackParried(attack_result);
             else if (attack_result.Dodged) OnAttackDodged(attack_result);
@@ -110,7 +103,7 @@ namespace Combat {
         }
 
         public Task MoveToMelee (ICombatant target) {
-            return MoveTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) Side }); // TODO: put melee range var somewhere
+            return MoveTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) CombatPosition.Side }); // TODO: put melee range var somewhere
         }
         #endregion
 
