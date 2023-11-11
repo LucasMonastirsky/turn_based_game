@@ -6,13 +6,13 @@ namespace Combat {
 
     public struct CombatPosition {
         public Side Side;
-        public int Row, RowPos, Slot;
+        public int Row, Slot;
     }
 
     public interface IPositioner {
         public void Setup ();
         public Vector2 GetWorldPosition (CombatPosition position);
-        public bool IsPositionAvailable (CombatPosition position);
         public List<CombatPosition> GetAvailablePositions ();
+        public List<CombatPosition> GetMoveTargets (ICombatant combatant);
     }
 }

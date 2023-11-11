@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CustomDebug;
 using Godot;
 
 namespace Combat {
@@ -15,26 +14,28 @@ namespace Combat {
 
 			combatants = new List<ICombatant> {
 				GetNode("Hugo") as ICombatant,
-				//GetNode("Hugo2") as ICombatant,
-				//GetNode("Hugo3") as ICombatant,
+				GetNode("Hugo2") as ICombatant,
+				GetNode("Hugo3") as ICombatant,
 			};
 
-            combatants[0].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, RowPos = 0, });
-			//combatants[1].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, RowPos = 1, });
-			//combatants[2].LoadIn(new CombatPosition { Side = Side.Left, Row = 1, RowPos = 0, });
+            combatants[0].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 1, });
+			combatants[1].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 3, });
+			combatants[2].LoadIn(new CombatPosition { Side = Side.Left, Row = 1, Slot = 2, });
 
             var rows = new List<ICombatant>[] { 
                 GetNode("Enemies/Front").GetChildren().Select(node => node as ICombatant).ToList(),
                 GetNode("Enemies/Back").GetChildren().Select(node => node as ICombatant).ToList(),
             };
 
-            for (var i = 0; i < rows.Count(); i++) {
-                for (var j = 0; j < rows[i].Count; j++) {
-                    rows[i][j].LoadIn(new CombatPosition { Side = Side.Right, Row = i, RowPos = j, });
-                }
+            rows[0][0].LoadIn(new CombatPosition() { Side = Side.Right, Row = 0, Slot = 1 });
+			rows[0][1].LoadIn(new CombatPosition() { Side = Side.Right, Row = 0, Slot = 3 });
+			rows[1][0].LoadIn(new CombatPosition() { Side = Side.Right, Row = 1, Slot = 2 });
 
-                combatants.AddRange(rows[i]);
-            }
+			foreach (var row in rows) {
+				foreach (var c in row) {
+					combatants.Add(c);
+				}
+			}
 
 			Positioner = GetNode<IPositioner>("Positioner");
 			Positioner.Setup();

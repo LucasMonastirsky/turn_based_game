@@ -4,6 +4,8 @@ using Godot;
 
 namespace Combat {
     public abstract partial class Controller : Node {
+        public ICombatant Combatant;
+
         public abstract void OnTurnStart ();
 
         public virtual Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {

@@ -9,22 +9,11 @@ using System.Threading.Tasks;
 public partial class KeyboardController : Controller {
 	[Export] private PackedScene SingleMarkerScene;
 
-	public Hugo hugo;
 	private CombatPlayerInterface player_interface;
 
-	public override void _Ready () {
-		hugo = GetNode<Hugo>("../Hugo");
-		hugo.Controller = this;
-	}
-
-	public override void _Process(double delta) {
-		if (Input.IsActionJustPressed("Test1")) {
-			hugo.Actions.Swing.RequestTargetsAndRun();
-		}
-	}
 
 	public override void OnTurnStart () {
-		CombatPlayerInterface.ShowActionList(hugo.ActionList);
+		CombatPlayerInterface.ShowActionList(Combatant.ActionList);
 	}
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
@@ -77,6 +66,6 @@ public partial class KeyboardController : Controller {
 			AddChild(marker);
 		}
 
-		return new CombatPosition() { Side = hugo.CombatPosition.Side, Row = 1, RowPos = 0, };
+		return new CombatPosition() { Side = Combatant.CombatPosition.Side, Row = 1, Slot = 2, };
 	}
 }

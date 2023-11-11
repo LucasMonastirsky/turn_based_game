@@ -22,7 +22,6 @@ namespace Combat {
         }
 
         public Vector2 WorldPos { get => Position; }
-
         public abstract List<CombatAction> ActionList { get; }
 
         #region Management

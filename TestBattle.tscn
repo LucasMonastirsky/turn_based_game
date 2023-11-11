@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8impj2vemvl"]
+[gd_scene load_steps=7 format=3 uid="uid://c8impj2vemvl"]
 
 [ext_resource type="Script" path="res://scripts/combat/battle/StandardBattle.cs" id="1_ufhvr"]
 [ext_resource type="Script" path="res://scripts/combat/management/InteractionManager.cs" id="2_4brod"]
 [ext_resource type="PackedScene" uid="uid://cxdr5gal8jxh1" path="res://StandardPositioner.tscn" id="2_gfn1p"]
 [ext_resource type="PackedScene" uid="uid://ba2w5micxhmo8" path="res://scripts/combat/interface/player/CombatPlayerInterface.tscn" id="3_jla18"]
-[ext_resource type="PackedScene" uid="uid://cw05rsvj58d0u" path="res://scripts/combat/controllers/keyboard_controller/KeyboardController.tscn" id="3_u3p0v"]
 [ext_resource type="PackedScene" uid="uid://b2bysfu7g8w7w" path="res://hugo/Hugo.tscn" id="4_43eyh"]
 [ext_resource type="PackedScene" uid="uid://c8h1qk64dpov" path="res://testers/miguel/Miguel.tscn" id="5_84if1"]
 
@@ -23,9 +22,11 @@ script = ExtResource("2_4brod")
 
 [node name="Positioner" parent="." instance=ExtResource("2_gfn1p")]
 
-[node name="KeyboardController" parent="." instance=ExtResource("3_u3p0v")]
-
 [node name="Hugo" parent="." instance=ExtResource("4_43eyh")]
+
+[node name="Hugo2" parent="." instance=ExtResource("4_43eyh")]
+
+[node name="Hugo3" parent="." instance=ExtResource("4_43eyh")]
 
 [node name="Enemies" type="Node" parent="."]
 

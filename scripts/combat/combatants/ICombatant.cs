@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace Combat {
@@ -9,6 +10,8 @@ namespace Combat {
 
         public abstract CombatPosition CombatPosition { get; set; }
         public abstract Vector2 WorldPos { get; }
+
+        public abstract List<CombatAction> ActionList { get; }
 
         public abstract void LoadIn (CombatPosition position);
         public abstract void UpdateWorldPos ();
