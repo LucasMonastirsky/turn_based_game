@@ -7,11 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 public partial class KeyboardController : Controller {
-	[Export] private PackedScene SingleMarkerScene;
-
-	private CombatPlayerInterface player_interface;
-
-
 	public override void OnTurnStart () {
 		CombatPlayerInterface.ShowActionList(Combatant.ActionList);
 	}
@@ -33,39 +28,12 @@ public partial class KeyboardController : Controller {
 			return true;
 		}).ToList();
 
-		var markers = new Queue<KeyboardSelectionMarker>();
-		var selection = new TaskCompletionSource<ICombatant>();
-		foreach (var combatant in selectables) {
-			var marker = SingleMarkerScene.Instantiate<KeyboardSelectionMarker>(); // TODO: I don't like setting public fields like this
-			marker.Position = combatant.WorldPos;
-			marker.OnCombatantSelected = () => {
-				selection.TrySetResult(combatant);
-			};
-			AddChild(marker);
-			markers.Enqueue(marker);
-		}
-
-		var result = await selection.Task;
-
-		while (markers.Count > 0) {
-			markers.Dequeue().QueueFree();
-		}
-
-		return result;
+		return await TargetingInterface.SelectSingleCombatant(selectables);
 	}
 
-	public override async Task<CombatPosition> RequestPosition () {
-		var available_positions = Battle.Positioner.GetAvailablePositions();
+	public override async Task<CombatPosition> RequestPosition (ICombatant user) {
+		var available_positions = Battle.Positioner.GetMoveTargets(user);
 
-		foreach (var position in available_positions) {
-			var marker = SingleMarkerScene.Instantiate<KeyboardSelectionMarker>();
-			marker.Position = Battle.Positioner.GetWorldPosition(position);
-			marker.OnCombatantSelected = () => {
-				Dev.Log($"POSITION CLICKED");
-			};
-			AddChild(marker);
-		}
-
-		return new CombatPosition() { Side = Combatant.CombatPosition.Side, Row = 1, Slot = 2, };
+		return await TargetingInterface.SelectPosition(available_positions);
 	}
 }

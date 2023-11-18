@@ -7,6 +7,8 @@ namespace Combat {
     public struct CombatPosition {
         public Side Side;
         public int Row, Slot;
+
+        public Vector2 WorldPosition => Battle.Positioner.GetWorldPosition(this);
     }
 
     public interface IPositioner {

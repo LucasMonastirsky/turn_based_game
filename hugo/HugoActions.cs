@@ -61,7 +61,7 @@ public partial class Hugo {
             public Move (ICombatant user) : base (user) {}
 
             public override async Task RequestTargetsAndRun() {
-                var target_position = await user.Controller.RequestPosition();
+                var target_position = await user.Controller.RequestPosition(user);
             }
         }
     

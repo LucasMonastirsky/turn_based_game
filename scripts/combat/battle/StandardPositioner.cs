@@ -48,6 +48,8 @@ namespace Combat {
             public List<SlotData> Slots;
             public int CombatantCount;
 
+            public SlotData this[int index] => Slots[index];
+
             public RowData () {
                 Slots = new ();
                 for (int i = 0; i < ROW_SLOT_COUNT; i++) {
@@ -71,6 +73,8 @@ namespace Combat {
         public void Setup () {
             foreach (var combatant in Battle.Combatants) {
                 combatant.UpdateWorldPos();
+                var pos = combatant.CombatPosition;
+                Rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
             }
         }
 
@@ -89,8 +93,8 @@ namespace Combat {
                     var y = vertical_offset + vertical_distance * slot_index / ROW_SLOT_COUNT;
                     y -= vertical_distance / ROW_SLOT_COUNT * 2;
 
-                    Rows[Side.Left][row_index].Slots[slot_index].WorldPosition = new Vector2(-x, y);
-                    Rows[Side.Right][row_index].Slots[slot_index].WorldPosition = new Vector2(x, y);
+                    Rows[Side.Left][row_index][slot_index].WorldPosition = new Vector2(-x, y);
+                    Rows[Side.Right][row_index][slot_index].WorldPosition = new Vector2(x, y);
                 }
             }
 
@@ -98,7 +102,7 @@ namespace Combat {
         }
 
         public Vector2 GetWorldPosition (CombatPosition position) {
-            return Rows[position.Side][position.Row].Slots[position.Slot].WorldPosition;
+            return Rows[position.Side][position.Row][position.Slot].WorldPosition;
         }
 
         public List<CombatPosition> GetAvailablePositions () {
@@ -107,7 +111,7 @@ namespace Combat {
             foreach (var side in new Side[] { Side.Left, Side.Right }) {
                 for (int row = 0; row < MAX_ROW_COUNT; row++) {
                     for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
-                        if (Rows[side][row].Slots[slot].Combatant == null) {
+                        if (Rows[side][row][slot].Combatant == null) {
                             available_positions.Add(new CombatPosition() { Side = side, Row = row, Slot = slot });
                         }
                     }
@@ -118,7 +122,27 @@ namespace Combat {
         }
 
         public List<CombatPosition> GetMoveTargets (ICombatant combatant) {
-            return new List<CombatPosition>();
+            var available_positions = new List<CombatPosition>();
+
+            var side = combatant.CombatPosition.Side;
+
+            for (int row = 0; row < MAX_ROW_COUNT; row++) {
+                for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
+                    if (Rows[side][row][slot].Combatant != null && Rows[side][row][slot].Combatant != combatant) {
+                        available_positions.Add(new () { Side = side, Row = row, Slot = slot });
+                    }
+                    else if (row != combatant.CombatPosition.Row) {
+                        if (
+                            (slot < ROW_SLOT_COUNT - 2 && Rows[side][row][slot + 1].Combatant != null)
+                            || (slot > 0 && Rows[side][row][slot - 1].Combatant != null)
+                        ) {
+                            available_positions.Add(new () { Side = side, Row = row, Slot = slot });
+                        }
+                    }
+                }
+            }
+
+            return available_positions;
         }
 
         private void AdjustRowPositions (Side side, int row) {
@@ -149,7 +173,13 @@ namespace Combat {
         }
 
         public override void _Draw () {
-
+            foreach (Side side in Rows.Keys) {
+                foreach (RowData row in Rows[side]) {
+                    foreach (SlotData slot in row.Slots) {
+                        DrawCircle(slot.WorldPosition, 5, Colors.Red);
+                    }
+                }
+            }
         }
     }
 }
