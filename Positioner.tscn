@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxdr5gal8jxh1"]
+
+[ext_resource type="Script" path="res://scripts/combat/battle/Positioner.cs" id="1_ielu5"]
+
+[node name="Positioner" type="Node2D"]
+script = ExtResource("1_ielu5")
+CenterDistance = 45
+VerticalDistance = 150
+HorizontalDistance = 50

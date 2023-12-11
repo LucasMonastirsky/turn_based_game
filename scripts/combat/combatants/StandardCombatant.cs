@@ -36,7 +36,7 @@ namespace Combat {
         }
 
         public void UpdateWorldPos () {
-            Position = Battle.Positioner.GetWorldPosition(CombatPosition);
+            Position = Positioner.GetWorldPosition(CombatPosition);
         }
 
         public virtual void OnActionEnd () {
@@ -98,7 +98,7 @@ namespace Combat {
         }
 
         public Task MoveBack () {
-            return MoveTo(Battle.Positioner.GetWorldPosition(CombatPosition));
+            return MoveTo(Positioner.GetWorldPosition(CombatPosition));
         }
 
         public Task MoveToMelee (ICombatant target) {

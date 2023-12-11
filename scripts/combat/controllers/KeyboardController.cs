@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 public partial class KeyboardController : Controller {
 	public override void OnTurnStart () {
 		CombatPlayerInterface.ShowActionList(Combatant.ActionList);
+		CombatPlayerInterface.MoveDebugMarker(Combatant.WorldPos);
 	}
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
@@ -32,7 +33,7 @@ public partial class KeyboardController : Controller {
 	}
 
 	public override async Task<CombatPosition> RequestPosition (ICombatant user) {
-		var available_positions = Battle.Positioner.GetMoveTargets(user);
+		var available_positions = Positioner.GetMoveTargets(user);
 
 		return await TargetingInterface.SelectPosition(available_positions);
 	}

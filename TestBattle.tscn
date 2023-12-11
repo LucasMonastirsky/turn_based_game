@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/combat/battle/StandardBattle.cs" id="1_ufhvr"]
 [ext_resource type="Script" path="res://scripts/combat/management/InteractionManager.cs" id="2_4brod"]
-[ext_resource type="PackedScene" uid="uid://cxdr5gal8jxh1" path="res://StandardPositioner.tscn" id="2_gfn1p"]
 [ext_resource type="PackedScene" uid="uid://c6r1y1xbor3j3" path="res://scripts/combat/interface/player/targeting/TargetingInterface.tscn" id="3_c64x3"]
 [ext_resource type="PackedScene" uid="uid://ba2w5micxhmo8" path="res://scripts/combat/interface/player/CombatPlayerInterface.tscn" id="3_jla18"]
+[ext_resource type="PackedScene" uid="uid://cxdr5gal8jxh1" path="res://Positioner.tscn" id="3_tio48"]
 [ext_resource type="PackedScene" uid="uid://b2bysfu7g8w7w" path="res://hugo/Hugo.tscn" id="4_43eyh"]
 [ext_resource type="PackedScene" uid="uid://c8h1qk64dpov" path="res://testers/miguel/Miguel.tscn" id="5_84if1"]
 
@@ -18,12 +18,12 @@ zoom = Vector2(2, 2)
 
 [node name="CombatPlayerInterface" parent="Camera2D/CanvasLayer" instance=ExtResource("3_jla18")]
 
+[node name="Positioner" parent="." instance=ExtResource("3_tio48")]
+
 [node name="TargetingInterface" parent="." instance=ExtResource("3_c64x3")]
 
 [node name="InteractionManager" type="Node" parent="."]
 script = ExtResource("2_4brod")
-
-[node name="Positioner" parent="." instance=ExtResource("2_gfn1p")]
 
 [node name="Hugo" parent="." instance=ExtResource("4_43eyh")]
 

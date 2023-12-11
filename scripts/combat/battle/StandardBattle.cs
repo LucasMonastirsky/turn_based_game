@@ -7,7 +7,7 @@ namespace Combat {
 	public partial class StandardBattle : Node, IBattle {
 		private List<ICombatant> combatants;
 		public List<ICombatant> Combatants { get => combatants; }
-		public IPositioner Positioner { get; protected set; }
+
 
 		public override void _Ready () {
 			Battle.Current = this;
@@ -37,7 +37,6 @@ namespace Combat {
 				}
 			}
 
-			Positioner = GetNode<IPositioner>("Positioner");
 			Positioner.Setup();
 
 			TurnManager.LoadIn();

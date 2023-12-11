@@ -47,7 +47,7 @@ public partial class Hugo {
 
                 await InteractionManager.ResolveQueue();
 
-                await user.MoveTo(Battle.Positioner.GetWorldPosition(user.CombatPosition));
+                await user.MoveTo(Positioner.GetWorldPosition(user.CombatPosition));
 
                 user.Animator.Play(user.Animations.Idle);
                 InteractionManager.EndAction();
@@ -62,6 +62,11 @@ public partial class Hugo {
 
             public override async Task RequestTargetsAndRun() {
                 var target_position = await user.Controller.RequestPosition(user);
+
+                Positioner.SwitchPosition(user, target_position);
+
+                await InteractionManager.ResolveQueue();
+                InteractionManager.EndAction();
             }
         }
     

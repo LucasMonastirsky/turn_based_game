@@ -43,7 +43,7 @@ public partial class Miguel {
 
                 await InteractionManager.ResolveQueue();
 
-                await user.MoveTo(Battle.Positioner.GetWorldPosition(user.CombatPosition));
+                await user.MoveTo(Positioner.GetWorldPosition(user.CombatPosition));
 
                 user.Animator.Play(user.Animations.Idle);
                 InteractionManager.EndAction();
