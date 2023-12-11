@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 public partial class KeyboardController : Controller {
 	public override void OnTurnStart () {
 		CombatPlayerInterface.ShowActionList(Combatant.ActionList);
-		CombatPlayerInterface.MoveDebugMarker(Combatant.WorldPos);
 	}
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {

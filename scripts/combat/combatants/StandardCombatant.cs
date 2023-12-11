@@ -35,10 +35,6 @@ namespace Combat {
             Setup();
         }
 
-        public void UpdateWorldPos () {
-            Position = Positioner.GetWorldPosition(CombatPosition);
-        }
-
         public virtual void OnActionEnd () {
             Dev.Log($"OnActionEnd {CombatName}");
             Animator.Play(StandardAnimations.Idle);

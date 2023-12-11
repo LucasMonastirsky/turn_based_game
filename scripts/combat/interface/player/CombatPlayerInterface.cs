@@ -13,14 +13,9 @@ namespace Combat {
 
         private List<CombatPlayerInterfaceActionButton> buttons = new ();
 
-        private Vector2 debug_marker_position;
 
         public override void _EnterTree () {
             current = this;
-        }
-
-        public override void _Draw () {
-            DrawCircle(debug_marker_position, 50f, Colors.Aquamarine);
         }
 
         public static void ShowActionList (List<CombatAction> actions) {
@@ -36,10 +31,6 @@ namespace Combat {
                 button.Action = action;
                 current.buttons.Add(button);
             }
-        }
-
-        public static void MoveDebugMarker (Vector2 target) {
-            current.debug_marker_position = target;
         }
     }
 }

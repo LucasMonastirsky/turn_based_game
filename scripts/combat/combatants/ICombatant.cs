@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 
 namespace Combat {
@@ -14,11 +15,11 @@ namespace Combat {
         public abstract List<CombatAction> ActionList { get; }
 
         public abstract void LoadIn (CombatPosition position);
-        public abstract void UpdateWorldPos ();
         public abstract void OnActionEnd ();
 
         public abstract void SwitchWith (ICombatant target);
         public abstract void SwitchTo (CombatPosition position);
+        public abstract Task MoveTo (Vector2 position);
 
         public abstract int Damage (int value, string[] tags);
         public abstract void ReceiveAttack (AttackResult attack_result);

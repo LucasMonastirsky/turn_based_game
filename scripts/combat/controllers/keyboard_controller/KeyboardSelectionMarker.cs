@@ -42,7 +42,7 @@ using Godot;
     public override void _Draw() {
         if (is_debug_active) DrawRect(
 			new Rect2(
-				new Vector2(Position.X - hitbox_width / 2, Position.Y + hitbox_low_padding),
+				new Vector2(-hitbox_width / 2, hitbox_low_padding),
 				new Vector2(hitbox_width, -hitbox_low_padding - hitbox_height)
 			),
 			Colors.Green,

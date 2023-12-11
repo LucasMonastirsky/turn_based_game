@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 
 namespace Combat {
@@ -16,28 +17,28 @@ namespace Combat {
             get => center_distance;
             set {
                 center_distance = value;
-                calculate_both_sides();
+                calculate_positions();
             }
         }
         [Export] protected int VerticalDistance {
             get => vertical_distance;
             set {
                 vertical_distance = value;
-                calculate_both_sides();
+                calculate_positions();
             }
         }
         [Export] protected int HorizontalDistance {
             get => horizontal_distance;
             set {
                 horizontal_distance = value;
-                calculate_both_sides();
+                calculate_positions();
             }
         }
         [Export] protected int VerticalOffset {
             get => vertical_offset;
             set {
                 vertical_offset = value;
-                calculate_both_sides();
+                calculate_positions();
             }
         }
         #endregion
@@ -77,8 +78,8 @@ namespace Combat {
 
         public static void Setup () {
             foreach (var combatant in Battle.Combatants) {
-                combatant.UpdateWorldPos();
                 var pos = combatant.CombatPosition;
+                combatant.MoveTo(GetWorldPosition(pos));
                 current.Rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
             }
         }
@@ -151,7 +152,7 @@ namespace Combat {
             return current.Rows[position.Side][position.Row][position.Slot];
         }
 
-        private void calculate_both_sides () {
+        private void calculate_positions () {
             Rows = new () {
                 { Side.Left, new List<RowData>() },
                 { Side.Right, new List<RowData>() },
@@ -177,45 +178,20 @@ namespace Combat {
             QueueRedraw();
         }
 
-        private static void adjust_row_positions (Side side, int row) {
-            var combatants = Battle.Combatants.Where(combatant => combatant.CombatPosition.Side == side && combatant.CombatPosition.Row == row).ToList();
-
-            int[] slots;
-
-            switch (combatants.Count()) {
-                case 1:
-                    slots = new int[] { 2 };
-                    break;
-                case 2:
-                    slots = new int[] { 1, 3 };
-                    break;
-                case 3:
-                    slots = new int[] { 0, 2, 4 };
-                    break;
-                default:
-                    slots = new int[] { };
-                    break;
-            }
-
-            for (int i = 0; i < combatants.Count(); i++) {
-                var combatant = combatants[i];
-                var new_pos = combatant.CombatPosition with { Slot = slots[i] };
-
-                get_slot_data(combatant.CombatPosition).Combatant = null;
-                get_slot_data(new_pos).Combatant = combatant;
-
-                combatant.CombatPosition = new_pos;
-                combatant.UpdateWorldPos();
-            }
-        }
-
         private static void recalculate_side (Side side) {
+            var tasks = new List<Task>();
+
             foreach (var row in current.Rows[side]) {
                 foreach (var slot in row.Slots) {
                     slot.Combatant = null;
                 }
 
-                var combatants = Battle.Combatants.Where(combatant => combatant.CombatPosition.Side == side && combatant.CombatPosition.Row == row.Index).ToList();
+                var combatants = Battle.Combatants.Where(combatant => (
+                    combatant.CombatPosition.Side == side
+                    && combatant.CombatPosition.Row == row.Index
+                )).ToList();
+
+                combatants.Sort((a, b) => a.CombatPosition.Slot - b.CombatPosition.Slot);
 
                 int[] slots;
 
@@ -239,11 +215,10 @@ namespace Combat {
 
                     combatant.CombatPosition =  combatant.CombatPosition with { Slot = slots[i] };
                     get_slot_data(combatant.CombatPosition).Combatant = combatant;
-                    combatant.UpdateWorldPos();
+                    
+                    tasks.Add(combatant.MoveTo(GetWorldPosition(combatant.CombatPosition)));
                 }
             }
-
-
         }
     }
 }
