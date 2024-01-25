@@ -7,6 +7,7 @@ namespace Combat {
         public ICombatant Combatant;
 
         public abstract void OnTurnStart ();
+        public virtual void OnTurnEnd () {}
 
         public virtual Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
             throw new NotImplementedException("RequestSingleTarget not implemented in controller");

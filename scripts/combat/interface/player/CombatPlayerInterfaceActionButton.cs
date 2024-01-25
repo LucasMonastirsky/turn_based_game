@@ -8,8 +8,9 @@ namespace Combat {
             set {
                 _action = value;
                 Text = _action.Name;
-                Pressed += () => {
+                Pressed += () => { // TODO: try/catch here to handle cancelling?
                     _action.RequestTargetsAndRun();
+                    CombatPlayerInterface.HideActionList();
                 };
             }
         }

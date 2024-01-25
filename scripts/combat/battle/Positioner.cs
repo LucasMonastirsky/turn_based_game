@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ namespace Combat {
             public RowData () {
                 Slots = new ();
                 for (int i = 0; i < ROW_SLOT_COUNT; i++) {
-                    Slots.Add(new SlotData());
+                    Slots.Add(new SlotData(this));
                 }
             }
         }
@@ -65,8 +66,10 @@ namespace Combat {
             public bool IsOccupied => Combatant != null;
             public ICombatant Combatant;
             public Vector2 WorldPosition;
+            public RowData Row { get; private set; }
 
-            public SlotData () {
+            public SlotData (RowData row) {
+                Row = row;
                 Combatant = null;
                 IsAvailable = true;
             }
@@ -106,7 +109,8 @@ namespace Combat {
 
         public static List<CombatPosition> GetMoveTargets (ICombatant combatant) {
             var available_positions = new List<CombatPosition>();
-            var side = combatant.CombatPosition.Side;
+            var position = combatant.CombatPosition;
+            var side = position.Side;
 
             for (int row = 0; row < MAX_ROW_COUNT; row++) {
                 for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
@@ -115,7 +119,11 @@ namespace Combat {
                     if (slot_data.Combatant != null && slot_data.Combatant != combatant) {
                         available_positions.Add(new () { Side = side, Row = row, Slot = slot });
                     }
-                    else if (row != combatant.CombatPosition.Row) {
+                    else if (
+                        row != combatant.CombatPosition.Row
+                        && slot_data.Row.CombatantCount < MAX_ROW_SIZE
+                        && Math.Abs(current.Rows[position.Side][position.Row].CombatantCount - slot_data.Row.CombatantCount) == 1
+                    ) {
                         if (
                             (slot < ROW_SLOT_COUNT - 2 && current.Rows[side][row][slot + 1].Combatant != null)
                             || (slot > 0 && current.Rows[side][row][slot - 1].Combatant != null)

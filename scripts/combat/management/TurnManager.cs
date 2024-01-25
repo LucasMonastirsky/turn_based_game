@@ -25,6 +25,8 @@ namespace Combat {
         public static void EndTurn () {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
+            instance.combatants[instance.turn_index].Controller.OnTurnEnd();
+
             instance.turn_index++;
 
             if (instance.turn_index >= instance.combatants.Length) {

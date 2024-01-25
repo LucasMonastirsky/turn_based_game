@@ -32,5 +32,13 @@ namespace Combat {
                 current.buttons.Add(button);
             }
         }
+
+        public static void HideActionList () {
+            foreach (var button in current.buttons) {
+                button.QueueFree();
+            }
+
+            current.buttons = new ();
+        }
     }
 }

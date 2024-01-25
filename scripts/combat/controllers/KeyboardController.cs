@@ -1,6 +1,4 @@
 using Combat;
-using CustomDebug;
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +10,13 @@ public partial class KeyboardController : Controller {
 	}
 
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
-		var selectables = Battle.Current.Combatants;
-
 		var predicates = new List<Predicate<ICombatant>> ();
 
 		if (selector.Side != null) predicates.Add(x => (int) x.CombatPosition.Side * (int) selector.Side == (int) user.CombatPosition.Side);
 		if (selector.Row != null) predicates.Add(x => x.CombatPosition.Row == selector.Row);
 		if (selector.Validator != null) predicates.Add(selector.Validator);
 
-		selectables = selectables.Where(combatant => {
+		var selectables = Battle.Current.Combatants.Where(combatant => {
 			foreach (var predicate in predicates) {
 				if (!predicate(combatant)) return false;
 			}
