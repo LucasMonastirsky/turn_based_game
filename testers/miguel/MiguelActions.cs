@@ -5,6 +5,7 @@ using Combat;
 public partial class Miguel {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
         Actions.Swing,
+        Actions.Pass,
     });
 
     public ActionStore Actions;
@@ -12,8 +13,11 @@ public partial class Miguel {
     public class ActionStore {
         public ActionClasses.Swing Swing;
 
+        public CommonActions.Pass Pass;
+
         public ActionStore (Miguel miguel) {
             Swing = new (miguel);
+            Pass = new (miguel);
         }
     }
 

@@ -12,8 +12,8 @@ public partial class KeyboardController : Controller {
 	public override async Task<ICombatant> RequestSingleTarget (ICombatant user, TargetSelector selector) {
 		var predicates = new List<Predicate<ICombatant>> ();
 
-		if (selector.Side != null) predicates.Add(x => (int) x.CombatPosition.Side * (int) selector.Side == (int) user.CombatPosition.Side);
-		if (selector.Row != null) predicates.Add(x => x.CombatPosition.Row == selector.Row);
+		if (selector.Side != null) predicates.Add(x => (int) x.Side * (int) selector.Side == (int) user.Side);
+		if (selector.Row != null) predicates.Add(x => x.Row == selector.Row);
 		if (selector.Validator != null) predicates.Add(selector.Validator);
 
 		var selectables = Battle.Current.Combatants.Where(combatant => {

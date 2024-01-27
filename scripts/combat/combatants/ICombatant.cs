@@ -10,6 +10,10 @@ namespace Combat {
         public abstract int Health { get; }
 
         public abstract CombatPosition CombatPosition { get; set; }
+        public int Slot { get => CombatPosition.Slot; }
+        public int Row { get => CombatPosition.Row; }
+        public Side Side { get => CombatPosition.Side; }
+
         public abstract Vector2 WorldPos { get; }
 
         public abstract List<CombatAction> ActionList { get; }

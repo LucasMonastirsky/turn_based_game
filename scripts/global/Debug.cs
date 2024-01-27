@@ -20,7 +20,7 @@ namespace CustomDebug {
 
         public static void Log (TAG tag, string message) {
             if (tags[tag]) {
-                GD.Print($"{DateTime.Now.ToString("HH:mm:ss:fff")}: {message}");
+                GD.Print($"{DateTime.Now.ToString("mm:ss:fff")}: {message}");
             }
         }
         public static void Log (string message) {

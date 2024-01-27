@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
+using CustomDebug;
 
 public partial class Hugo {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
         Actions.Swing,
         Actions.Move,
+        Actions.Pass,
     });
 
     public ActionStore Actions;
@@ -15,15 +17,22 @@ public partial class Hugo {
         public HugoActions.Swing Swing;
         public HugoActions.Move Move;
 
+        public CommonActions.Pass Pass;
+
         public ActionStore (Hugo hugo) {
             Swing = new (hugo);
             Move = new (hugo);
+            Pass = new (hugo);
         }
     }
 
     public abstract class HugoActions {
         public class Swing : SingleTargetAction {
             public override string Name { get => "Swing"; }
+
+            public override bool IsAvailable () {
+                return user.Row == 0;
+            }
 
             public override TargetSelector Selector => new () {
                 Side = TargetSelector.SideCondition.Opposite,
@@ -60,7 +69,7 @@ public partial class Hugo {
 
             public Move (ICombatant user) : base (user) {}
 
-            public override async Task RequestTargetsAndRun() {
+            public override async Task RequestTargetsAndRun () {
                 var target_position = await user.Controller.RequestPosition(user);
 
                 Positioner.SwitchPosition(user, target_position);

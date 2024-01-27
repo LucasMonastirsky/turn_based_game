@@ -20,6 +20,9 @@ namespace Combat {
                 Animator.Flipped = _combat_position.Side == Side.Right;
             }
         }
+        public int Slot { get => CombatPosition.Slot; }
+        public int Row { get => CombatPosition.Row; }
+        public Side Side { get => CombatPosition.Side; }
 
         public Vector2 WorldPos { get => Position; }
         public abstract List<CombatAction> ActionList { get; }
@@ -36,7 +39,7 @@ namespace Combat {
         }
 
         public virtual void OnActionEnd () {
-            Dev.Log($"OnActionEnd {CombatName}");
+            //Dev.Log($"OnActionEnd {CombatName}");
             Animator.Play(StandardAnimations.Idle);
         }
         #endregion
@@ -77,7 +80,7 @@ namespace Combat {
             OnAttackParried(attack_result);
         }
 
-        private double movement_duration = Timing.MoveDuration; 
+        private double movement_duration = (double) Timing.MoveDuration / 1000; 
         private bool moving = false;
         private Vector2 moving_from, moving_towards;
         private double moving_time;
@@ -129,7 +132,7 @@ namespace Combat {
         #endregion
 
         #region Animation
-        protected NewCombatAnimator Animator;
+        protected CombatAnimator Animator;
         public abstract partial class StandardAnimationStore {
             public abstract SimpleAnimation Idle { get; set; }
             public abstract SimpleSprite Hurt { get; set; }
@@ -141,7 +144,7 @@ namespace Combat {
 
         #region Godot
         public override void _Ready () {
-            Animator = new NewCombatAnimator();
+            Animator = new CombatAnimator();
             AddChild(Animator);
             Animator.Play(StandardAnimations.Idle);
         }
@@ -151,6 +154,7 @@ namespace Combat {
                 moving_time += delta;
                 Position = moving_from.Lerp(moving_towards, (float) (moving_time / movement_duration));
                 if (moving_time >= movement_duration) {
+                    Position = moving_towards;
                     moving = false;
                     move_completion_source.TrySetResult();
                 }

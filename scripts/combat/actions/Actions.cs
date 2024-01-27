@@ -19,6 +19,10 @@ namespace Combat {
     public abstract class CombatAction {
         public abstract string Name { get; }
 
+        public virtual bool IsAvailable () {
+            return true;
+        }
+
         protected ICombatant user;
 
         public CombatAction (ICombatant user) {

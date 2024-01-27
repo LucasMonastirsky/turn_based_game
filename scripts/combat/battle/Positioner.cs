@@ -120,7 +120,7 @@ namespace Combat {
                         available_positions.Add(new () { Side = side, Row = row, Slot = slot });
                     }
                     else if (
-                        row != combatant.CombatPosition.Row
+                        row != combatant.Row
                         && slot_data.Row.CombatantCount < MAX_ROW_SIZE
                         && Math.Abs(current.Rows[position.Side][position.Row].CombatantCount - slot_data.Row.CombatantCount) == 1
                     ) {
@@ -195,11 +195,11 @@ namespace Combat {
                 }
 
                 var combatants = Battle.Combatants.Where(combatant => (
-                    combatant.CombatPosition.Side == side
-                    && combatant.CombatPosition.Row == row.Index
+                    combatant.Side == side
+                    && combatant.Row == row.Index
                 )).ToList();
 
-                combatants.Sort((a, b) => a.CombatPosition.Slot - b.CombatPosition.Slot);
+                combatants.Sort((a, b) => a.Slot - b.Slot);
 
                 int[] slots;
 

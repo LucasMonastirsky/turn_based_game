@@ -1,6 +1,8 @@
 using CustomDebug;
 using Godot;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -17,7 +19,7 @@ namespace Combat {
 
         public static async Task ResolveQueue () {
             if (resolving) {
-                Dev.Log($"Attempted to resolve while resolving");
+                // Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Attempted to resolve while resolving");
                 return;
             }
 
@@ -35,9 +37,9 @@ namespace Combat {
             resolving = false;
         }
 
-        public static async void EndAction () {
+        public static async Task EndAction () {
             if (resolving) {
-                Dev.Log($"Attempted to end action while resolving");
+                // Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Attempted to end action while resolving");
                 return;
             }
 
@@ -47,7 +49,7 @@ namespace Combat {
                 combatant.OnActionEnd();
             }
 
-            await Timing.Delay();
+            // await Timing.Delay();
 
             TurnManager.EndTurn();
         }
