@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Utils;
 using Godot;
 
-namespace CustomDebug {
+namespace Development {
     public static class Dev {
         public static bool IsActive = true;
         public enum TAG {
-            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT_MANAGEMENT, ROLL, UI,
+            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT_MANAGEMENT, ROLL, UI, RANDOM,
         }
         private static Dictionary<TAG, bool> tags = new Dictionary<TAG, bool> {
             { TAG.GLOBAL, true },
@@ -16,11 +17,17 @@ namespace CustomDebug {
             { TAG.COMBAT_MANAGEMENT, true },
             { TAG.ROLL, false },
             { TAG.UI, true },
+            { TAG.RANDOM, false },
         };
+
+        private static DateTime last_log_time = DateTime.Now;
 
         public static void Log (TAG tag, string message) {
             if (tags[tag]) {
-                GD.Print($"{DateTime.Now.ToString("mm:ss:fff")}: {message}");
+                var now = DateTime.Now;
+                var delta = (int) (now - last_log_time).TotalMilliseconds;
+                GD.Print($"{now.ToString("mm:ss:fff")} (+{Stringer.PadWithZeroes(delta, 3)}): {message}");
+                last_log_time = now;
             }
         }
         public static void Log (string message) {

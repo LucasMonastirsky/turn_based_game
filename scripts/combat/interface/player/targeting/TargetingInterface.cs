@@ -1,5 +1,5 @@
 using Combat;
-using CustomDebug;
+using Development;
 using Godot;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ public partial class TargetingInterface : Node2D {
 	private static TargetingInterface current {
 		get {
 			if (_current == null) {
-				Dev.Error("No instance of TargetingInterface");
+                Dev.Error("No instance of TargetingInterface");
 			}
 			return _current;
 		}

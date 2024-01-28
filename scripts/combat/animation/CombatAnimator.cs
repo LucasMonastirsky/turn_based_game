@@ -1,5 +1,5 @@
 using System;
-using CustomDebug;
+using Development;
 using Godot;
 using ResourceHelpers;
 
@@ -28,7 +28,7 @@ namespace Combat {
 
 		private void SetSprite (SimpleSprite sprite) {
 			if (sprite == null) {
-				Dev.Error($"Null sprite in animator");
+                Dev.Error($"Null sprite in animator");
 				return;
 			}
 

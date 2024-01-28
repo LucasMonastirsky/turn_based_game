@@ -1,7 +1,5 @@
-using System;
 using Combat;
-using CustomDebug;
-using Godot;
+using Utils;
 
 public partial class MiguelController : Controller {
     public ICombatant User;
@@ -14,7 +12,7 @@ public partial class MiguelController : Controller {
         else {
             var targets = Battle.Combatants.FindAll(combatant => combatant.Side != User.Side && combatant.Row == 0);
 
-            if (targets.Count > 0) _ = miguel.Actions.Swing.Run(targets[(int) GD.Randi() % (targets.Count - 1)]);
+            if (targets.Count > 0) _ = miguel.Actions.Swing.Run(targets[RNG.LessThan(targets.Count)]);
             else miguel.Actions.Pass.Run();
         }
     }

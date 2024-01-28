@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
-using CustomDebug;
+using Development;
 
 namespace Combat {
     public class TurnManager {

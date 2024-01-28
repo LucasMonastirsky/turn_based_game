@@ -48,7 +48,7 @@ namespace Combat {
 
         public class RowData {
             public List<SlotData> Slots;
-            public int CombatantCount;
+            public int CombatantCount { get => Slots.Where(slot => slot.Combatant != null).Count(); }
             public int Index;
 
             public SlotData this[int index] => Slots[index];
@@ -122,7 +122,7 @@ namespace Combat {
                     else if (
                         row != combatant.Row
                         && slot_data.Row.CombatantCount < MAX_ROW_SIZE
-                        && Math.Abs(current.Rows[position.Side][position.Row].CombatantCount - slot_data.Row.CombatantCount) == 1
+                        && current.Rows[position.Side][position.Row].CombatantCount > slot_data.Row.CombatantCount
                     ) {
                         if (
                             (slot < ROW_SLOT_COUNT - 2 && current.Rows[side][row][slot + 1].Combatant != null)
