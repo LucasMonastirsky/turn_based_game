@@ -3,7 +3,7 @@ namespace Combat {
         public struct BasicAttackOptions {
             public int ParryNegation, DodgeNegation;
         }
-        public static AttackResult BasicAttack (ICombatant user, ICombatant target, BasicAttackOptions? options = null) {
+        public static AttackResult BasicAttack (Combatant user, Combatant target, BasicAttackOptions? options = null) {
             var hit_roll = user.Roll(new DiceRoll(10), new string[] { "Attack" });
             var parry_roll = target.Roll(new DiceRoll(10), new string[] { "Parry" });
             var dodge_roll = target.Roll(new DiceRoll(10), new string[] { "Dodge" });

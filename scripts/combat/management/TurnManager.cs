@@ -5,7 +5,7 @@ using Development;
 
 namespace Combat {
     public class TurnManager {
-        private ICombatant[] combatants;
+        private Combatant[] combatants;
         private int turn_index;
 
         private static TurnManager instance;

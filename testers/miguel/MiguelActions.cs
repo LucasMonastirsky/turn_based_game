@@ -5,6 +5,7 @@ using Combat;
 public partial class Miguel {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
         Actions.Swing,
+        Actions.Move,
         Actions.Pass,
     });
 
@@ -13,10 +14,12 @@ public partial class Miguel {
     public class ActionStore {
         public ActionClasses.Swing Swing;
 
+        public CommonActions.Move Move;
         public CommonActions.Pass Pass;
 
         public ActionStore (Miguel miguel) {
             Swing = new (miguel);
+            Move = new (miguel);
             Pass = new (miguel);
         }
     }
@@ -33,7 +36,7 @@ public partial class Miguel {
             protected new Miguel user => base.user as Miguel;
             public Swing (Miguel user) : base (user) {}
 
-            public override async Task Run(ICombatant target) {
+            public override async Task Run(Combatant target) {
                 user.Animator.Play(user.Animations.Swing);
                 await user.MoveToMelee(target);
 

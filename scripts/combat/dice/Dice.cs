@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Development;
-using Godot;
+using Utils;
 
 namespace Combat {
     public class DiceRoll {
@@ -72,21 +70,18 @@ namespace Combat {
         }
 
         public Result Calculate () {
-            var random = new RandomNumberGenerator();
-            random.Randomize();
-
             int sum = 0;
 
             foreach (var dice_roll in DiceRolls) {
                 for (int i = 0; i < dice_roll.Amount; i++) {
                     if (Advantage == 0){
-                        sum += random.RandiRange(1, dice_roll.Size);
+                        sum += RNG.Range(1, dice_roll.Size);
                     }
                     else {
                         var absolute = Math.Abs(Advantage);
                         var rolls = new int[absolute];
                         for (var j = 0; j < absolute; i++) {
-                            rolls[j] = random.RandiRange(1, dice_roll.Size);
+                            rolls[j] = RNG.Range(1, dice_roll.Size);
                         }
                         if (Advantage > 0) sum += rolls.Max();
                         else sum += rolls.Min();

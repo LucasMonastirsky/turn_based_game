@@ -14,8 +14,8 @@ public partial class Hugo {
 
     public class ActionStore {
         public HugoActions.Swing Swing;
-        public HugoActions.Move Move;
 
+        public CommonActions.Move Move;
         public CommonActions.Pass Pass;
 
         public ActionStore (Hugo hugo) {
@@ -39,9 +39,9 @@ public partial class Hugo {
             };
 
             protected new Hugo user { get => base.user as Hugo; }
-            public Swing (ICombatant user) : base(user) {}
+            public Swing (Combatant user) : base(user) {}
 
-            public override async Task Run (ICombatant target) {
+            public override async Task Run (Combatant target) {
                 user.Animator.Play(user.Animations.Swing);
                 await user.MoveToMelee(target);
 
@@ -62,21 +62,5 @@ public partial class Hugo {
             }
 
         }
-    
-        public class Move : CombatAction {
-            public override string Name { get => "Move"; }
-
-            public Move (ICombatant user) : base (user) {}
-
-            public override async Task RequestTargetsAndRun () {
-                var target_position = await user.Controller.RequestPosition(user);
-
-                Positioner.SwitchPosition(user, target_position);
-
-                await InteractionManager.ResolveQueue();
-                InteractionManager.EndAction();
-            }
-        }
-    
     }
 }

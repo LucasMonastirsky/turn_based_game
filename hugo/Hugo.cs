@@ -1,7 +1,7 @@
 using Combat;
 using Godot;
 
-public partial class Hugo : StandardCombatant, ICombatant {
+public partial class Hugo : Combatant {
 	[Export] public PackedScene PackedController;
 
 	public override string CombatName { get => "Hugo"; }

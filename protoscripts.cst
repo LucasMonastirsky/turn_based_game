@@ -11,7 +11,7 @@ StandardCombatant user;
 await user.StandardAttack(target, attack_data)
 user.ReturnToRow()
 
-public void StandardAttack (ICombatant target) {
+public void StandardAttack (Combatant target) {
     var result = target.Defend(user)
 
     if (result.hit) {

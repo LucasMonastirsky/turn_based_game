@@ -2,6 +2,6 @@ using System.Collections.Generic;
 
 namespace Combat {
     public interface IBattle {
-        List<ICombatant> Combatants { get; }
+        List<Combatant> Combatants { get; }
     }
 }

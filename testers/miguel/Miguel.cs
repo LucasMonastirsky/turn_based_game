@@ -1,6 +1,6 @@
 using Combat;
 
-public partial class Miguel : StandardCombatant {
+public partial class Miguel : Combatant {
 	public override string CombatName => "Miguel";
 
     protected override void Setup () {

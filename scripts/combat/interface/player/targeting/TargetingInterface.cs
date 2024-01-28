@@ -24,9 +24,9 @@ public partial class TargetingInterface : Node2D {
 		current = this;
 	}
 
-	public static async Task<ICombatant> SelectSingleCombatant (List<ICombatant> combatants) {
+	public static async Task<Combatant> SelectSingleCombatant (List<Combatant> combatants) {
 		var markers = new Queue<KeyboardSelectionMarker>();
-		var selection = new TaskCompletionSource<ICombatant>();
+		var selection = new TaskCompletionSource<Combatant>();
 
 		foreach (var combatant in combatants) {
 			var marker = current.single_marker_scene.Instantiate<KeyboardSelectionMarker>(); // TODO: I don't like setting public fields like this

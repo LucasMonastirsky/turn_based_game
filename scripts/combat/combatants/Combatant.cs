@@ -5,7 +5,7 @@ using Godot;
 using Development;
 
 namespace Combat {
-    public abstract partial class StandardCombatant : Node2D, ICombatant {
+    public abstract partial class Combatant : Node2D {
         public Controller Controller { get; set; }
 
         public abstract string CombatName { get; }
@@ -39,13 +39,12 @@ namespace Combat {
         }
 
         public virtual void OnActionEnd () {
-            //Dev.Log($"OnActionEnd {CombatName}");
             Animator.Play(StandardAnimations.Idle);
         }
         #endregion
 
         #region Combat Interactions
-        public void SwitchWith(ICombatant target) { // remove?
+        public void SwitchWith(Combatant target) { // remove?
             throw new NotImplementedException();
         }
 
@@ -100,7 +99,7 @@ namespace Combat {
             return MoveTo(Positioner.GetWorldPosition(CombatPosition));
         }
 
-        public Task MoveToMelee (ICombatant target) {
+        public Task MoveToMelee (Combatant target) {
             return MoveTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) CombatPosition.Side }); // TODO: put melee range var somewhere
         }
         #endregion

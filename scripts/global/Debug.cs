@@ -16,7 +16,7 @@ namespace Development {
             { TAG.ANIMATION, true },
             { TAG.COMBAT_MANAGEMENT, true },
             { TAG.ROLL, false },
-            { TAG.UI, true },
+            { TAG.UI, false },
             { TAG.RANDOM, false },
         };
 

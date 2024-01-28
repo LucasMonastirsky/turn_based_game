@@ -2,7 +2,7 @@ using Combat;
 using Godot;
 using ResourceHelpers;
 
-public partial class Hugo : StandardCombatant {
+public partial class Hugo : Combatant {
     private static string texture_path = "res://hugo/textures";
     protected class AnimationStore : StandardAnimationStore {
         public override SimpleAnimation Idle { get; set; }

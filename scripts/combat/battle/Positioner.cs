@@ -64,7 +64,7 @@ namespace Combat {
         public class SlotData {
             public bool IsAvailable;
             public bool IsOccupied => Combatant != null;
-            public ICombatant Combatant;
+            public Combatant Combatant;
             public Vector2 WorldPosition;
             public RowData Row { get; private set; }
 
@@ -107,7 +107,7 @@ namespace Combat {
             return available_positions;
         }
 
-        public static List<CombatPosition> GetMoveTargets (ICombatant combatant) {
+        public static List<CombatPosition> GetMoveTargets (Combatant combatant) {
             var available_positions = new List<CombatPosition>();
             var position = combatant.CombatPosition;
             var side = position.Side;
@@ -137,7 +137,7 @@ namespace Combat {
             return available_positions;
         }
 
-        public static void SwitchPosition (ICombatant combatant, CombatPosition target) {
+        public static void SwitchPosition (Combatant combatant, CombatPosition target) {
             var old_pos = combatant.CombatPosition;
 
             combatant.CombatPosition = target;

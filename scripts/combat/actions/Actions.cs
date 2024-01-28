@@ -11,7 +11,7 @@ namespace Combat {
         public SideCondition? Side { get; init; }
         public int? Row { get; init; }
 
-        public Predicate<ICombatant> Validator { get; init; }
+        public Predicate<Combatant> Validator { get; init; }
 
     }
 
@@ -22,9 +22,9 @@ namespace Combat {
             return true;
         }
 
-        protected ICombatant user;
+        protected Combatant user;
 
-        public CombatAction (ICombatant user) {
+        public CombatAction (Combatant user) {
             this.user = user;
         }
 
@@ -33,8 +33,8 @@ namespace Combat {
 
     public abstract class SingleTargetAction : CombatAction {
         public abstract TargetSelector Selector { get; }
-        public SingleTargetAction (ICombatant user) : base (user) {}
-        public abstract Task Run (ICombatant target);
+        public SingleTargetAction (Combatant user) : base (user) {}
+        public abstract Task Run (Combatant target);
         public override async Task RequestTargetsAndRun () {
             Dev.Log($"Requesting targets for {Name}");
             var target = await user.Controller.RequestSingleTarget(user, Selector);
