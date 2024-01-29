@@ -42,7 +42,6 @@ namespace Combat {
 
             increase();
             while (combatant.IsDead) {
-                Dev.Log("DEAD");
                 increase();
             }
 

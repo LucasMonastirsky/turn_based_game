@@ -1,8 +1,6 @@
 using Development;
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -19,7 +17,6 @@ namespace Combat {
 
         public static async Task ResolveQueue () {
             if (resolving) {
-                // Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Attempted to resolve while resolving");
                 return;
             }
 
@@ -38,10 +35,7 @@ namespace Combat {
         }
 
         public static async Task EndAction () {
-            if (resolving) {
-                // Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Attempted to end action while resolving");
-                return;
-            }
+            if (resolving) return;
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
 
@@ -49,7 +43,7 @@ namespace Combat {
                 combatant.OnActionEnd();
             }
 
-            // await Timing.Delay();
+            if (current.Queue.Count > 0) await ResolveQueue();
 
             TurnManager.EndTurn();
         }

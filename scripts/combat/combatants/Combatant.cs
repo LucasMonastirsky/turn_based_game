@@ -40,12 +40,16 @@ namespace Combat {
             Setup();
         }
 
-        public virtual void OnActionEnd () { // add ResolveQueue() after death
+        public virtual void OnActionEnd () {
             if (Health < 1) {
-                Animator.Play(StandardAnimations.Dead);
-                IsDead = true;
+                if (!IsDead) {
+                    Animator.Play(StandardAnimations.Dead);
+                    IsDead = true;
+                }
             }
-            else Animator.Play(StandardAnimations.Idle);
+            else {
+                Animator.Play(StandardAnimations.Idle);
+            }
         }
         #endregion
 
