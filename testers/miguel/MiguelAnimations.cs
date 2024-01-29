@@ -8,6 +8,7 @@ public partial class Miguel {
         public override SimpleSprite Hurt { get; set; }
 		public override SimpleSprite Dodge { get; set; }
 		public override SimpleSprite Parry { get; set; }
+		public override SimpleSprite Dead { get; set; }
 		public SimpleSprite Swing { get; set; }
     }
 	protected override StandardAnimationStore StandardAnimations { get => Animations; }
@@ -31,8 +32,11 @@ public partial class Miguel {
 		Dodge = new SimpleSprite() {
 			Texture = Resources.LoadTexture(texture_path, "dodge"),
 		},
+		Dead = new SimpleSprite() {
+			Texture = Resources.LoadTexture(texture_path, "dead"),
+		},
 		Swing = new SimpleSprite() {
 			Texture = Resources.LoadTexture(texture_path, "swing"),
-		}
+		},
 	};
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
@@ -27,13 +28,24 @@ namespace Combat {
 
             instance.combatants[instance.turn_index].Controller.OnTurnEnd();
 
-            instance.turn_index++;
+            Combatant combatant;
 
-            if (instance.turn_index >= instance.combatants.Length) {
-                instance.turn_index = 0;
+            void increase () {
+                instance.turn_index++;
+
+                if (instance.turn_index >= instance.combatants.Length) {
+                    instance.turn_index = 0;
+                }
+
+                combatant = instance.combatants[instance.turn_index];
             }
 
-            var combatant = instance.combatants[instance.turn_index];
+            increase();
+            while (combatant.IsDead) {
+                Dev.Log("DEAD");
+                increase();
+            }
+
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting turn: {combatant.CombatName}");
             combatant.Controller.OnTurnStart();
         }

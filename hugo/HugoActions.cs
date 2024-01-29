@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
+using Utils;
 
 public partial class Hugo {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
@@ -36,6 +37,7 @@ public partial class Hugo {
             public override TargetSelector Selector => new () {
                 Side = TargetSelector.SideCondition.Opposite,
                 Row = 0,
+                Validator = combatant => !combatant.IsDead,
             };
 
             protected new Hugo user { get => base.user as Hugo; }
@@ -50,7 +52,7 @@ public partial class Hugo {
                 });
 
                 if (attack_result.Hit) {
-                    target.Damage(10, new string[] { "Cut" });
+                    target.Damage(RNG.Range(15, 30), new string[] { "Cut" });
                 }
 
                 await InteractionManager.ResolveQueue();

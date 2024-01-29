@@ -9,6 +9,7 @@ public partial class Hugo : Combatant {
         public override SimpleSprite Hurt { get; set; }
         public override SimpleSprite Parry { get; set; }
         public override SimpleSprite Dodge { get; set; }
+        public override SimpleSprite Dead { get; set; }
         public SimpleSprite Swing { get; set; }
     }
     protected override StandardAnimationStore StandardAnimations { get => Animations; }
@@ -25,11 +26,10 @@ public partial class Hugo : Combatant {
                 },
             },
         },
-        Swing = new SimpleSprite() {
-            Texture = Resources.LoadTexture(texture_path, "swing"),
-        },
+        Swing = new SimpleSprite(texture_path, "swing"),
         Hurt = new SimpleSprite(texture_path, "hurt"),
         Parry = new SimpleSprite(texture_path, "parry"),
         Dodge = new SimpleSprite(texture_path, "dodge"),
+        Dead = new SimpleSprite(texture_path, "dead"),
     };
 }

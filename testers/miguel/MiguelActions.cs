@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
+using Utils;
 
 public partial class Miguel {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
@@ -45,7 +46,7 @@ public partial class Miguel {
                 });
 
                 if (attack_result.Hit) {
-                    target.Damage(8, new string[] { "Cut" });
+                    target.Damage(RNG.Range(15, 30), new string[] { "Cut" });
                 }
 
                 await InteractionManager.ResolveQueue();

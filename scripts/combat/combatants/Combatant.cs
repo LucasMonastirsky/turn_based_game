@@ -12,6 +12,8 @@ namespace Combat {
         [Export] public int Health { get; protected set; } = 50;
         [Export] public int Armor { get; protected set; }
 
+        public bool IsDead { get; protected set; }
+
         private CombatPosition _combat_position;
         public CombatPosition CombatPosition {
             get => _combat_position;
@@ -38,8 +40,12 @@ namespace Combat {
             Setup();
         }
 
-        public virtual void OnActionEnd () {
-            Animator.Play(StandardAnimations.Idle);
+        public virtual void OnActionEnd () { // add ResolveQueue() after death
+            if (Health < 1) {
+                Animator.Play(StandardAnimations.Dead);
+                IsDead = true;
+            }
+            else Animator.Play(StandardAnimations.Idle);
         }
         #endregion
 
@@ -137,6 +143,7 @@ namespace Combat {
             public abstract SimpleSprite Hurt { get; set; }
             public abstract SimpleSprite Parry { get; set; }
             public abstract SimpleSprite Dodge { get; set; }
+            public abstract SimpleSprite Dead { get; set; } // PCs get knocked instead, and die the third time?
         }
         protected abstract StandardAnimationStore StandardAnimations { get; }
         #endregion
