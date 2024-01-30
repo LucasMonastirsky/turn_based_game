@@ -13,16 +13,21 @@ namespace Combat {
             current.Queue.Enqueue(action);
         }
 
-        private static bool resolving;
+        private enum STATE { FREE, RESOLVING, ENDING, }
+        private static STATE state = STATE.FREE;
 
         public static async Task ResolveQueue () {
-            if (resolving) {
+            if (state == STATE.RESOLVING) {
                 return;
+            }
+
+            if (state == STATE.ENDING) {
+                Dev.Error($"InteractionManager: Trying to resolve during Ending state");
             }
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Resolving queue");
 
-            resolving = true;
+            state = STATE.RESOLVING;
 
             await Timing.Delay();
 
@@ -31,11 +36,19 @@ namespace Combat {
                 await Timing.Delay();
             }
 
-            resolving = false;
+            state = STATE.FREE;
         }
 
         public static async Task EndAction () {
-            if (resolving) return;
+            if (state != STATE.FREE) return;
+
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnPreActionEnd events");
+
+            foreach (var combatant in Battle.Combatants) {
+                combatant.OnPreActionEnd();
+            }
+
+            if (current.Queue.Count > 0) await ResolveQueue();
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
 
@@ -43,7 +56,7 @@ namespace Combat {
                 combatant.OnActionEnd();
             }
 
-            if (current.Queue.Count > 0) await ResolveQueue();
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
             TurnManager.EndTurn();
         }

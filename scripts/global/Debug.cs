@@ -7,13 +7,14 @@ namespace Development {
     public static class Dev {
         public static bool IsActive = true;
         public enum TAG {
-            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT_MANAGEMENT, ROLL, UI, RANDOM,
+            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT, COMBAT_MANAGEMENT, ROLL, UI, RANDOM,
         }
         private static Dictionary<TAG, bool> tags = new Dictionary<TAG, bool> {
             { TAG.GLOBAL, true },
             { TAG.INPUT, false },
             { TAG.TARGETING, false },
             { TAG.ANIMATION, true },
+            { TAG.COMBAT, true },
             { TAG.COMBAT_MANAGEMENT, true },
             { TAG.ROLL, false },
             { TAG.UI, false },

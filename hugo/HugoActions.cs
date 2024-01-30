@@ -7,6 +7,7 @@ using Utils;
 public partial class Hugo {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
         Actions.Swing,
+        Actions.Blast,
         Actions.Move,
         Actions.Pass,
     });
@@ -15,12 +16,14 @@ public partial class Hugo {
 
     public class ActionStore {
         public HugoActions.Swing Swing;
+        public HugoActions.Blast Blast;
 
         public CommonActions.Move Move;
         public CommonActions.Pass Pass;
 
         public ActionStore (Hugo hugo) {
             Swing = new (hugo);
+            Blast = new (hugo);
             Move = new (hugo);
             Pass = new (hugo);
         }
@@ -59,9 +62,38 @@ public partial class Hugo {
 
                 await user.MoveTo(Positioner.GetWorldPosition(user.CombatPosition));
 
-                user.Animator.Play(user.Animations.Idle);
                 InteractionManager.EndAction();
             }
+
+        }
+
+        public class Blast : SingleTargetAction {
+            public override string Name => "Blast";
+
+            protected new Hugo user => base.user as Hugo;
+
+            public Blast (Combatant user) : base (user) {}
+
+            public override TargetSelector Selector => new () {
+                Side = TargetSelector.SideCondition.Opposite,
+                Validator = combatant => !combatant.IsDead,
+            };
+
+            public override async Task Run(Combatant target) {
+                user.Animator.Play(user.Animations.Blast);
+
+                var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
+                    ParryNegation = 0, DodgeNegation = 0,
+                });
+
+                if (attack_result.Hit) {
+                    target.Damage(RNG.Range(5, 15), new string[] { "Ranged", "Blunt" });
+                }
+
+                await InteractionManager.ResolveQueue();
+                InteractionManager.EndAction();
+            }
+
 
         }
     }

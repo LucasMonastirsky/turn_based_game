@@ -10,6 +10,9 @@ public partial class Miguel : Combatant {
 
     protected override void OnAttackParried(AttackResult attack_result) {
 		Animator.Play(Animations.Parry);
-        InteractionManager.AddQueueEvent(() => Actions.Swing.Run(attack_result.Attacker));
+
+        if (Row == 0 && attack_result.Attacker.Row == 0) {
+            InteractionManager.AddQueueEvent(() => Actions.Swing.Run(attack_result.Attacker));
+        }
     }
 }

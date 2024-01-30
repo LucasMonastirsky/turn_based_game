@@ -40,10 +40,9 @@ namespace Combat {
                 combatant = instance.combatants[instance.turn_index];
             }
 
-            increase();
-            while (combatant.IsDead) {
+            do {
                 increase();
-            }
+            } while (combatant.IsDead);
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting turn: {combatant.CombatName}");
             combatant.Controller.OnTurnStart();

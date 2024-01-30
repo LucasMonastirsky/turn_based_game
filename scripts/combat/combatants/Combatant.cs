@@ -40,9 +40,17 @@ namespace Combat {
             Setup();
         }
 
+        public virtual void OnPreActionEnd () {
+
+        }
+
+        /// <summary>
+        ///  Don't add to resolve_queue here
+        /// </summary>
         public virtual void OnActionEnd () {
             if (Health < 1) {
                 if (!IsDead) {
+                    Dev.Log(Dev.TAG.COMBAT, $"{CombatName} dead in {CombatPosition}");
                     Animator.Play(StandardAnimations.Dead);
                     IsDead = true;
                 }
@@ -66,7 +74,7 @@ namespace Combat {
             var total = Math.Clamp(value - Armor, 0, 999);
 
             Health -= total;
-            Dev.Log($"{CombatName} received {total} damage ({value} - {Armor}). Health: {Health}");
+            Dev.Log(Dev.TAG.COMBAT, $"{CombatName} received {total} damage ({value} - {Armor}). Health: {Health}");
 
             Animator.Play(StandardAnimations.Hurt);
 

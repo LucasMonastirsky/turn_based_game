@@ -11,12 +11,12 @@ public partial class MiguelController : Controller {
                 miguel.Actions.Pass.Run();
             }
             else {
-                var targets = Battle.Combatants.FindAll(combatant => combatant.Side == User.Side && combatant.Row == 0);
+                var targets = Battle.Combatants.FindAll(combatant => !combatant.IsDead && combatant.Side == User.Side && combatant.Row == 0);
                 miguel.Actions.Move.Run(RNG.SelectFrom(targets).CombatPosition);
             }
         }
         else {
-            var targets = Battle.Combatants.FindAll(combatant => combatant.Side != User.Side && combatant.Row == 0);
+            var targets = Battle.Combatants.FindAll(combatant => !combatant.IsDead && combatant.Side != User.Side && combatant.Row == 0);
 
             if (targets.Count > 0) _ = miguel.Actions.Swing.Run(RNG.SelectFrom(targets));
             else miguel.Actions.Pass.Run();
