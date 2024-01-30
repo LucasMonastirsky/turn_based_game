@@ -4,23 +4,19 @@ using System.Linq;
 using Godot;
 
 namespace Combat {
-	public partial class StandardBattle : Node, IBattle {
-		private List<Combatant> combatants;
-		public List<Combatant> Combatants { get => combatants; }
-
-
+	public partial class StandardBattle : BattleInstance {
 		public override void _Ready () {
 			Battle.Current = this;
 
-			combatants = new List<Combatant> {
+			Combatants = new List<Combatant> {
 				GetNode("Hugo") as Combatant,
 				GetNode("Hugo2") as Combatant,
 				GetNode("Hugo3") as Combatant,
 			};
 
-            combatants[0].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 1, });
-			combatants[1].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 3, });
-			combatants[2].LoadIn(new CombatPosition { Side = Side.Left, Row = 1, Slot = 2, });
+            Combatants[0].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 1, });
+			Combatants[1].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 3, });
+			Combatants[2].LoadIn(new CombatPosition { Side = Side.Left, Row = 1, Slot = 2, });
 
             var rows = new List<Combatant>[] { 
                 GetNode("Enemies/Front").GetChildren().Select(node => node as Combatant).ToList(),
@@ -33,7 +29,7 @@ namespace Combat {
 
 			foreach (var row in rows) {
 				foreach (var c in row) {
-					combatants.Add(c);
+					Combatants.Add(c);
 				}
 			}
 

@@ -16,7 +16,7 @@ namespace Combat {
         }
 
         public static void LoadIn () {
-            instance = new TurnManager() { combatants = Battle.Combatants.ToArray() };
+            instance = new TurnManager() { combatants = Battle.Combatants.ToList().ToArray() };
         }
 
         public static void Start () {

@@ -44,7 +44,7 @@ namespace Combat {
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnPreActionEnd events");
 
-            foreach (var combatant in Battle.Combatants) {
+            foreach (var combatant in Battle.Combatants.All) {
                 combatant.OnPreActionEnd();
             }
 

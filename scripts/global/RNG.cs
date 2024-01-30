@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Combat;
 using Development;
 using Godot;
 
@@ -25,6 +26,11 @@ namespace Utils {
 
         public static T SelectFrom <T> (List<T> values) {
             var selected = values[LessThan(values.Count())];
+            return selected;
+        }
+
+        public static Combatant SelectFrom (CombatantStore combatants) {
+            var selected = combatants[LessThan(combatants.Count)];
             return selected;
         }
     }
