@@ -1,13 +1,10 @@
-using System.Threading.Tasks;
-using Combat;
-using Development;
 using Godot;
 
-[Tool] public partial class KeyboardSelectionMarker : Sprite2D {
+[Tool] public partial class SelectionMarker : Sprite2D {
 	[Export] private int hitbox_width, hitbox_height, hitbox_low_padding;
 	[Export] private bool is_debug_active;
 
-	public KeyboardController Controller;
+	public PlayerController Controller;
 
 	public delegate void OnCombatantSelectedDelegate ();
 	public OnCombatantSelectedDelegate OnCombatantSelected;

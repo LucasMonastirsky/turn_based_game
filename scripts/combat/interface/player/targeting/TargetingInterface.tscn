@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c6r1y1xbor3j3"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/targeting/TargetingInterface.cs" id="1_mvmvk"]
-[ext_resource type="PackedScene" uid="uid://dafgudcf0bd6g" path="res://scripts/combat/controllers/keyboard_controller/KeyboardSelectionMarker.tscn" id="2_5neoe"]
+[ext_resource type="PackedScene" uid="uid://dafgudcf0bd6g" path="res://scripts/combat/interface/player/targeting/markers/SelectionMarker.tscn" id="2_5neoe"]
 
 [node name="TargetingInterface" type="Node2D"]
 script = ExtResource("1_mvmvk")

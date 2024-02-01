@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public partial class KeyboardController : Controller {
+public class PlayerController : Controller {
 	public override void OnTurnStart () {
 		CombatPlayerInterface.ShowActionList(Combatant.ActionList);
 	}

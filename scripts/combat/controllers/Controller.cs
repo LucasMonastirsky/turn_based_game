@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Godot;
 
 namespace Combat {
-    public abstract partial class Controller : Node {
+    public abstract class Controller {
         public Combatant Combatant;
 
         public abstract void OnTurnStart ();

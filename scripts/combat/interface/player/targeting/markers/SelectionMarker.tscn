@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dafgudcf0bd6g"]
 
 [ext_resource type="Texture2D" uid="uid://e0rawovun7mc" path="res://scripts/combat/controllers/keyboard_controller/sprites/target.png" id="1_1yjof"]
-[ext_resource type="Script" path="res://scripts/combat/controllers/keyboard_controller/KeyboardSelectionMarker.cs" id="1_dsvc3"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/targeting/markers/SelectionMarker.cs" id="1_dsvc3"]
 
 [node name="KeyboardSelectionMarker" type="Sprite2D"]
 scale = Vector2(1, 0.920586)

@@ -1,8 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b2bysfu7g8w7w"]
 
 [ext_resource type="Script" path="res://hugo/Hugo.cs" id="1_bnjw3"]
-[ext_resource type="PackedScene" uid="uid://cw05rsvj58d0u" path="res://scripts/combat/controllers/keyboard_controller/KeyboardController.tscn" id="2_mgred"]
 
 [node name="Hugo" type="Node2D"]
 script = ExtResource("1_bnjw3")
-PackedController = ExtResource("2_mgred")

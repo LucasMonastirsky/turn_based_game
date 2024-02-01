@@ -32,11 +32,11 @@ public partial class TargetingInterface : Node2D {
 			cancel.SetResult();
 		});
 
-		var markers = new Queue<KeyboardSelectionMarker>();
+		var markers = new Queue<SelectionMarker>();
 		var selection = new TaskCompletionSource<Combatant>();
 
 		foreach (var combatant in combatants) {
-			var marker = current.single_marker_scene.Instantiate<KeyboardSelectionMarker>(); // TODO: I don't like setting public fields like this
+			var marker = current.single_marker_scene.Instantiate<SelectionMarker>(); // TODO: I don't like setting public fields like this
 			marker.Position = combatant.WorldPos;
 			marker.OnCombatantSelected = () => {
 				selection.TrySetResult(combatant);
@@ -61,11 +61,11 @@ public partial class TargetingInterface : Node2D {
 	}
 
 	public static async Task<CombatPosition> SelectPosition (List<CombatPosition> positions) {
-		var markers = new Queue<KeyboardSelectionMarker>();
+		var markers = new Queue<SelectionMarker>();
 		var selection = new TaskCompletionSource<CombatPosition>();
 
 		foreach (var position in positions) {
-			var marker = current.single_marker_scene.Instantiate<KeyboardSelectionMarker>();
+			var marker = current.single_marker_scene.Instantiate<SelectionMarker>();
 			marker.Position = position.WorldPosition;
 			marker.OnCombatantSelected = () => {
 				selection.TrySetResult(position);

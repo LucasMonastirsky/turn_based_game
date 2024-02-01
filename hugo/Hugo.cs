@@ -1,16 +1,14 @@
+using System;
 using Combat;
 using Godot;
 
 public partial class Hugo : Combatant {
-	[Export] public PackedScene PackedController;
+    public override Type DefaultControllerType => typeof(PlayerController);
 
-	public override string CombatName { get => "Hugo"; }
+    public override string CombatName => "Hugo";
 
 	protected override void Setup () {
+		base.Setup();
 		Actions = new ActionStore(this);
-		var scene = PackedController.Instantiate();
-		AddChild(scene);
-		Controller = scene as KeyboardController;
-		Controller.Combatant = this;
 	}
 }

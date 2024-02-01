@@ -7,6 +7,7 @@ using Development;
 namespace Combat {
     public abstract partial class Combatant : Node2D {
         public Controller Controller { get; set; }
+        public abstract Type DefaultControllerType { get; }
 
         public abstract string CombatName { get; }
         [Export] public int Health { get; protected set; } = 50;
@@ -31,7 +32,11 @@ namespace Combat {
 
         #region Management
         protected virtual void Setup () {
-
+            if (DefaultControllerType.IsAssignableTo(typeof(Controller))) {
+                Dev.Log("Instantiating");
+                Controller = (Controller) Activator.CreateInstance(DefaultControllerType);
+                Controller.Combatant = this;
+            } else Dev.Log("NO");
         }
 
         public void LoadIn (CombatPosition position) {

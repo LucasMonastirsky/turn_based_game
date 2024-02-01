@@ -1,10 +1,12 @@
+using System;
 using Combat;
 
 public partial class Miguel : Combatant {
 	public override string CombatName => "Miguel";
+    public override Type DefaultControllerType => typeof(MiguelController);
 
     protected override void Setup () {
-        this.Controller = new MiguelController() { User = this };
+        base.Setup();
         this.Actions = new ActionStore(this);
     }
 

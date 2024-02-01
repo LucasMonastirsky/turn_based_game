@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://e0rawovun7mc"
-path="res://.godot/imported/target.png-62a33d442d97ab9a92cef1a7970c2118.ctex"
+path="res://.godot/imported/target.png-08ac85815b49b0df1438ad56bf1a7c05.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/controllers/keyboard_controller/sprites/target.png"
-dest_files=["res://.godot/imported/target.png-62a33d442d97ab9a92cef1a7970c2118.ctex"]
+source_file="res://scripts/combat/interface/player/targeting/markers/sprites/target.png"
+dest_files=["res://.godot/imported/target.png-08ac85815b49b0df1438ad56bf1a7c05.ctex"]
 
 [params]
 
