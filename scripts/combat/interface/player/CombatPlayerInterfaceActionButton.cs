@@ -1,3 +1,5 @@
+using System;
+using Development;
 using Godot;
 
 namespace Combat {
@@ -8,9 +10,8 @@ namespace Combat {
             set {
                 _action = value;
                 Text = _action.Name;
-                Pressed += () => { // TODO: try/catch here to handle cancelling?
+                Pressed += async () => { // TODO: try/catch here to handle cancelling?
                     _action.RequestTargetsAndRun();
-                    CombatPlayerInterface.HideActionList();
                 };
             }
         }

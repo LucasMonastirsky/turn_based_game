@@ -1,11 +1,18 @@
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using Development;
 using Godot;
 
 namespace Combat {
     public partial class CombatPlayerInterface : Control {
         private static CombatPlayerInterface current;
+
+        private static bool _action_list_visible;
+        public static bool ActionListVisible {
+            get => _action_list_visible;
+            set {
+                current.Visible = value;
+                _action_list_visible = value;
+            }
+        }
 
         [Export] private PackedScene action_button_scene;
         
@@ -32,9 +39,15 @@ namespace Combat {
                 button.Disabled = !action.IsAvailable();
                 current.buttons.Add(button);
             }
+
+            ActionListVisible = true;
         }
 
         public static void HideActionList () {
+            ActionListVisible = false;
+        }
+
+        public static void ClearActionList () {
             foreach (var button in current.buttons) {
                 button.QueueFree();
             }

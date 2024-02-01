@@ -32,6 +32,7 @@ namespace Combat {
             }
 
             public override async Task RequestTargetsAndRun () {
+                CombatPlayerInterface.HideActionList();
                 Run();
             }
         }

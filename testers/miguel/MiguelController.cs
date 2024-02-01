@@ -7,12 +7,15 @@ public partial class MiguelController : Controller {
 
     public override void OnTurnStart() {
         if (User.Row != 0) {
-            if (RNG.Bool()) {
-                miguel.Actions.Pass.Run();
+            var front_row_allies = Battle.Combatants.OnSide(User.Side).OnRow(0).All;
+            front_row_allies.Sort((a, b) => a.Health - b.Health);
+            var most_injured = front_row_allies[0];
+
+            if (most_injured.Health < miguel.Health) {
+                miguel.Actions.Move.Run(most_injured.CombatPosition);
             }
             else {
-                var targets = Battle.Combatants.Alive.OnSide(User.Side).OnRow(0);
-                miguel.Actions.Move.Run(RNG.SelectFrom(targets).CombatPosition);
+                miguel.Actions.Pass.Run();
             }
         }
         else {

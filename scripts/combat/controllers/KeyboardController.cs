@@ -16,7 +16,7 @@ public partial class KeyboardController : Controller {
 		if (selector.Row != null) predicates.Add(x => x.Row == selector.Row);
 		if (selector.Validator != null) predicates.Add(selector.Validator);
 
-		var selectables = Battle.Current.Combatants.Where(combatant => {
+		var selectables = Battle.Combatants.All.Where(combatant => {
 			foreach (var predicate in predicates) {
 				if (!predicate(combatant)) return false;
 			}
@@ -24,7 +24,12 @@ public partial class KeyboardController : Controller {
 			return true;
 		}).ToList();
 
-		return await TargetingInterface.SelectSingleCombatant(selectables);
+		try {
+			return await TargetingInterface.SelectSingleCombatant(selectables);
+		}
+		catch {
+			return null;
+		}
 	}
 
 	public override async Task<CombatPosition> RequestPosition (Combatant user) {

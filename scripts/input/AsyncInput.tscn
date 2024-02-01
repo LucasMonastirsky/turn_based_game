@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://sws6l7i8r11r"]
+
+[ext_resource type="Script" path="res://scripts/input/AsyncInput.cs" id="1_wjvkn"]
+
+[node name="AsyncInput" type="Node"]
+script = ExtResource("1_wjvkn")

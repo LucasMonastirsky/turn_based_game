@@ -22,6 +22,7 @@ namespace Combat {
 
         public List<Combatant> All => combatants;
         public CombatantStore Alive => new (combatants.FindAll(combatant => !combatant.IsDead));
+        public CombatantStore Dead => new (combatants.FindAll(combatant => combatant.IsDead));
 
         public CombatantStore OnOppositeSide (Side side) {
             return new (combatants.FindAll(combatant => combatant.Side != side));

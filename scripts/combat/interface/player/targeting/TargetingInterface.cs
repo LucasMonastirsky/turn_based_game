@@ -25,6 +25,13 @@ public partial class TargetingInterface : Node2D {
 	}
 
 	public static async Task<Combatant> SelectSingleCombatant (List<Combatant> combatants) {
+		CombatPlayerInterface.HideActionList();
+
+		var cancel = new TaskCompletionSource();
+		AsyncInput.Cancel.Once(() => {
+			cancel.SetResult();
+		});
+
 		var markers = new Queue<KeyboardSelectionMarker>();
 		var selection = new TaskCompletionSource<Combatant>();
 
@@ -38,13 +45,19 @@ public partial class TargetingInterface : Node2D {
 			markers.Enqueue(marker);
 		}
 
-		var result = await selection.Task;
+		var first_resolved_task = await Task.WhenAny(cancel.Task, selection.Task);
 
 		while (markers.Count > 0) {
 			markers.Dequeue().QueueFree();
 		}
 
-		return result;
+		if (first_resolved_task == selection.Task) {
+			return selection.Task.Result;
+		}
+		else {
+			CombatPlayerInterface.ActionListVisible = true;
+			return null;
+		}
 	}
 
 	public static async Task<CombatPosition> SelectPosition (List<CombatPosition> positions) {
