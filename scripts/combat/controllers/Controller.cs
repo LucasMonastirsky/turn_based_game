@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Godot;
 
 namespace Combat {
     public abstract class Controller {

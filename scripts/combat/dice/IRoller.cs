@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-
 namespace Combat {
     public interface IRoller {
         public delegate void PreRollCallback (Roll roll);
