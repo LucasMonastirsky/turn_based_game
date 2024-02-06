@@ -16,6 +16,10 @@ namespace Combat {
         private enum STATE { FREE, RESOLVING, ENDING, }
         private static STATE state = STATE.FREE;
 
+        public static async Task StartAction () {
+            CombatantDisplayManager.Hide();
+        }
+
         public static async Task ResolveQueue () {
             if (state == STATE.RESOLVING) {
                 return;
@@ -59,6 +63,7 @@ namespace Combat {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
             TurnManager.EndTurn();
+            CombatantDisplayManager.Show();
         }
     }
 }

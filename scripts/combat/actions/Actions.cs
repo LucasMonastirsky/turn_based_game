@@ -36,9 +36,14 @@ namespace Combat {
         public SingleTargetAction (Combatant user) : base (user) {}
         public abstract Task Run (Combatant target);
         public override async Task RequestTargetsAndRun () {
+            CombatPlayerInterface.HideActionList();
+
             var target = await user.Controller.RequestSingleTarget(user, Selector);
 
-            if (target == null) return;
+            if (target == null) {
+                CombatPlayerInterface.ShowActionList();
+                return;
+            }
 
             await Run(target);
         }

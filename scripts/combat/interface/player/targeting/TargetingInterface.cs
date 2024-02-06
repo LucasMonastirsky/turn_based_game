@@ -55,12 +55,16 @@ public partial class TargetingInterface : Node2D {
 			return selection.Task.Result;
 		}
 		else {
-			CombatPlayerInterface.ActionListVisible = true;
 			return null;
 		}
 	}
 
-	public static async Task<CombatPosition> SelectPosition (List<CombatPosition> positions) {
+	public static async Task<CombatPosition?> SelectPosition (List<CombatPosition> positions) {
+		var cancel = new TaskCompletionSource();
+		AsyncInput.Cancel.Once(() => {
+			cancel.SetResult();
+		});
+
 		var markers = new Queue<SelectionMarker>();
 		var selection = new TaskCompletionSource<CombatPosition>();
 
@@ -74,12 +78,17 @@ public partial class TargetingInterface : Node2D {
 			markers.Enqueue(marker);
 		}
 
-		var result = await selection.Task;
+		var first_resolved_task = await Task.WhenAny(cancel.Task, selection.Task);
 
 		while (markers.Count > 0) {
 			markers.Dequeue().QueueFree();
 		}
 
-		return result;
+		if (first_resolved_task == selection.Task) {
+			return selection.Task.Result;
+		}
+		else {
+			return null;
+		}
 	}
 }

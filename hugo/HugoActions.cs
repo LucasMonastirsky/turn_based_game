@@ -47,6 +47,8 @@ public partial class Hugo {
             public Swing (Combatant user) : base(user) {}
 
             public override async Task Run (Combatant target) {
+                await InteractionManager.StartAction();
+
                 user.Animator.Play(user.Animations.Swing);
                 await user.MoveToMelee(target);
 
@@ -80,6 +82,8 @@ public partial class Hugo {
             };
 
             public override async Task Run(Combatant target) {
+                await InteractionManager.StartAction();
+
                 user.Animator.Play(user.Animations.Blast);
 
                 var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {

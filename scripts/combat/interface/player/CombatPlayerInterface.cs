@@ -25,6 +25,10 @@ namespace Combat {
             current = this;
         }
 
+        public static void ShowActionList () {
+            ActionListVisible = true;
+        }
+
         public static void ShowActionList (List<CombatAction> actions) {
             foreach (var button in current.buttons) {
                 button.QueueFree();

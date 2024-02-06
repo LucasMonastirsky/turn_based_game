@@ -9,8 +9,11 @@ namespace Combat {
         public Controller Controller { get; set; }
         public abstract Type DefaultControllerType { get; }
 
+        public CombatantDisplay Display { get; set; }
+
         public abstract string CombatName { get; }
-        [Export] public int Health { get; protected set; } = 50;
+        [Export] public int MaxHealth { get; protected set; } = 30;
+        [Export] public int Health { get; protected set; } = 30;
         [Export] public int Armor { get; protected set; }
 
         public bool IsDead { get; protected set; }
@@ -33,10 +36,14 @@ namespace Combat {
         #region Management
         protected virtual void Setup () {
             if (DefaultControllerType.IsAssignableTo(typeof(Controller))) {
-                Dev.Log("Instantiating");
                 Controller = (Controller) Activator.CreateInstance(DefaultControllerType);
                 Controller.Combatant = this;
-            } else Dev.Log("NO");
+            }
+            else {
+                Dev.Error($"{CombatName}.Setup(): DefaultControllerType is not assignable to Controller");
+            }
+
+            Display = CombatantDisplayManager.CreateDisplay(this);
         }
 
         public void LoadIn (CombatPosition position) {

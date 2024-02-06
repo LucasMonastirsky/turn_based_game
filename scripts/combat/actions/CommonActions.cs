@@ -9,6 +9,8 @@ namespace Combat {
             public Move (Combatant user) : base (user) {}
 
             public async Task Run (CombatPosition target_position) {
+                await InteractionManager.StartAction();
+
                 Positioner.SwitchPosition(user, target_position);
 
                 await InteractionManager.ResolveQueue();
@@ -16,8 +18,16 @@ namespace Combat {
             }
 
             public override async Task RequestTargetsAndRun () {
+                CombatPlayerInterface.HideActionList();
+
                 var target_position = await user.Controller.RequestPosition(user);
-                Run(target_position);
+
+                if (target_position == null) {
+                    CombatPlayerInterface.ShowActionList();
+                    return;
+                }
+
+                Run((CombatPosition) target_position);
             }
         }
 
@@ -27,6 +37,7 @@ namespace Combat {
             public Pass (Combatant user) : base (user) {}
 
             public async Task Run () {
+                await InteractionManager.StartAction();
                 await InteractionManager.ResolveQueue();
                 await InteractionManager.EndAction();
             }

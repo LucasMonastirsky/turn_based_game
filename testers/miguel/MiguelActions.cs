@@ -38,6 +38,8 @@ public partial class Miguel {
             public Swing (Miguel user) : base (user) {}
 
             public override async Task Run(Combatant target) {
+                await InteractionManager.StartAction();
+
                 user.Animator.Play(user.Animations.Swing);
                 await user.MoveToMelee(target);
 
