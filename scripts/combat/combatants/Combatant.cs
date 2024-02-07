@@ -115,7 +115,15 @@ namespace Combat {
         private double moving_time;
         private TaskCompletionSource move_completion_source;
 
-        public Task MoveTo (Vector2 target_position) {
+        public Task MoveTo (CombatPosition position) {
+            return Positioner.SwitchPosition(this, position);
+        }
+
+        public Task SwitchPlaces (Combatant other_combatant) {
+            return Positioner.SwitchCombatants(this, other_combatant);
+        }
+
+        public Task DisplaceTo (Vector2 target_position) {
             move_completion_source = new TaskCompletionSource();
             moving = true;
             moving_from = Position;
@@ -125,12 +133,12 @@ namespace Combat {
             return move_completion_source.Task;
         }
 
-        public Task MoveBack () {
-            return MoveTo(Positioner.GetWorldPosition(CombatPosition));
+        public Task ReturnToPosition () {
+            return DisplaceTo(Positioner.GetWorldPosition(CombatPosition));
         }
 
-        public Task MoveToMelee (Combatant target) {
-            return MoveTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) CombatPosition.Side }); // TODO: put melee range var somewhere
+        public Task DisplaceToMeleeDistance (Combatant target) {
+            return DisplaceTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) CombatPosition.Side }); // TODO: put melee range var somewhere
         }
         #endregion
 

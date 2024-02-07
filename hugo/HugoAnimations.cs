@@ -12,7 +12,7 @@ public partial class Hugo : Combatant {
         public override SimpleSprite Dead { get; set; }
         public SimpleSprite Swing { get; set; }
         public SimpleSprite Blast { get; set; }
-        public SimpleSprite BlastHit { get; set; }
+        public SimpleSprite Shove { get; set; }
     }
     protected override StandardAnimationStore StandardAnimations { get => Animations; }
     protected AnimationStore Animations = new () {
@@ -34,6 +34,6 @@ public partial class Hugo : Combatant {
         Dead = new SimpleSprite(texture_path, "dead"),
         Swing = new SimpleSprite(texture_path, "swing"),
         Blast = new SimpleSprite(texture_path, "blast"),
-        BlastHit = new SimpleSprite(texture_path, "blast_hit"),
+        Shove = new SimpleSprite(texture_path, "shove"),
     };
 }

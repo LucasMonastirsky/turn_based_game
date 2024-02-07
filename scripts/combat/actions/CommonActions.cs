@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -11,7 +10,7 @@ namespace Combat {
             public async Task Run (CombatPosition target_position) {
                 await InteractionManager.StartAction();
 
-                Positioner.SwitchPosition(user, target_position);
+                await Positioner.SwitchPosition(user, target_position);
 
                 await InteractionManager.ResolveQueue();
                 await InteractionManager.EndAction();

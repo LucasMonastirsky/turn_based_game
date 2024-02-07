@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -81,7 +82,7 @@ namespace Combat {
         public static void Setup () {
             foreach (var combatant in Battle.Combatants) {
                 var pos = combatant.CombatPosition;
-                combatant.MoveTo(GetWorldPosition(pos));
+                combatant.DisplaceTo(GetWorldPosition(pos));
                 current.Rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
             }
         }
@@ -136,23 +137,38 @@ namespace Combat {
             return available_positions;
         }
 
-        public static void SwitchPosition (Combatant combatant, CombatPosition target) {
-            var old_pos = combatant.CombatPosition;
-
-            combatant.CombatPosition = target;
-
-            var new_slot = get_slot_data(target);
-            if (new_slot.Combatant != null) {
-                var new_combatant = new_slot.Combatant;
-                new_combatant.CombatPosition = old_pos;
-                new_slot.Combatant = combatant;
-                get_slot_data(old_pos).Combatant = new_combatant;
+        public static async Task SwitchPosition (Combatant combatant, CombatPosition target) {
+            if (get_slot_data(target).Combatant == null) {
+                await MoveCombatant(combatant, target);
             }
             else {
-                
+                await SwitchCombatants(combatant, get_slot_data(target).Combatant);
+            }
+        }
+
+        public static async Task MoveCombatant (Combatant combatant, CombatPosition position) {
+            if (get_slot_data(position).Combatant != null) {
+                throw new Exception($"Positioner.MoveCombatant({combatant.CombatName}, {position}): Position is not empty");
             }
 
-            recalculate_side(target.Side);
+            get_slot_data(combatant.CombatPosition).Combatant = null;
+            combatant.CombatPosition = position;
+            get_slot_data(position).Combatant = combatant;
+
+            await recalculate_side(combatant.Side);
+        }
+
+        public static async Task SwitchCombatants (Combatant combatant_1, Combatant combatant_2) {
+            var old_pos = combatant_1.CombatPosition;
+            combatant_1.CombatPosition = combatant_2.CombatPosition;
+            combatant_2.CombatPosition = old_pos;
+
+            get_slot_data(combatant_1.CombatPosition).Combatant = combatant_1;
+            get_slot_data(combatant_2.CombatPosition).Combatant = combatant_2;
+
+            var task_1 = combatant_1.DisplaceTo(GetWorldPosition(combatant_1.CombatPosition));
+            var task_2 = combatant_2.DisplaceTo(GetWorldPosition(combatant_2.CombatPosition));
+            await Task.WhenAll(task_1, task_2);
         }
         
         private static SlotData get_slot_data (CombatPosition position) {
@@ -185,7 +201,7 @@ namespace Combat {
             QueueRedraw();
         }
 
-        private static void recalculate_side (Side side) {
+        private static async Task recalculate_side (Side side) {
             var tasks = new List<Task>();
 
             foreach (var row in current.Rows[side]) {
@@ -223,9 +239,11 @@ namespace Combat {
                     combatant.CombatPosition =  combatant.CombatPosition with { Slot = slots[i] };
                     get_slot_data(combatant.CombatPosition).Combatant = combatant;
                     
-                    tasks.Add(combatant.MoveTo(GetWorldPosition(combatant.CombatPosition)));
+                    tasks.Add(combatant.DisplaceTo(GetWorldPosition(combatant.CombatPosition)));
                 }
             }
+
+            await Task.WhenAll(tasks);
         }
     }
 }

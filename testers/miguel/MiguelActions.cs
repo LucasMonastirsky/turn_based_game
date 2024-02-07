@@ -41,7 +41,7 @@ public partial class Miguel {
                 await InteractionManager.StartAction();
 
                 user.Animator.Play(user.Animations.Swing);
-                await user.MoveToMelee(target);
+                await user.DisplaceToMeleeDistance(target);
 
                 var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
@@ -53,10 +53,9 @@ public partial class Miguel {
 
                 await InteractionManager.ResolveQueue();
 
-                await user.MoveTo(Positioner.GetWorldPosition(user.CombatPosition));
+                await user.DisplaceTo(Positioner.GetWorldPosition(user.CombatPosition));
 
-                user.Animator.Play(user.Animations.Idle);
-                InteractionManager.EndAction();
+                await InteractionManager.EndAction();
             }
         }
     }
