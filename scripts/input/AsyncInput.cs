@@ -2,8 +2,6 @@ using Godot;
 using System.Collections.Generic;
 
 public partial class AsyncInput : Node {
-	private static AsyncInput current;
-
 	public class Manager {
 		public delegate void Handler ();
 		private List<Handler> handlers = new ();
@@ -22,10 +20,6 @@ public partial class AsyncInput : Node {
 	}
 
 	public static Manager Cancel = new ();
-
-    public override void _Ready() {
-        current = this;
-    }
 
     public override void _Input (InputEvent @event) {
 		if (@event.IsActionPressed("Cancel")) {

@@ -8,6 +8,7 @@ namespace Combat {
     public abstract partial class Combatant : Node2D {
         public Controller Controller { get; set; }
         public abstract Type DefaultControllerType { get; }
+        public Type OverrideControllerType { get; set; }
 
         public CombatantDisplay Display { get; set; }
 
@@ -35,12 +36,14 @@ namespace Combat {
 
         #region Management
         protected virtual void Setup () {
-            if (DefaultControllerType.IsAssignableTo(typeof(Controller))) {
-                Controller = (Controller) Activator.CreateInstance(DefaultControllerType);
+            var chosen_type = OverrideControllerType ?? DefaultControllerType;
+
+            if (chosen_type.IsAssignableTo(typeof(Controller))) {
+                Controller = (Controller) Activator.CreateInstance(chosen_type);
                 Controller.Combatant = this;
             }
             else {
-                Dev.Error($"{CombatName}.Setup(): DefaultControllerType is not assignable to Controller");
+                Dev.Error($"{CombatName}.Setup(): ControllerType is not assignable to Controller");
             }
 
             Display = CombatantDisplayManager.CreateDisplay(this);

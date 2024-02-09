@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
-using Utils;
 
 public partial class Miguel {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
@@ -29,6 +28,10 @@ public partial class Miguel {
         public class Swing : SingleTargetAction {
             public override string Name => "Swing";
 
+            public override bool IsAvailable () {
+                return user.Row == 0;
+            }
+
             public override TargetSelector Selector => new TargetSelector() {
                 Side = TargetSelector.SideCondition.Opposite,
                 Row = 0,
@@ -38,8 +41,6 @@ public partial class Miguel {
             public Swing (Miguel user) : base (user) {}
 
             public override async Task Run(Combatant target) {
-                await InteractionManager.StartAction();
-
                 user.Animator.Play(user.Animations.Swing);
                 await user.DisplaceToMeleeDistance(target);
 
@@ -48,14 +49,13 @@ public partial class Miguel {
                 });
 
                 if (attack_result.Hit) {
-                    target.Damage(RNG.Range(15, 30), new string[] { "Cut" });
+                    var damage_roll = user.Roll(new DiceRoll(8), new string[] { "Damage" });
+                    target.Damage(damage_roll.Total, new string[] { "Cut" });
                 }
 
                 await InteractionManager.ResolveQueue();
 
                 await user.DisplaceTo(Positioner.GetWorldPosition(user.CombatPosition));
-
-                await InteractionManager.EndAction();
             }
         }
     }

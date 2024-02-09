@@ -49,8 +49,6 @@ public partial class Hugo {
             public Swing (Combatant user) : base(user) {}
 
             public override async Task Run (Combatant target) {
-                await InteractionManager.StartAction();
-
                 user.Animator.Play(user.Animations.Swing);
                 await user.DisplaceToMeleeDistance(target);
 
@@ -59,14 +57,13 @@ public partial class Hugo {
                 });
 
                 if (attack_result.Hit) {
-                    target.Damage(RNG.Range(15, 30), new string[] { "Cut" });
+                    var damage_roll = user.Roll(new DiceRoll(10), new string[] { "Damage" });
+                    target.Damage(damage_roll.Total, new string[] { "Cut" });
                 }
 
                 await InteractionManager.ResolveQueue();
 
                 await user.DisplaceTo(Positioner.GetWorldPosition(user.CombatPosition));
-
-                await InteractionManager.EndAction();
             }
 
         }
@@ -84,8 +81,6 @@ public partial class Hugo {
             };
 
             public override async Task Run(Combatant target) {
-                await InteractionManager.StartAction();
-
                 user.Animator.Play(user.Animations.Blast);
 
                 var attack_result = ActionHelpers.BasicAttack(user, target, new ActionHelpers.BasicAttackOptions {
@@ -93,10 +88,9 @@ public partial class Hugo {
                 });
 
                 if (attack_result.Hit) {
-                    target.Damage(RNG.Range(5, 15), new string[] { "Ranged", "Blunt" });
+                    var damage_roll = user.Roll(new DiceRoll(6), new string[] { "Damage" });
+                    target.Damage(damage_roll.Total, new string[] { "Ranged", "Blunt" });
                 }
-
-                await InteractionManager.EndAction();
             }
 
 
@@ -136,12 +130,10 @@ public partial class Hugo {
                     return;
                 }
 
-                await Run(front_target, back_target);
+                await InteractionManager.RunAction(() => Run(front_target, back_target));
             }
 
             public async Task Run (Combatant front_target, Combatant back_target) {
-                await InteractionManager.StartAction();
-
                 user.Animator.Play(user.Animations.Shove);
                 await user.DisplaceToMeleeDistance(front_target);
 
@@ -150,7 +142,10 @@ public partial class Hugo {
                 });
 
                 if (!attack_result.Dodged) {
-                    if (attack_result.Hit) front_target.Damage(RNG.Range(15, 30), new string[] { "Cut" });
+                    if (attack_result.Hit) {
+                        var damage_roll = user.Roll(new DiceRoll(4), new string[] { "Damage" });
+                        front_target.Damage(damage_roll.Total, new string[] { "Cut" });
+                    }
 
                     await Positioner.SwitchCombatants(front_target, back_target);
                 }
@@ -158,8 +153,6 @@ public partial class Hugo {
                 await InteractionManager.ResolveQueue();
 
                 await user.DisplaceTo(Positioner.GetWorldPosition(user.CombatPosition));
-
-                await InteractionManager.EndAction();
             }
         }
     }

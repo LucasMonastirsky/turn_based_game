@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Development;
 
 namespace Combat {
     public struct TargetSelector {
@@ -45,7 +44,7 @@ namespace Combat {
                 return;
             }
 
-            await Run(target);
+            await InteractionManager.RunAction(() => Run(target));
         }
     }
 }
