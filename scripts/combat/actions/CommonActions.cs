@@ -7,21 +7,28 @@ namespace Combat {
 
             public Move (Combatant user) : base (user) {}
 
-            public async Task Run (CombatPosition target_position) {
-                await Positioner.SwitchPosition(user, target_position);
+            private CombatPosition bound_target_position;
+            public Move Bind (CombatPosition bound_target_position) {
+                this.bound_target_position = bound_target_position;
+                Bound = true;
+                return this;
+            }
+
+            public override async Task Run () {
+                await Positioner.SwitchPosition(User, bound_target_position);
             }
 
             public override async Task RequestTargetsAndRun () {
                 CombatPlayerInterface.HideActionList();
 
-                var target_position = await user.Controller.RequestPosition(user);
+                var target_position = await User.Controller.RequestPosition(User);
 
                 if (target_position == null) {
                     CombatPlayerInterface.ShowActionList();
                     return;
                 }
 
-                InteractionManager.RunAction(() => Run((CombatPosition) target_position));
+                await InteractionManager.Act(Bind((CombatPosition) target_position));
             }
         }
 
@@ -30,13 +37,18 @@ namespace Combat {
 
             public Pass (Combatant user) : base (user) {}
 
-            public async Task Run () {
+            public Pass Bind () {
+                Bound = true;
+                return this;
+            }
+
+            public override async Task Run () {
 
             }
 
             public override async Task RequestTargetsAndRun () {
                 CombatPlayerInterface.HideActionList();
-                InteractionManager.RunAction(() => Run());
+                await InteractionManager.Act(Bind());
             }
         }
     }

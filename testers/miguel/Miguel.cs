@@ -7,7 +7,7 @@ public partial class Miguel : Combatant {
 
     protected override void Setup () {
         base.Setup();
-        this.Actions = new ActionStore(this);
+        Actions = new ActionStore(this);
 
         AddPreRollEvent("Parry", "Parry", (roll) => {
             roll.Bonus += 10;
@@ -17,8 +17,6 @@ public partial class Miguel : Combatant {
     protected override void OnAttackParried(AttackResult attack_result) {
 		Animator.Play(Animations.Parry);
 
-        if (Row == 0 && attack_result.Attacker.Row == 0) {
-            InteractionManager.AttemptReaction(() => Actions.Swing.Run(attack_result.Attacker));
-        }
+        InteractionManager.React(Actions.Swing.Bind(attack_result.Attacker).WithCondition(() => Row == 0 && attack_result.Attacker.Row == 0 ));
     }
 }

@@ -27,7 +27,7 @@ namespace Development {
             if (tags[tag]) {
                 var now = DateTime.Now;
                 var delta = (int) (now - last_log_time).TotalMilliseconds;
-                GD.Print($"{now.ToString("mm:ss:fff")} (+{Stringer.PadWithZeroes(delta, 3)}): {message}");
+                GD.Print($"{now:mm:ss:fff} (+{Stringer.PadWithZeroes(delta, 3)}): {message}");
                 last_log_time = now;
             }
         }
@@ -38,6 +38,7 @@ namespace Development {
         public static void Error (string message) {
             GD.PrintErr(message);
             GD.PushError(message);
+            throw new Exception(message);
         }
     }
 }
