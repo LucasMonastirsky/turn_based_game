@@ -32,68 +32,62 @@ public partial class Hugo {
     }
 
     public abstract class HugoActions {
-        public class Swing : SingleTargetAction {
+        public class Swing : CombatAction {
             public override string Name { get => "Swing"; }
 
             public override bool IsAvailable () {
                 return User.Row == 0;
             }
 
-            public override TargetSelector Selector => new () {
-                Side = TargetSelector.SideCondition.Opposite,
-                Row = 0,
-                Validator = combatant => !combatant.IsDead,
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                new TargetSelector (TargetType.Single) { Side = SideSelector.Opposite, Row = 0, }
             };
 
             public new Hugo User { get => base.User as Hugo; }
+
             public Swing (Combatant user) : base(user) {}
 
             public override async Task Run () {
-                User.Animator.Play(User.Animations.Swing);
-                await User.DisplaceToMeleeDistance(Target);
+                var target = Targets[0];
 
-                var attack_result = ActionHelpers.BasicAttack(User, Target, new ActionHelpers.BasicAttackOptions {
+                User.Animator.Play(User.Animations.Swing);
+                await User.DisplaceToMeleeDistance(target.Combatant);
+
+                var attack_result = ActionHelpers.BasicAttack(User, target.Combatant, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 
                 if (attack_result.Hit) {
                     var damage_roll = User.Roll(new DiceRoll(10), new string[] { "Damage" });
-                    Target.Damage(damage_roll.Total, new string[] { "Cut" });
+                    target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
                 }
-
-                await InteractionManager.ResolveQueue();
-
-                await User.DisplaceTo(Positioner.GetWorldPosition(User.CombatPosition));
             }
-
         }
 
-        public class Blast : SingleTargetAction {
+        public class Blast : CombatAction {
             public override string Name => "Blast";
 
             public new Hugo User => base.User as Hugo;
 
             public Blast (Combatant user) : base (user) {}
 
-            public override TargetSelector Selector => new () {
-                Side = TargetSelector.SideCondition.Opposite,
-                Validator = combatant => !combatant.IsDead,
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                new (TargetType.Single) { Side = SideSelector.Opposite, }
             };
 
             public override async Task Run() {
+                var target = Targets[0];
                 User.Animator.Play(User.Animations.Blast);
 
-                var attack_result = ActionHelpers.BasicAttack(User, Target, new ActionHelpers.BasicAttackOptions {
+                var attack_result = ActionHelpers.BasicAttack(User, target.Combatant, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 
                 if (attack_result.Hit) {
                     var damage_roll = User.Roll(new DiceRoll(6), new string[] { "Damage" });
-                    Target.Damage(damage_roll.Total, new string[] { "Ranged", "Blunt" });
+                    target.Combatant.Damage(damage_roll.Total, new string[] { "Ranged", "Blunt" });
                 }
             }
-
-
         }
 
         public class Shove : CombatAction {
@@ -103,64 +97,38 @@ public partial class Hugo {
                 return User.Row == 0;
             }
 
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                new (TargetType.Single) {
+                    Side = SideSelector.Opposite,
+                    Row = 0,
+                },
+                new (TargetType.Position) {
+                    Side = SideSelector.Opposite,
+                    Row = 1,
+                    Validator = (target, user, targets) => Positioner.IsValidMovement(targets[0].Combatant, target.Position),
+                },
+            };
+
             public new Hugo User => base.User as Hugo;
 
             public Shove (Combatant user) : base (user) {}
 
-            private Combatant front_target, back_target;
-            public Shove Bind (Combatant front_target, Combatant back_target) {
-                this.front_target = front_target;
-                this.back_target = back_target;
-                Bound = true;
-                return this;
-            }
-
-            public override async Task RequestTargetsAndRun () {
-                CombatPlayerInterface.HideActionList();
-
-                var front_target = await User.Controller.RequestSingleTarget(User, new TargetSelector () {
-                    Side = TargetSelector.SideCondition.Opposite,
-                    Row = 0,
-                });
-
-                if (front_target == null) {
-                    CombatPlayerInterface.ShowActionList();
-                    return;
-                }
-
-                var back_target = await User.Controller.RequestSingleTarget(User, new TargetSelector () {
-                    Side = TargetSelector.SideCondition.Opposite,
-                    Row = 1,
-                });
-
-                if (back_target == null) {
-                    CombatPlayerInterface.ShowActionList();
-                    return;
-                }
-
-                await InteractionManager.Act(Bind(front_target, back_target));
-            }
-
             public override async Task Run () {
                 User.Animator.Play(User.Animations.Shove);
-                await User.DisplaceToMeleeDistance(front_target);
+                await User.DisplaceToMeleeDistance(Targets[0].Combatant);
 
-                var attack_result = ActionHelpers.BasicAttack(User, front_target, new ActionHelpers.BasicAttackOptions {
+                var attack_result = ActionHelpers.BasicAttack(User, Targets[0].Combatant, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 
                 if (!attack_result.Dodged) {
                     if (attack_result.Hit) {
                         var damage_roll = User.Roll(new DiceRoll(4), new string[] { "Damage" });
-                        front_target.Damage(damage_roll.Total, new string[] { "Cut" });
+                        Targets[0].Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
                     }
 
-                    await Positioner.SwitchCombatants(front_target, back_target);
+                    await Positioner.SwitchPosition(Targets[0].Combatant, Targets[1].Position);
                 }
-
-                await InteractionManager.ResolveQueue();
-
-                await User.DisplaceTo(Positioner.GetWorldPosition(User.CombatPosition));
             }
         }
     }

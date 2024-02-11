@@ -70,12 +70,12 @@ namespace Combat {
 
             while (ActionQueue.Count > 0) {
                 var action = ActionQueue.Dequeue();
-                if (action.Condition()) {
+                if (action.IsAvailable() && action.Condition()) {
                     action.Run();
                     await Timing.Delay();
                 }
                 else {
-                    Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Reaction {action.Name} from {action.User.CombatName} did not meet condition");
+                    Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Reaction {action.Name} from {action.User.CombatName} is no longer available or does not meet condition");
                 }
             }
 
@@ -93,13 +93,20 @@ namespace Combat {
 
             await ResolveQueue();
 
+            foreach (var combatant in Battle.Combatants.All) {
+                combatant.ReturnToPosition();
+                combatant.ResetAnimation();
+            }
+
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
 
             foreach (var combatant in Battle.Combatants) {
                 combatant.OnActionEnd();
             }
 
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
+            await ResolveQueue();
+
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending action");
 
             ReactionsThisTurn = 0;
             TurnManager.EndTurn();

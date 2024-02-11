@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Development;
 using Godot;
 
 namespace Combat {
@@ -107,72 +108,100 @@ namespace Combat {
             return available_positions;
         }
 
-        public static List<CombatPosition> GetMoveTargets (Combatant combatant) {
-            var available_positions = new List<CombatPosition>();
-            var position = combatant.CombatPosition;
+        public static bool IsValidMovement (Combatant combatant, CombatPosition position) {
             var side = position.Side;
+            var row = position.Row;
+            var slot = position.Slot;
+            var slot_data = current.Rows[side][row][slot];
 
-            for (int row = 0; row < MAX_ROW_COUNT; row++) {
-                for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
-                    var slot_data = current.Rows[side][row][slot];
-
-                    if (slot_data.Combatant != null && slot_data.Combatant != combatant) {
-                        available_positions.Add(new () { Side = side, Row = row, Slot = slot });
-                    }
-                    else if (
-                        row != combatant.Row
-                        && slot_data.Row.CombatantCount < MAX_ROW_SIZE
-                        && current.Rows[position.Side][position.Row].CombatantCount > slot_data.Row.CombatantCount
-                    ) {
-                        if (
-                            (slot < ROW_SLOT_COUNT - 2 && current.Rows[side][row][slot + 1].Combatant != null)
-                            || (slot > 0 && current.Rows[side][row][slot - 1].Combatant != null)
-                        ) {
-                            available_positions.Add(new () { Side = side, Row = row, Slot = slot });
-                        }
-                    }
+            if (slot_data.Combatant != null && slot_data.Combatant != combatant) {
+                return true;
+            }
+            else if (
+                row != combatant.Row
+                && slot_data.Row.CombatantCount < MAX_ROW_SIZE
+                && current.Rows[combatant.Side][combatant.Row].CombatantCount > slot_data.Row.CombatantCount
+            ) {
+                if (
+                    (slot < ROW_SLOT_COUNT - 2 && current.Rows[side][row][slot + 1].Combatant != null)
+                    || (slot > 0 && current.Rows[side][row][slot - 1].Combatant != null)
+                ) {
+                    return true;
                 }
             }
 
-            return available_positions;
+            return false;
+        }
+
+        public static List<CombatTarget> GetMoveTargets (Combatant combatant) {
+            var targets = new List<CombatTarget>();
+            var side = combatant.Side;
+
+            for (int row = 0; row < MAX_ROW_COUNT; row++) {
+                for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
+                    var position = new CombatPosition { Side = side, Row = row, Slot = slot};
+
+                    if (IsValidMovement(combatant, position)) targets.Add(new CombatTarget (position));
+                }
+            }
+
+            return targets;
         }
 
         public static async Task SwitchPosition (Combatant combatant, CombatPosition target) {
-            if (get_slot_data(target).Combatant == null) {
+            if (GetSlotData(target).Combatant == null) {
                 await MoveCombatant(combatant, target);
             }
             else {
-                await SwitchCombatants(combatant, get_slot_data(target).Combatant);
+                await SwitchCombatants(combatant, GetSlotData(target).Combatant);
             }
         }
 
         public static async Task MoveCombatant (Combatant combatant, CombatPosition position) {
-            if (get_slot_data(position).Combatant != null) {
-                throw new Exception($"Positioner.MoveCombatant({combatant.CombatName}, {position}): Position is not empty");
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Moving {combatant} to {position}");
+
+            if (GetSlotData(position).Combatant != null) {
+                Dev.Error($"Positioner.MoveCombatant({combatant.CombatName}, {position}): Position is not empty");
             }
 
-            get_slot_data(combatant.CombatPosition).Combatant = null;
+            GetSlotData(combatant.CombatPosition).Combatant = null;
             combatant.CombatPosition = position;
-            get_slot_data(position).Combatant = combatant;
+            GetSlotData(position).Combatant = combatant;
 
             await recalculate_side(combatant.Side);
         }
 
         public static async Task SwitchCombatants (Combatant combatant_1, Combatant combatant_2) {
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Switching places between {combatant_1} and {combatant_2}");
+
             var old_pos = combatant_1.CombatPosition;
             combatant_1.CombatPosition = combatant_2.CombatPosition;
             combatant_2.CombatPosition = old_pos;
 
-            get_slot_data(combatant_1.CombatPosition).Combatant = combatant_1;
-            get_slot_data(combatant_2.CombatPosition).Combatant = combatant_2;
+            GetSlotData(combatant_1.CombatPosition).Combatant = combatant_1;
+            GetSlotData(combatant_2.CombatPosition).Combatant = combatant_2;
 
             var task_1 = combatant_1.DisplaceTo(GetWorldPosition(combatant_1.CombatPosition));
             var task_2 = combatant_2.DisplaceTo(GetWorldPosition(combatant_2.CombatPosition));
             await Task.WhenAll(task_1, task_2);
         }
         
-        private static SlotData get_slot_data (CombatPosition position) {
+        public static SlotData GetSlotData (CombatPosition position) {
             return current.Rows[position.Side][position.Row][position.Slot];
+        }
+
+        public static List<CombatTarget> GetCombatTargets () {
+            var targets = new List<CombatTarget> ();
+
+            for (var side = -1; side < 2; side += 2) {
+                for (var row = 0; row < MAX_ROW_COUNT; row++ ) {
+                    for (var slot = 0; slot < ROW_SLOT_COUNT; slot++ ) {
+                        targets.Add(new CombatTarget(new CombatPosition () { Side = (Side) side, Row = row, Slot = slot }));
+                    }
+                }
+            }
+
+            return targets;
         }
 
         private void calculate_positions () {
@@ -237,7 +266,7 @@ namespace Combat {
                     var combatant = combatants[i];
 
                     combatant.CombatPosition =  combatant.CombatPosition with { Slot = slots[i] };
-                    get_slot_data(combatant.CombatPosition).Combatant = combatant;
+                    GetSlotData(combatant.CombatPosition).Combatant = combatant;
                     
                     tasks.Add(combatant.DisplaceTo(GetWorldPosition(combatant.CombatPosition)));
                 }

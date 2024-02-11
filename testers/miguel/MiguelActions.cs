@@ -25,37 +25,34 @@ public partial class Miguel {
     }
 
     public class ActionClasses {
-        public class Swing : SingleTargetAction {
+        public class Swing : CombatAction {
             public override string Name => "Swing";
 
             public override bool IsAvailable () {
                 return User.Row == 0;
             }
 
-            public override TargetSelector Selector => new TargetSelector() {
-                Side = TargetSelector.SideCondition.Opposite,
-                Row = 0,
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                new (TargetType.Single) { Side = SideSelector.Opposite, Row = 0, },
             };
 
             public new Miguel User => base.User as Miguel;
             public Swing (Miguel user) : base (user) {}
 
             public override async Task Run() {
-                User.Animator.Play(User.Animations.Swing);
-                await User.DisplaceToMeleeDistance(Target);
+                var target = Targets[0];
 
-                var attack_result = ActionHelpers.BasicAttack(User, Target, new ActionHelpers.BasicAttackOptions {
+                User.Animator.Play(User.Animations.Swing);
+                await User.DisplaceToMeleeDistance(target.Combatant);
+
+                var attack_result = ActionHelpers.BasicAttack(User, target.Combatant, new ActionHelpers.BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 
                 if (attack_result.Hit) {
                     var damage_roll = User.Roll(new DiceRoll(8), new string[] { "Damage" });
-                    Target.Damage(damage_roll.Total, new string[] { "Cut" });
+                    target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
                 }
-
-                await InteractionManager.ResolveQueue();
-
-                await User.DisplaceTo(Positioner.GetWorldPosition(User.CombatPosition));
             }
         }
     }

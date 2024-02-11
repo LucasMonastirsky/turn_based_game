@@ -118,6 +118,10 @@ namespace Combat {
         private double moving_time;
         private TaskCompletionSource move_completion_source;
 
+        public bool CanMoveTo (CombatPosition position) {
+            return Positioner.IsValidMovement(this, position);
+        }
+
         public Task MoveTo (CombatPosition position) {
             return Positioner.SwitchPosition(this, position);
         }
@@ -181,6 +185,10 @@ namespace Combat {
             public abstract SimpleSprite Dead { get; set; } // PCs get knocked instead, and die the third time?
         }
         protected abstract StandardAnimationStore StandardAnimations { get; }
+
+        public virtual void ResetAnimation () {
+            Animator.Play(StandardAnimations.Idle);
+        }
         #endregion
 
         #region Godot

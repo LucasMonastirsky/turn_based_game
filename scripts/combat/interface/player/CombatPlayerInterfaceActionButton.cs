@@ -9,7 +9,7 @@ namespace Combat {
                 _action = value;
                 Text = _action.Name;
                 Pressed += async () => { // TODO: try/catch here to handle cancelling?
-                    _action.RequestTargetsAndRun();
+                    _action.RequestBindAndRun();
                 };
             }
         }

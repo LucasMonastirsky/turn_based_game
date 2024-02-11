@@ -2,6 +2,7 @@ using Combat;
 using Development;
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 public partial class TargetingInterface : Node2D {
@@ -24,7 +25,7 @@ public partial class TargetingInterface : Node2D {
 		current = this;
 	}
 
-	public static async Task<Combatant> SelectSingleCombatant (List<Combatant> combatants) {
+	public static async Task<CombatTarget> SelectSingleCombatant (List<CombatTarget> targets) {
 		CombatPlayerInterface.HideActionList();
 
 		var cancel = new TaskCompletionSource();
@@ -33,13 +34,13 @@ public partial class TargetingInterface : Node2D {
 		});
 
 		var markers = new Queue<SelectionMarker>();
-		var selection = new TaskCompletionSource<Combatant>();
+		var selection = new TaskCompletionSource<CombatTarget>();
 
-		foreach (var combatant in combatants) {
+		foreach (var combatant in targets.Select(target => target.Combatant)) {
 			var marker = current.single_marker_scene.Instantiate<SelectionMarker>(); // TODO: I don't like setting public fields like this
 			marker.Position = combatant.WorldPos;
 			marker.OnCombatantSelected = () => {
-				selection.TrySetResult(combatant);
+				selection.TrySetResult(new CombatTarget(combatant));
 			};
 			current.AddChild(marker);
 			markers.Enqueue(marker);
@@ -59,20 +60,20 @@ public partial class TargetingInterface : Node2D {
 		}
 	}
 
-	public static async Task<CombatPosition?> SelectPosition (List<CombatPosition> positions) {
+	public static async Task<CombatTarget?> SelectPosition (List<CombatTarget> targets) {
 		var cancel = new TaskCompletionSource();
 		AsyncInput.Cancel.Once(() => {
 			cancel.SetResult();
 		});
 
 		var markers = new Queue<SelectionMarker>();
-		var selection = new TaskCompletionSource<CombatPosition>();
+		var selection = new TaskCompletionSource<CombatTarget>();
 
-		foreach (var position in positions) {
+		foreach (var target in targets) {
 			var marker = current.single_marker_scene.Instantiate<SelectionMarker>();
-			marker.Position = position.WorldPosition;
+			marker.Position = target.Position.WorldPosition;
 			marker.OnCombatantSelected = () => {
-				selection.TrySetResult(position);
+				selection.TrySetResult(target);
 			};
 			current.AddChild(marker);
 			markers.Enqueue(marker);

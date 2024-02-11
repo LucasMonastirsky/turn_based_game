@@ -17,6 +17,8 @@ public partial class Miguel : Combatant {
     protected override void OnAttackParried(AttackResult attack_result) {
 		Animator.Play(Animations.Parry);
 
-        InteractionManager.React(Actions.Swing.Bind(attack_result.Attacker).WithCondition(() => Row == 0 && attack_result.Attacker.Row == 0 ));
+        InteractionManager.React(
+            Actions.Swing.Bind(new CombatTarget(attack_result.Attacker))
+        );
     }
 }
