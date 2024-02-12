@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b2bysfu7g8w7w" path="res://hugo/Hugo.tscn" id="4_43eyh"]
 [ext_resource type="PackedScene" uid="uid://c8h1qk64dpov" path="res://testers/miguel/Miguel.tscn" id="5_84if1"]
 [ext_resource type="PackedScene" uid="uid://sws6l7i8r11r" path="res://scripts/input/AsyncInput.tscn" id="7_kedgi"]
-[ext_resource type="Script" path="res://scripts/combat/interface/player/combatant/CombatantDisplayManager.cs" id="9_hxyir"]
+[ext_resource type="Script" path="res://scripts/combat/interface/combatant/CombatantDisplayManager.cs" id="9_hxyir"]
 
 [node name="TestBattle" type="Node2D"]
 script = ExtResource("1_ufhvr")

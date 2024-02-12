@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Development;
 
 namespace Combat {
@@ -19,10 +21,13 @@ namespace Combat {
             instance.combatants[instance.turn_index].Controller.OnTurnStart();
         }
 
-        public static void EndTurn () {
+        public static event EmptyDelegate OnTurnEnd;
+        public static async Task EndTurn () {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
             instance.combatants[instance.turn_index].Controller.OnTurnEnd();
+            OnTurnEnd?.Invoke();
+            //await InteractionManager.ResolveQueue();
 
             Combatant combatant;
 

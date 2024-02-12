@@ -22,9 +22,9 @@ namespace Combat {
 
         public bool Bound { get; protected set; } = false;
 
-        public CombatAction Bind (params CombatTarget [] targets) {
+        public CombatAction Bind (params Targetable [] targetables) {
             Bound = true;
-            Targets = new List<CombatTarget> (targets);
+            Targets = targetables.Select(target => target.ToTarget()).ToList();;
             return this;
         }
 

@@ -50,8 +50,9 @@ public partial class Miguel {
                 });
 
                 if (attack_result.Hit) {
-                    var damage_roll = User.Roll(new DiceRoll(8), new string[] { "Damage" });
+                    var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
                     target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                    target.Combatant.AddStatusEffect(new Poison());
                 }
             }
         }

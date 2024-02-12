@@ -1,7 +1,7 @@
 using System;
 
 namespace Combat {
-    public class CombatTarget {
+    public class CombatTarget : Targetable {
         public CombatPosition Position;
         public Combatant Combatant => Positioner.GetSlotData(Position).Combatant;
 
@@ -16,5 +16,7 @@ namespace Combat {
         public CombatTarget (Combatant combatant) {
             Position = combatant.CombatPosition;
         }
+
+        public CombatTarget ToTarget () => this;
     }
 }

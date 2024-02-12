@@ -127,7 +127,7 @@ public partial class Hugo {
                         Targets[0].Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
                     }
 
-                    await Positioner.SwitchPosition(Targets[0].Combatant, Targets[1].Position);
+                    await Targets[0].Combatant.MoveTo(Targets[1].Position);
                 }
             }
         }

@@ -1,6 +1,5 @@
 using System;
 using Combat;
-using Godot;
 
 public partial class Hugo : Combatant {
     public override Type DefaultControllerType => typeof(PlayerController);
