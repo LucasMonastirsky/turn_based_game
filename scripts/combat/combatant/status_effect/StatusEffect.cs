@@ -6,6 +6,14 @@ namespace Combat {
 
         public Combatant User { get; set; }
 
+        public StatusEffect (int duration) {
+            Duration = duration;
+        }
+
+        public virtual void Tick () {
+            
+        }
+
         public virtual void OnApplied () {
 
         }

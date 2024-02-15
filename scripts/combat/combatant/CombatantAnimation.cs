@@ -11,7 +11,8 @@ namespace Combat {
         protected abstract StandardAnimationStore StandardAnimations { get; }
 
         public virtual void ResetAnimation () {
-            Animator.Play(StandardAnimations.Idle);
+            if (!IsDead) Animator.Play(StandardAnimations.Idle);
+            else Animator.Play(StandardAnimations.Dead);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Development;
+using System.Linq;
 
 namespace Combat {
     public abstract partial class Combatant : Node2D, Targetable {
@@ -21,7 +22,7 @@ namespace Combat {
             var total = Math.Clamp(value - Armor, 0, 999);
 
             Health -= total;
-            Dev.Log(Dev.TAG.COMBAT, $"{CombatName} received {total} damage ({value} - {Armor}). Health: {Health}");
+            Dev.Log(Dev.TAG.COMBAT, $"{this} received {total} damage [{string.Join(",", tags)}]");
 
             Animator.Play(StandardAnimations.Hurt);
 
@@ -29,7 +30,7 @@ namespace Combat {
         }
 
         public virtual void ReceiveAttack (AttackResult attack_result) {
-            Dev.Log(Dev.TAG.COMBAT, $"{CombatName} received attack - {attack_result}");
+            Dev.Log(Dev.TAG.COMBAT, $"{this} received attack - {attack_result}");
 
             if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
             else if (attack_result.Parried) OnAttackParried(attack_result);
@@ -51,10 +52,25 @@ namespace Combat {
         public List<StatusEffect> StatusEffects { get; } = new ();
 
         public void AddStatusEffect (StatusEffect effect) {
+            Dev.Log(Dev.TAG.COMBAT, $"{CombatName} getting status effect {effect.Name}");
+
             StatusEffects.Add(effect);
             effect.User = this;
             effect.OnApplied();
-            Dev.Log(Dev.TAG.COMBAT, $"{CombatName} got status effect {effect.Name}");
+
+            Display.AddStatusEffect(effect);
+        }
+
+        public void RemoveStatusEffect (string name) {
+            var effect = StatusEffects.First(effect => effect.Name == name);
+
+            if (effect is null) {
+                throw Dev.Error($"Tried to remove effect {name}, but didn't find match in [{string.Join(",", StatusEffects.Select(effect => effect.Name))}]");
+            }
+
+            StatusEffects.Remove(effect);
+            effect.OnRemoved();
+            Display.RemoveStatusEffect(effect);
         }
         #endregion
 

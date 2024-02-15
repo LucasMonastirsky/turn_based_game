@@ -24,5 +24,7 @@ namespace Combat {
         public TargetSelector (TargetType type) {
             this.Type = type;
         }
+
+        
     }
 }

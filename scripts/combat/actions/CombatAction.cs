@@ -43,20 +43,16 @@ namespace Combat {
         public abstract Task Run ();
 
         public async Task RequestBindAndRun () {
+            CombatPlayerInterface.HideActionList();
+
             var all_targets = Positioner.GetCombatTargets();
-            var selected_targets = new List<CombatTarget> ();
+            Targets = new ();
 
             foreach (var selector in TargetSelectors) {
-                var predicates = new List<Predicate<CombatTarget>> ();
-
-                if (selector.Type != TargetType.Position) predicates.Add(target => target.Combatant != null);
-                if (selector.Side != null) predicates.Add(target => (int) User.Side * (int) selector.Side == (int) target.Side);
-                if (selector.Row != null) predicates.Add(target => target.Row == selector.Row);
-                if (selector.Validator != null) predicates.Add(target => selector.Validator(target, User, selected_targets));
-
                 var selectable_targets = new List<CombatTarget> ();
+
                 foreach (var target in all_targets) {
-                    if (predicates.Find(predicate => !predicate(target)) == null) selectable_targets.Add(target);
+                    if (IsValidTarget(target, selector)) selectable_targets.Add(target);
                 }
 
                 CombatTarget selection = null;
@@ -70,14 +66,36 @@ namespace Combat {
                 }
 
                 if (selection == null) {
+                    Targets = new ();
                     return;
                 }
                 else {
-                    selected_targets.Add(selection);
+                    Targets.Add(selection);
                 }
             }
 
-            await InteractionManager.Act(Bind(selected_targets.ToArray()));
+            await InteractionManager.Act(Bind(Targets.ToArray()));
+        }
+
+        private bool IsValidTarget (CombatTarget target, TargetSelector selector) {
+            var predicates = new List<Func<bool>> ();
+
+            if (selector.Type != TargetType.Position) predicates.Add(() => target.Combatant != null);
+            if (selector.Side != null) predicates.Add(() => (int) User.Side * (int) selector.Side == (int) target.Side);
+            if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
+            if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, Targets));
+
+            return !predicates.Any(predicate => !predicate());
+        }
+
+        public bool PassesSelectors () {
+            for (var i = 0; i < TargetSelectors.Count; i++) {
+                if (Targets[i] is null || !IsValidTarget(Targets[i], TargetSelectors[i])) {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

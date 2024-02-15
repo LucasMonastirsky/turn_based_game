@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Development;
 
 namespace Combat {
@@ -47,6 +48,18 @@ namespace Combat {
             else {
                 Animator.Play(StandardAnimations.Idle);
             }
+        }
+
+        public virtual void OnTurnEnd () {
+            if (TurnManager.ActiveCombatant == this) {
+                foreach (var effect in StatusEffects.ToList()) {
+                    effect.Tick();
+                }
+            } 
+        }
+
+        public override string ToString() {
+            return $"{CombatName} ({CombatPosition})";
         }
     }
 }

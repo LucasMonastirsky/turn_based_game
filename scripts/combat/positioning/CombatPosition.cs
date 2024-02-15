@@ -10,5 +10,9 @@ namespace Combat {
         public Vector2 WorldPosition => Positioner.GetWorldPosition(this);
 
         public CombatTarget ToTarget () => new CombatTarget (this);
+
+        public override string ToString () {
+            return $"{(Side == Side.Left ? "L" : "R")}{(Row == 0 ? "F" : "R")}{Slot}"; 
+        }
     }
 }

@@ -17,9 +17,6 @@ namespace Combat {
 
         public static Queue<CombatAction> ActionQueue = new ();
 
-        private enum STATE { FREE, RESOLVING, ENDING, }
-        private static STATE state = STATE.FREE;
-
         public static int ReactionsThisTurn { get; private set; }
         public static bool ReactionsAllowed => ReactionsThisTurn < 1;
 
@@ -37,29 +34,13 @@ namespace Combat {
         }
 
         public static async Task StartAction () {
-            if (state == STATE.RESOLVING) {
-                if (!ReactionsAllowed) {
-                    Dev.Error("Started action while reactions were disallowed");
-                }
-            }
-
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting action {CurrentAction.Name} ({CurrentAction.User.CombatName})");
 
             CombatantDisplayManager.Hide();
         }
 
         public static async Task ResolveQueue () {
-            if (state == STATE.RESOLVING) {
-                return;
-            }
-
-            if (state == STATE.ENDING) {
-                Dev.Error($"InteractionManager: Trying to resolve during Ending state");
-            }
-
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Resolving queue");
-
-            state = STATE.RESOLVING;
 
             await Timing.Delay();
 
@@ -70,7 +51,8 @@ namespace Combat {
 
             while (ActionQueue.Count > 0) {
                 var action = ActionQueue.Dequeue();
-                if (action.IsAvailable() && action.Condition()) {
+
+                if (action.IsAvailable() && action.Condition() && action.PassesSelectors()) {
                     action.Run();
                     await Timing.Delay();
                 }
@@ -79,12 +61,12 @@ namespace Combat {
                 }
             }
 
-            state = STATE.FREE;
+            foreach (var combatant in Battle.Combatants) {
+                combatant.ResetAnimation();
+            }
         }
 
         public static async Task EndAction () {
-            if (state != STATE.FREE) return;
-
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnPreActionEnd events");
 
             foreach (var combatant in Battle.Combatants.All) {
@@ -95,7 +77,6 @@ namespace Combat {
 
             foreach (var combatant in Battle.Combatants.All) {
                 combatant.ReturnToPosition();
-                combatant.ResetAnimation();
             }
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
@@ -110,6 +91,7 @@ namespace Combat {
 
             ReactionsThisTurn = 0;
             TurnManager.EndTurn();
+            await ResolveQueue();
             CombatantDisplayManager.Show();
         }
 

@@ -35,7 +35,7 @@ namespace Development {
             Log(TAG.GLOBAL, message);
         }
 
-        public static void Error (string message) {
+        public static Exception Error (string message) {
             GD.PrintErr(message);
             GD.PushError(message);
             throw new Exception(message);

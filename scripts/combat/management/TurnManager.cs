@@ -6,6 +6,8 @@ namespace Combat {
     public class TurnManager {
         private Combatant[] combatants;
         private int turn_index;
+        
+        public static Combatant ActiveCombatant => instance.combatants[instance.turn_index];
 
         private static TurnManager instance;
 
@@ -26,10 +28,13 @@ namespace Combat {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
             instance.combatants[instance.turn_index].Controller.OnTurnEnd();
+            foreach (var combatant in instance.combatants) {
+                combatant.OnTurnEnd();
+            }
             OnTurnEnd?.Invoke();
             //await InteractionManager.ResolveQueue();
 
-            Combatant combatant;
+            Combatant new_combatant;
 
             void increase () {
                 instance.turn_index++;
@@ -38,15 +43,15 @@ namespace Combat {
                     instance.turn_index = 0;
                 }
 
-                combatant = instance.combatants[instance.turn_index];
+                new_combatant = instance.combatants[instance.turn_index];
             }
 
             do {
                 increase();
-            } while (combatant.IsDead);
+            } while (new_combatant.IsDead);
 
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting turn: {combatant.CombatName}");
-            combatant.Controller.OnTurnStart();
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting turn: {new_combatant.CombatName}");
+            new_combatant.Controller.OnTurnStart();
         }
     }
 }

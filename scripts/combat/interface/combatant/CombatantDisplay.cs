@@ -9,6 +9,21 @@ public partial class CombatantDisplay : Node2D {
     private List<Label> labels = new ();
 
     private Label LabelHealth;
+    private List<Label> EffectLabels = new ();
+
+    public void AddStatusEffect (StatusEffect effect) {
+        var label = new Label {
+            Text = effect.Name,
+            Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10, },
+            Scale = new Vector2 { X = 0.65f, Y = 0.65f },
+        };
+        AddChild(label);
+        EffectLabels.Add(label);
+    }
+
+    public void RemoveStatusEffect (StatusEffect effect) {
+        EffectLabels.RemoveAll(label => label.Text == effect.Name);
+    }
 
     public override void _Ready () {
         var label = new Label {

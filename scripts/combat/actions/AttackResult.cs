@@ -11,7 +11,7 @@ namespace Combat {
 
         public override string ToString() {
             if (Hit) return "Hit";
-            if (Parried && Dodged) return "Parried and dodged";
+            if (Parried && Dodged) return "Parried + Dodged";
             if (Parried) return "Parried";
             if (Dodged) return "Dodged";
             return "bro what";

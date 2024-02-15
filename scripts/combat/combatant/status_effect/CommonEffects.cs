@@ -2,16 +2,17 @@ namespace Combat {
     public class Poison : StatusEffect {
         public override string Name => "Poison";
 
-        public void OnTurnEnd () {
-            User.Damage(5, new [] { "Poison" });
-        }
+        public Poison (int duration) : base (duration) {}
 
-        public override void OnApplied () {
-            TurnManager.OnTurnEnd += OnTurnEnd;
-        }
+        public override void Tick () {
+            InteractionManager.AddQueueEvent(async () => {
+                User.Damage(5, new [] { "Poison" });
+            });
+            Duration--;
 
-        public override void OnRemoved() {
-            TurnManager.OnTurnEnd -= OnTurnEnd;
+            if (Duration <= 0) {
+                User.RemoveStatusEffect(Name);
+            }
         }
     }
 }

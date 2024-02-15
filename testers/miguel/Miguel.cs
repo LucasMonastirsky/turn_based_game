@@ -10,7 +10,7 @@ public partial class Miguel : Combatant {
         Actions = new ActionStore(this);
 
         roller.AddPreRollEvent("Parry", "Parry", (roll) => {
-            roll.Bonus += 10;
+            roll.Bonus += 4;
         });
     }
 
