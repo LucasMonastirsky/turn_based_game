@@ -1,10 +1,11 @@
+using System.Threading.Tasks;
 using Combat;
 using Utils;
 
 public partial class MiguelController : Controller {
     private new Miguel Combatant => base.Combatant as Miguel;
 
-    public override async void OnTurnStart() {
+    public override async Task OnTurnStart() {
         if (Combatant.Row != 0) {
             var allies = Battle.Combatants.OnSide(Combatant.Side);
 

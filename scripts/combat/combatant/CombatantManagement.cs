@@ -38,15 +38,9 @@ namespace Combat {
         ///  Don't add to resolve_queue here
         /// </summary>
         public virtual void OnActionEnd () {
-            if (Health < 1) {
-                if (!IsDead) {
-                    Dev.Log(Dev.TAG.COMBAT, $"{CombatName} dead in {CombatPosition}");
-                    Animator.Play(StandardAnimations.Dead);
-                    IsDead = true;
-                }
-            }
-            else {
-                Animator.Play(StandardAnimations.Idle);
+            if (!IsDead && Health < 1) {
+                Dev.Log(Dev.TAG.COMBAT, $"{this} died");
+                IsDead = true;
             }
         }
 

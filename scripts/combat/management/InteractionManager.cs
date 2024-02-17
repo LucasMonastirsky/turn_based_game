@@ -42,8 +42,6 @@ namespace Combat {
         public static async Task ResolveQueue () {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Resolving queue");
 
-            await Timing.Delay();
-
             while(current.Queue.Count > 0) {
                 await current.Queue.Dequeue()();
                 await Timing.Delay();
@@ -53,16 +51,12 @@ namespace Combat {
                 var action = ActionQueue.Dequeue();
 
                 if (action.IsAvailable() && action.Condition() && action.PassesSelectors()) {
-                    action.Run();
+                    await action.Run();
                     await Timing.Delay();
                 }
                 else {
                     Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Reaction {action.Name} from {action.User.CombatName} is no longer available or does not meet condition");
                 }
-            }
-
-            foreach (var combatant in Battle.Combatants) {
-                combatant.ResetAnimation();
             }
         }
 
@@ -73,11 +67,10 @@ namespace Combat {
                 combatant.OnPreActionEnd();
             }
 
+            await Timing.Delay();
             await ResolveQueue();
 
-            foreach (var combatant in Battle.Combatants.All) {
-                combatant.ReturnToPosition();
-            }
+            await ResetCombatants();
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
 
@@ -85,24 +78,41 @@ namespace Combat {
                 combatant.OnActionEnd();
             }
 
+            await Timing.Delay();
             await ResolveQueue();
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending action");
 
             ReactionsThisTurn = 0;
-            TurnManager.EndTurn();
+            await TurnManager.EndTurn();
+            await Timing.Delay();
             await ResolveQueue();
+            ResetCombatants();
             CombatantDisplayManager.Show();
         }
 
-        public static async Task React (CombatAction action) {
+        public static void React (CombatAction action) {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"{action.User.CombatName} queued reaction {action.Name}");
 
             if (ReactionsAllowed) {
                 ActionQueue.Enqueue(action);
             }
+            else {
+                Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Rejected reaction");
+            }
 
             ReactionsThisTurn++;
+        }
+
+        public static async Task ResetCombatants () {
+            List<Task> tasks = new ();
+
+            foreach (var combatant in Battle.Combatants) {
+                combatant.ResetAnimation();
+                tasks.Add(combatant.ReturnToPosition());
+            }
+
+            await Task.WhenAll(tasks);
         }
     }
 }

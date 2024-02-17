@@ -5,7 +5,7 @@ namespace Combat {
     public abstract class Controller {
         public Combatant Combatant;
 
-        public abstract void OnTurnStart ();
+        public abstract Task OnTurnStart ();
         public virtual void OnTurnEnd () {}
 
         public virtual Task<CombatTarget> RequestSingleTarget (Combatant user, TargetSelector selector) {

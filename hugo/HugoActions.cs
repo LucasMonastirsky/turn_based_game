@@ -53,7 +53,7 @@ public partial class Hugo {
                 User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
-                var attack_result = ActionHelpers.BasicAttack(User, target.Combatant, new ActionHelpers.BasicAttackOptions {
+                var attack_result = await User.Attack(target, new BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 
@@ -79,7 +79,7 @@ public partial class Hugo {
                 var target = Targets[0];
                 User.Animator.Play(User.Animations.Blast);
 
-                var attack_result = ActionHelpers.BasicAttack(User, target.Combatant, new ActionHelpers.BasicAttackOptions {
+                var attack_result = await User.Attack(target, new BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 
@@ -117,7 +117,7 @@ public partial class Hugo {
                 User.Animator.Play(User.Animations.Shove);
                 await User.DisplaceToMeleeDistance(Targets[0].Combatant);
 
-                var attack_result = ActionHelpers.BasicAttack(User, Targets[0].Combatant, new ActionHelpers.BasicAttackOptions {
+                var attack_result = await User.Attack(Targets[0], new BasicAttackOptions {
                     ParryNegation = 0, DodgeNegation = 0,
                 });
 

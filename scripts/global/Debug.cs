@@ -27,12 +27,12 @@ namespace Development {
             if (tags[tag]) {
                 var now = DateTime.Now;
                 var delta = (int) (now - last_log_time).TotalMilliseconds;
-                GD.Print($"{now:mm:ss:fff} (+{Stringer.PadWithZeroes(delta, 3)}): {message}");
+                GD.PrintRich($"{now:mm:ss:fff} (+{Stringer.PadWithZeroes(delta, 3)}): {message}");
                 last_log_time = now;
             }
         }
         public static void Log (string message) {
-            Log(TAG.GLOBAL, message);
+            Log(TAG.GLOBAL, $"[color=#00FF00]{message}[/color]");
         }
 
         public static Exception Error (string message) {

@@ -25,6 +25,7 @@ namespace Combat {
 
         public static event EmptyDelegate OnTurnEnd;
         public static async Task EndTurn () {
+            
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
             instance.combatants[instance.turn_index].Controller.OnTurnEnd();
@@ -32,7 +33,7 @@ namespace Combat {
                 combatant.OnTurnEnd();
             }
             OnTurnEnd?.Invoke();
-            //await InteractionManager.ResolveQueue();
+            await InteractionManager.ResolveQueue();
 
             Combatant new_combatant;
 
@@ -51,7 +52,7 @@ namespace Combat {
             } while (new_combatant.IsDead);
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting turn: {new_combatant.CombatName}");
-            new_combatant.Controller.OnTurnStart();
+            await new_combatant.Controller.OnTurnStart();
         }
     }
 }

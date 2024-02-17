@@ -36,7 +36,7 @@ namespace Combat {
             }
 
             public override string ToString() {
-                return $"{Total} ({DiceResult}+{Bonus}) [{Tags.Aggregate("", (x, y) => $"{x} {y}")}]";
+                return $"{Total} ({DiceResult}+{Bonus}) [{string.Join(",", Tags)}]";
             }
 
             public static bool operator <= (Result a, Result b) => a.Total <= b.Total;

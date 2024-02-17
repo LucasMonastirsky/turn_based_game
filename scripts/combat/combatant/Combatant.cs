@@ -17,37 +17,6 @@ namespace Combat {
 
         public CombatTarget ToTarget () => new CombatTarget (this);
 
-        #region Combat Interactions
-        public int Damage(int value, string[] tags) {
-            var total = Math.Clamp(value - Armor, 0, 999);
-
-            Health -= total;
-            Dev.Log(Dev.TAG.COMBAT, $"{this} received {total} damage [{string.Join(",", tags)}]");
-
-            Animator.Play(StandardAnimations.Hurt);
-
-            return value;
-        }
-
-        public virtual void ReceiveAttack (AttackResult attack_result) {
-            Dev.Log(Dev.TAG.COMBAT, $"{this} received attack - {attack_result}");
-
-            if (attack_result.Parried && attack_result.Dodged) OnAttackParriedAndDodged(attack_result);
-            else if (attack_result.Parried) OnAttackParried(attack_result);
-            else if (attack_result.Dodged) OnAttackDodged(attack_result);
-        }
-
-        protected virtual void OnAttackParried (AttackResult attack_result) {
-            Animator.Play(StandardAnimations.Parry);
-        }
-        protected virtual void OnAttackDodged (AttackResult attack_result) {
-            Animator.Play(StandardAnimations.Dodge);
-        }
-        protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
-            OnAttackDodged(attack_result);
-        }
-        #endregion
-
         #region Status Effects
         public List<StatusEffect> StatusEffects { get; } = new ();
 

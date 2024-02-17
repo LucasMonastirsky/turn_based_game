@@ -31,8 +31,8 @@ namespace Combat {
             return Positioner.SwitchPosition(this, position);
         }
 
-        public Task SwitchPlaces (Combatant other_combatant) {
-            return Positioner.SwitchCombatants(this, other_combatant);
+        public async Task SwitchPlaces (Combatant other_combatant) {
+            await Positioner.SwitchCombatants(this, other_combatant);
         }
 
         public Task DisplaceTo (Vector2 target_position) {
