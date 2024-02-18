@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
-using Development;
 
 public partial class Hugo {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
@@ -34,6 +33,7 @@ public partial class Hugo {
     public abstract class HugoActions {
         public class Swing : CombatAction {
             public override string Name { get => "Swing"; }
+            public override int TempoCost { get; set; } = 2;
 
             public override bool IsAvailable () {
                 return User.Row == 0;
@@ -66,6 +66,7 @@ public partial class Hugo {
 
         public class Blast : CombatAction {
             public override string Name => "Blast";
+            public override int TempoCost { get; set; } = 2;
 
             public new Hugo User => base.User as Hugo;
 
@@ -92,6 +93,7 @@ public partial class Hugo {
 
         public class Shove : CombatAction {
             public override string Name => "Shove";
+            public override int TempoCost { get; set; } = 2;
 
             public override bool IsAvailable () {
                 return User.Row == 0;

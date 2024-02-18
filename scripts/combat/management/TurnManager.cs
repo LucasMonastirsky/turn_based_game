@@ -20,12 +20,22 @@ namespace Combat {
         }
 
         public static void Start () {
+            ActiveCombatant.OnTurnstart();
             instance.combatants[instance.turn_index].Controller.OnTurnStart();
         }
 
         public static event EmptyDelegate OnTurnEnd;
+        public static async Task EndAction () {
+            if (ActiveCombatant.Tempo > 0) {
+                Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "{ActiveCombatant} still has tempo, continuing turn");
+                await ActiveCombatant.Controller.OnTurnStart();
+            }
+            else {
+                await EndTurn();
+            }
+        }
+
         public static async Task EndTurn () {
-            
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending turn");
 
             instance.combatants[instance.turn_index].Controller.OnTurnEnd();
@@ -52,6 +62,7 @@ namespace Combat {
             } while (new_combatant.IsDead);
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting turn: {new_combatant.CombatName}");
+            ActiveCombatant.OnTurnstart();
             await new_combatant.Controller.OnTurnStart();
         }
     }

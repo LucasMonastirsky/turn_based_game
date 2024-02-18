@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace Combat {
     public abstract class CombatAction {
         public abstract string Name { get; }
+        public abstract int TempoCost { get; set; }
 
         public virtual bool IsAvailable () {
             return true;
@@ -67,6 +68,7 @@ namespace Combat {
 
                 if (selection == null) {
                     Targets = new ();
+                    CombatPlayerInterface.ShowActionList();
                     return;
                 }
                 else {

@@ -31,8 +31,6 @@ script = ExtResource("2_4brod")
 
 [node name="Hugo2" parent="." instance=ExtResource("4_43eyh")]
 
-[node name="Hugo3" parent="." instance=ExtResource("4_43eyh")]
-
 [node name="AsyncInput" parent="." instance=ExtResource("7_kedgi")]
 
 [node name="Enemies" type="Node" parent="."]

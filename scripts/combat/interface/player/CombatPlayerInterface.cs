@@ -29,18 +29,18 @@ namespace Combat {
             ActionListVisible = true;
         }
 
-        public static void ShowActionList (List<CombatAction> actions) {
+        public static void ShowActionList (Combatant combatant) {
             foreach (var button in current.buttons) {
                 button.QueueFree();
             }
 
             current.buttons = new ();
 
-            foreach (var action in actions) {
+            foreach (var action in combatant.ActionList) {
                 var button = current.action_button_scene.Instantiate<CombatPlayerInterfaceActionButton>();
                 current.action_button_container.AddChild(button);
                 button.Action = action;
-                button.Disabled = !action.IsAvailable();
+                button.Disabled = !action.IsAvailable() || action.TempoCost > combatant.Tempo;
                 current.buttons.Add(button);
             }
 

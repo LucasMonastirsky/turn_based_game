@@ -7,9 +7,12 @@ using System.Linq;
 namespace Combat {
     public abstract partial class Combatant : Node2D, Targetable {
         public abstract string CombatName { get; }
-        [Export] public int MaxHealth { get; protected set; } = 30;
-        [Export] public int Health { get; protected set; } = 30;
-        [Export] public int Armor { get; protected set; }
+        public int MaxHealth { get; protected set; } = 30;
+        public int Health { get; protected set; } = 30;
+        
+        public int MaxTempo { get; set; } = 3;
+        public int StartingTempo { get; set; } = 2;
+        public int Tempo { get; set; }
 
         public bool IsDead { get; protected set; }
 

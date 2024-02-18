@@ -5,7 +5,7 @@ using Development;
 namespace Combat {
     public partial class Combatant {
          public int Damage(int value, string[] tags) {
-            var total = Math.Clamp(value - Armor, 0, 999);
+            var total = Math.Clamp(value, 0, 999);
 
             Health -= total;
             Dev.Log(Dev.TAG.COMBAT, $"{this} received {total} damage [{string.Join(",", tags)}]");

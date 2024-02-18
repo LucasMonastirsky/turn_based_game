@@ -26,6 +26,7 @@ namespace Combat {
             }
 
             CurrentAction = action;
+            action.User.Tempo -= action.TempoCost;
 
             await StartAction();
             await CurrentAction.Run();
@@ -84,7 +85,7 @@ namespace Combat {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending action");
 
             ReactionsThisTurn = 0;
-            await TurnManager.EndTurn();
+            await TurnManager.EndAction();
             await Timing.Delay();
             await ResolveQueue();
             ResetCombatants();

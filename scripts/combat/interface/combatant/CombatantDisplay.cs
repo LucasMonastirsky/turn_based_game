@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Combat;
-using Development;
 using Godot;
 
 public partial class CombatantDisplay : Node2D {
@@ -8,14 +7,14 @@ public partial class CombatantDisplay : Node2D {
 
     private List<Label> labels = new ();
 
-    private Label LabelHealth;
+    private Label LabelHealth, LabelTempo;
     private List<Label> EffectLabels = new ();
 
     public void AddStatusEffect (StatusEffect effect) {
         var label = new Label {
             Text = effect.Name,
             Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10, },
-            Scale = new Vector2 { X = 0.65f, Y = 0.65f },
+            Scale = new Vector2 { X = 0.5f, Y = 0.5f },
         };
         AddChild(label);
         EffectLabels.Add(label);
@@ -28,20 +27,20 @@ public partial class CombatantDisplay : Node2D {
     }
 
     public override void _Ready () {
-        var label = new Label {
-            Scale = new Vector2 { X = 0.65f, Y = 0.65f },
+        var health_label = new Label {
+            Scale = new Vector2 { X = 0.5f, Y = 0.5f },
         };
 
-        AddChild(label);
-        LabelHealth = label;
-        labels.Add(label);
+        AddChild(health_label);
+        LabelHealth = health_label;
+        labels.Add(health_label);
     }
 
     public override void _Process (double delta) {
-        LabelHealth.Text = $"HP: {User.Health}/{User.MaxHealth}";
+        LabelHealth.Text = $"HP: {User.Health}/{User.MaxHealth} ({User.Tempo}T)";
 
         var position = Positioner.GetWorldPosition(User.CombatPosition);
-        LabelHealth.Position = position with { Y = position.Y - 40, X = position.X - 20 };
+        Position = position with { Y = position.Y - 40, X = position.X - 20 };
     }
 
 }

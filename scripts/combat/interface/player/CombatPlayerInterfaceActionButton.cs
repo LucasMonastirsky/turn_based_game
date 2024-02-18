@@ -7,7 +7,7 @@ namespace Combat {
             get => _action;
             set {
                 _action = value;
-                Text = _action.Name;
+                Text = $"{_action.Name} ({value.TempoCost})";
                 Pressed += async () => { // TODO: try/catch here to handle cancelling?
                     _action.RequestBindAndRun();
                 };

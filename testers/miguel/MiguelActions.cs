@@ -31,6 +31,7 @@ public partial class Miguel {
     public class ActionClasses {
         public class Swing : CombatAction {
             public override string Name => "Swing";
+            public override int TempoCost { get; set; } = 2;
 
             public override bool IsAvailable () {
                 return User.Row == 0;
@@ -63,6 +64,7 @@ public partial class Miguel {
 
         public class Switcheroo : CombatAction {
             public override string Name => "Switcheroo";
+            public override int TempoCost { get; set; } = 2;
 
             public new Miguel User => base.User as Miguel;
 

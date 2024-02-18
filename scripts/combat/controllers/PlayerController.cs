@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 public class PlayerController : Controller {
 	public override async Task OnTurnStart () {
-		CombatPlayerInterface.ShowActionList(Combatant.ActionList);
+		CombatPlayerInterface.ShowActionList(Combatant);
 	}
 
 /* 	public override async Task<CombatTarget> RequestSingleTarget (Combatant user, TargetSelector selector) {

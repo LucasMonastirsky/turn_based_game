@@ -26,8 +26,18 @@ namespace Combat {
 
         public void LoadIn (CombatPosition position) {
             CombatPosition = position;
+            Tempo = StartingTempo;
 
             Setup();
+        }
+
+        public bool FirstTurnTaken { get; private set; } = false;
+        public void OnTurnstart () {
+            if (FirstTurnTaken) {
+                Tempo += StartingTempo;
+                if (Tempo > MaxTempo) Tempo = MaxTempo;
+            }
+            else FirstTurnTaken = true;
         }
 
         public virtual void OnPreActionEnd () {
@@ -49,7 +59,7 @@ namespace Combat {
                 foreach (var effect in StatusEffects.ToList()) {
                     effect.Tick();
                 }
-            } 
+            }
         }
 
         public override string ToString() {
