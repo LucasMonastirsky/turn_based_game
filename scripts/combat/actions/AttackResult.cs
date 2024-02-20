@@ -1,5 +1,5 @@
 namespace Combat {
-    public struct AttackResult {
+    public class AttackResult {
         public Combatant Attacker, Defender;
 
         public int ParryDelta { get; init; }
@@ -9,6 +9,7 @@ namespace Combat {
         public bool Parried { get => ParryDelta > 0; }
         public bool Dodged { get => DodgeDelta > 0; }
 
+        public bool AllowRiposte { get; set;} = false;
         public override string ToString() {
             if (Hit) return "Hit";
             if (Parried && Dodged) return "Parried + Dodged";

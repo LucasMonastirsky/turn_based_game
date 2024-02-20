@@ -25,84 +25,31 @@ namespace Combat {
                 Dev.Error($"Tried to act unbound action: {action.Name} ({action.User.CombatName})");
             }
 
-            CurrentAction = action;
+            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting action {action}");
+            CombatantDisplayManager.Hide();
+
             action.User.Tempo -= action.TempoCost;
 
-            await StartAction();
-            await CurrentAction.Run();
-            await EndAction();
-            CurrentAction.Unbind();
-        }
+            await action.Run();
 
-        public static async Task StartAction () {
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting action {CurrentAction.Name} ({CurrentAction.User.CombatName})");
+            await Timing.Delay();
+            await ResetCombatants();
 
-            CombatantDisplayManager.Hide();
+            foreach (var combatant in Battle.Combatants) {
+                combatant.OnActionEnd();
+            }
+
+            action.Unbind();
+            CombatantDisplayManager.Show();
         }
 
         public static async Task ResolveQueue () {
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Resolving queue");
 
             while(current.Queue.Count > 0) {
-                await current.Queue.Dequeue()();
                 await Timing.Delay();
+                await current.Queue.Dequeue()();
             }
-
-            while (ActionQueue.Count > 0) {
-                var action = ActionQueue.Dequeue();
-
-                if (action.IsAvailable() && action.Condition() && action.PassesSelectors()) {
-                    await action.Run();
-                    await Timing.Delay();
-                }
-                else {
-                    Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Reaction {action.Name} from {action.User.CombatName} is no longer available or does not meet condition");
-                }
-            }
-        }
-
-        public static async Task EndAction () {
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnPreActionEnd events");
-
-            foreach (var combatant in Battle.Combatants.All) {
-                combatant.OnPreActionEnd();
-            }
-
-            await Timing.Delay();
-            await ResolveQueue();
-
-            await ResetCombatants();
-
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Triggering OnActionEnd events");
-
-            foreach (var combatant in Battle.Combatants) {
-                combatant.OnActionEnd();
-            }
-
-            await Timing.Delay();
-            await ResolveQueue();
-
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Ending action");
-
-            ReactionsThisTurn = 0;
-            await TurnManager.EndAction();
-            await Timing.Delay();
-            await ResolveQueue();
-            ResetCombatants();
-            CombatantDisplayManager.Show();
-        }
-
-        public static void React (CombatAction action) {
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"{action.User.CombatName} queued reaction {action.Name}");
-
-            if (ReactionsAllowed) {
-                ActionQueue.Enqueue(action);
-            }
-            else {
-                Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Rejected reaction");
-            }
-
-            ReactionsThisTurn++;
         }
 
         public static async Task ResetCombatants () {

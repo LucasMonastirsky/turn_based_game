@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c8impj2vemvl"]
+[gd_scene load_steps=11 format=3 uid="uid://c8impj2vemvl"]
 
 [ext_resource type="Script" path="res://scripts/combat/battle/StandardBattle.cs" id="1_ufhvr"]
 [ext_resource type="Script" path="res://scripts/combat/management/InteractionManager.cs" id="2_4brod"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c8h1qk64dpov" path="res://testers/miguel/Miguel.tscn" id="5_84if1"]
 [ext_resource type="PackedScene" uid="uid://sws6l7i8r11r" path="res://scripts/input/AsyncInput.tscn" id="7_kedgi"]
 [ext_resource type="Script" path="res://scripts/combat/interface/combatant/CombatantDisplayManager.cs" id="9_hxyir"]
+[ext_resource type="PackedScene" uid="uid://ejg2u08c72xc" path="res://scripts/combat/interface/debug/DebugInterface.tscn" id="10_baxse"]
 
 [node name="TestBattle" type="Node2D"]
 script = ExtResource("1_ufhvr")
@@ -47,3 +48,5 @@ script = ExtResource("2_4brod")
 
 [node name="CombatantDisplayManager" type="Node" parent="."]
 script = ExtResource("9_hxyir")
+
+[node name="DebugInterface" parent="." instance=ExtResource("10_baxse")]

@@ -30,13 +30,22 @@ public class EventManager<T> {
         until_handlers.Add(handler);
     }
 
-    public void Trigger (T argument) {
+    public List<Action<T>> always_handlers = new ();
+    public void Always (Action<T> handler) {
+        always_handlers.Add(handler);
+    }
+
+    public void Trigger (T arguments) {
         foreach (var handler in once_handlers) {
-            handler(argument);
+            handler(arguments);
+        }
+
+        foreach (var handler in always_handlers) { // TODO: maybe handlers should be tasks and awaited instead of added to a queue...
+            handler(arguments);
         }
 
         foreach (var handler in until_handlers.ToList()) {
-            if (handler(argument)) {
+            if (handler(arguments)) {
                 until_handlers.Remove(handler);
             }
         }

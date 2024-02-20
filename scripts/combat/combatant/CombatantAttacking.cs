@@ -33,6 +33,17 @@ namespace Combat {
             public int ParryNegation, DodgeNegation;
         }
 
+        public async Task BasicAttack (CombatTarget target, BasicAttackOptions options, Func<AttackResult, Task> function) {
+            CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
+            await InteractionManager.ResolveQueue();
+
+            var result = target.Combatant.ReceiveAttack(this, options);
+            await function(result);
+
+            CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Target = target, Options = options, Result = result });
+            await InteractionManager.ResolveQueue();
+        }
+
         public async Task<AttackResult> Attack (CombatTarget target, BasicAttackOptions options) {
             CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
 

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ejg2u08c72xc"]
+
+[ext_resource type="Script" path="res://scripts/combat/interface/debug/DebugInterface.cs" id="1_mku78"]
+
+[node name="DebugInterface" type="Node2D"]
+script = ExtResource("1_mku78")

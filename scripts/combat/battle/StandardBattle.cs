@@ -36,9 +36,7 @@ namespace Combat {
 			}
 
 			Positioner.Setup();
-
-			TurnManager.LoadIn();
-			TurnManager.Start();
+			TurnManager.BeginLoop();
 		}
 	}
 }

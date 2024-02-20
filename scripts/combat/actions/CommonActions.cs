@@ -37,7 +37,7 @@ namespace Combat {
             public Pass (Combatant user) : base (user) {}
 
             public override async Task Run () {
-                await TurnManager.EndTurn();
+                TurnManager.PassTurn();
             }
         }
     }

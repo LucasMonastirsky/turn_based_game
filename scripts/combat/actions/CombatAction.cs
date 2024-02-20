@@ -43,7 +43,7 @@ namespace Combat {
 
         public abstract Task Run ();
 
-        public async Task RequestBindAndRun () {
+        public async Task<CombatAction> RequestBind () {
             CombatPlayerInterface.HideActionList();
 
             var all_targets = Positioner.GetCombatTargets();
@@ -69,14 +69,14 @@ namespace Combat {
                 if (selection == null) {
                     Targets = new ();
                     CombatPlayerInterface.ShowActionList();
-                    return;
+                    return null;
                 }
                 else {
                     Targets.Add(selection);
                 }
             }
 
-            await InteractionManager.Act(Bind(Targets.ToArray()));
+            return Bind(Targets.ToArray());
         }
 
         private bool IsValidTarget (CombatTarget target, TargetSelector selector) {
@@ -98,6 +98,10 @@ namespace Combat {
             }
 
             return true;
+        }
+
+        public override string ToString () {
+            return $"{User.CombatName}.{Name}";
         }
     }
 }

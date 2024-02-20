@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 
 namespace Combat {
@@ -23,6 +24,29 @@ namespace Combat {
 
         public override void _EnterTree () {
             current = this;
+        }
+
+        public static async Task<CombatAction> RequestAction (Combatant combatant) {
+            foreach (var button in current.buttons) {
+                button.QueueFree();
+            }
+
+            var completion_source = new TaskCompletionSource<CombatAction>();
+
+            current.buttons = new ();
+
+            foreach (var action in combatant.ActionList) {
+                var button = current.action_button_scene.Instantiate<CombatPlayerInterfaceActionButton>();
+                current.action_button_container.AddChild(button);
+                button.Action = action;
+                button.CompletionSource = completion_source;
+                button.Disabled = !action.IsAvailable() || action.TempoCost > combatant.Tempo;
+                current.buttons.Add(button);
+            }
+
+            ActionListVisible = true;
+
+            return await completion_source.Task;
         }
 
         public static void ShowActionList () {

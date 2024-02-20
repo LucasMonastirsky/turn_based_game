@@ -53,14 +53,18 @@ public partial class Hugo {
                 User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
-                var attack_result = await User.Attack(target, new BasicAttackOptions {
-                    ParryNegation = 0, DodgeNegation = 0,
-                });
+                var attack_options = new BasicAttackOptions {
 
-                if (attack_result.Hit) {
-                    var damage_roll = User.Roll(new DiceRoll(10), new string[] { "Damage" });
-                    target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
-                }
+                };
+
+                await User.BasicAttack(target, attack_options, async (result) => {
+                    if (result.Hit) {
+                        result.AllowRiposte = false;
+                        var damage_roll = User.Roll(new DiceRoll(10), new string[] { "Damage" });
+                        target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                    }
+                    else result.AllowRiposte = true;
+                });
             }
         }
 

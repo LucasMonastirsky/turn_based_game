@@ -50,15 +50,18 @@ public partial class Miguel {
                 User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
-                var attack_result = await User.Attack(target, new BasicAttackOptions {
-                    ParryNegation = 0, DodgeNegation = 0,
+                var options = new BasicAttackOptions () {
+                    ParryNegation = 2, DodgeNegation = 0,
+                };
+                await User.BasicAttack(target, options, async result => {
+                    if (result.Hit){
+                        result.AllowRiposte = false;
+                        var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
+                        target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                        target.Combatant.AddStatusEffect(new Poison(1));
+                    }
+                    else result.AllowRiposte = true;
                 });
-
-                if (attack_result.Hit) {
-                    var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
-                    target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
-                    target.Combatant.AddStatusEffect(new Poison(1));
-                }
             }
         }
 
