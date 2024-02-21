@@ -9,10 +9,13 @@ namespace Combat {
 
         public static CombatAction CurrentAction;
 
-        public delegate Task QueueAction ();
-        public Queue<QueueAction> Queue = new ();
-        public static void AddQueueEvent (QueueAction action) {
+        public delegate Task QueueEvent ();
+        public Queue<QueueEvent> Queue = new ();
+        public static void AddQueueEvent (QueueEvent action) {
             current.Queue.Enqueue(action);
+        }
+        public static void QueueAction (CombatAction action) {
+            AddQueueEvent(async () => await action.Run());
         }
 
         public static Queue<CombatAction> ActionQueue = new ();
@@ -33,11 +36,12 @@ namespace Combat {
             await action.Run();
 
             await Timing.Delay();
-            await ResetCombatants();
 
             foreach (var combatant in Battle.Combatants) {
-                combatant.OnActionEnd();
+                combatant.ActionEndCheck();
             }
+
+            await ResetCombatants();
 
             action.Unbind();
             CombatantDisplayManager.Show();

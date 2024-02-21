@@ -15,8 +15,8 @@ namespace Combat {
             return value;
         }
 
-        public virtual void ReceiveAttack (AttackResult attack_result) {
-            Dev.Log(Dev.TAG.COMBAT, $"{this} received attack - {attack_result}");
+        public virtual async Task Riposte (AttackResult attack_result) {
+
         }
 
         protected virtual void OnAttackParried (AttackResult attack_result) {
@@ -40,16 +40,10 @@ namespace Combat {
             var result = target.Combatant.ReceiveAttack(this, options);
             await function(result);
 
+            if (TurnManager.ActiveCombatant != result.Defender) await result.Defender.Riposte(result);
+
             CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Target = target, Options = options, Result = result });
             await InteractionManager.ResolveQueue();
-        }
-
-        public async Task<AttackResult> Attack (CombatTarget target, BasicAttackOptions options) {
-            CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
-
-            await InteractionManager.ResolveQueue();
-
-            return target.Combatant.ReceiveAttack(this, options);
         }
 
         public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions? options = null) {
@@ -62,6 +56,7 @@ namespace Combat {
                 Defender = this,
                 ParryDelta = parry_roll.Total - hit_roll.Total - options?.ParryNegation ?? 0,
                 DodgeDelta = dodge_roll.Total - hit_roll.Total - options?.DodgeNegation ?? 0,
+                AllowRiposte = false,
             };
 
             if (result.Parried && result.Dodged) OnAttackParriedAndDodged(result);

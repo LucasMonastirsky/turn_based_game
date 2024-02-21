@@ -55,6 +55,10 @@ public class EventManager<T> {
 
         once_handlers = new ();
     }
+
+    public void Remove (Action<T> handler) {
+        if (!once_handlers.Remove(handler)) always_handlers.Remove(handler);
+    }
 }
 
 public delegate void EmptyDelegate ();

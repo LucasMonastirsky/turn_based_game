@@ -1,6 +1,4 @@
 using Combat;
-using Godot;
-using ResourceHelpers;
 
 public partial class Hugo : Combatant {
     private static string texture_path = "res://hugo/textures";
@@ -18,14 +16,8 @@ public partial class Hugo : Combatant {
     protected AnimationStore Animations = new () {
         Idle = new SimpleAnimation() {
             Sprites = new SimpleSprite[] {
-                new SimpleSprite() {
-                    Texture = Resources.LoadTexture(texture_path, "idle_0"),
-                    Offset = new Vector2(0, 0),
-                },
-                new SimpleSprite() {
-                    Texture = Resources.LoadTexture(texture_path, "idle_1"),
-                    Offset = new Vector2(0, 0),
-                },
+                new SimpleSprite(texture_path, "idle_0"),
+                new SimpleSprite(texture_path, "idle_1"),
             },
         },
         Hurt = new SimpleSprite(texture_path, "hurt"),

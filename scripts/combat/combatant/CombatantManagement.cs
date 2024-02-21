@@ -32,7 +32,7 @@ namespace Combat {
         }
 
         public bool FirstTurnTaken { get; private set; } = false;
-        public void OnTurnstart () {
+        public void OnTurnStart () {
             if (FirstTurnTaken) {
                 Tempo += StartingTempo;
                 if (Tempo > MaxTempo) Tempo = MaxTempo;
@@ -44,10 +44,7 @@ namespace Combat {
 
         }
 
-        /// <summary>
-        ///  Don't add to resolve_queue here
-        /// </summary>
-        public virtual void OnActionEnd () {
+        public virtual void ActionEndCheck () {
             if (!IsDead && Health < 1) {
                 Dev.Log(Dev.TAG.COMBAT, $"{this} died");
                 IsDead = true;

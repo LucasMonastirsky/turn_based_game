@@ -7,8 +7,8 @@ using System.Linq;
 namespace Combat {
     public abstract partial class Combatant : Node2D, Targetable {
         public abstract string CombatName { get; }
-        public int MaxHealth { get; protected set; } = 30;
-        public int Health { get; protected set; } = 30;
+        public int MaxHealth { get; protected set; } = 15;
+        public int Health { get; protected set; } = 15;
         
         public int MaxTempo { get; set; } = 3;
         public int StartingTempo { get; set; } = 2;
@@ -19,6 +19,8 @@ namespace Combat {
         public abstract List<CombatAction> ActionList { get; }
 
         public CombatTarget ToTarget () => new CombatTarget (this);
+
+        public CombatantStore Allies => Battle.Combatants.OnSide(Side);
 
         #region Status Effects
         public List<StatusEffect> StatusEffects { get; } = new ();

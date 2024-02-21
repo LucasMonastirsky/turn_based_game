@@ -26,6 +26,24 @@ namespace Combat {
             }
         }
 
+        public class Switch : CombatAction {
+            public override string Name => "Switch";
+            public override int TempoCost { get; set; } = 2;
+
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                new (TargetType.Single) {
+                    Side = SideSelector.Same,
+                    Validator = (target, user, previous_targets) => target.Combatant.CanSwitch,
+                }
+            };
+
+            public Switch (Combatant user) : base (user) {}
+
+            public override async Task Run () {
+                await Positioner.SwitchCombatants(User, Targets[0].Combatant);
+            }
+        }
+
         public class Pass : CombatAction {
             public override string Name => "Pass";
             public override int TempoCost { get; set; } = 0;

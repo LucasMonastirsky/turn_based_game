@@ -8,6 +8,7 @@ public partial class Hugo {
         Actions.Shove,
         Actions.Blast,
         Actions.Move,
+        Actions.Switch,
         Actions.Pass,
     });
 
@@ -19,6 +20,7 @@ public partial class Hugo {
         public HugoActions.Blast Blast;
 
         public CommonActions.Move Move;
+        public CommonActions.Switch Switch;
         public CommonActions.Pass Pass;
 
         public ActionStore (Hugo hugo) {
@@ -26,6 +28,7 @@ public partial class Hugo {
             Blast = new (hugo);
             Shove = new (hugo);
             Move = new (hugo);
+            Switch = new (hugo);
             Pass = new (hugo);
         }
     }
@@ -54,12 +57,11 @@ public partial class Hugo {
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
                 var attack_options = new BasicAttackOptions {
-
+                    DodgeNegation = 3,
                 };
 
                 await User.BasicAttack(target, attack_options, async (result) => {
                     if (result.Hit) {
-                        result.AllowRiposte = false;
                         var damage_roll = User.Roll(new DiceRoll(10), new string[] { "Damage" });
                         target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
                     }
@@ -84,14 +86,12 @@ public partial class Hugo {
                 var target = Targets[0];
                 User.Animator.Play(User.Animations.Blast);
 
-                var attack_result = await User.Attack(target, new BasicAttackOptions {
-                    ParryNegation = 0, DodgeNegation = 0,
+                await User.BasicAttack(target, new () { ParryNegation = 4, }, async result => {
+                    if (result.Hit) {
+                        var damage_roll = User.Roll(new DiceRoll(6), new string[] { "Damage" });
+                        target.Combatant.Damage(damage_roll.Total, new string[] { "Ranged", "Blunt" });
+                    }
                 });
-
-                if (attack_result.Hit) {
-                    var damage_roll = User.Roll(new DiceRoll(6), new string[] { "Damage" });
-                    target.Combatant.Damage(damage_roll.Total, new string[] { "Ranged", "Blunt" });
-                }
             }
         }
 
@@ -123,18 +123,16 @@ public partial class Hugo {
                 User.Animator.Play(User.Animations.Shove);
                 await User.DisplaceToMeleeDistance(Targets[0].Combatant);
 
-                var attack_result = await User.Attack(Targets[0], new BasicAttackOptions {
-                    ParryNegation = 0, DodgeNegation = 0,
-                });
+                await User.BasicAttack(Targets[0], new () {}, async result => {
+                    if (!result.Dodged) {
+                        if (result.Hit) {
+                            var damage_roll = User.Roll(new DiceRoll(4), new string[] { "Damage" });
+                            Targets[0].Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                        }
 
-                if (!attack_result.Dodged) {
-                    if (attack_result.Hit) {
-                        var damage_roll = User.Roll(new DiceRoll(4), new string[] { "Damage" });
-                        Targets[0].Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                        await Targets[0].Combatant.MoveTo(Targets[1].Position);
                     }
-
-                    await Targets[0].Combatant.MoveTo(Targets[1].Position);
-                }
+                });
             }
         }
     }

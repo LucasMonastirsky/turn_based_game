@@ -15,6 +15,9 @@ namespace Combat {
         public int Row { get => CombatPosition.Row; }
         public Side Side { get => CombatPosition.Side; }
 
+        public bool CanSwitch => true;
+        public bool CanMove => true;
+
         public Vector2 WorldPos { get => Position; }
     
         private double movement_duration = (double) Timing.MoveDuration / 1000; 

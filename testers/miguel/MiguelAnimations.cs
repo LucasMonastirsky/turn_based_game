@@ -10,33 +10,23 @@ public partial class Miguel {
 		public override SimpleSprite Parry { get; set; }
 		public override SimpleSprite Dead { get; set; }
 		public SimpleSprite Swing { get; set; }
+		public SimpleSprite Combo_1 { get; set; }
+		public SimpleSprite Combo_2 { get; set; }
     }
 	protected override StandardAnimationStore StandardAnimations { get => Animations; }
 	public AnimationStore Animations = new () {
 		Idle = new SimpleAnimation() {
 			Sprites = new SimpleSprite[] {
-				new SimpleSprite() {
-					Texture = Resources.LoadTexture(texture_path, "idle_0"),
-				},
-				new SimpleSprite() {
-					Texture = Resources.LoadTexture(texture_path, "idle_1"),
-				},
+				new SimpleSprite(texture_path, "idle_0"),
+				new SimpleSprite(texture_path, "idle_1"),
 			}
 		},
-		Hurt = new SimpleSprite() {
-			Texture = Resources.LoadTexture(texture_path, "hurt"),
-		},
-		Parry = new SimpleSprite() {
-			Texture = Resources.LoadTexture(texture_path, "parry"),
-		},
-		Dodge = new SimpleSprite() {
-			Texture = Resources.LoadTexture(texture_path, "dodge"),
-		},
-		Dead = new SimpleSprite() {
-			Texture = Resources.LoadTexture(texture_path, "dead"),
-		},
-		Swing = new SimpleSprite() {
-			Texture = Resources.LoadTexture(texture_path, "swing"),
-		},
+		Hurt = new SimpleSprite(texture_path, "hurt"),
+		Parry = new SimpleSprite(texture_path, "parry"),
+		Dodge = new SimpleSprite(texture_path, "dodge"),
+		Dead = new SimpleSprite(texture_path, "dead"),
+		Swing = new SimpleSprite(texture_path, "swing"),
+		Combo_1 = new SimpleSprite(texture_path, "combo_1"),
+		Combo_2 = new SimpleSprite(texture_path, "combo_2"),
 	};
 }

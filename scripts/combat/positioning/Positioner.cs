@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Development;
 using Godot;
@@ -131,6 +133,24 @@ namespace Combat {
             }
 
             return targets;
+        }
+
+        public static CombatTarget SelectClosest (Targetable target, List<CombatTarget> positions) {
+            var results = new Dictionary<int, Targetable> ();
+
+            foreach (var position in positions) {
+                var distance = 0;
+
+                var target_pos = target.ToTarget().Position;
+                var evaluated_pos = position.Position;
+
+                distance += Math.Abs(target_pos.Row - evaluated_pos.Row);
+                distance += Math.Abs(target_pos.Slot - evaluated_pos.Slot);
+
+                results.TryAdd(distance, position); // maybe return a random one instead, or a list of ties
+            }
+
+            return results.MinBy(kvp => kvp.Key).Value as CombatTarget;
         }
     }
 }
