@@ -22,7 +22,7 @@ public partial class DebugInterface : Node2D {
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
-		label_turn_manager.Text = $"{TurnManager.State}";
+		label_turn_manager.Text = $"{TurnManager.State} {TurnManager.CurrentAction}";
 		//label_interaction_manager.Text = $"{InteractionManager.State}: {InteractionManager.CurrentAction}";
 	}
 }

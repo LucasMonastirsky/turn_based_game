@@ -18,7 +18,7 @@ namespace Combat {
                 Controller.Combatant = this;
             }
             else {
-                Dev.Error($"{CombatName}.Setup(): ControllerType is not assignable to Controller");
+                Dev.Error($"{Name}.Setup(): ControllerType is not assignable to Controller");
             }
 
             Display = CombatantDisplayManager.CreateDisplay(this);
@@ -60,7 +60,7 @@ namespace Combat {
         }
 
         public override string ToString() {
-            return $"{CombatName} ({CombatPosition})";
+            return $"{Name} ({CombatPosition})";
         }
     }
 }

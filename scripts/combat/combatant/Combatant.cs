@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using Godot;
 using Development;
 using System.Linq;
+using Utils;
 
 namespace Combat {
-    public abstract partial class Combatant : Node2D, Targetable {
-        public abstract string CombatName { get; }
+    public abstract partial class Combatant : Node2D, Targetable, Identifiable {
+        private int _id { get; } = RNG.NewId;
+        public int Id => _id;
+        public abstract new string Name { get; }
+
         public int MaxHealth { get; protected set; } = 15;
         public int Health { get; protected set; } = 15;
         
@@ -20,13 +24,13 @@ namespace Combat {
 
         public CombatTarget ToTarget () => new CombatTarget (this);
 
-        public CombatantStore Allies => Battle.Combatants.OnSide(Side);
+        public CombatantStore Allies => new CombatantStore(Battle.Combatants.OnSide(Side).Where(combatant => combatant != this));
 
         #region Status Effects
         public List<StatusEffect> StatusEffects { get; } = new ();
 
         public void AddStatusEffect (StatusEffect effect) {
-            Dev.Log(Dev.TAG.COMBAT, $"{CombatName} getting status effect {effect.Name}");
+            Dev.Log(Dev.TAG.COMBAT, $"{Name} getting status effect {effect.Name}");
 
             StatusEffects.Add(effect);
             effect.User = this;
@@ -45,16 +49,6 @@ namespace Combat {
             StatusEffects.Remove(effect);
             effect.OnRemoved();
             Display.RemoveStatusEffect(effect);
-        }
-        #endregion
-
-        #region Rolls
-        protected RollManager roller = new RollManager();
-        public Roll.Result Roll (DiceRoll roll, string[] tags) {
-            return roller.Roll(roll, tags);
-        }
-        public Roll.Result Roll (DiceRoll[] rolls, string[] tags) {
-            return roller.Roll(rolls, tags);
         }
         #endregion
 

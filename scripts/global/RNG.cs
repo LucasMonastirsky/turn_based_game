@@ -6,6 +6,9 @@ using Godot;
 
 namespace Utils {
     public static class RNG {
+        private static int last_id = 0;
+        public static int NewId => last_id++;
+
         public static int LessThan (int max) {
             var value = (int) (GD.Randi() % max);
             Dev.Log(Dev.TAG.RANDOM, $"RNG.LessThan({max}): {value}");

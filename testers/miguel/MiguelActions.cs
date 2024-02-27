@@ -62,8 +62,8 @@ public partial class Miguel {
                 await User.BasicAttack(target, options, async result => {
                     if (result.Hit){
                         result.AllowRiposte = false;
-                        var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
-                        target.Combatant.Damage(damage_roll.Total + 4, new string[] { "Cut" });
+                        var damage_roll = User.Roll(8, new string [] { "Damage" });
+                        target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
                         target.Combatant.AddStatusEffect(new Poison(1));
                     }
                     else result.AllowRiposte = true;
@@ -137,8 +137,8 @@ public partial class Miguel {
 
                 await User.BasicAttack(target, new () {}, async result => {
                     if (result.Hit) {
-                        var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
-                        target.Combatant.Damage(damage_roll.Total + 4, new string[] { "Cut" });
+                        var damage_roll = User.Roll(8, new string [] { "Damage" });
+                        target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
                     }
                 });
 
@@ -147,8 +147,8 @@ public partial class Miguel {
                 User.Animator.Play(User.Animations.Combo_1);
                 await User.BasicAttack(target, new () { ParryNegation = -1, DodgeNegation = 2, }, async result => {
                     if (result.Hit) {
-                        var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
-                        target.Combatant.Damage(damage_roll.Total, new string[] { "Blunt" });
+                        var damage_roll = User.Roll(8, new string [] { "Damage" });
+                        target.Combatant.Damage(damage_roll, new string [] { "Blunt" });
                     }
                 });
 
@@ -157,8 +157,8 @@ public partial class Miguel {
                 User.Animator.Play(User.Animations.Combo_2);
                 await User.BasicAttack(target, new () { ParryNegation = 2, DodgeNegation = 0, }, async result => {
                     if (result.Hit) {
-                        var damage_roll = User.roller.Roll(new DiceRoll(8), new string[] { "Damage" });
-                        target.Combatant.Damage(damage_roll.Total, new string[] { "Blunt" });
+                        var damage_roll = User.Roll(8, new string [] { "Damage" });
+                        target.Combatant.Damage(damage_roll, new string[] { "Blunt" });
                     }
                 });
             }

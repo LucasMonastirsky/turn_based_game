@@ -2,7 +2,7 @@ using System;
 using Combat;
 
 public partial class Miguel : Combatant {
-	public override string CombatName => "Miguel";
+	public override string Name => "Miguel";
     public override Type DefaultControllerType => typeof(MiguelController);
 
     protected override void Setup () {
@@ -15,10 +15,6 @@ public partial class Miguel : Combatant {
                     await Actions.Swing.Bind(arguments.Attacker).Run();
                 });
             }
-        });
-
-        roller.AddPreRollEvent("Dodge", "Dodge", (roll) => {
-            roll.Bonus += 0;
         });
     }
 

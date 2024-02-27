@@ -25,7 +25,7 @@ namespace Combat {
 
         public static async Task Act (CombatAction action) {
             if (!action.Bound) {
-                Dev.Error($"Tried to act unbound action: {action.Name} ({action.User.CombatName})");
+                Dev.Error($"Tried to act unbound action: {action.Name} ({action.User.Name})");
             }
 
             Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting action {action}");

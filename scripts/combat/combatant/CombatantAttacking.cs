@@ -47,15 +47,15 @@ namespace Combat {
         }
 
         public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions? options = null) {
-            var hit_roll = attacker.Roll(new DiceRoll(10), new string[] { "Attack" });
-            var parry_roll = Roll(new DiceRoll(10), new string[] { "Parry" });
-            var dodge_roll = Roll(new DiceRoll(10), new string[] { "Dodge" });
+            var hit_roll = attacker.Roll(10, new string [] { "Attack" });
+            var parry_roll = Roll(10, new string [] { "Parry" });
+            var dodge_roll = Roll(10, new string [] { "Dodge" });
 
             var result = new AttackResult {
                 Attacker = attacker,
                 Defender = this,
-                ParryDelta = parry_roll.Total - hit_roll.Total - options?.ParryNegation ?? 0,
-                DodgeDelta = dodge_roll.Total - hit_roll.Total - options?.DodgeNegation ?? 0,
+                ParryDelta = parry_roll - hit_roll - options?.ParryNegation ?? 0,
+                DodgeDelta = dodge_roll - hit_roll - options?.DodgeNegation ?? 0,
                 AllowRiposte = false,
             };
 

@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utils;
 
 namespace Combat {
-    public abstract class CombatAction {
+    public abstract class CombatAction : Identifiable {
+        private int _id { get; } = RNG.NewId;
+        public int Id => _id;
         public abstract string Name { get; }
+
         public abstract int TempoCost { get; set; }
 
         public virtual bool IsAvailable () {
@@ -101,7 +105,7 @@ namespace Combat {
         }
 
         public override string ToString () {
-            return $"{User.CombatName}.{Name}";
+            return $"{User.Name}.{Name}";
         }
     }
 }

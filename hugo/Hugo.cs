@@ -7,7 +7,7 @@ using Utils;
 public partial class Hugo : Combatant {
     public override Type DefaultControllerType => typeof(PlayerController);
 
-    public override string CombatName => "Hugo";
+    public override string Name => "Hugo";
 
 	protected override void Setup () {
 		base.Setup();

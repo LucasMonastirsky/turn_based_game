@@ -37,10 +37,10 @@ public partial class CombatantDisplay : Node2D {
     }
 
     public override void _Process (double delta) {
-        LabelHealth.Text = $"HP: {User.Health}/{User.MaxHealth} ({User.Tempo}T)";
+        LabelHealth.Text = $"{User.Name} {User.Id} HP: {User.Health}/{User.MaxHealth} ({User.Tempo}T)";
 
         var position = Positioner.GetWorldPosition(User.CombatPosition);
-        Position = position with { Y = position.Y - 40, X = position.X - 20 };
+        Position = position with { Y = position.Y - 40, X = position.X - 40 };
     }
 
 }

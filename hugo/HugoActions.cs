@@ -62,8 +62,8 @@ public partial class Hugo {
 
                 await User.BasicAttack(target, attack_options, async (result) => {
                     if (result.Hit) {
-                        var damage_roll = User.Roll(new DiceRoll(10), new string[] { "Damage" });
-                        target.Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                        var damage_roll = User.Roll(10, "Damage");
+                        target.Combatant.Damage(damage_roll, new string [] { "Cut" });
                     }
                     else result.AllowRiposte = true;
                 });
@@ -88,8 +88,8 @@ public partial class Hugo {
 
                 await User.BasicAttack(target, new () { ParryNegation = 4, }, async result => {
                     if (result.Hit) {
-                        var damage_roll = User.Roll(new DiceRoll(6), new string[] { "Damage" });
-                        target.Combatant.Damage(damage_roll.Total, new string[] { "Ranged", "Blunt" });
+                        var damage_roll = User.Roll(6, new string [] { "Damage" });
+                        target.Combatant.Damage(damage_roll, new string[] { "Ranged", "Blunt" });
                     }
                 });
             }
@@ -126,8 +126,8 @@ public partial class Hugo {
                 await User.BasicAttack(Targets[0], new () {}, async result => {
                     if (!result.Dodged) {
                         if (result.Hit) {
-                            var damage_roll = User.Roll(new DiceRoll(4), new string[] { "Damage" });
-                            Targets[0].Combatant.Damage(damage_roll.Total, new string[] { "Cut" });
+                            var damage_roll = User.Roll(4, new string [] { "Damage" });
+                            Targets[0].Combatant.Damage(damage_roll, new string[] { "Cut" });
                         }
 
                         await Targets[0].Combatant.MoveTo(Targets[1].Position);

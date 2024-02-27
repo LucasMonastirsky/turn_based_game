@@ -8,6 +8,8 @@ namespace Combat {
         public static List<Combatant> Combatants;
         public static Combatant ActiveCombatant => Combatants[turn_index];
 
+        public static CombatAction CurrentAction { get; protected set; }
+
         public static string State = "Idle";
         private static bool IsPassQueued = false;
 
@@ -23,11 +25,12 @@ namespace Combat {
                 while (ActiveCombatant.Tempo > 0 && !IsPassQueued) {
                     State = "Requesting";
 
-                    var action = await ActiveCombatant.Controller.RequestAction();
-                    
+                    CurrentAction = await ActiveCombatant.Controller.RequestAction();
+
                     State = "Resolving";
 
-                    await InteractionManager.Act(action);
+                    await InteractionManager.Act(CurrentAction);
+                    CurrentAction = null;
                 }
 
                 State = "Ending";

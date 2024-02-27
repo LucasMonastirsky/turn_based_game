@@ -9,6 +9,14 @@ namespace Combat {
             this.combatants = combatants;
         }
 
+        public CombatantStore (Combatant[] combatants) {
+            this.combatants = new (combatants);
+        }
+
+        public CombatantStore (IEnumerable<Combatant> combatants) {
+            this.combatants = new (combatants);
+        }
+
         public int Count => combatants.Count;
 
         public List<Combatant> ToList () {
