@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Development;
 using Utils;
 
 namespace Combat {
@@ -41,15 +42,35 @@ namespace Combat {
             if (advantage >= 0) rolls.Sort((x, y) => y - x);
             else rolls.Sort((x, y) => x - y);
 
+            Dev.Log(Dev.TAG.ROLL, $"{this} rolled {Stringer.Join(tags)}: {rolls[0]} + {bonus} ({advantage} advantage)");
+
+            foreach (var mod in mods) {
+                if (mod.Temporary) RemoveRollModifier(mod);
+            }
+
             return rolls[0] + bonus;
         }
 
         public void AddRollModifier (RollModifier roll_modifier) {
+            if (FindRollModifierIndex(roll_modifier) > -1) Dev.Error("Trying to add modifier that already exists");
+            
             RollModifiers.Add(roll_modifier);
         }
 
-        public void RemoveRollModifier (Identifiable source, params string [] tags) {
-            RollModifiers.RemoveAll(mod => mod.Source == source && mod.Tags.SequenceEqual(tags.OrderBy(x => x).ToList()));
+        public void EditRollModifier (RollModifier roll_modifier) {
+            var index = FindRollModifierIndex(roll_modifier);
+
+            if (index < 0) Dev.Error("Trying to edit modifier that doesn't exist");
+
+            RollModifiers[index] = roll_modifier;
+        }
+
+        public void RemoveRollModifier (RollModifier roll_modifier) {
+            RollModifiers.RemoveAt(FindRollModifierIndex(roll_modifier));
+        }
+
+        public int FindRollModifierIndex (RollModifier roll_modifier) {
+            return RollModifiers.FindIndex(item => item.Source == roll_modifier.Source && item.Tags == roll_modifier.Tags);
         }
 
         public List<RollModifier> RollModifiers = new ();
@@ -58,6 +79,11 @@ namespace Combat {
             public List<string> Tags { get; init; }
             public int Bonus = 0;
             public int Advantage = 0;
+
+            /// <summary>
+            /// Will be removed when used or on action end
+            /// </summary>
+            public bool Temporary { get; init; } = false;
 
             public Identifiable Source { get; init; }
 

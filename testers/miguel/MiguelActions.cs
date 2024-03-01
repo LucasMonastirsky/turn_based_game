@@ -107,6 +107,8 @@ public partial class Miguel {
                         else {
                             InteractionManager.AddQueueEvent(async () => {
                                 await Caster.SwitchPlaces(User);
+                                Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
+                                Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
                                 User.RemoveStatusEffect(Name);
                             });
                             return true;

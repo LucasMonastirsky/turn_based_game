@@ -9,9 +9,16 @@ public partial class Hugo : Combatant {
 
     public override string Name => "Hugo";
 
+	private RollModifier parry_modifier;
+	private RollModifier attack_modifier;
+
 	protected override void Setup () {
 		base.Setup();
 		Actions = new ActionStore(this);
+
+		
+		AddRollModifier(parry_modifier = new (this, "Parry") { Bonus = 2 });
+		AddRollModifier(attack_modifier = new (this, "Attack") { Bonus = 4 });
 	}
 
 	public override async Task Riposte (AttackResult attack_result) {
