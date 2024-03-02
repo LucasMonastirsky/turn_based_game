@@ -87,15 +87,15 @@ public partial class Miguel {
                 var target = Targets[0];
 
                 User.Animator.Play(User.Animations.Parry);
-                target.Combatant.AddStatusEffect(new Effect (User));
+                target.Combatant.AddStatusEffect(new SwitcherooEffect (User));
             }
 
-            public class Effect : StatusEffect {
-                public override string Name => "Switcher";
+            public class SwitcherooEffect : StatusEffect {
+                public override string Name => "Switcheroo";
 
                 public Combatant Caster;
 
-                public Effect (Combatant caster) : base (0) {
+                public SwitcherooEffect (Combatant caster) {
                     Caster = caster;
                 }
 

@@ -44,6 +44,7 @@ namespace Combat {
             await ResetCombatants();
 
             action.Unbind();
+            await Timing.Delay();
             CombatantDisplayManager.Show();
         }
 

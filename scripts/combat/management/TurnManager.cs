@@ -22,7 +22,7 @@ namespace Combat {
                 IsPassQueued = false;
                 ActiveCombatant.OnTurnStart();
 
-                while (ActiveCombatant.Tempo > 0 && !IsPassQueued) {
+                while (ActiveCombatant.Tempo > 0 && !ActiveCombatant.IsDead && !IsPassQueued) {
                     State = "Requesting";
 
                     CurrentAction = await ActiveCombatant.Controller.RequestAction();

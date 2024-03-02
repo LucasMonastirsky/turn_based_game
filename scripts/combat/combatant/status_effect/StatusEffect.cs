@@ -6,13 +6,11 @@ namespace Combat {
         public int Id => _id;
         public abstract string Name { get; }
 
-        public int Duration;
+        public int Level { get; set; } = 0;
 
         public Combatant User { get; set; }
 
-        public StatusEffect (int duration) {
-            Duration = duration;
-        }
+        public StatusEffect () {}
 
         public virtual void Tick () {
             

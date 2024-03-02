@@ -7,30 +7,29 @@ public partial class MiguelController : Controller {
     private new Miguel Combatant => base.Combatant as Miguel;
 
     public override async Task<CombatAction> RequestAction () {
-        if (Combatant.Tempo == 0) return Combatant.Actions.Pass.Bind();
-
         if (Combatant.Row == 1) {
-            if (Combatant.Allies.OnRow(0).Count < Combatant.Allies.OnRow(1).Count + 1) {
+            var front_allies = Combatant.Allies.OnRow(0);
+
+            if (front_allies.Count < Combatant.Allies.OnRow(1).Count + 1) {
                 var targets = Positioner.GetMoveTargets(Combatant).Where(target => target.Combatant is null).ToList();
-                return Combatant.Actions.Move.Bind(RNG.SelectFrom(targets));
+                if (targets.Count > 0) return Combatant.Actions.Move.Bind(RNG.SelectFrom(targets));
             }
-        }
 
-        if (Combatant.Tempo == 1) {
-            var available_allies = Combatant.Allies.OnRow(0).Where(ally => ally.Tempo > 0 && ally.Health < Combatant.Health);
+            var weak_front_allies = front_allies.Where(ally => ally.Health < Combatant.Health).ToList();
+            if (weak_front_allies.Count > 0) {
+                var allies_with_extra_tempo = weak_front_allies.Where(ally => ally.Tempo > 0).ToList();
 
-            if (available_allies.Count() > 0) return Combatant.Actions.Move.Bind(available_allies.MinBy(ally => ally.Health));
-            else return Combatant.Actions.Pass.Bind();
-        }
+                if (allies_with_extra_tempo.Count > 0) return Combatant.Actions.Move.Bind(RNG.SelectFrom(allies_with_extra_tempo));
+                else if (Combatant.Tempo > 1) return Combatant.Actions.Switch.Bind(RNG.SelectFrom(weak_front_allies));
+            }
 
-        if (Combatant.Row == 0) {
-            var targets = Battle.Combatants.OnOppositeSide(Combatant.Side).OnRow(0).Alive.All;
-
-            if (targets.Count > 0) return Combatant.Actions.Swing.Bind(RNG.SelectFrom(targets));
-            else return Combatant.Actions.Pass.Bind();
+            return Combatant.Actions.Pass.Bind();
         }
         else {
-            return Combatant.Actions.Pass.Bind();
+            var targets = Battle.Combatants.OnOppositeSide(Combatant.Side).OnRow(0).Alive.All;
+
+            if (targets.Count < 1) return Combatant.Actions.Pass.Bind();
+            else return Combatant.Actions.Swing.Bind(RNG.SelectFrom(targets));
         }
     }
 }

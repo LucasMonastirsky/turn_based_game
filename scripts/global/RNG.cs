@@ -10,13 +10,13 @@ namespace Utils {
         public static int NewId => last_id++;
 
         public static int LessThan (int max) {
-            var value = max > 0 ? (int) (GD.Randi() % max) : 0;
+            var value = (int) (GD.Randi() % max);
             Dev.Log(Dev.TAG.RANDOM, $"RNG.LessThan({max}): {value}");
             return value;
         }
 
         public static int Range (int min, int max) {
-            var value = (int) (GD.Randi() % max);
+            var value = (int) (GD.Randi() % (max - min)) + min;
             Dev.Log(Dev.TAG.RANDOM, $"RNG.Range({min}, {max}): {value}");
             return value;
         }

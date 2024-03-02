@@ -13,8 +13,8 @@ public partial class CombatantDisplay : Node2D {
     public void AddStatusEffect (StatusEffect effect) {
         var label = new Label {
             Text = effect.Name,
-            Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10, },
-            Scale = new Vector2 { X = 0.5f, Y = 0.5f },
+            Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10 * (EffectLabels.Count + 1), },
+            Scale = new Vector2 { X = 0.4f, Y = 0.4f },
         };
         AddChild(label);
         EffectLabels.Add(label);
@@ -37,7 +37,7 @@ public partial class CombatantDisplay : Node2D {
     }
 
     public override void _Process (double delta) {
-        LabelHealth.Text = $"{User.Name} {User.Id} HP: {User.Health}/{User.MaxHealth} ({User.Tempo}T)";
+        LabelHealth.Text = $"{User.Name} {User.Health}/{User.MaxHealth} ({User.Tempo}T)";
 
         var position = Positioner.GetWorldPosition(User.CombatPosition);
         Position = position with { Y = position.Y - 40, X = position.X - 40 };

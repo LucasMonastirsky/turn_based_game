@@ -25,6 +25,7 @@ namespace Combat {
         public CombatTarget ToTarget () => new CombatTarget (this);
 
         public CombatantStore Allies => new CombatantStore(Battle.Combatants.OnSide(Side).Where(combatant => combatant != this));
+        public CombatantStore Enemies => new CombatantStore(Battle.Combatants.OnOppositeSide(Side));
 
         #region Status Effects
         public List<StatusEffect> StatusEffects { get; } = new ();
