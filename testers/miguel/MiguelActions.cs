@@ -8,6 +8,7 @@ public partial class Miguel {
         Actions.Swing,
         Actions.Switcheroo,
         Actions.Combo,
+        Actions.Immobilize,
         Actions.Move,
         Actions.Switch,
         Actions.Pass,
@@ -19,6 +20,7 @@ public partial class Miguel {
         public ActionClasses.Swing Swing;
         public ActionClasses.Switcheroo Switcheroo;
         public ActionClasses.Combo Combo;
+        public ActionClasses.Immobilize Immobilize;
 
         public CommonActions.Move Move;
         public CommonActions.Switch Switch;
@@ -28,6 +30,7 @@ public partial class Miguel {
             Swing = new (miguel);
             Switcheroo = new (miguel);
             Combo = new (miguel);
+            Immobilize = new (miguel);
             Move = new (miguel);
             Switch = new (miguel);
             Pass = new (miguel);
@@ -164,6 +167,26 @@ public partial class Miguel {
                     }
                 });
             }
+        }
+
+
+        public class Immobilize : CombatAction {
+            public override string Name => "Immobilize";
+            public override int TempoCost { get; set; } = 1;
+
+            public new Miguel User => base.User as Miguel;
+
+            public Immobilize (Miguel user) : base (user) {}
+
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                new (TargetType.Single) { Side = SideSelector.Opposite }
+            };
+
+            public override async Task Run () {
+                User.Animator.Play(User.Animations.Seal);
+                Targets[0].Combatant.AddStatusEffect(new Immobilized (1));
+            }
+
         }
     }
 }

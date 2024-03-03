@@ -42,7 +42,7 @@ namespace Combat {
             if (advantage >= 0) rolls.Sort((x, y) => y - x);
             else rolls.Sort((x, y) => x - y);
 
-            Dev.Log(Dev.TAG.ROLL, $"{this} rolled {Stringer.Join(tags)}: {rolls[0]} + {bonus} ({advantage} advantage)");
+            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {Stringer.Join(tags)}: {rolls[0]} + {bonus} ({advantage} advantage)");
 
             foreach (var mod in mods) {
                 if (mod.Temporary) RemoveRollModifier(mod);

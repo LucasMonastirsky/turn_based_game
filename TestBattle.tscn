@@ -20,6 +20,8 @@ zoom = Vector2(2, 2)
 [node name="CanvasLayer" type="CanvasLayer" parent="Camera2D"]
 
 [node name="CombatPlayerInterface" parent="Camera2D/CanvasLayer" instance=ExtResource("3_jla18")]
+offset_right = -231.0
+offset_bottom = -130.0
 
 [node name="Positioner" parent="." instance=ExtResource("3_tio48")]
 

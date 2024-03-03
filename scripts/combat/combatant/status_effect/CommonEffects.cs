@@ -1,4 +1,25 @@
 namespace Combat {
+    public class Immobilized : StatusEffect {
+        public override string Name => "Immobilized";
+
+        public Immobilized (int duration = 0) {
+            Level = duration;
+        }
+
+        public override void OnApplied() {
+            User.AddMovementRestriction(new (this) { CanMoveSelf = false });
+        }
+
+        public override void OnRemoved() {
+            User.RemoveMovementRestriction(this);
+        }
+
+        public override void Tick () {
+            if (Level == 0) return;
+            if (Level-- < 1) User.RemoveStatusEffect(Name);
+        }
+    }
+
     public class Poison : StatusEffect {
         public override string Name => "Poison";
 

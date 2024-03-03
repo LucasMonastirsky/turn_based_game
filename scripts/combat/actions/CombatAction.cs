@@ -105,7 +105,8 @@ namespace Combat {
         }
 
         public override string ToString () {
-            return $"{User.Name}.{Name}";
+            return Name;
+            // return $"{User.Name}.{Name}";
         }
     }
 }

@@ -45,10 +45,7 @@ namespace Combat {
         }
 
         public virtual void ActionEndCheck () {
-            if (!IsDead && Health < 1) {
-                Dev.Log(Dev.TAG.COMBAT, $"{this} died");
-                IsDead = true;
-            }
+
         }
 
         public virtual void OnTurnEnd () {

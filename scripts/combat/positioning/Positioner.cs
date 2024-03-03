@@ -41,14 +41,15 @@ namespace Combat {
             return available_positions;
         }
 
-        public static bool IsValidMovement (Combatant combatant, CombatPosition position) {
+        public static bool IsValidMovement (Combatant combatant, CombatPosition position, bool forcible) {
             var side = position.Side;
             var row = position.Row;
             var slot = position.Slot;
             var slot_data = current.Rows[side][row][slot];
 
             if (slot_data.Combatant != null && slot_data.Combatant != combatant) {
-                return true;
+                if (forcible) return slot_data.Combatant.CanSwitch;
+                else return slot_data.Combatant.CanMove;
             }
             else if (
                 row != combatant.Row
@@ -66,7 +67,7 @@ namespace Combat {
             return false;
         }
 
-        public static List<CombatTarget> GetMoveTargets (Combatant combatant) {
+        public static List<CombatTarget> GetMoveTargets (Combatant combatant, bool forcible) {
             var targets = new List<CombatTarget>();
             var side = combatant.Side;
 
@@ -74,7 +75,7 @@ namespace Combat {
                 for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
                     var position = new CombatPosition { Side = side, Row = row, Slot = slot};
 
-                    if (IsValidMovement(combatant, position)) targets.Add(new CombatTarget (position));
+                    if (IsValidMovement(combatant, position, forcible)) targets.Add(new CombatTarget (position));
                 }
             }
 
@@ -91,7 +92,7 @@ namespace Combat {
         }
 
         public static async Task MoveCombatant (Combatant combatant, CombatPosition position) {
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Moving {combatant} to {position}");
+            Dev.Log(Dev.Tags.CombatManagement, $"Moving {combatant} to {position}");
 
             if (GetSlotData(position).Combatant != null) {
                 Dev.Error($"Positioner.MoveCombatant({combatant}, {position}): Position is not empty");
@@ -105,7 +106,7 @@ namespace Combat {
         }
 
         public static async Task SwitchCombatants (Combatant combatant_1, Combatant combatant_2) {
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Switching places between {combatant_1} and {combatant_2}");
+            Dev.Log(Dev.Tags.CombatManagement, $"Switching places between {combatant_1} and {combatant_2}");
 
             (combatant_1.CombatPosition, combatant_2.CombatPosition) = (combatant_2.CombatPosition, combatant_1.CombatPosition);
 

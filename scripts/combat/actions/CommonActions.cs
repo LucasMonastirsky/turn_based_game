@@ -7,6 +7,10 @@ namespace Combat {
             public override string Name { get => "Move"; }
             public override int TempoCost { get; set; } = 1;
 
+            public override bool IsAvailable() {
+                return User.CanMove;
+            }
+
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new TargetSelector (TargetType.Position) {
                     Side = SideSelector.Same,
@@ -29,6 +33,10 @@ namespace Combat {
         public class Switch : CombatAction {
             public override string Name => "Switch";
             public override int TempoCost { get; set; } = 2;
+
+            public override bool IsAvailable () {
+                return User.CanMove;
+            }
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new (TargetType.Single) {

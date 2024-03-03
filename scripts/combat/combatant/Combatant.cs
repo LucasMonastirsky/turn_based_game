@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using Godot;
-using Development;
 using System.Linq;
 using Utils;
 
@@ -18,7 +16,7 @@ namespace Combat {
         public int StartingTempo { get; set; } = 2;
         public int Tempo { get; set; }
 
-        public bool IsDead { get; protected set; }
+        public bool IsDead => Health < 1;
 
         public abstract List<CombatAction> ActionList { get; }
 
@@ -26,32 +24,6 @@ namespace Combat {
 
         public CombatantStore Allies => new CombatantStore(Battle.Combatants.OnSide(Side).Where(combatant => combatant != this));
         public CombatantStore Enemies => new CombatantStore(Battle.Combatants.OnOppositeSide(Side));
-
-        #region Status Effects
-        public List<StatusEffect> StatusEffects { get; } = new ();
-
-        public void AddStatusEffect (StatusEffect effect) {
-            Dev.Log(Dev.TAG.COMBAT, $"{Name} getting status effect {effect.Name}");
-
-            StatusEffects.Add(effect);
-            effect.User = this;
-            effect.OnApplied();
-
-            Display.AddStatusEffect(effect);
-        }
-
-        public void RemoveStatusEffect (string name) {
-            var effect = StatusEffects.First(effect => effect.Name == name);
-
-            if (effect is null) {
-                throw Dev.Error($"Tried to remove effect {name}, but didn't find match in [{string.Join(",", StatusEffects.Select(effect => effect.Name))}]");
-            }
-
-            StatusEffects.Remove(effect);
-            effect.OnRemoved();
-            Display.RemoveStatusEffect(effect);
-        }
-        #endregion
 
         #region Godot
         public override void _Ready () {

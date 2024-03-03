@@ -8,7 +8,7 @@ namespace Combat {
             var total = Math.Clamp(value, 0, 999);
 
             Health -= total;
-            Dev.Log(Dev.TAG.COMBAT, $"{this} received {total} damage [{string.Join(",", tags)}]");
+            Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage [{string.Join(",", tags)}]");
 
             Animator.Play(StandardAnimations.Hurt);
 
@@ -48,8 +48,8 @@ namespace Combat {
 
         public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions? options = null) {
             var hit_roll = attacker.Roll(10, new string [] { "Attack" });
-            var parry_roll = Roll(10, new string [] { "Parry" });
-            var dodge_roll = Roll(10, new string [] { "Dodge" });
+            var parry_roll = IsDead ? 0 : Roll(10, new string [] { "Parry" });
+            var dodge_roll = IsDead ? 0 : Roll(10, new string [] { "Dodge" });
 
             var result = new AttackResult {
                 Attacker = attacker,

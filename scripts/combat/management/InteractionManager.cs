@@ -28,7 +28,7 @@ namespace Combat {
                 Dev.Error($"Tried to act unbound action: {action.Name} ({action.User.Name})");
             }
 
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, $"Starting action {action}");
+            Dev.Log(Dev.Tags.CombatManagement, $"Starting action {action}");
             CombatantDisplayManager.Hide();
 
             action.User.Tempo -= action.TempoCost;
@@ -49,7 +49,7 @@ namespace Combat {
         }
 
         public static async Task ResolveQueue () {
-            Dev.Log(Dev.TAG.COMBAT_MANAGEMENT, "Resolving queue");
+            Dev.Log(Dev.Tags.CombatManagement, "Resolving queue");
 
             while(current.Queue.Count > 0) {
                 await Timing.Delay();

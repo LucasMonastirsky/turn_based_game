@@ -6,33 +6,44 @@ using Godot;
 namespace Development {
     public static class Dev {
         public static bool IsActive = true;
-        public enum TAG {
-            GLOBAL, INPUT, TARGETING, ANIMATION, COMBAT, COMBAT_MANAGEMENT, ROLL, UI, RANDOM,
+        public static bool LogColor = true;
+        public static bool LogDate = false;
+        public static bool LogDelta = false;
+
+        public struct LogTag {
+            public string Name;
+            public string Color;
+            public bool Log;
         }
-        private static Dictionary<TAG, bool> tags = new Dictionary<TAG, bool> {
-            { TAG.GLOBAL, true },
-            { TAG.INPUT, false },
-            { TAG.TARGETING, false },
-            { TAG.ANIMATION, false },
-            { TAG.COMBAT, true },
-            { TAG.COMBAT_MANAGEMENT, true },
-            { TAG.ROLL, true },
-            { TAG.UI, false },
-            { TAG.RANDOM, false },
-        };
+
+        public static class Tags {
+            public static LogTag Global = new () { Name = "Global", Color = "FFFFFF", Log = true };
+            public static LogTag Input = new () { Name = "Input", Color = "FFFFFF", Log = false };
+            public static LogTag Targeting = new () { Name = "Targeting", Color = "FFFFFF", Log = false };
+            public static LogTag Animation = new () { Name = "Animation", Color = "FFFFFF", Log = false };
+            public static LogTag Combat = new () { Name = "Combat", Color = "FFFFFF", Log = true };
+            public static LogTag CombatManagement = new () { Name = "CombatManagement", Color = "FFFFFF", Log = true };
+            public static LogTag BotController = new () { Name = "BotController", Color = "8f34eb", Log = true };
+            public static LogTag Rolling = new () { Name = "Rolling", Color = "FFFFFF", Log = false };
+            public static LogTag Interface = new () { Name = "Interface", Color = "FFFFFF", Log = false };
+            public static LogTag Random = new () { Name = "Random", Color = "FFFFFF", Log = false };
+        }
 
         private static DateTime last_log_time = DateTime.Now;
 
-        public static void Log (TAG tag, string message) {
-            if (tags[tag]) {
+        public static void Log (LogTag tag, string message) {
+            if (tag.Log) {
                 var now = DateTime.Now;
                 var delta = (int) (now - last_log_time).TotalMilliseconds;
-                GD.PrintRich($"{now:mm:ss:fff} (+{Stringer.PadWithZeroes(delta, 3)}): {message}");
+                if (LogDelta) message = $"(+{Stringer.PadWithZeroes(delta, 3)}) {message}";
+                if (LogDate) message = $"{now:mm:ss:fff} {message}";
+                if (LogColor) message = $"[color=#{tag.Color}]{message}[/color]";
+                GD.PrintRich(message);
                 last_log_time = now;
             }
         }
         public static void Log (string message) {
-            Log(TAG.GLOBAL, $"[color=#00FF00]{message}[/color]");
+            Log(Tags.Global, $"{message}");
         }
 
         public static Exception Error (string message) {

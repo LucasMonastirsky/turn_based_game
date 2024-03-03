@@ -23,7 +23,7 @@ public partial class Hugo : Combatant {
 
 	public override async Task Riposte (AttackResult attack_result) {
 		if (attack_result.Attacker.Row == 0) {
-			var move_targets = Positioner.GetMoveTargets(attack_result.Attacker);
+			var move_targets = Positioner.GetMoveTargets(attack_result.Attacker, true);
 			if (move_targets.Count > 0) {
 				var empty_targets = move_targets.Where(target => target.Combatant is null);
 				var final_move_targets = empty_targets.Count() > 0 ? empty_targets : move_targets;

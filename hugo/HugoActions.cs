@@ -111,7 +111,7 @@ public partial class Hugo {
                 new (TargetType.Position) {
                     Side = SideSelector.Opposite,
                     Row = 1,
-                    Validator = (target, user, targets) => Positioner.IsValidMovement(targets[0].Combatant, target.Position),
+                    Validator = (target, user, targets) => Positioner.IsValidMovement(targets[0].Combatant, target.Position, true),
                 },
             };
 

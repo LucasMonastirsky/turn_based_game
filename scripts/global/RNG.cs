@@ -11,19 +11,19 @@ namespace Utils {
 
         public static int LessThan (int max) {
             var value = (int) (GD.Randi() % max);
-            Dev.Log(Dev.TAG.RANDOM, $"RNG.LessThan({max}): {value}");
+            Dev.Log(Dev.Tags.Random, $"RNG.LessThan({max}): {value}");
             return value;
         }
 
         public static int Range (int min, int max) {
             var value = (int) (GD.Randi() % (max - min)) + min;
-            Dev.Log(Dev.TAG.RANDOM, $"RNG.Range({min}, {max}): {value}");
+            Dev.Log(Dev.Tags.Random, $"RNG.Range({min}, {max}): {value}");
             return value;
         }
 
         public static bool Bool () {
             var value = (int) (GD.Randi() % 2);
-            Dev.Log(Dev.TAG.RANDOM, $"RNG.Bool: {value} ({value == 0})");
+            Dev.Log(Dev.Tags.Random, $"RNG.Bool: {value} ({value == 0})");
             return value == 1;
         }
 
