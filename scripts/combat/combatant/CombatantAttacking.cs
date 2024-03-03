@@ -6,12 +6,12 @@ using Utils;
 namespace Combat {
     public partial class Combatant {
          public int Damage(int value, string[] tags) {
+            if (!IsDead) Animator.Play(StandardAnimations.Hurt);
+
             var total = Math.Clamp(value, 0, 999);
 
             Health -= total;
             Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage {Stringer.Join(tags)}");
-
-            if (!IsDead) Animator.Play(StandardAnimations.Hurt);
 
             return value;
         }

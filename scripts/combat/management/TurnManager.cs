@@ -7,7 +7,7 @@ namespace Combat {
     public class TurnManager {
         private static int turn_index = 0;
         
-        public static CombatantStore Combatants => Battle.Combatants.Alive;
+        public static CombatantStore Combatants => Battle.Combatants;
         public static Combatant ActiveCombatant => Combatants[turn_index];
 
         public static CombatAction CurrentAction { get; protected set; }
@@ -44,10 +44,16 @@ namespace Combat {
                 Dev.Log(Dev.Tags.CombatManagement, $"Ending turn of {ActiveCombatant}");
 
                 CombatEvents.BeforeTurnEnd.Trigger();
+                ActiveCombatant.StatusEffects.ToList().ForEach(effect => effect.Tick());
                 await InteractionManager.ResolveQueue();
+                await Timing.Delay();
+                await InteractionManager.ResetCombatants();
 
-                turn_index++;
-                if (turn_index >= Combatants.Count) turn_index = 0;
+                do {
+                    turn_index++;
+                    if (turn_index >= Combatants.Count) turn_index = 0;
+                }
+                while (Combatants[turn_index].IsDead);
             }
         }
 

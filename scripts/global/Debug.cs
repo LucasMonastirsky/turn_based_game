@@ -6,7 +6,7 @@ using Godot;
 namespace Development {
     public static class Dev {
         public static bool IsActive = true;
-        public static bool LogColor = true;
+        public static bool LogColor = false;
         public static bool LogDate = false;
         public static bool LogDelta = false;
 
