@@ -90,6 +90,7 @@ namespace Combat {
             if (selector.Side != null) predicates.Add(() => (int) User.Side * (int) selector.Side == (int) target.Side);
             if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
             if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, Targets));
+            if (!selector.CanTargetSelf) predicates.Add(() => target.Combatant != User);
 
             return !predicates.Any(predicate => !predicate());
         }

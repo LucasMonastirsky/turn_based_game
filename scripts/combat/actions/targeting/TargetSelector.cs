@@ -18,11 +18,13 @@ namespace Combat {
         public SideSelector? Side { get; init; } = null;
         public int? Row { get; init; } = null;
 
+        public bool CanTargetSelf { get; init; } = false;
+
         public delegate bool ValidatorDelegate (CombatTarget target, Combatant user, List<CombatTarget> previous_targets);
         public ValidatorDelegate Validator { get; init; } = null;
 
         public TargetSelector (TargetType type) {
-            this.Type = type;
+            Type = type;
         }
 
         

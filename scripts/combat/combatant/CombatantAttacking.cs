@@ -10,8 +10,11 @@ namespace Combat {
 
             var total = Math.Clamp(value, 0, 999);
 
+            var previous_health = Health;
             Health -= total;
             Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage {Stringer.Join(tags)}");
+
+            if (previous_health > 0 && IsDead) CombatEvents.AfterDeath.Trigger(new () { Combatant = this });
 
             return value;
         }

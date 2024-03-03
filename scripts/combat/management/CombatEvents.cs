@@ -23,5 +23,12 @@ namespace Combat {
         #region BeforeTurnEnd
         public static EventManager BeforeTurnEnd = new ();
         #endregion
+    
+        #region AfterDeath
+        public struct AfterDeathArguments {
+            public Combatant Combatant;
+        }
+        public static EventManager<AfterDeathArguments> AfterDeath = new ();
+        #endregion
     }
 }

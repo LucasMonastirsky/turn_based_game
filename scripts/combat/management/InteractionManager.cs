@@ -33,17 +33,10 @@ namespace Combat {
             action.User.Tempo -= action.TempoCost;
 
             await action.Run();
-
             await Timing.Delay();
-
-            foreach (var combatant in Battle.Combatants) {
-                combatant.ActionEndCheck();
-            }
-
             await ResetCombatants();
 
             action.Unbind();
-            await Timing.Delay();
         }
 
         public static async Task ResolveQueue () {

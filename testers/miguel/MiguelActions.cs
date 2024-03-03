@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Combat;
 using Development;
@@ -83,7 +85,10 @@ public partial class Miguel {
             public Switcheroo (Combatant user) : base(user) {}
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                new TargetSelector(TargetType.Single) { Side = SideSelector.Same, },
+                new TargetSelector(TargetType.Single) {
+                    Side = SideSelector.Same,
+                    Validator = (target, user, previous_targets) => !target.Combatant.HasStatusEffect<SwitcherooEffect>()
+                },
             };
 
             public override async Task Run () {
@@ -103,7 +108,18 @@ public partial class Miguel {
                 }
 
                 public override void OnApplied () {
+                    CombatEvents.AfterDeath.Until(arguments => {
+                        if (arguments.Combatant == Caster) {
+                            User.RemoveStatusEffect(this);
+                            return true;
+                        }
+
+                        return false;
+                    });
+
                     CombatEvents.BeforeAttack.Until(arguments => {
+                        if (Caster.IsDead || !User.HasStatusEffect(this)) return true;
+
                         if (arguments.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
                             return false;
                         }
@@ -112,7 +128,10 @@ public partial class Miguel {
                                 await Caster.SwitchPlaces(User);
                                 Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
                                 Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
-                                User.RemoveStatusEffect(Name);
+                                
+                                foreach (var combatant in Battle.Combatants) {
+                                    combatant.RemoveStatusEffectIf<SwitcherooEffect>(effect => effect.Caster == Caster);
+                                }
                             });
                             return true;
                         }
