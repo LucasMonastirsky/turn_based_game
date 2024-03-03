@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Development;
+using Utils;
 
 namespace Combat {
     public partial class Combatant {
@@ -8,9 +9,9 @@ namespace Combat {
             var total = Math.Clamp(value, 0, 999);
 
             Health -= total;
-            Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage [{string.Join(",", tags)}]");
+            Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage {Stringer.Join(tags)}");
 
-            Animator.Play(StandardAnimations.Hurt);
+            if (!IsDead) Animator.Play(StandardAnimations.Hurt);
 
             return value;
         }

@@ -19,12 +19,12 @@ namespace Development {
         public static class Tags {
             public static LogTag Global = new () { Name = "Global", Color = "FFFFFF", Log = true };
             public static LogTag Input = new () { Name = "Input", Color = "FFFFFF", Log = false };
-            public static LogTag Targeting = new () { Name = "Targeting", Color = "FFFFFF", Log = false };
+            public static LogTag Targeting = new () { Name = "Targeting", Color = "ff73e1", Log = false };
             public static LogTag Animation = new () { Name = "Animation", Color = "FFFFFF", Log = false };
-            public static LogTag Combat = new () { Name = "Combat", Color = "FFFFFF", Log = true };
-            public static LogTag CombatManagement = new () { Name = "CombatManagement", Color = "FFFFFF", Log = true };
+            public static LogTag Combat = new () { Name = "Combat", Color = "73ff7c", Log = true };
+            public static LogTag CombatManagement = new () { Name = "CombatManagement", Color = "f2d049", Log = true };
             public static LogTag BotController = new () { Name = "BotController", Color = "8f34eb", Log = true };
-            public static LogTag Rolling = new () { Name = "Rolling", Color = "FFFFFF", Log = false };
+            public static LogTag Rolling = new () { Name = "Rolling", Color = "f28735", Log = true };
             public static LogTag Interface = new () { Name = "Interface", Color = "FFFFFF", Log = false };
             public static LogTag Random = new () { Name = "Random", Color = "FFFFFF", Log = false };
         }

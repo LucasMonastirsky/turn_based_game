@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Development;
+using Utils;
 
 namespace Combat {
     public partial class Combatant {
@@ -23,7 +23,7 @@ namespace Combat {
             var effect = StatusEffects.First(effect => effect.Name == name);
 
             if (effect is null) {
-                throw Dev.Error($"Tried to remove effect {name}, but didn't find match in [{string.Join(",", StatusEffects.Select(effect => effect.Name))}]");
+                throw Dev.Error($"Tried to remove effect {name}, but didn't find match in {Stringer.Join(StatusEffects.Select(effect => effect.Name))}");
             }
 
             StatusEffects.Remove(effect);

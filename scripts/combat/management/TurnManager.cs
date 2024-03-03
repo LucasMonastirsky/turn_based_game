@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Development;
 
 namespace Combat {
     public class TurnManager {
         private static int turn_index = 0;
         
-        public static CombatantStore Combatants;
+        public static CombatantStore Combatants => Battle.Combatants.Alive;
         public static Combatant ActiveCombatant => Combatants[turn_index];
 
         public static CombatAction CurrentAction { get; protected set; }
@@ -16,8 +17,6 @@ namespace Combat {
 
         public static async void BeginLoop () {
             while (true) {
-                Combatants = Battle.Combatants.Alive;
-
                 State = "Starting";
                 Dev.Log(Dev.Tags.CombatManagement, $"Starting turn of {ActiveCombatant}");
 
@@ -28,6 +27,7 @@ namespace Combat {
                     State = "Requesting";
                     Dev.Log(Dev.Tags.CombatManagement, $"Requesting action from {ActiveCombatant}");
 
+                    CombatantDisplayManager.Show();
                     CurrentAction = await ActiveCombatant.Controller.RequestAction();
 
                     if (CurrentAction is null) break;
@@ -35,6 +35,7 @@ namespace Combat {
                     State = "Resolving";
                     Dev.Log(Dev.Tags.CombatManagement, $"Starting action {CurrentAction}");
 
+                    CombatantDisplayManager.Hide();
                     await InteractionManager.Act(CurrentAction);
                     CurrentAction = null;
                 }

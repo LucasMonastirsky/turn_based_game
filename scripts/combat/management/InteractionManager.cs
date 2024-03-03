@@ -29,7 +29,6 @@ namespace Combat {
             }
 
             Dev.Log(Dev.Tags.CombatManagement, $"Starting action {action}");
-            CombatantDisplayManager.Hide();
 
             action.User.Tempo -= action.TempoCost;
 
@@ -45,7 +44,6 @@ namespace Combat {
 
             action.Unbind();
             await Timing.Delay();
-            CombatantDisplayManager.Show();
         }
 
         public static async Task ResolveQueue () {

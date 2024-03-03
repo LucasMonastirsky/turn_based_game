@@ -8,6 +8,8 @@ public partial class MiguelController : Controller {
     private new Miguel Combatant => base.Combatant as Miguel;
 
     public override async Task<CombatAction> RequestAction () {
+        await Timing.Delay();
+
         if (Combatant.Row == 1) {
             Dev.Log(Dev.Tags.BotController, "Back row");
 
@@ -51,7 +53,7 @@ public partial class MiguelController : Controller {
 
             var targets = Battle.Combatants.OnOppositeSide(Combatant.Side).OnRow(0).Alive.All;
 
-            if (targets.Count < 1) return Combatant.Actions.Pass.Bind();
+            if (Combatant.Tempo < 2 || targets.Count < 1) return Combatant.Actions.Pass.Bind();
             else return Combatant.Actions.Swing.Bind(RNG.SelectFrom(targets));
         }
     }
