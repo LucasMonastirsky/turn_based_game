@@ -105,7 +105,7 @@ namespace Combat {
             await recalculate_side(combatant.Side);
         }
 
-        public static async Task SwitchCombatants (Combatant combatant_1, Combatant combatant_2) {
+        public static async Task SwitchCombatants (Combatant combatant_1, Combatant combatant_2, bool instant = false) {
             Dev.Log(Dev.Tags.CombatManagement, $"Switching places between {combatant_1} and {combatant_2}");
 
             (combatant_1.CombatPosition, combatant_2.CombatPosition) = (combatant_2.CombatPosition, combatant_1.CombatPosition);
@@ -113,9 +113,15 @@ namespace Combat {
             GetSlotData(combatant_1.CombatPosition).Combatant = combatant_1;
             GetSlotData(combatant_2.CombatPosition).Combatant = combatant_2;
 
-            var task_1 = combatant_1.DisplaceTo(GetWorldPosition(combatant_1.CombatPosition));
-            var task_2 = combatant_2.DisplaceTo(GetWorldPosition(combatant_2.CombatPosition));
-            await Task.WhenAll(task_1, task_2);
+            if (instant) {
+                combatant_1.Position = GetWorldPosition(combatant_1.CombatPosition);
+                combatant_2.Position = GetWorldPosition(combatant_2.CombatPosition);
+            }
+            else {
+                var task_1 = combatant_1.DisplaceTo(GetWorldPosition(combatant_1.CombatPosition));
+                var task_2 = combatant_2.DisplaceTo(GetWorldPosition(combatant_2.CombatPosition));
+                await Task.WhenAll(task_1, task_2);
+            }
         }
         
         public static SlotData GetSlotData (CombatPosition position) {
