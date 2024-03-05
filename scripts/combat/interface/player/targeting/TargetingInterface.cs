@@ -38,7 +38,7 @@ public partial class TargetingInterface : Node2D {
 
 		foreach (var combatant in targets.Select(target => target.Combatant)) {
 			var marker = current.single_marker_scene.Instantiate<SelectionMarker>(); // TODO: I don't like setting public fields like this
-			marker.Position = combatant.WorldPos;
+			marker.Position = combatant.Node.Position;
 			marker.OnCombatantSelected = () => {
 				selection.TrySetResult(new CombatTarget(combatant));
 			};

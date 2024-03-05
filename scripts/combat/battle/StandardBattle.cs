@@ -2,37 +2,24 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Combat {
-	public partial class StandardBattle : BattleInstance {
+	public partial class StandardBattle : BattleNode {
 		public override void _Ready () {
-			Battle.Current = this;
+			Battle.Node = this;
 
 			var t = new Miguel();
-			AddChild(t);
 			t.OverrideControllerType = typeof(PlayerController);
 
 			Combatants = new List<Combatant> {
-				GetNode("Hugo") as Combatant,
-				GetNode("Hugo2") as Combatant,
-				t,
+				new Hugo { Position = new () { Side = Side.Left, Row = 0, Slot = 1, }},
+				new Hugo { Position = new () { Side = Side.Left, Row = 0, Slot = 3, }},
+				new Miguel { Position = new () { Side = Side.Left, Row = 1, Slot = 2, }, OverrideControllerType = typeof(PlayerController), },
+				new Miguel { Position = new () { Side = Side.Right, Row = 0, Slot = 1, }},
+				new Miguel { Position = new () { Side = Side.Right, Row = 0, Slot = 3, }},
+				new Miguel { Position = new () { Side = Side.Right, Row = 1, Slot = 2, }},
 			};
 
-            Combatants[0].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 1, });
-			Combatants[1].LoadIn(new CombatPosition { Side = Side.Left, Row = 0, Slot = 3, });
-			Combatants[2].LoadIn(new CombatPosition { Side = Side.Left, Row = 1, Slot = 2, });
-
-            var rows = new List<Combatant>[] { 
-                GetNode("Enemies/Front").GetChildren().Select(node => node as Combatant).ToList(),
-                GetNode("Enemies/Back").GetChildren().Select(node => node as Combatant).ToList(),
-            };
-
-            rows[0][0].LoadIn(new CombatPosition() { Side = Side.Right, Row = 0, Slot = 1 });
-			rows[0][1].LoadIn(new CombatPosition() { Side = Side.Right, Row = 0, Slot = 3 });
-			rows[1][0].LoadIn(new CombatPosition() { Side = Side.Right, Row = 1, Slot = 2 });
-
-			foreach (var row in rows) {
-				foreach (var c in row) {
-					Combatants.Add(c);
-				}
+			foreach (var combatant in Combatants) {
+				combatant.LoadIn();
 			}
 
 			Positioner.Setup();

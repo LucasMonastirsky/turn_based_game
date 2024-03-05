@@ -22,13 +22,19 @@ namespace Combat {
             }
 
             Display = CombatantDisplayManager.CreateDisplay(this);
+
+            Animator.Play(StandardAnimations.Idle);
         }
 
-        public void LoadIn (CombatPosition position) {
-            CombatPosition = position;
+        public void LoadIn () {
             Tempo = StartingTempo;
 
             Setup();
+        }
+
+        public void LoadIn (CombatPosition position) {
+            Position = position;
+            LoadIn();
         }
 
         public bool FirstTurnTaken { get; private set; } = false;
@@ -57,7 +63,7 @@ namespace Combat {
         }
 
         public override string ToString() {
-            return $"{Name} ({CombatPosition})";
+            return $"{Name} ({Position})";
         }
     }
 }

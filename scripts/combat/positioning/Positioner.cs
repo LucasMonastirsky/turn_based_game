@@ -15,7 +15,7 @@ namespace Combat {
 
         public static void Setup () {
             foreach (var combatant in Battle.Combatants) {
-                var pos = combatant.CombatPosition;
+                var pos = combatant.Position;
                 combatant.DisplaceTo(GetWorldPosition(pos));
                 current.Rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
             }
@@ -98,8 +98,8 @@ namespace Combat {
                 Dev.Error($"Positioner.MoveCombatant({combatant}, {position}): Position is not empty");
             }
 
-            GetSlotData(combatant.CombatPosition).Combatant = null;
-            combatant.CombatPosition = position;
+            GetSlotData(combatant.Position).Combatant = null;
+            combatant.Position = position;
             GetSlotData(position).Combatant = combatant;
 
             await recalculate_side(combatant.Side);
@@ -108,18 +108,18 @@ namespace Combat {
         public static async Task SwitchCombatants (Combatant combatant_1, Combatant combatant_2, bool instant = false) {
             Dev.Log(Dev.Tags.CombatManagement, $"Switching places between {combatant_1} and {combatant_2}");
 
-            (combatant_1.CombatPosition, combatant_2.CombatPosition) = (combatant_2.CombatPosition, combatant_1.CombatPosition);
+            (combatant_1.Position, combatant_2.Position) = (combatant_2.Position, combatant_1.Position);
 
-            GetSlotData(combatant_1.CombatPosition).Combatant = combatant_1;
-            GetSlotData(combatant_2.CombatPosition).Combatant = combatant_2;
+            GetSlotData(combatant_1.Position).Combatant = combatant_1;
+            GetSlotData(combatant_2.Position).Combatant = combatant_2;
 
             if (instant) {
-                combatant_1.Position = GetWorldPosition(combatant_1.CombatPosition);
-                combatant_2.Position = GetWorldPosition(combatant_2.CombatPosition);
+                combatant_1.Node.Position = GetWorldPosition(combatant_1.Position);
+                combatant_2.Node.Position = GetWorldPosition(combatant_2.Position);
             }
             else {
-                var task_1 = combatant_1.DisplaceTo(GetWorldPosition(combatant_1.CombatPosition));
-                var task_2 = combatant_2.DisplaceTo(GetWorldPosition(combatant_2.CombatPosition));
+                var task_1 = combatant_1.DisplaceTo(GetWorldPosition(combatant_1.Position));
+                var task_2 = combatant_2.DisplaceTo(GetWorldPosition(combatant_2.Position));
                 await Task.WhenAll(task_1, task_2);
             }
         }

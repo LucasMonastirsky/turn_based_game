@@ -6,17 +6,17 @@ using Godot;
 
 namespace Combat {
     public partial class Combatant {
-        private CombatPosition _combat_position;
-        public CombatPosition CombatPosition {
-            get => _combat_position;
+        private CombatPosition _position;
+        public CombatPosition Position {
+            get => _position;
             set {
-                _combat_position = value;
-                Animator.Flipped = _combat_position.Side == Side.Right;
+                _position = value;
+                Animator.Flipped = _position.Side == Side.Right;
             }
         }
-        public int Slot { get => CombatPosition.Slot; }
-        public int Row { get => CombatPosition.Row; }
-        public Side Side { get => CombatPosition.Side; }
+        public int Slot { get => Position.Slot; }
+        public int Row { get => Position.Row; }
+        public Side Side { get => Position.Side; }
 
         public bool CanSwitch => movement_restrictions.Where(x => !x.CanBeMoved).Count() < 1;
         public bool CanMove => movement_restrictions.Where(x => !x.CanMoveSelf).Count() < 1;
@@ -40,14 +40,6 @@ namespace Combat {
             movement_restrictions.RemoveAll(restriction => restriction.Source == source);
         }
 
-        public Vector2 WorldPos { get => Position; }
-    
-        private double movement_duration = (double) Timing.MoveDuration / 1000; 
-        private bool moving = false;
-        private Vector2 moving_from, moving_towards;
-        private double moving_time;
-        private TaskCompletionSource move_completion_source;
-
         public bool CanMoveTo (CombatPosition position) {
             return CanMove && Positioner.IsValidMovement(this, position, false);
         }
@@ -61,33 +53,15 @@ namespace Combat {
         }
 
         public Task DisplaceTo (Vector2 target_position) {
-            move_completion_source = new TaskCompletionSource();
-            moving = true;
-            moving_from = Position;
-            moving_towards = target_position;
-            moving_time = 0;
-
-            return move_completion_source.Task;
+            return Node.DisplaceTo(target_position);
         }
 
         public Task ReturnToPosition () {
-            return DisplaceTo(Positioner.GetWorldPosition(CombatPosition));
+            return DisplaceTo(Positioner.GetWorldPosition(Position));
         }
 
         public Task DisplaceToMeleeDistance (Combatant target) {
-            return DisplaceTo(target.WorldPos with { X = target.WorldPos.X + 50 * (int) CombatPosition.Side }); // TODO: put melee range var somewhere
-        }
-
-        protected virtual void ProcessMovement (double delta) {
-            if (moving) { // TODO: this is kinda dirty, use callback list?
-                moving_time += delta;
-                Position = moving_from.Lerp(moving_towards, (float) (moving_time / movement_duration));
-                if (moving_time >= movement_duration) {
-                    Position = moving_towards;
-                    moving = false;
-                    move_completion_source.TrySetResult();
-                }
-            }
+            return DisplaceTo(target.Node.Position with { X = target.Node.Position.X + 50 * (int) Position.Side }); // TODO: put melee range var somewhere
         }
     }
 }

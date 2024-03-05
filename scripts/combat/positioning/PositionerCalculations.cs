@@ -103,10 +103,10 @@ namespace Combat {
                 for (var i = 0; i < combatants.Count; i++) {
                     var combatant = combatants[i];
 
-                    combatant.CombatPosition =  combatant.CombatPosition with { Slot = slots[i] };
-                    GetSlotData(combatant.CombatPosition).Combatant = combatant;
+                    combatant.Position =  combatant.Position with { Slot = slots[i] };
+                    GetSlotData(combatant.Position).Combatant = combatant;
                     
-                    tasks.Add(combatant.DisplaceTo(GetWorldPosition(combatant.CombatPosition)));
+                    tasks.Add(combatant.DisplaceTo(GetWorldPosition(combatant.Position)));
                 }
             }
 

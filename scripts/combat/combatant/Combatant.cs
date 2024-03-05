@@ -4,10 +4,10 @@ using System.Linq;
 using Utils;
 
 namespace Combat {
-    public abstract partial class Combatant : Node2D, Targetable, Identifiable {
+    public abstract partial class Combatant : Targetable, Identifiable {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
-        public abstract new string Name { get; }
+        public abstract string Name { get; }
 
         public int MaxHealth { get; protected set; } = 15;
         public int Health { get; protected set; } = 15;
@@ -25,16 +25,11 @@ namespace Combat {
         public CombatantStore Allies => new CombatantStore(Battle.Combatants.OnSide(Side).Where(combatant => combatant != this));
         public CombatantStore Enemies => new CombatantStore(Battle.Combatants.OnOppositeSide(Side));
 
-        #region Godot
-        public override void _Ready () {
-            Animator = new CombatAnimator();
-            AddChild(Animator);
-            Animator.Play(StandardAnimations.Idle);
-        }
+        public CombatantNode Node;
 
-        public override void _Process (double delta) {
-            ProcessMovement(delta);
+        public Combatant () {
+            Node = new ();
+            Animator = Node.Animator;
         }
-        #endregion
     }
 }

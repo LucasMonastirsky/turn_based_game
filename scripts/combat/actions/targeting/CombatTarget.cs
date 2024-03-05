@@ -14,7 +14,7 @@ namespace Combat {
         }
 
         public CombatTarget (Combatant combatant) {
-            Position = combatant.CombatPosition;
+            Position = combatant.Position;
         }
 
         public CombatTarget ToTarget () => this;

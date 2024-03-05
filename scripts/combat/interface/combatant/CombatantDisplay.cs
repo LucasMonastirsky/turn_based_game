@@ -22,8 +22,11 @@ public partial class CombatantDisplay : Node2D {
 
     public void RemoveStatusEffect (StatusEffect effect) {
         var label = EffectLabels.Find(label => label.Text == effect.Name);
-        EffectLabels.Remove(label);
-        label.QueueFree();
+
+        if (label is not null) {
+            EffectLabels.Remove(label);
+            label.QueueFree();
+        }
     }
 
     public override void _Ready () {
@@ -39,7 +42,7 @@ public partial class CombatantDisplay : Node2D {
     public override void _Process (double delta) {
         LabelHealth.Text = $"{User.Name} {User.Health}/{User.MaxHealth} ({User.Tempo}T)";
 
-        var position = Positioner.GetWorldPosition(User.CombatPosition);
+        var position = Positioner.GetWorldPosition(User.Position);
         Position = position with { Y = position.Y - 40, X = position.X - 40 };
     }
 
