@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Combat;
-using Development;
 
 public partial class Miguel {
     public override List<CombatAction> ActionList => new (new CombatAction[] {
@@ -55,17 +52,19 @@ public partial class Miguel {
             public new Miguel User => base.User as Miguel;
             public Swing (Miguel user) : base (user) {}
 
-            public override async Task Run() {
+            public override async Task Run () {
                 var target = Targets[0];
 
                 User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
                 var options = new BasicAttackOptions () {
+                    AttackRollTags = new [] { "Attack", "Melee", },
                     ParryNegation = 2, DodgeNegation = 0,
                 };
+
                 await User.BasicAttack(target, options, async result => {
-                    if (result.Hit){
+                    if (result.Hit) {
                         result.AllowRiposte = false;
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
@@ -153,13 +152,31 @@ public partial class Miguel {
                 new (TargetType.Single) { Row = 0, Side = SideSelector.Opposite, },
             };
 
+            public BasicAttackOptions [] AttackOptions { get; protected set; } = new [] {
+                new BasicAttackOptions () {
+                    AttackRollTags = new [] { "Attack", "Melee", "Weapon", },
+                    ParryNegation = 4,
+                    DodgeNegation = 2,
+                },
+                new BasicAttackOptions () {
+                    AttackRollTags = new [] { "Attack", "Melee", "Unarmed", },
+                    ParryNegation = 2,
+                    DodgeNegation = 6,
+                },
+                new BasicAttackOptions () {
+                    AttackRollTags = new [] { "Attack", "Melee", "Unarmed", },
+                    ParryNegation = 2,
+                    DodgeNegation = 6,
+                },
+            };
+
             public override async Task Run() {
                 var target = Targets[0];
 
                 User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
-                await User.BasicAttack(target, new () {}, async result => {
+                await User.BasicAttack(target, AttackOptions[0], async result => {
                     if (result.Hit) {
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
@@ -169,7 +186,7 @@ public partial class Miguel {
                 await Timing.Delay();
 
                 User.Animator.Play(User.Animations.Combo_1);
-                await User.BasicAttack(target, new () { ParryNegation = -1, DodgeNegation = 2, }, async result => {
+                await User.BasicAttack(target, AttackOptions[1], async result => {
                     if (result.Hit) {
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll, new string [] { "Blunt" });
@@ -179,7 +196,7 @@ public partial class Miguel {
                 await Timing.Delay();
 
                 User.Animator.Play(User.Animations.Combo_2);
-                await User.BasicAttack(target, new () { ParryNegation = 2, DodgeNegation = 0, }, async result => {
+                await User.BasicAttack(target, AttackOptions[2], async result => {
                     if (result.Hit) {
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll, new string[] { "Blunt" });

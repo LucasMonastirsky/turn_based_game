@@ -39,6 +39,18 @@ namespace Combat {
             action.Unbind();
         }
 
+        public static async Task QuickAct (CombatAction action) {
+            if (!action.Bound) {
+                Dev.Error($"Tried to quick-act unbound action: {action.Name} ({action.User.Name})");
+            }
+
+            Dev.Log(Dev.Tags.CombatManagement, $"Quick-acting action {action}");
+
+            await Timing.Delay();
+            await action.Run();
+            action.Unbind();
+        }
+
         public static async Task ResolveQueue () {
             Dev.Log(Dev.Tags.CombatManagement, "Resolving queue");
 

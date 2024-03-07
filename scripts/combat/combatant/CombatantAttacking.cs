@@ -35,6 +35,7 @@ namespace Combat {
                     
         public struct BasicAttackOptions {
             public int ParryNegation, DodgeNegation;
+            public string [] AttackRollTags;
         }
 
         public async Task BasicAttack (CombatTarget target, BasicAttackOptions options, Func<AttackResult, Task> function) {
@@ -45,21 +46,20 @@ namespace Combat {
             await function(result);
 
             if (TurnManager.ActiveCombatant != result.Defender) await result.Defender.Riposte(result);
-
             CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Target = target, Options = options, Result = result });
             await InteractionManager.ResolveQueue();
         }
 
-        public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions? options = null) {
-            var hit_roll = attacker.Roll(10, new string [] { "Attack" });
+        public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions options) {
+            var hit_roll = attacker.Roll(10, options.AttackRollTags);
             var parry_roll = IsDead ? 0 : Roll(10, new string [] { "Parry" });
             var dodge_roll = IsDead ? 0 : Roll(10, new string [] { "Dodge" });
 
             var result = new AttackResult {
                 Attacker = attacker,
                 Defender = this,
-                ParryDelta = parry_roll - hit_roll - options?.ParryNegation ?? 0,
-                DodgeDelta = dodge_roll - hit_roll - options?.DodgeNegation ?? 0,
+                ParryDelta = parry_roll - hit_roll - options.ParryNegation,
+                DodgeDelta = dodge_roll - hit_roll - options.DodgeNegation,
                 AllowRiposte = false,
             };
 

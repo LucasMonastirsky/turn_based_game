@@ -10,9 +10,9 @@ namespace Combat {
 			t.OverrideControllerType = typeof(PlayerController);
 
 			Combatants = new List<Combatant> {
-				new Hugo { Position = new () { Side = Side.Left, Row = 0, Slot = 1, }},
-				new Hugo { Position = new () { Side = Side.Left, Row = 0, Slot = 3, }},
-				new Miguel { Position = new () { Side = Side.Left, Row = 1, Slot = 2, }, OverrideControllerType = typeof(PlayerController), },
+				new Hugo { Position = new () { Side = Side.Left, Row = 0, Slot = 2, }},
+				new Miguel { Position = new () { Side = Side.Left, Row = 1, Slot = 1, }, OverrideControllerType = typeof(PlayerController), },
+				new Anna { Position = new () { Side = Side.Left, Row = 1, Slot = 3, }},
 				new Miguel { Position = new () { Side = Side.Right, Row = 0, Slot = 1, }},
 				new Miguel { Position = new () { Side = Side.Right, Row = 0, Slot = 3, }},
 				new Miguel { Position = new () { Side = Side.Right, Row = 1, Slot = 2, }},

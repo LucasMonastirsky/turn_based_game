@@ -1,5 +1,4 @@
 using Combat;
-using ResourceHelpers;
 
 public partial class Miguel {
     private static string texture_path = "res://testers/miguel/textures";
