@@ -52,20 +52,18 @@ namespace Combat {
                     User.Animator.Play(User.Animations.Kick);
                     await User.DisplaceToMeleeDistance(target.Combatant);
 
-                    await User.BasicAttack(target, AttackOptions, async result => {
-                        if (result.Dodged) {
-                            result.AllowRiposte = true;
-                        }
-
+                    var result = await User.Attack(target, AttackOptions, async result => {
                         if (result.Hit) {
                             var damage = User.Roll(10, "Damage", "Melee", "Unarmed");
                             target.Combatant.Damage(damage, new string [] { "Melee", "Unarmed" });
                         }
-
-                        if (User.Bullets > 0 && (result.Hit || result.Parried)) {
-                            await User.Actions.Shoot.Act(target);
-                        }
                     });
+
+                    await Timing.Delay();
+
+                    if (!result.Dodged && User.Bullets > 0) {
+                        await User.Actions.Shoot.Act(target);
+                    }
                 }
             }
 
@@ -138,7 +136,7 @@ namespace Combat {
                     var locked_on = target.Combatant.GetStatusEffect<Aim.LockedOn>() as Aim.LockedOn;
                     if (locked_on?.Caster == User) User.AddRollModifier(locked_on_modifier);
 
-                    await User.BasicAttack(target, AttackOptions, async result => {
+                    await User.Attack(target, AttackOptions, async result => {
                         if (result.Hit) {
                             var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
                             target.Combatant.Damage(damage_roll, new string [] { "Bullet" });

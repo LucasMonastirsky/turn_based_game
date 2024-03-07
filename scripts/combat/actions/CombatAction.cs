@@ -53,16 +53,15 @@ namespace Combat {
 
             await Run();
             Unbind();
-            await Timing.Delay();
         }
 
         public async Task Act (params Targetable [] targetables) {
+            Bind(targetables);
+
             if (!PassesSelectors()) Dev.Error($"Action {this} does not pass selector");
 
-            Bind(targetables);
             await Run();
             Unbind();
-            await Timing.Delay();
         }
 
         public async Task<CombatAction> RequestBind () {

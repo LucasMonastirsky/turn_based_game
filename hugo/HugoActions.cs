@@ -52,7 +52,7 @@ public partial class Hugo {
                 User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
-                await User.BasicAttack(target, attack_options, async (result) => {
+                await User.Attack(target, attack_options, async (result) => {
                     if (result.Hit) {
                         var damage_roll = User.Roll(10, "Damage");
                         target.Combatant.Damage(damage_roll, new string [] { "Cut" });
@@ -84,7 +84,7 @@ public partial class Hugo {
                 var target = Targets[0];
                 User.Animator.Play(User.Animations.Blast);
 
-                await User.BasicAttack(target, attack_options, async result => {
+                await User.Attack(target, attack_options, async result => {
                     if (result.Hit) {
                         var damage_roll = User.Roll(6, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll, new string[] { "Ranged", "Blunt" });
@@ -127,7 +127,7 @@ public partial class Hugo {
                 User.Animator.Play(User.Animations.Shove);
                 await User.DisplaceToMeleeDistance(Targets[0].Combatant);
 
-                await User.BasicAttack(Targets[0], AttackOptions, async result => {
+                await User.Attack(Targets[0], AttackOptions, async result => {
                     if (!result.Dodged) {
                         if (result.Hit) {
                             var damage_roll = User.Roll(4, new string [] { "Damage" });

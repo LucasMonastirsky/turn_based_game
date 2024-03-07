@@ -38,10 +38,15 @@ namespace Combat {
                         await CurrentAction.Act();
 
                         if (LastAttack != null) {
-                            await LastAttack.Defender.Riposte(LastAttack);
+                            if (LastAttack.AllowRiposte) {
+                                await Timing.Delay();
+                                await LastAttack.Defender.Riposte(LastAttack);
+                            }
+
                             LastAttack = null;
                         }
 
+                        await Timing.Delay();
                         await InteractionManager.ResetCombatants();
                         CurrentAction = null;
                     }

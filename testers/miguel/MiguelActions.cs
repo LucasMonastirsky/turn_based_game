@@ -52,7 +52,7 @@ public partial class Miguel {
                     ParryNegation = 2, DodgeNegation = 0,
                 };
 
-                await User.BasicAttack(target, options, async result => {
+                await User.Attack(target, options, async result => {
                     if (result.Hit) {
                         result.AllowRiposte = false;
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
@@ -162,35 +162,36 @@ public partial class Miguel {
             public override async Task Run() {
                 var target = Targets[0];
 
-                User.Animator.Play(User.Animations.Swing);
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
-                await User.BasicAttack(target, AttackOptions[0], async result => {
-                    if (result.Hit) {
-                        var damage_roll = User.Roll(8, new string [] { "Damage" });
-                        target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
-                    }
-                });
+                var first_attack = await User.Attack(target, AttackOptions[0]);
+                User.Animator.Play(User.Animations.Swing);
+                if (first_attack.Hit) {
+                    var damage_roll = User.Roll(8, new string [] { "Damage" });
+                    target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
+                }
 
-                await Timing.Delay();
+                if (!first_attack.Parried) {
+                    await Timing.Delay();
 
-                User.Animator.Play(User.Animations.Combo_1);
-                await User.BasicAttack(target, AttackOptions[1], async result => {
-                    if (result.Hit) {
+                    var second_attack = await User.Attack(target, AttackOptions[1]);
+                    if (second_attack.Hit) {
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll, new string [] { "Blunt" });
                     }
-                });
 
-                await Timing.Delay();
+                    User.Animator.Play(User.Animations.Combo_1);
 
-                User.Animator.Play(User.Animations.Combo_2);
-                await User.BasicAttack(target, AttackOptions[2], async result => {
-                    if (result.Hit) {
+                    await Timing.Delay();
+
+                    var third_attack = await User.Attack(target, AttackOptions[2]);
+                    if (third_attack.Hit) {
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll, new string[] { "Blunt" });
                     }
-                });
+
+                    User.Animator.Play(User.Animations.Combo_2);
+                }
             }
         }
 
