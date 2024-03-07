@@ -65,6 +65,11 @@ namespace Combat {
             RollModifiers[index] = roll_modifier;
         }
 
+        public void TryRemoveRollModifier (RollModifier roll_modifier) {
+            var index = FindRollModifierIndex(roll_modifier);
+            if (index > -1) RollModifiers.RemoveAt(index);
+        }
+
         public void RemoveRollModifier (RollModifier roll_modifier) {
             RollModifiers.RemoveAt(FindRollModifierIndex(roll_modifier));
         }

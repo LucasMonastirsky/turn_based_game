@@ -46,19 +46,9 @@ namespace Combat {
             else FirstTurnTaken = true;
         }
 
-        public virtual void OnPreActionEnd () {
-
-        }
-
-        public virtual void ActionEndCheck () {
-
-        }
-
         public virtual void OnTurnEnd () {
-            if (TurnManager.ActiveCombatant == this) {
-                foreach (var effect in StatusEffects.ToList()) {
-                    effect.Tick();
-                }
+            foreach (var effect in StatusEffects.ToList()) {
+                effect.Tick();
             }
         }
 

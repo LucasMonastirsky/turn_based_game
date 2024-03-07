@@ -1,17 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
 
 public partial class Miguel {
-    public override List<CombatAction> ActionList => new (new CombatAction[] {
-        Actions.Swing,
-        Actions.Switcheroo,
-        Actions.Combo,
-        Actions.Immobilize,
-        Actions.Move,
-        Actions.Switch,
-        Actions.Pass,
-    });
+    public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
 
     public ActionStore Actions;
 
@@ -26,13 +19,9 @@ public partial class Miguel {
         public CommonActions.Pass Pass;
 
         public ActionStore (Miguel miguel) {
-            Swing = new (miguel);
-            Switcheroo = new (miguel);
-            Combo = new (miguel);
-            Immobilize = new (miguel);
-            Move = new (miguel);
-            Switch = new (miguel);
-            Pass = new (miguel);
+            foreach (var field in typeof(ActionStore).GetFields()) {
+                field.SetValue(this, Activator.CreateInstance(field.FieldType, miguel));
+            }
         }
     }
 
@@ -59,7 +48,7 @@ public partial class Miguel {
                 await User.DisplaceToMeleeDistance(target.Combatant);
 
                 var options = new BasicAttackOptions () {
-                    AttackRollTags = new [] { "Attack", "Melee", },
+                    HitRollTags = new [] { "Attack", "Melee", },
                     ParryNegation = 2, DodgeNegation = 0,
                 };
 
@@ -154,17 +143,17 @@ public partial class Miguel {
 
             public BasicAttackOptions [] AttackOptions { get; protected set; } = new [] {
                 new BasicAttackOptions () {
-                    AttackRollTags = new [] { "Attack", "Melee", "Weapon", },
+                    HitRollTags = new [] { "Attack", "Melee", "Weapon", },
                     ParryNegation = 4,
                     DodgeNegation = 2,
                 },
                 new BasicAttackOptions () {
-                    AttackRollTags = new [] { "Attack", "Melee", "Unarmed", },
+                    HitRollTags = new [] { "Attack", "Melee", "Unarmed", },
                     ParryNegation = 2,
                     DodgeNegation = 6,
                 },
                 new BasicAttackOptions () {
-                    AttackRollTags = new [] { "Attack", "Melee", "Unarmed", },
+                    HitRollTags = new [] { "Attack", "Melee", "Unarmed", },
                     ParryNegation = 2,
                     DodgeNegation = 6,
                 },

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using System.Linq;
 using Utils;
+using System;
 
 namespace Combat {
     public abstract partial class Combatant : Targetable, Identifiable {

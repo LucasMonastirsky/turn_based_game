@@ -30,21 +30,24 @@ namespace Combat {
                     CombatantDisplayManager.Show();
                     CurrentAction = await ActiveCombatant.Controller.RequestAction();
 
-                    if (CurrentAction is null) break;
+                    if (CurrentAction != null) {
+                        State = "Resolving";
+                        Dev.Log(Dev.Tags.CombatManagement, $"Starting action {CurrentAction}");
 
-                    State = "Resolving";
-                    Dev.Log(Dev.Tags.CombatManagement, $"Starting action {CurrentAction}");
-
-                    CombatantDisplayManager.Hide();
-                    await InteractionManager.Act(CurrentAction);
-                    CurrentAction = null;
+                        CombatantDisplayManager.Hide();
+                        ActiveCombatant.Tempo -= CurrentAction.TempoCost;
+                        await InteractionManager.Act(CurrentAction);
+                        await InteractionManager.ResetCombatants();
+                        CurrentAction = null;
+                    }
                 }
 
                 State = "Ending";
                 Dev.Log(Dev.Tags.CombatManagement, $"Ending turn of {ActiveCombatant}");
 
                 CombatEvents.BeforeTurnEnd.Trigger();
-                ActiveCombatant.StatusEffects.ToList().ForEach(effect => effect.Tick());
+                ActiveCombatant.OnTurnEnd();
+
                 await InteractionManager.ResolveQueue();
                 await Timing.Delay();
                 await InteractionManager.ResetCombatants();

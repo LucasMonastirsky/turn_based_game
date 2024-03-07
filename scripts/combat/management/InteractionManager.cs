@@ -28,15 +28,9 @@ namespace Combat {
                 Dev.Error($"Tried to act unbound action: {action.Name} ({action.User.Name})");
             }
 
-            Dev.Log(Dev.Tags.CombatManagement, $"Starting action {action}");
-
-            action.User.Tempo -= action.TempoCost;
-
             await action.Run();
-            await Timing.Delay();
-            await ResetCombatants();
-
             action.Unbind();
+            await Timing.Delay();
         }
 
         public static async Task QuickAct (CombatAction action) {

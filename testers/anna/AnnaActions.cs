@@ -1,19 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
 
 namespace Combat {
     public partial class Anna {
 
-        public override List<CombatAction> ActionList => new (new CombatAction [] {
-            Actions.Kick,
-            Actions.Aim,
-            Actions.Shoot,
-            Actions.Reload,
-            Actions.Move,
-            Actions.Switch,
-            Actions.Pass,
-        });
+        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
 
         public ActionStore Actions;
         public class ActionStore {
@@ -21,19 +14,16 @@ namespace Combat {
             public ActionClasses.Aim Aim;
             public ActionClasses.Shoot Shoot;
             public ActionClasses.Reload Reload;
+            public ActionClasses.Smoke Smoke;
 
             public CommonActions.Move Move;
             public CommonActions.Switch Switch;
             public CommonActions.Pass Pass;
 
             public ActionStore (Anna anna) {
-                Kick = new (anna);
-                Aim = new (anna);
-                Shoot = new (anna);
-                Reload = new (anna);
-                Move = new (anna);
-                Switch = new (anna);
-                Pass = new (anna);
+                foreach (var field in typeof(ActionStore).GetFields()) {
+                    field.SetValue(this, Activator.CreateInstance(field.FieldType, anna));
+                }
             }
         }
 
@@ -52,7 +42,7 @@ namespace Combat {
                 public Kick (Anna user) : base (user) {}
 
                 public BasicAttackOptions AttackOptions { get; protected set; } = new () {
-                    AttackRollTags = new [] { "Attack", "Melee", "Unarmed" },
+                    HitRollTags = new [] { "Attack", "Melee", "Unarmed" },
                     ParryNegation = 2,
                     DodgeNegation = 4,
                 };
@@ -84,7 +74,11 @@ namespace Combat {
                 public override string Name => "Aim";
 
                 public override int TempoCost { get; set; } = 1;
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new (TargetType.Single) { Side = SideSelector.Opposite, }
+                };
+
                 public override bool IsAvailable () {
                     return User.Row != 0;
                 }
@@ -93,11 +87,24 @@ namespace Combat {
                 public Aim (Anna user) : base (user) {}
 
                 public override async Task Run() {
-                    var modifier = new RollModifier(this, "Attack", "Shot") { Advantage = 1 };
-                    User.AddRollModifier(modifier);
+                    foreach (var combatant in Battle.Combatants) {
+                        combatant.RemoveStatusEffectIf<LockedOn>(effect => effect.Caster == User);
+                    }
+
+                    Targets[0].Combatant.AddStatusEffect(new LockedOn(User));
+
                     CombatEvents.BeforeTurnEnd.Once(() => {
-                        User.RemoveRollModifier(modifier);
+                        Targets[0].Combatant.RemoveStatusEffect<LockedOn>();
                     });
+                }
+
+                public class LockedOn : StatusEffect {
+                    public override string Name => "Locked-On";
+                    public Anna Caster;
+
+                    public LockedOn (Anna caster) {
+                        Caster = caster;
+                    }
                 }
             }
 
@@ -117,7 +124,7 @@ namespace Combat {
                 public Shoot (Anna user) : base (user) {}
 
                 public BasicAttackOptions AttackOptions { get; protected set; } = new () {
-                    AttackRollTags = new string [] { "Attack", "Shot" },
+                    HitRollTags = new string [] { "Attack", "Shot" },
                     ParryNegation = 10,
                     DodgeNegation = 6,
                 };
@@ -128,12 +135,18 @@ namespace Combat {
                     User.Animator.Play(User.Animations.Shoot);
                     User.Bullets -= 1;
 
+                    var locked_on_modifier = new RollModifier (User.Actions.Aim, "Attack") { Advantage = 1 };;
+                    var locked_on = target.Combatant.GetStatusEffect<Aim.LockedOn>() as Aim.LockedOn;
+                    if (locked_on?.Caster == User) User.AddRollModifier(locked_on_modifier);
+
                     await User.BasicAttack(target, AttackOptions, async result => {
                         if (result.Hit) {
-                            var damage_roll = User.Roll(6, new string [] { "Damage" });
+                            var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
                             target.Combatant.Damage(damage_roll, new string [] { "Bullet" });
                         }
                     });
+
+                    User.TryRemoveRollModifier(locked_on_modifier);
                 }
             }
         
@@ -152,6 +165,23 @@ namespace Combat {
                     User.Animator.Play(User.Animations.Reload);
                     User.Bullets += Amount;
                     if (User.Bullets > User.MaxBullets) User.Bullets = User.MaxBullets;
+                }
+            }
+        
+            public class Smoke : CombatAction {
+                public override string Name => "Smoke";
+                public override int TempoCost { get; set; } = 1;
+
+                public override bool IsAvailable () => User.HasStatusEffect<TheShakes>();
+
+                public new Anna User => base.User as Anna;
+                public Smoke (Anna user) : base (user) {}
+
+                public override async Task Run () {
+                    User.Play(User.Animations.Smoke);
+                    var effect = User.GetStatusEffect<TheShakes>();
+                    effect.Level -= 2;
+                    if (effect.Level < 1) User.RemoveStatusEffect(effect);
                 }
             }
         }

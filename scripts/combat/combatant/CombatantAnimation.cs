@@ -12,6 +12,14 @@ namespace Combat {
 
         protected abstract StandardAnimationStore StandardAnimations { get; }
 
+        public void Play (SimpleAnimation animation) {
+            Animator.Play(animation);
+        }
+
+        public void Play (SimpleSprite sprite) {
+            Animator.Play(sprite);
+        }
+
         public virtual void ResetAnimation () {
             if (!IsDead) Animator.Play(StandardAnimations.Idle);
             else Animator.Play(StandardAnimations.Dead);

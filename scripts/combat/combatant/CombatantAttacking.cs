@@ -33,9 +33,14 @@ namespace Combat {
             OnAttackDodged(attack_result);
         }
                     
-        public struct BasicAttackOptions {
+        public class BasicAttackOptions {
             public int ParryNegation, DodgeNegation;
-            public string [] AttackRollTags;
+            public string [] HitRollTags;
+
+            public BasicAttackOptions () {
+                (ParryNegation, DodgeNegation) = (0, 0);
+                HitRollTags = new string [] {};
+            }
         }
 
         public async Task BasicAttack (CombatTarget target, BasicAttackOptions options, Func<AttackResult, Task> function) {
@@ -51,7 +56,7 @@ namespace Combat {
         }
 
         public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions options) {
-            var hit_roll = attacker.Roll(10, options.AttackRollTags);
+            var hit_roll = attacker.Roll(10, options.HitRollTags);
             var parry_roll = IsDead ? 0 : Roll(10, new string [] { "Parry" });
             var dodge_roll = IsDead ? 0 : Roll(10, new string [] { "Dodge" });
 

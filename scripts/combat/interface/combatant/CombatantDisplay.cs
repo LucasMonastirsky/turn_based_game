@@ -8,7 +8,7 @@ public partial class CombatantDisplay : Node2D {
     private List<Label> labels = new ();
 
     private Label LabelHealth, LabelTempo;
-    private List<Label> EffectLabels = new ();
+    private Dictionary<string, Label> EffectLabels = new ();
 
     public void AddStatusEffect (StatusEffect effect) {
         var label = new Label {
@@ -17,16 +17,11 @@ public partial class CombatantDisplay : Node2D {
             Scale = new Vector2 { X = 0.4f, Y = 0.4f },
         };
         AddChild(label);
-        EffectLabels.Add(label);
+        EffectLabels.Add(effect.Name, label);
     }
 
     public void RemoveStatusEffect (StatusEffect effect) {
-        var label = EffectLabels.Find(label => label.Text == effect.Name);
-
-        if (label is not null) {
-            EffectLabels.Remove(label);
-            label.QueueFree();
-        }
+        EffectLabels.Remove(effect.Name);
     }
 
     public override void _Ready () {
@@ -44,6 +39,10 @@ public partial class CombatantDisplay : Node2D {
 
         var position = Positioner.GetWorldPosition(User.Position);
         Position = position with { Y = position.Y - 40, X = position.X - 40 };
+
+        foreach (var kvp in EffectLabels) {
+            kvp.Value.Text = User.StatusEffects.Find(x => x.Name == kvp.Key).ToString();
+        }
     }
 
 }

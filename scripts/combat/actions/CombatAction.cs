@@ -22,7 +22,7 @@ namespace Combat {
             User = user;
         }
 
-        public abstract List<TargetSelector> TargetSelectors { get; protected set; }
+        public virtual List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
         public List<CombatTarget> Targets;
 
         public bool Bound { get; protected set; } = false;

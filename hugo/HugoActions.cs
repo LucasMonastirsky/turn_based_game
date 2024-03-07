@@ -1,16 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
 
 public partial class Hugo {
-    public override List<CombatAction> ActionList => new (new CombatAction[] {
-        Actions.Swing,
-        Actions.Shove,
-        Actions.Blast,
-        Actions.Move,
-        Actions.Switch,
-        Actions.Pass,
-    });
+    public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
 
     public ActionStore Actions;
 
@@ -24,12 +18,9 @@ public partial class Hugo {
         public CommonActions.Pass Pass;
 
         public ActionStore (Hugo hugo) {
-            Swing = new (hugo);
-            Blast = new (hugo);
-            Shove = new (hugo);
-            Move = new (hugo);
-            Switch = new (hugo);
-            Pass = new (hugo);
+            foreach (var field in GetType().GetFields()) {
+                field.SetValue(this, Activator.CreateInstance(field.FieldType, hugo));
+            }
         }
     }
 
@@ -51,7 +42,7 @@ public partial class Hugo {
             public Swing (Combatant user) : base(user) {}
 
             protected BasicAttackOptions attack_options = new BasicAttackOptions {
-                AttackRollTags = new string [] { "Attack", "Melee" },
+                HitRollTags = new string [] { "Attack", "Melee" },
                 DodgeNegation = 3,
             };
 
@@ -84,7 +75,7 @@ public partial class Hugo {
             };
 
             protected BasicAttackOptions attack_options = new BasicAttackOptions () {
-                AttackRollTags = new string [] { "Attack", "Melee" },
+                HitRollTags = new string [] { "Attack", "Melee" },
                 ParryNegation = 4,
                 DodgeNegation = 0,
             };
@@ -127,7 +118,7 @@ public partial class Hugo {
             public Shove (Combatant user) : base (user) {}
 
             public BasicAttackOptions AttackOptions { get; protected set; } = new () {
-                AttackRollTags = new [] { "Attack", "Melee" },
+                HitRollTags = new [] { "Attack", "Melee" },
                 ParryNegation = 0,
                 DodgeNegation = 0,
             };
