@@ -17,8 +17,8 @@ namespace Combat {
         }
 
         public override async Task Riposte (AttackResult attack_result) {
-            if (!attack_result.Hit) {
-                InteractionManager.QueueAction(Actions.Kick.Bind(attack_result.Attacker));
+            if (attack_result.Dodged) {
+                await Actions.Kick.Act(attack_result.Attacker);
             }
         }
 

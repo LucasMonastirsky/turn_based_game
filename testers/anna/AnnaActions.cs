@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -64,7 +63,7 @@ namespace Combat {
                         }
 
                         if (User.Bullets > 0 && (result.Hit || result.Parried)) {
-                            await InteractionManager.QuickAct(User.Actions.Shoot.Bind(target));
+                            await User.Actions.Shoot.Act(target);
                         }
                     });
                 }
@@ -126,7 +125,7 @@ namespace Combat {
                 public BasicAttackOptions AttackOptions { get; protected set; } = new () {
                     HitRollTags = new string [] { "Attack", "Shot" },
                     ParryNegation = 10,
-                    DodgeNegation = 6,
+                    DodgeNegation = 3,
                 };
 
                 public override async Task Run () {

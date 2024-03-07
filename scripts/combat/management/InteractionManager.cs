@@ -23,28 +23,6 @@ namespace Combat {
         public static int ReactionsThisTurn { get; private set; }
         public static bool ReactionsAllowed => ReactionsThisTurn < 1;
 
-        public static async Task Act (CombatAction action) {
-            if (!action.Bound) {
-                Dev.Error($"Tried to act unbound action: {action.Name} ({action.User.Name})");
-            }
-
-            await action.Run();
-            action.Unbind();
-            await Timing.Delay();
-        }
-
-        public static async Task QuickAct (CombatAction action) {
-            if (!action.Bound) {
-                Dev.Error($"Tried to quick-act unbound action: {action.Name} ({action.User.Name})");
-            }
-
-            Dev.Log(Dev.Tags.CombatManagement, $"Quick-acting action {action}");
-
-            await Timing.Delay();
-            await action.Run();
-            action.Unbind();
-        }
-
         public static async Task ResolveQueue () {
             Dev.Log(Dev.Tags.CombatManagement, "Resolving queue");
 

@@ -13,7 +13,7 @@ public partial class Miguel : Combatant {
 
     public override async Task Riposte (AttackResult attack_result) {
         if (!attack_result.Hit && attack_result.Attacker.Row == 0 && Row == 0) {
-            InteractionManager.QueueAction(Actions.Swing.Bind(attack_result.Attacker));
+            await Actions.Swing.Act(attack_result.Attacker);
         }
     }
 

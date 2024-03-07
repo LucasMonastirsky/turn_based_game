@@ -50,8 +50,9 @@ namespace Combat {
             var result = target.Combatant.ReceiveAttack(this, options);
             await function(result);
 
-            if (TurnManager.ActiveCombatant != result.Defender) await result.Defender.Riposte(result);
             CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Target = target, Options = options, Result = result });
+            TurnManager.LastAttack = result;
+
             await InteractionManager.ResolveQueue();
         }
 

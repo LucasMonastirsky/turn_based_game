@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Development;
 using Utils;
 
 namespace Combat {
@@ -27,7 +28,7 @@ namespace Combat {
 
         public bool Bound { get; protected set; } = false;
 
-        public CombatAction Bind (params Targetable [] targetables) {
+        public CombatAction Bind (params Targetable [] targetables) { // TODO: binding error checks
             Bound = true;
             Targets = targetables.Select(target => target.ToTarget()).ToList();;
             return this;
@@ -46,6 +47,23 @@ namespace Combat {
         }
 
         public abstract Task Run ();
+
+        public async Task Act () {
+            if (!Bound) Dev.Error($"Tried to act unbound action {this}");
+
+            await Run();
+            Unbind();
+            await Timing.Delay();
+        }
+
+        public async Task Act (params Targetable [] targetables) {
+            if (!PassesSelectors()) Dev.Error($"Action {this} does not pass selector");
+
+            Bind(targetables);
+            await Run();
+            Unbind();
+            await Timing.Delay();
+        }
 
         public async Task<CombatAction> RequestBind () {
             CombatPlayerInterface.HideActionList();
@@ -97,7 +115,7 @@ namespace Combat {
 
         public bool PassesSelectors () {
             for (var i = 0; i < TargetSelectors.Count; i++) {
-                if (Targets[i] is null || !IsValidTarget(Targets[i], TargetSelectors[i])) {
+                if (Targets?[i] is null || !IsValidTarget(Targets[i], TargetSelectors[i])) {
                     return false;
                 }
             }

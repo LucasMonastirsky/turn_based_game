@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Development;
 
 namespace Combat {
@@ -14,6 +11,8 @@ namespace Combat {
 
         public static string State = "Idle";
         private static bool IsPassQueued = false;
+
+        public static AttackResult LastAttack = null;
 
         public static async void BeginLoop () {
             while (true) {
@@ -36,7 +35,13 @@ namespace Combat {
 
                         CombatantDisplayManager.Hide();
                         ActiveCombatant.Tempo -= CurrentAction.TempoCost;
-                        await InteractionManager.Act(CurrentAction);
+                        await CurrentAction.Act();
+
+                        if (LastAttack != null) {
+                            await LastAttack.Defender.Riposte(LastAttack);
+                            LastAttack = null;
+                        }
+
                         await InteractionManager.ResetCombatants();
                         CurrentAction = null;
                     }
