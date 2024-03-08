@@ -34,7 +34,7 @@ public partial class Hugo {
             }
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                new TargetSelector (TargetType.Single) { Side = SideSelector.Opposite, Row = 0, }
+                CommonTargetSelectors.Melee,
             };
 
             public new Hugo User { get => base.User as Hugo; }
@@ -102,14 +102,15 @@ public partial class Hugo {
             }
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                new (TargetType.Single) {
-                    Side = SideSelector.Opposite,
-                    Row = 0,
-                },
+                CommonTargetSelectors.Melee,
                 new (TargetType.Position) {
                     Side = SideSelector.Opposite,
                     Row = 1,
-                    Validator = (target, user, targets) => Positioner.IsValidMovement(targets[0].Combatant, target.Position, true),
+                    Validator = (target, user, targets) => (
+                        target.Combatant is null
+                        && target.VerticalDistanceTo(targets[0]) <= 1
+                        && Positioner.IsValidMovement(targets[0].Combatant, target.Position, true)
+                    ),
                 },
             };
 

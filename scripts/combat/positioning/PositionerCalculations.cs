@@ -49,8 +49,8 @@ namespace Combat {
             };
 
             for (var row_index = 0; row_index < MAX_ROW_COUNT; row_index++) {
-                Rows[Side.Left].Add(new RowData());
-                Rows[Side.Right].Add(new RowData());
+                Rows[Side.Left].Add(new RowData(Side.Left));
+                Rows[Side.Right].Add(new RowData(Side.Right));
 
                 for (var slot_index = 0; slot_index < ROW_SLOT_COUNT; slot_index++) {
                     var x = center_distance + horizontal_distance * row_index;

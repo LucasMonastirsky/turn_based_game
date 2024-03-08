@@ -159,5 +159,24 @@ namespace Combat {
 
             return results.MinBy(kvp => kvp.Key).Value as CombatTarget;
         }
+        
+        public static List<CombatTarget> TargetsInRange (Targetable target, int horizontal_range, int vertical_range = 5) {
+            var origin = target.ToTarget().Position;
+            var rows = current.Rows[origin.Side];
+
+            var selected = new List<CombatTarget> ();
+
+            foreach (var row in rows) {
+                if (Math.Abs(origin.Row - row.Index) <= horizontal_range) {
+                    foreach (var slot in row.Slots) {
+                        if (Math.Abs(origin.Slot - slot.Index) <= vertical_range) {
+                            selected.Add(new CombatTarget(slot.Position));
+                        }
+                    }
+                }
+            }
+
+            return selected;
+        }
     }
 }

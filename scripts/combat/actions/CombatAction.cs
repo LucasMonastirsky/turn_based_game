@@ -106,6 +106,7 @@ namespace Combat {
             if (selector.Type != TargetType.Position) predicates.Add(() => target.Combatant != null);
             if (selector.Side != null) predicates.Add(() => (int) User.Side * (int) selector.Side == (int) target.Side);
             if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
+            if (selector.VerticalRange != null) predicates.Add(() => Math.Abs(User.Slot - target.Slot) <= selector.VerticalRange);
             if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, Targets));
             if (!selector.CanTargetSelf) predicates.Add(() => target.Combatant != User);
 

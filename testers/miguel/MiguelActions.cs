@@ -35,7 +35,7 @@ public partial class Miguel {
             }
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                new (TargetType.Single) { Side = SideSelector.Opposite, Row = 0, },
+                CommonTargetSelectors.Melee,
             };
 
             public new Miguel User => base.User as Miguel;
@@ -68,6 +68,8 @@ public partial class Miguel {
             public override string Name => "Switcheroo";
             public override int TempoCost { get; set; } = 1;
 
+            public override bool IsAvailable () => User.Row == 1;
+
             public new Miguel User => base.User as Miguel;
 
             public Switcheroo (Combatant user) : base(user) {}
@@ -75,6 +77,7 @@ public partial class Miguel {
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new TargetSelector(TargetType.Single) {
                     Side = SideSelector.Same,
+                    Row = 0,
                     Validator = (target, user, previous_targets) => !target.Combatant.HasStatusEffect<SwitcherooEffect>()
                 },
             };
@@ -138,7 +141,7 @@ public partial class Miguel {
             public Combo (Miguel user) : base (user) {}
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                new (TargetType.Single) { Row = 0, Side = SideSelector.Opposite, },
+                CommonTargetSelectors.Melee,
             };
 
             public BasicAttackOptions [] AttackOptions { get; protected set; } = new [] {

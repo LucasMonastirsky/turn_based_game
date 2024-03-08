@@ -18,5 +18,9 @@ namespace Combat {
         }
 
         public CombatTarget ToTarget () => this;
+
+        public int VerticalDistanceTo (CombatTarget target) {
+            return Math.Abs(Position.Slot - target.Position.Slot);
+        }
     }
 }

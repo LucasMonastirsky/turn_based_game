@@ -31,7 +31,7 @@ namespace Combat {
                 public override string Name => "Kick";
                 public override int TempoCost { get; set; } = 2;
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                    new (TargetType.Single) { Side = SideSelector.Opposite, Row = 0, },
+                    CommonTargetSelectors.Melee,
                 };
                 public override bool IsAvailable () {
                     return User.Row == 0;

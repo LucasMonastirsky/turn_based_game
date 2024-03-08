@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Combat {
@@ -17,6 +16,8 @@ namespace Combat {
  
         public SideSelector? Side { get; init; } = null;
         public int? Row { get; init; } = null;
+
+        public int? VerticalRange { get; init; } = null;
 
         public bool CanTargetSelf { get; init; } = false;
 
