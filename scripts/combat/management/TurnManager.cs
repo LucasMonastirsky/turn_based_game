@@ -3,7 +3,7 @@ using Development;
 namespace Combat {
     public class TurnManager {
         private static int turn_index = 0;
-        
+
         public static CombatantStore Combatants => Battle.Combatants;
         public static Combatant ActiveCombatant => Combatants[turn_index];
 
@@ -39,8 +39,11 @@ namespace Combat {
 
                         if (LastAttack != null) {
                             if (LastAttack.AllowRiposte) {
-                                await Timing.Delay();
-                                await LastAttack.Defender.Riposte(LastAttack);
+                                var riposte = LastAttack.Defender.GetRiposte(LastAttack);
+                                if (riposte != null) {
+                                    await Timing.Delay();
+                                    riposte.Act();
+                                }
                             }
 
                             LastAttack = null;
@@ -50,6 +53,8 @@ namespace Combat {
                         await InteractionManager.ResetCombatants();
                         CurrentAction = null;
                     }
+
+                    else IsPassQueued = true;
                 }
 
                 State = "Ending";

@@ -16,10 +16,12 @@ namespace Combat {
             Actions = new (this);
         }
 
-        public override async Task Riposte (AttackResult attack_result) {
+        public override CombatAction GetRiposte (AttackResult attack_result) {
             if (attack_result.Dodged) {
-                await Actions.Kick.Act(attack_result.Attacker);
+                return Actions.Kick.Bind(attack_result.Attacker);
             }
+
+            return null;
         }
 
         public override void OnTurnEnd () {

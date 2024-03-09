@@ -21,17 +21,22 @@ public partial class Hugo : Combatant {
 		AddRollModifier(attack_modifier = new (this, "Attack") { Bonus = 4 });
 	}
 
-	public override async Task Riposte (AttackResult attack_result) {
-		if (attack_result.Attacker.Row == 0) {
-			var move_targets = Positioner.GetMoveTargets(attack_result.Attacker, true);
+	public override CombatAction GetRiposte (AttackResult attack_result) {
+		var attacker = attack_result.Attacker;
+
+		if (attacker.Row == 0) {
+			var move_targets = Positioner.GetMoveTargets(attacker, true);
+
 			if (move_targets.Count > 0) {
 				var empty_targets = move_targets.Where(target => target.Combatant is null);
 				var final_move_targets = empty_targets.Count() > 0 ? empty_targets : move_targets;
-				await Actions.Shove.Act(attack_result.Attacker, Positioner.SelectClosest(attack_result.Attacker, move_targets));
+				return Actions.Shove.Bind(attacker, Positioner.SelectClosest(attacker, final_move_targets.ToList()));
 			}
 			else {
-				await Actions.Swing.Act(attack_result.Attacker);
+				return Actions.Swing.Bind(attacker);
 			}
 		}
+
+		return null;
 	}
 }

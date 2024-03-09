@@ -25,6 +25,7 @@ namespace Combat {
 
         public virtual List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
         public List<CombatTarget> Targets;
+        public int TargetCount => TargetSelectors.Count;
 
         public bool Bound { get; protected set; } = false;
 
@@ -122,6 +123,35 @@ namespace Combat {
 
             return true;
         }
+
+        /*
+        // these won't work because of validator predicate
+        // TODO: implement ValidTargetSets
+        public List<List<CombatTarget>> ValidTargets {
+            get {
+                var lists = new List<List<CombatTarget>> ();
+                var targets = Positioner.GetCombatTargets();
+
+                foreach (var selector in TargetSelectors) {
+                    lists.Add(targets.Where(target => IsValidTarget(target, selector)).ToList());
+                }
+
+                return lists;
+            }
+        }
+
+        public bool HasValidTargets {
+            get {
+                var targets = Positioner.GetCombatTargets();
+
+                return TargetSelectors.Any(selector => !targets.Any(target => IsValidTarget(target, selector)));
+            }
+        }
+
+        public CombatAction RandomBind () {
+            return Bind(ValidTargets.Select(targets => RNG.SelectFrom(targets)).ToArray());
+        }
+        */
 
         public override string ToString () {
             return Name;

@@ -11,10 +11,12 @@ public partial class Miguel : Combatant {
         Actions = new ActionStore(this);
     }
 
-    public override async Task Riposte (AttackResult attack_result) {
+    public override CombatAction GetRiposte (AttackResult attack_result) {
         if (!attack_result.Hit && attack_result.Attacker.Row == 0 && Row == 0) {
-            await Actions.Swing.Act(attack_result.Attacker);
+            return Actions.Swing.Bind(attack_result.Attacker);
         }
+
+        return null;
     }
 
     protected override void OnAttackParried(AttackResult attack_result) {

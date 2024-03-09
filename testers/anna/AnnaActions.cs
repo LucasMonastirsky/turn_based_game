@@ -12,6 +12,7 @@ namespace Combat {
             public ActionClasses.Kick Kick;
             public ActionClasses.Aim Aim;
             public ActionClasses.Shoot Shoot;
+            public ActionClasses.LegShot LegShot;
             public ActionClasses.Reload Reload;
             public ActionClasses.Smoke Smoke;
 
@@ -83,15 +84,19 @@ namespace Combat {
                 public new Anna User => base.User as Anna;
                 public Aim (Anna user) : base (user) {}
 
-                public override async Task Run() {
+                public override async Task Run() { // TODO: implement event to dynamically add mods to attacks
+                    User.Play(User.Animations.Shoot);
+
                     foreach (var combatant in Battle.Combatants) {
                         combatant.RemoveStatusEffectIf<LockedOn>(effect => effect.Caster == User);
                     }
 
-                    Targets[0].Combatant.AddStatusEffect(new LockedOn(User));
+                    var enemy = Targets[0].Combatant;
+
+                    enemy.AddStatusEffect(new LockedOn(User));
 
                     CombatEvents.BeforeTurnEnd.Once(() => {
-                        Targets[0].Combatant.RemoveStatusEffect<LockedOn>();
+                        enemy.RemoveStatusEffect<LockedOn>();
                     });
                 }
 
@@ -132,7 +137,7 @@ namespace Combat {
                     User.Animator.Play(User.Animations.Shoot);
                     User.Bullets -= 1;
 
-                    var locked_on_modifier = new RollModifier (User.Actions.Aim, "Attack") { Advantage = 1 };;
+                    var locked_on_modifier = new RollModifier (User.Actions.Aim, "Attack") { Advantage = 1 }; // TODO: do this properly
                     var locked_on = target.Combatant.GetStatusEffect<Aim.LockedOn>() as Aim.LockedOn;
                     if (locked_on?.Caster == User) User.AddRollModifier(locked_on_modifier);
 
@@ -179,6 +184,41 @@ namespace Combat {
                     var effect = User.GetStatusEffect<TheShakes>();
                     effect.Level -= 2;
                     if (effect.Level < 1) User.RemoveStatusEffect(effect);
+                }
+            }
+        
+            public class LegShot : CombatAction {
+                public override string Name => "Leg-Shot";
+                public override int TempoCost { get; set; } = 1;
+
+                public override bool IsAvailable () => User.Bullets > 0;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new (TargetType.Single) { Side = SideSelector.Opposite, }
+                };
+
+                public new Anna User => base.User as Anna;
+
+                public LegShot (Anna user) : base (user) {}
+
+                public BasicAttackOptions AttackOptions = new () {
+                    HitRollTags = new [] { "Attack", "Shot" },
+                    ParryNegation = 10,
+                    DodgeNegation = 1,
+                };
+
+                public override async Task Run () {
+                    var target = Targets[0];
+                    User.Play(User.Animations.Shoot);
+                    User.Bullets -= 1;
+
+                    var result = await User.Attack(target, AttackOptions);
+
+                    if (result.Hit) {
+                        var damage = User.Roll(4, "Damage", "Shot");
+                        target.Combatant.Damage(damage, new [] { "Bullet" });
+                        target.Combatant.AddStatusEffect(new Immobilized (2));
+                    }
                 }
             }
         }

@@ -53,7 +53,7 @@ public partial class MiguelController : Controller {
 
             var targets = Battle.Combatants.OnOppositeSide(Combatant.Side).OnRow(0).Alive.All;
 
-            if (Combatant.Tempo < 2 || targets.Count < 1) return Combatant.Actions.Pass.Bind();
+            if (Combatant.Tempo < 2 || targets.Count < 1) return null;
             else return Combatant.Actions.Swing.Bind(RNG.SelectFrom(targets));
         }
     }

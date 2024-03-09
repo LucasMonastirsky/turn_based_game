@@ -19,8 +19,8 @@ namespace Combat {
             return value;
         }
 
-        public virtual async Task Riposte (AttackResult attack_result) {
-
+        public virtual CombatAction GetRiposte (AttackResult attack_result) {
+            return null;
         }
 
         protected virtual void OnAttackParried (AttackResult attack_result) {
@@ -71,7 +71,6 @@ namespace Combat {
                 Defender = this,
                 ParryDelta = parry_roll - hit_roll - options.ParryNegation,
                 DodgeDelta = dodge_roll - hit_roll - options.DodgeNegation,
-                AllowRiposte = false,
             };
 
             if (result.Parried && result.Dodged) OnAttackParriedAndDodged(result);

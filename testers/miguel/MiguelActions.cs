@@ -54,12 +54,10 @@ public partial class Miguel {
 
                 await User.Attack(target, options, async result => {
                     if (result.Hit) {
-                        result.AllowRiposte = false;
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
                         target.Combatant.AddStatusEffect(new Poison(1));
                     }
-                    else result.AllowRiposte = true;
                 });
             }
         }
@@ -130,7 +128,6 @@ public partial class Miguel {
                 }
             }
         }
-
 
         public class Combo : CombatAction {
             public override string Name => "Combo";
