@@ -4,10 +4,12 @@ using Godot;
 	[Export] private int hitbox_width, hitbox_height, hitbox_low_padding;
 	[Export] private bool is_debug_active;
 
-	public PlayerController Controller;
+	public bool EnableAutoHighlight = true;
 
 	public delegate void OnCombatantSelectedDelegate ();
 	public OnCombatantSelectedDelegate OnCombatantSelected;
+
+	public EmptyDelegate OnHovered = () => {};
 
 	public bool IsActive { get; private set; }
 
@@ -16,23 +18,26 @@ using Godot;
 			QueueRedraw();
 		}
 
-    	var mouse_pos = GetLocalMousePosition();
-		if (
-			mouse_pos.X > -hitbox_width / 2
-			&& mouse_pos.X < hitbox_width / 2
-			&& mouse_pos.Y > -hitbox_height
-			&& mouse_pos.Y < hitbox_low_padding
-		) {
-			IsActive = true;
-			Scale = Scale with { X = 1.5f };
-		}
-		else {
-			IsActive = false;
-			Scale = Scale with { X = 1f };
-		}
+		if (EnableAutoHighlight) {
+			var mouse_pos = GetLocalMousePosition();
+			if (
+				mouse_pos.X > -hitbox_width / 2
+				&& mouse_pos.X < hitbox_width / 2
+				&& mouse_pos.Y > -hitbox_height
+				&& mouse_pos.Y < hitbox_low_padding
+			) {
+				IsActive = true;
+				Scale = Scale with { X = 1.5f };
+				OnHovered();
+			}
+			else {
+				IsActive = false;
+				Scale = Scale with { X = 1f };
+			}
 
-		if (IsActive && Input.IsMouseButtonPressed(MouseButton.Left)) { // TODO: create action for selection
-			OnCombatantSelected();
+			if (IsActive && Input.IsMouseButtonPressed(MouseButton.Left)) { // TODO: create action for selection
+				OnCombatantSelected();
+			}
 		}
     }
 

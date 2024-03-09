@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl1vcwnorr66f"
-path="res://.godot/imported/idle_0.png-e94ee00dd36ec23a667cd75d012b5ac5.ctex"
+uid="uid://dct0kuppnmnhb"
+path="res://.godot/imported/parry.png-bde78e8efc17ba318ac657223a29ef26.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/idle_0.png"
-dest_files=["res://.godot/imported/idle_0.png-e94ee00dd36ec23a667cd75d012b5ac5.ctex"]
+source_file="res://testers/hidan/textures/parry.png"
+dest_files=["res://.godot/imported/parry.png-bde78e8efc17ba318ac657223a29ef26.ctex"]
 
 [params]
 

@@ -36,20 +36,21 @@ namespace Combat {
                         CombatantDisplayManager.Hide();
                         ActiveCombatant.Tempo -= CurrentAction.TempoCost;
                         await CurrentAction.Act();
+                        await Timing.Delay();
 
                         if (LastAttack != null) {
-                            if (LastAttack.AllowRiposte) {
+                            if (LastAttack.AllowRiposte && !LastAttack.Defender.IsDead) {
                                 var riposte = LastAttack.Defender.GetRiposte(LastAttack);
+
                                 if (riposte != null) {
+                                    await riposte.Act();
                                     await Timing.Delay();
-                                    riposte.Act();
                                 }
                             }
 
                             LastAttack = null;
                         }
 
-                        await Timing.Delay();
                         await InteractionManager.ResetCombatants();
                         CurrentAction = null;
                     }

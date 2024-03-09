@@ -63,5 +63,10 @@ namespace Combat {
         public Task DisplaceToMeleeDistance (Combatant target) {
             return DisplaceTo(target.Node.Position with { X = target.Node.Position.X + 50 * (int) Position.Side }); // TODO: put melee range var somewhere
         }
+
+        public Task DisplaceToMeleeDistance (CombatTarget target) {
+            var node_position = target.Combatant == null ? target.Position.WorldPosition : target.Combatant.Node.Position;
+            return DisplaceTo(node_position with { X = node_position.X + 50 * (int) Position.Side });
+        }
     }
 }

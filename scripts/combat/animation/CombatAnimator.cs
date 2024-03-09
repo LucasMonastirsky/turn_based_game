@@ -17,6 +17,10 @@ namespace Combat {
 	public partial class SimpleAnimation : Resource {
 		public SimpleSprite[] Sprites;
 		public double FrameDuration = 0.250;
+
+		public SimpleAnimation (params SimpleSprite [] sprites) {
+			Sprites = sprites;
+		}
 	}
 
 	public partial class CombatAnimator : Sprite2D {

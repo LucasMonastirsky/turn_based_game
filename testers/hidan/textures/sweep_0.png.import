@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://k1jk5q4qh81b"
-path="res://.godot/imported/stab.png-4c33ab4386553c70eb28a8a8c99d177d.ctex"
+uid="uid://jhlprwt5e22t"
+path="res://.godot/imported/sweep_0.png-f1153ba5b51befe3a93ef9441740c724.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/stab.png"
-dest_files=["res://.godot/imported/stab.png-4c33ab4386553c70eb28a8a8c99d177d.ctex"]
+source_file="res://testers/hidan/textures/sweep_0.png"
+dest_files=["res://.godot/imported/sweep_0.png-f1153ba5b51befe3a93ef9441740c724.ctex"]
 
 [params]
 

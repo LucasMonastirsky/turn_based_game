@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b307aqe7wbg1h"
-path="res://.godot/imported/dodge.png-5e1cdd384e803dfa1a4d52153819dbb8.ctex"
+uid="uid://kxsodbenn5us"
+path="res://.godot/imported/sweep_1.png-87387586ccf6ce5b7f98a1e0400cb132.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/dodge.png"
-dest_files=["res://.godot/imported/dodge.png-5e1cdd384e803dfa1a4d52153819dbb8.ctex"]
+source_file="res://testers/hidan/textures/sweep_1.png"
+dest_files=["res://.godot/imported/sweep_1.png-87387586ccf6ce5b7f98a1e0400cb132.ctex"]
 
 [params]
 

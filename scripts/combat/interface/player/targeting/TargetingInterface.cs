@@ -92,4 +92,40 @@ public partial class TargetingInterface : Node2D {
 			return null;
 		}
 	}
+
+/* 	public static async Task<CombatTarget> SelectDouble (List<CombatTarget> targets) {
+		CombatPlayerInterface.HideActionList();
+
+		var cancel = new TaskCompletionSource();
+		AsyncInput.Cancel.Once(() => {
+			cancel.SetResult();
+		});
+
+		var selection = new TaskCompletionSource<CombatTarget>();
+
+		var markers = new List<SelectionMarker>();
+		var highlightables = new HashSet<CombatPosition>();
+
+		foreach (var target in targets) {
+			highlightables.Add(new CombatPosition () { Side = target.Side, Row = target.Row, Slot = target.Slot - 1 });
+			highlightables.Add(new CombatPosition () { Side = target.Side, Row = target.Row, Slot = target.Slot + 1 });
+
+			var marker = current.single_marker_scene.Instantiate<SelectionMarker>(); // TODO: I don't like setting public fields like this
+			marker.Position = target.Position.WorldPosition;
+			marker.EnableAutoHighlight = false;
+			marker.Visible = false;
+
+			current.AddChild(marker);
+			markers.Add(marker);
+		}
+
+		foreach (var position in highlightables) {
+			var marker = current.single_marker_scene.Instantiate<SelectionMarker>(); // TODO: I don't like setting public fields like this
+			marker.Position = position.WorldPosition;
+			marker.EnableAutoHighlight = false;
+
+			current.AddChild(marker);
+			markers.Add(marker);
+		}
+	} */
 }

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kxsodbenn5us"
-path="res://.godot/imported/sweep_1.png-02ba8ecc5ee06fd264196efde5c3d1fc.ctex"
+uid="uid://c5h4or6hphnij"
+path="res://.godot/imported/charge.png-fbeea1c96b386905e5dbb4648860a6a0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/sweep_1.png"
-dest_files=["res://.godot/imported/sweep_1.png-02ba8ecc5ee06fd264196efde5c3d1fc.ctex"]
+source_file="res://testers/hidan/textures/charge.png"
+dest_files=["res://.godot/imported/charge.png-fbeea1c96b386905e5dbb4648860a6a0.ctex"]
 
 [params]
 

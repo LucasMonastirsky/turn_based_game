@@ -4,6 +4,7 @@ namespace Combat {
     public enum TargetType {
         Position,
         Single,
+        Double,
     }
 
     public enum SideSelector {
@@ -26,8 +27,6 @@ namespace Combat {
 
         public TargetSelector (TargetType type) {
             Type = type;
-        }
-
-        
+        }        
     }
 }

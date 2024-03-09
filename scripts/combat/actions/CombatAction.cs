@@ -86,6 +86,9 @@ namespace Combat {
                     case TargetType.Single:
                         selection = await TargetingInterface.SelectSingleCombatant(selectable_targets);
                         break;
+                    case TargetType.Double:
+                        selection = await TargetingInterface.SelectPosition(selectable_targets);
+                        break;
                 }
 
                 if (selection == null) {
@@ -104,12 +107,20 @@ namespace Combat {
         private bool IsValidTarget (CombatTarget target, TargetSelector selector) {
             var predicates = new List<Func<bool>> ();
 
-            if (selector.Type != TargetType.Position) predicates.Add(() => target.Combatant != null);
+            if (selector.Type == TargetType.Single) predicates.Add(() => target.Combatant != null);
             if (selector.Side != null) predicates.Add(() => (int) User.Side * (int) selector.Side == (int) target.Side);
             if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
             if (selector.VerticalRange != null) predicates.Add(() => Math.Abs(User.Slot - target.Slot) <= selector.VerticalRange);
             if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, Targets));
             if (!selector.CanTargetSelf) predicates.Add(() => target.Combatant != User);
+
+            if (selector.Type == TargetType.Double) predicates.Add(() => {
+                if (target.Slot is 0 or 4) return false;
+                if (Positioner.GetSlotData(target.Position with { Slot = target.Slot - 1 }).Combatant == null) return false;
+                if (Positioner.GetSlotData(target.Position with { Slot = target.Slot + 1 }).Combatant == null) return false;
+
+                return true;
+            });
 
             return !predicates.Any(predicate => !predicate());
         }

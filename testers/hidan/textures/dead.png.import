@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dct0kuppnmnhb"
-path="res://.godot/imported/parry.png-5ba41f8c669a96744a6fe1edd94fa25a.ctex"
+uid="uid://y4qia53x7w6l"
+path="res://.godot/imported/dead.png-fdd6659bdc486f9119bb4b1c6ce525e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/parry.png"
-dest_files=["res://.godot/imported/parry.png-5ba41f8c669a96744a6fe1edd94fa25a.ctex"]
+source_file="res://testers/hidan/textures/dead.png"
+dest_files=["res://.godot/imported/dead.png-fdd6659bdc486f9119bb4b1c6ce525e2.ctex"]
 
 [params]
 
