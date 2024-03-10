@@ -8,7 +8,7 @@ namespace Development {
         public static bool IsActive = true;
         public static bool LogColor = false;
         public static bool LogDate = false;
-        public static bool LogDelta = false;
+        public static bool LogDelta = true;
 
         public struct LogTag {
             public string Name;

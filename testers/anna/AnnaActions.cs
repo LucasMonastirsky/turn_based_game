@@ -15,6 +15,7 @@ namespace Combat {
             public ActionClasses.LegShot LegShot;
             public ActionClasses.Reload Reload;
             public ActionClasses.Smoke Smoke;
+            public ActionClasses.Unload Unload;
 
             public CommonActions.Move Move;
             public CommonActions.Switch Switch;
@@ -60,9 +61,8 @@ namespace Combat {
                         }
                     });
 
-                    await Timing.Delay();
-
                     if (!result.Dodged && User.Bullets > 0) {
+                        await Timing.Delay();
                         await User.Actions.Shoot.Act(target);
                     }
                 }
@@ -96,7 +96,7 @@ namespace Combat {
 
                     enemy.AddStatusEffect(new LockedOn(User));
 
-                    CombatEvents.BeforeTurnEnd.Once(() => {
+                    CombatEvents.BeforeTurnEnd.Once(async () => {
                         enemy.RemoveStatusEffect<LockedOn>();
                     });
                 }
@@ -136,7 +136,6 @@ namespace Combat {
                     var target = Targets[0];
 
                     User.Animator.Play(User.Animations.Shoot);
-                    User.Play(User.Sounds.Shot);
                     User.Bullets -= 1;
 
                     var locked_on_modifier = new RollModifier (User.Actions.Aim, "Attack") { Advantage = 1 }; // TODO: do this properly
@@ -144,6 +143,8 @@ namespace Combat {
                     if (locked_on?.Caster == User) User.AddRollModifier(locked_on_modifier);
 
                     await User.Attack(target, AttackOptions, async result => {
+                        User.Play(User.Sounds.Shot);
+
                         if (result.Hit) {
                             var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
                             target.Combatant.Damage(damage_roll, new string [] { "Bullet" });
@@ -233,6 +234,52 @@ namespace Combat {
                         target.Combatant.Damage(damage, new [] { "Bullet" });
                         target.Combatant.AddStatusEffect(new Immobilized (2));
                     }
+                }
+            }
+        
+            public class Unload : CombatAction {
+                public override string Name => "Unload";
+                public override int TempoCost { get; set; } = 3;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new (TargetType.Single) { Side = SideSelector.Opposite, },
+                };
+
+                public new Anna User => base.User as Anna;
+                public Unload (Anna user) : base (user) {}
+
+                public override async Task Run () {
+                    var target = Targets[0];
+
+                    User.Play(User.Animations.Shoot);
+
+                    var attack_options = new BasicAttackOptions () {
+                        HitRollTags = new string [] { "Attack", "Shot" },
+                        ParryNegation = 10,
+                        DodgeNegation = 4,
+                    };
+
+                    var hit_modifier = User.AddRollModifier(new (this, "Attack") { Advantage = -1, Bonus = 1 });
+                    var damage_modifier = User.AddRollModifier(new (this, "Damage") { Advantage = - 1 });
+
+                    for (var i = 0; i < User.Bullets; i++) {
+                        var result = await User.Attack(target, attack_options);
+
+                        User.Play(User.Sounds.Shot);
+
+                        if (result.Hit) {
+                            var damage = User.Roll(6, "Damage", "Shot");
+                            result.Defender.Damage(damage, new string [] { "Shot" });
+                        }
+
+                        hit_modifier.Bonus--;
+
+                        await Timing.Delay( 1f / User.Bullets * 2f);
+                    }
+
+                    User.Bullets = 0;
+                    User.RemoveRollModifier(hit_modifier);
+                    User.RemoveRollModifier(damage_modifier);
                 }
             }
         }

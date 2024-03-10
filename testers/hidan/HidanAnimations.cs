@@ -7,7 +7,7 @@ namespace Combat {
         protected override StandardAnimationStore StandardAnimations => Animations;
 
         public class AnimationStore : StandardAnimationStore {
-            public SimpleSprite Stab, Charge;
+            public SimpleSprite Stab, Charge, Punch;
             public SimpleSprite [] Sweeps;
         }
 
@@ -22,6 +22,7 @@ namespace Combat {
             Dead = new (texture_path, "dead"),
             Stab = new (texture_path, "stab"),
             Charge = new (texture_path, "charge"),
+            Punch = new (texture_path, "punch"),
             Sweeps = new SimpleSprite [] {
                 new (texture_path, "sweep_0"),
                 new (texture_path, "sweep_1"),

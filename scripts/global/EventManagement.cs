@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Development;
 
 public class EventManager : EventManager<object> {
-    public void Once (Action handler) {
+    public void Once (Func<Task> handler) {
         Once((object a) => handler());
     }
 
@@ -20,32 +19,32 @@ public class EventManager<T> {
         return completion_source.Task;
     }
 
-    private List<Action<T>> once_handlers = new ();
-    public void Once (Action<T> handler) {
+    private List<Func<T, Task>> once_handlers = new ();
+    public void Once (Func<T, Task> handler) {
         once_handlers.Add(handler);
     }
 
-    private List<Predicate<T>> until_handlers = new ();
-    public void Until (Predicate<T> handler) {
+    private List<Func<T, Task<bool>>> until_handlers = new ();
+    public void Until (Func<T, Task<bool>> handler) {
         until_handlers.Add(handler);
     }
 
-    public List<Action<T>> always_handlers = new ();
-    public void Always (Action<T> handler) {
+    public List<Func<T, Task>> always_handlers = new ();
+    public void Always (Func<T, Task> handler) {
         always_handlers.Add(handler);
     }
 
-    public void Trigger (T arguments) {
+    public async Task Trigger (T arguments) {
         foreach (var handler in once_handlers) {
-            handler(arguments);
+            await handler(arguments);
         }
 
         foreach (var handler in always_handlers) { // TODO: maybe handlers should be tasks and awaited instead of added to a queue...
-            handler(arguments);
+            await handler(arguments);
         }
 
         foreach (var handler in until_handlers.ToList()) {
-            if (handler(arguments)) {
+            if (await handler(arguments)) {
                 until_handlers.Remove(handler);
             }
         }
@@ -56,7 +55,7 @@ public class EventManager<T> {
         once_handlers = new ();
     }
 
-    public void Remove (Action<T> handler) {
+    public void Remove (Func<T, Task> handler) {
         if (!once_handlers.Remove(handler)) always_handlers.Remove(handler);
     }
 }

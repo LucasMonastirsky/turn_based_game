@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Development;
 using Utils;
 
 namespace Combat {
     public partial class Combatant {
-         public int Damage(int value, string[] tags) {
+        public int Damage(int value, string[] tags) {
             if (!IsDead) Animator.Play(StandardAnimations.Hurt);
 
             var total = Math.Clamp(value, 0, 999);
@@ -19,7 +18,13 @@ namespace Combat {
 
             Play(CommonSounds.SwordWound); // TODO: add condition via tags
 
+            OnDamaged(ref value, tags);
+
             return value;
+        }
+
+        protected virtual void OnDamaged (ref int value, string [] tags) {
+
         }
 
         public virtual CombatAction GetRiposte (AttackResult attack_result) {
@@ -35,7 +40,8 @@ namespace Combat {
             Play(CommonSounds.Woosh);
         }
         protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
-            OnAttackParried(attack_result);
+            if (attack_result.ParryDelta > attack_result.DodgeDelta) OnAttackParried(attack_result);
+            else OnAttackDodged(attack_result);
         }
                     
         public class BasicAttackOptions {
@@ -49,21 +55,26 @@ namespace Combat {
         }
 
         public async Task<AttackResult> Attack (CombatTarget target, BasicAttackOptions options, Func<AttackResult, Task> function) {
-            CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
-            await InteractionManager.ResolveQueue();
+            await CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
 
             var result = target.Combatant.ReceiveAttack(this, options);
+
             await function(result);
+
+            await CombatEvents.AfterAttack.Trigger(new () { Attacker = result.Attacker, Options = options, Result = result, Target = result.Defender.ToTarget() });
 
             TurnManager.LastAttack = result;
             return result;
         }
 
         public async Task<AttackResult> Attack (CombatTarget target, BasicAttackOptions options) {
-            CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
-            await InteractionManager.ResolveQueue();
+            await CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
 
-            return TurnManager.LastAttack = target.Combatant.ReceiveAttack(this, options);
+            var result = target.Combatant.ReceiveAttack(this, options);
+
+            await CombatEvents.AfterAttack.Trigger(new () { Attacker = result.Attacker, Options = options, Result = result, Target = result.Defender.ToTarget() });
+
+            return TurnManager.LastAttack = result;
         }
 
         public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions options) {
@@ -81,6 +92,8 @@ namespace Combat {
             if (result.Parried && result.Dodged) OnAttackParriedAndDodged(result);
             else if (result.Parried) OnAttackParried(result);
             else if (result.Dodged) OnAttackDodged(result);
+
+            Dev.Log(Dev.Tags.Combat, $"{result}");
 
             return result;
         }

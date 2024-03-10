@@ -1,6 +1,4 @@
 using System;
-using System.Threading.Tasks;
-using Development;
 
 namespace Combat {
     public partial class Anna : Combatant {
@@ -8,7 +6,7 @@ namespace Combat {
 
         public override Type DefaultControllerType => typeof (PlayerController);
 
-        public int Bullets = 3;
+        public int Bullets = 6;
         public int MaxBullets = 6;
 
         protected override void Setup () {

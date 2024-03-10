@@ -13,10 +13,23 @@ public partial class MiguelController : Controller {
         if (Combatant.Row == 1) {
             Dev.Log(Dev.Tags.BotController, "Back row");
 
+            if (Combatant.Tempo > 1) {
+                Dev.Log(Dev.Tags.BotController, "Checking for dead allies");
+
+                var dead_allies = Combatant.Allies.OnRow(0).Dead.All;
+                if (dead_allies.Count > 0) {
+                    Dev.Log(Dev.Tags.BotController, "Found dead allies");
+                    return Combatant.Actions.Switch.Bind(RNG.SelectFrom(dead_allies));
+                }
+            }
+
+            Dev.Log(Dev.Tags.BotController, "Checking for unswitcherood allies");
+
             var front_allies = Combatant.Allies.OnRow(0);
             var unswitcherood_allies = front_allies.Where(ally => !ally.HasStatusEffect<Miguel.ActionClasses.Switcheroo.SwitcherooEffect>()).ToList();
 
             if (unswitcherood_allies.Count > 0) {
+                Dev.Log(Dev.Tags.BotController, "Found unswitcherood allies");
                 return Combatant.Actions.Switcheroo.Bind(RNG.SelectFrom(unswitcherood_allies));
             }
 

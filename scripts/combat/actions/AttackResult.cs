@@ -2,8 +2,8 @@ namespace Combat {
     public class AttackResult {
         public Combatant Attacker, Defender;
 
-        public int ParryDelta { get; init; }
-        public int DodgeDelta { get; init; }
+        public int ParryDelta { get; set; }
+        public int DodgeDelta { get; set; }
 
         public bool Hit { get => !Parried && !Dodged; }
         public bool Parried { get => ParryDelta > 0; }

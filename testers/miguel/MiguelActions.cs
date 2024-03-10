@@ -83,7 +83,7 @@ public partial class Miguel {
             public override async Task Run () {
                 var target = Targets[0];
 
-                User.Animator.Play(User.Animations.Parry);
+                User.Animator.Play(User.Animations.Seal);
                 target.Combatant.AddStatusEffect(new SwitcherooEffect (User));
             }
 
@@ -97,7 +97,7 @@ public partial class Miguel {
                 }
 
                 public override void OnApplied () {
-                    CombatEvents.AfterDeath.Until(arguments => {
+                    CombatEvents.AfterDeath.Until(async arguments => {
                         if (arguments.Combatant == Caster) {
                             User.RemoveStatusEffect(this);
                             return true;
@@ -106,22 +106,21 @@ public partial class Miguel {
                         return false;
                     });
 
-                    CombatEvents.BeforeAttack.Until(arguments => {
+                    CombatEvents.BeforeAttack.Until(async arguments => {
                         if (Caster.IsDead || !User.HasStatusEffect(this)) return true;
 
                         if (arguments.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
                             return false;
                         }
                         else {
-                            InteractionManager.AddQueueEvent(async () => {
-                                await Positioner.SwitchCombatants(User, Caster);
-                                Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
-                                Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
-                                
-                                foreach (var combatant in Battle.Combatants) {
-                                    combatant.RemoveStatusEffectIf<SwitcherooEffect>(effect => effect.Caster == Caster);
-                                }
-                            });
+                            await Positioner.SwitchCombatants(User, Caster);
+                            Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
+                            Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
+                            
+                            foreach (var combatant in Battle.Combatants) {
+                                combatant.RemoveStatusEffectIf<SwitcherooEffect>(effect => effect.Caster == Caster);
+                            }
+
                             return true;
                         }
                     });

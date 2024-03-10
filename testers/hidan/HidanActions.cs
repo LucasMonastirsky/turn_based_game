@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utils;
 
 namespace Combat {
     public partial class Hidan {
@@ -13,6 +14,7 @@ namespace Combat {
             public ActionClasses.Stab Stab;
             public ActionClasses.Sweep Sweep;
             public ActionClasses.Charge Charge;
+            public ActionClasses.Unleash Unleash;
 
             public CommonActions.Move Move;
             public CommonActions.Switch Switch;
@@ -72,7 +74,7 @@ namespace Combat {
 
                 public BasicAttackOptions AttackOptions = new () {
                     HitRollTags = new string [] { "Attack", "Melee", "Armed" },
-                    ParryNegation = 4,
+                    ParryNegation = 0,
                     DodgeNegation = 1,
                 };
 
@@ -95,12 +97,11 @@ namespace Combat {
                     if (!first_attack.Parried) {
                         await Timing.Delay();
                         User.Play(User.Animations.Sweeps[1]);
-                        await User.Attack(real_targets[1], AttackOptions, async result => {
-                            if (result.Hit) {
-                                var damage = User.Roll(6, "Damage", "Melee", "Armed");
-                                real_targets[1].Combatant.Damage(damage, new string [] { "Melee" });
-                            }
-                        });
+                        var second_attack = await User.Attack(real_targets[1], AttackOptions);
+                        if (second_attack.Hit) {
+                            var damage = User.Roll(6, "Damage", "Melee", "Armed");
+                            real_targets[1].Combatant.Damage(damage, new string [] { "Melee" });
+                        }
                     }
                 }
             }
@@ -150,6 +151,76 @@ namespace Combat {
                     foreach (var modifier in modifiers) {
                         User.RemoveRollModifier(modifier);
                     }
+                }
+            }
+
+            public class Impatience : CombatAction {
+                public override string Name => "Impatience";
+                public override int TempoCost { get; set; } = 1;
+
+                public override bool IsAvailable () => User.Row == 1;
+
+                public new Hidan User => base.User as Hidan;
+                public Impatience (Hidan user) : base (user) {}
+
+                public override async Task Run () {
+                    User.AddStatusEffect(new Rage(2));
+                    await Timing.Delay();
+                }
+            }
+
+            public class Unleash : CombatAction {
+                public override string Name => "Unleash";
+                public override int TempoCost { get; set; } = 3;
+
+                public override bool IsAvailable () => User.Row == 0 && User.GetStatusEffect<Rage>()?.Level >= 10;
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    CommonTargetSelectors.Melee,
+                };
+
+                public new Hidan User => base.User as Hidan;
+                public Unleash (Hidan user) : base (user) {}
+
+                BasicAttackOptions attack_options = new () {
+                    HitRollTags = new string [] { "Attack", "Melee", "Armed", },
+                    ParryNegation = 2,
+                    DodgeNegation = 2,
+                };
+                
+                public override async Task Run () {
+                    var target = Targets[0];
+
+                    await User.DisplaceToMeleeDistance(target);
+
+                    for (var i = 0; i < 3; i++) {
+                        if (i == 0) User.Play(User.Animations.Stab);
+                        if (i == 1) User.Play(User.Animations.Sweeps[0]);
+                        if (i == 2) User.Play(User.Animations.Sweeps[1]);
+
+                        await User.Attack(target, attack_options, async result => {
+                            if (result.Hit) {
+                                var damage = User.Roll(6, "Damage", "Melee", "Armed");
+                                target.Combatant.Damage(damage, new [] { "Cut" });
+                            }
+                        });
+
+                        await Timing.Delay();
+                    }
+
+                    User.Play(User.Animations.Punch);
+                    await User.Attack(target, attack_options, async result => {
+                        if (result.Hit) {
+                            var damage = User.Roll(4, "Damage", "Melee", "Unarmed");
+                            target.Combatant.Damage(damage, new [] { "Cut" });
+
+                            var switchers = target.Combatant.Allies.OnRow(1).Where(combatant => combatant.CanSwitch).ToList();
+                            if (switchers.Count > 0) {
+                                await target.Combatant.SwitchPlaces(RNG.SelectFrom(switchers));
+                            }
+                        }
+                    });
+
+                    User.RemoveStatusEffect<Rage>();
                 }
             }
         }

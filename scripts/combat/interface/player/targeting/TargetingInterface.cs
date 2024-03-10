@@ -29,7 +29,7 @@ public partial class TargetingInterface : Node2D {
 		CombatPlayerInterface.HideActionList();
 
 		var cancel = new TaskCompletionSource();
-		AsyncInput.Cancel.Once(() => {
+		AsyncInput.Cancel.Once(async () => {
 			cancel.SetResult();
 		});
 
@@ -62,7 +62,7 @@ public partial class TargetingInterface : Node2D {
 
 	public static async Task<CombatTarget> SelectPosition (List<CombatTarget> targets) {
 		var cancel = new TaskCompletionSource();
-		AsyncInput.Cancel.Once(() => {
+		AsyncInput.Cancel.Once(async () => {
 			cancel.SetResult();
 		});
 
