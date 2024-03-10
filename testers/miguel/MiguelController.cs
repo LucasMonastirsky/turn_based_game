@@ -14,6 +14,11 @@ public partial class MiguelController : Controller {
             Dev.Log(Dev.Tags.BotController, "Back row");
 
             var front_allies = Combatant.Allies.OnRow(0);
+            var unswitcherood_allies = front_allies.Where(ally => !ally.HasStatusEffect<Miguel.ActionClasses.Switcheroo.SwitcherooEffect>()).ToList();
+
+            if (unswitcherood_allies.Count > 0) {
+                return Combatant.Actions.Switcheroo.Bind(RNG.SelectFrom(unswitcherood_allies));
+            }
 
             if (Combatant.CanMove) {
                 Dev.Log(Dev.Tags.BotController, "Can move");

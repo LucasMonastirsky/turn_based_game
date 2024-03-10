@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Development;
 using Utils;
@@ -16,6 +17,8 @@ namespace Combat {
 
             if (previous_health > 0 && IsDead) CombatEvents.AfterDeath.Trigger(new () { Combatant = this });
 
+            Play(CommonSounds.SwordWound); // TODO: add condition via tags
+
             return value;
         }
 
@@ -25,12 +28,14 @@ namespace Combat {
 
         protected virtual void OnAttackParried (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Parry);
+            Play(CommonSounds.SwordClash);
         }
         protected virtual void OnAttackDodged (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Dodge);
+            Play(CommonSounds.Woosh);
         }
         protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
-            OnAttackDodged(attack_result);
+            OnAttackParried(attack_result);
         }
                     
         public class BasicAttackOptions {

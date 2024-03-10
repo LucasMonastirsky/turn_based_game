@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -11,6 +12,7 @@ namespace Combat {
         public class ActionStore {
             public ActionClasses.Stab Stab;
             public ActionClasses.Sweep Sweep;
+            public ActionClasses.Charge Charge;
 
             public CommonActions.Move Move;
             public CommonActions.Switch Switch;
@@ -99,6 +101,54 @@ namespace Combat {
                                 real_targets[1].Combatant.Damage(damage, new string [] { "Melee" });
                             }
                         });
+                    }
+                }
+            }
+        
+            public class Charge : CombatAction {
+                public override string Name => "Charge";
+                public override int TempoCost { get; set; } = 2;
+
+                public override bool IsAvailable() {
+                    return User.Row == 1;
+                }
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new (TargetType.Single) {
+                        Side = SideSelector.Same,
+                        Row = 0,
+                        Validator = (target, user, previous_targets) => target.Combatant.CanMove,
+                    }
+                };
+
+                public new Hidan User => base.User as Hidan;
+                public Charge (Hidan user) : base (user) {}
+
+                public override async Task Run () {
+                    var ally = Targets[0];
+                    var enemies = new List<CombatTarget> ();
+
+                    // TODO: make Side into class?
+                    var opposite_slot = ally.Position.OppositeSide;
+
+                    if (opposite_slot.Combatant != null) enemies = new () { opposite_slot.ToTarget() };
+                    else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null && x.Combatant.IsAlive).Select(x => x.ToTarget()).ToList();
+
+                    User.MoveTo(Targets[0].Position);
+
+                    var modifiers =  new RollModifier [] {
+                        User.AddRollModifier(new (this, "Attack") { Advantage = 1 }),
+                        User.AddRollModifier(new (this, "Damage") { Advantage = -1 }),
+                    };
+
+                    if (enemies.Count == 1) {
+                        await User.Actions.Stab.Act(enemies[0]);
+                    }
+                    else {
+                        await User.Actions.Sweep.Act(enemies[0].Position with { Slot = ally.Slot });
+                    }
+
+                    foreach (var modifier in modifiers) {
+                        User.RemoveRollModifier(modifier);
                     }
                 }
             }

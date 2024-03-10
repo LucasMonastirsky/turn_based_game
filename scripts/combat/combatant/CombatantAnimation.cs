@@ -1,3 +1,5 @@
+using Godot;
+
 namespace Combat {
     public partial class Combatant {
         protected CombatAnimator Animator;
@@ -18,6 +20,11 @@ namespace Combat {
 
         public void Play (SimpleSprite sprite) {
             Animator.Play(sprite);
+        }
+
+        public void Play (AudioStream audio) {
+            Node.AudioPlayer.Stream = audio;
+            Node.AudioPlayer.Play();
         }
 
         public virtual void ResetAnimation () {

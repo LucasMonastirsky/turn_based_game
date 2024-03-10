@@ -21,7 +21,10 @@ public partial class CombatantDisplay : Node2D {
     }
 
     public void RemoveStatusEffect (StatusEffect effect) {
-        EffectLabels.Remove(effect.Name);
+        if (EffectLabels.ContainsKey(effect.Name)) {
+            EffectLabels[effect.Name].QueueFree();
+            EffectLabels.Remove(effect.Name);
+        }
     }
 
     public override void _Ready () {
@@ -41,7 +44,7 @@ public partial class CombatantDisplay : Node2D {
         Position = position with { Y = position.Y - 40, X = position.X - 40 };
 
         foreach (var kvp in EffectLabels) {
-            kvp.Value.Text = User.StatusEffects.Find(x => x.Name == kvp.Key).ToString();
+            kvp.Value.Text = User.StatusEffects.Find(x => x.Name == kvp.Key)?.ToString();
         }
     }
 

@@ -36,7 +36,8 @@ namespace Combat {
                         CombatantDisplayManager.Hide();
                         ActiveCombatant.Tempo -= CurrentAction.TempoCost;
                         await CurrentAction.Act();
-                        await Timing.Delay();
+
+                        if (!IsPassQueued) await Timing.Delay();
 
                         if (LastAttack != null) {
                             if (LastAttack.AllowRiposte && !LastAttack.Defender.IsDead) {
@@ -69,8 +70,7 @@ namespace Combat {
                 await InteractionManager.ResetCombatants();
 
                 do {
-                    turn_index++;
-                    if (turn_index >= Combatants.Count) turn_index = 0;
+                    if (++turn_index >= Combatants.Count) turn_index = 0;
                 }
                 while (Combatants[turn_index].IsDead);
             }

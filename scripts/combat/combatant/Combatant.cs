@@ -30,7 +30,7 @@ namespace Combat {
         public CombatantNode Node;
 
         public Combatant () {
-            Node = new ();
+            Node = new () { Name = Name };
             Animator = Node.Animator;
         }
     }

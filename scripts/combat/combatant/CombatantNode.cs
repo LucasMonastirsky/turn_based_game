@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-using Development;
 using Godot;
 
 namespace Combat {
     public partial class CombatantNode : Node2D {
         public CombatAnimator Animator;
+        public AudioStreamPlayer AudioPlayer;
 
         private double movement_duration = (double) Timing.MoveDuration / 1000; 
         private bool moving = false;
@@ -15,7 +15,10 @@ namespace Combat {
         public CombatantNode () {
             Battle.Node.AddChild(this);
             Animator = new CombatAnimator ();
+            AudioPlayer = new AudioStreamPlayer ();
+            AudioPlayer.VolumeDb = -6;
             AddChild(Animator);
+            AddChild(AudioPlayer);
         }
 
         public override void _Process (double delta) {

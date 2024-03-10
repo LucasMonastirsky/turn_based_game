@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Combat;
 
 public partial class Miguel : Combatant {
@@ -9,6 +8,8 @@ public partial class Miguel : Combatant {
     protected override void Setup () {
         base.Setup();
         Actions = new ActionStore(this);
+
+        AddRollModifier(new RollModifier(this, "Parry") { Advantage = 0, Bonus = 0 });
     }
 
     public override CombatAction GetRiposte (AttackResult attack_result) {
@@ -19,11 +20,8 @@ public partial class Miguel : Combatant {
         return null;
     }
 
-    protected override void OnAttackParried(AttackResult attack_result) {
-		Animator.Play(Animations.Parry);
-    }
-
     protected override void OnAttackDodged(AttackResult attack_result) {
         Animator.Play(Animations.Dodge);
+        Play(CommonSounds.Woosh);
     }
 }

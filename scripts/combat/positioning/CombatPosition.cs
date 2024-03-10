@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace Combat {
@@ -11,6 +12,20 @@ namespace Combat {
 
         public CombatTarget ToTarget () => new CombatTarget (this);
 
+        public Combatant Combatant => Positioner.GetSlotData(this).Combatant;
+
+        public CombatPosition OppositeSide => this with { Side = (Side) ((int) Side * -1) };
+
+        public List<CombatPosition> Neighbours {
+            get {
+                var result = new List<CombatPosition> ();
+
+                if (Slot > 0) result.Add(this with { Slot = Slot - 1 });
+                if (Slot < 4) result.Add(this with { Slot = Slot + 1 });
+
+                return result;
+            }
+        }
         public override string ToString () {
             return $"{(Side == Side.Left ? "L" : "R")}{(Row == 0 ? "F" : "R")}{Slot}"; 
         }

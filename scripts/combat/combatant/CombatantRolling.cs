@@ -51,10 +51,12 @@ namespace Combat {
             return rolls[0] + bonus;
         }
 
-        public void AddRollModifier (RollModifier roll_modifier) {
+        public RollModifier AddRollModifier (RollModifier roll_modifier) {
             if (FindRollModifierIndex(roll_modifier) > -1) Dev.Error("Trying to add modifier that already exists");
             
             RollModifiers.Add(roll_modifier);
+
+            return roll_modifier;
         }
 
         public void EditRollModifier (RollModifier roll_modifier) {

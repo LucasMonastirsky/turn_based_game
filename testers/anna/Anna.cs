@@ -8,7 +8,7 @@ namespace Combat {
 
         public override Type DefaultControllerType => typeof (PlayerController);
 
-        public int Bullets = 6;
+        public int Bullets = 3;
         public int MaxBullets = 6;
 
         protected override void Setup () {

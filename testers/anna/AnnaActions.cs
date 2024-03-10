@@ -86,6 +86,7 @@ namespace Combat {
 
                 public override async Task Run() { // TODO: implement event to dynamically add mods to attacks
                     User.Play(User.Animations.Shoot);
+                    User.Play(User.Sounds.Cock);
 
                     foreach (var combatant in Battle.Combatants) {
                         combatant.RemoveStatusEffectIf<LockedOn>(effect => effect.Caster == User);
@@ -135,6 +136,7 @@ namespace Combat {
                     var target = Targets[0];
 
                     User.Animator.Play(User.Animations.Shoot);
+                    User.Play(User.Sounds.Shot);
                     User.Bullets -= 1;
 
                     var locked_on_modifier = new RollModifier (User.Actions.Aim, "Attack") { Advantage = 1 }; // TODO: do this properly
@@ -165,6 +167,17 @@ namespace Combat {
 
                 public override async Task Run () {
                     User.Animator.Play(User.Animations.Reload);
+                    
+                    var step_count = User.MaxBullets - User.Bullets + 2;
+                    if (step_count > Amount + 2) step_count = Amount + 2;
+
+                    for (var i = 0; i < step_count; i++) {
+                        if (i == 0 || i == step_count - 1) User.Play(User.Sounds.ReloadStart);
+                        else User.Play(User.Sounds.ReloadShell);
+
+                        if (i < step_count - 1) await Timing.Delay((float) 1/step_count);
+                    }
+
                     User.Bullets += Amount;
                     if (User.Bullets > User.MaxBullets) User.Bullets = User.MaxBullets;
                 }
@@ -210,6 +223,7 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
                     User.Play(User.Animations.Shoot);
+                    User.Play(User.Sounds.Shot);
                     User.Bullets -= 1;
 
                     var result = await User.Attack(target, AttackOptions);
