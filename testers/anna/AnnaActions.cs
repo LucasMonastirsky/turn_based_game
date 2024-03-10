@@ -84,7 +84,9 @@ namespace Combat {
                 public new Anna User => base.User as Anna;
                 public Aim (Anna user) : base (user) {}
 
-                public override async Task Run() { // TODO: implement event to dynamically add mods to attacks
+                public override async Task Run() {
+                    // TODO: implement event to dynamically add mods to attacks
+                    // TODO: add OnMove and OnActionStart events
                     User.Play(User.Animations.Shoot);
                     User.Play(User.Sounds.Cock);
 

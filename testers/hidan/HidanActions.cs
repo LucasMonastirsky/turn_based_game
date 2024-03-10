@@ -15,6 +15,7 @@ namespace Combat {
             public ActionClasses.Sweep Sweep;
             public ActionClasses.Charge Charge;
             public ActionClasses.Unleash Unleash;
+            public ActionClasses.Impatience Impatience;
 
             public CommonActions.Move Move;
             public CommonActions.Switch Switch;

@@ -7,7 +7,7 @@ namespace Combat {
         public abstract string Name { get; }
 
         public virtual bool Stackable { get; protected set; } = false;
-        public int Level { get; set; } = 0;
+        public virtual int Level { get; set; } = 0;
 
         public Combatant User { get; set; }
 

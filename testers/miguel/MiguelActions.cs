@@ -56,7 +56,7 @@ public partial class Miguel {
                     if (result.Hit) {
                         var damage_roll = User.Roll(8, new string [] { "Damage" });
                         target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
-                        target.Combatant.AddStatusEffect(new Poison(1));
+                        target.Combatant.AddStatusEffect(new Poison(3));
                     }
                 });
             }

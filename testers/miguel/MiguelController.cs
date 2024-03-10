@@ -13,7 +13,7 @@ public partial class MiguelController : Controller {
         if (Combatant.Row == 1) {
             Dev.Log(Dev.Tags.BotController, "Back row");
 
-            if (Combatant.Tempo > 1) {
+            if (Combatant.Tempo > 1 && Combatant.CanMove) {
                 Dev.Log(Dev.Tags.BotController, "Checking for dead allies");
 
                 var dead_allies = Combatant.Allies.OnRow(0).Dead.All;

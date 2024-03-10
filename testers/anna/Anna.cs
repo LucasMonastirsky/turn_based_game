@@ -30,17 +30,25 @@ namespace Combat {
             public override string Name => "The Shakes";
             public override bool Stackable => true;
 
+            private int _level;
+            public override int Level {
+                get => _level;
+                set {
+                    _level = value;
+                    RollModifier.Bonus = -value;
+                }
+            }
+
             public RollModifier RollModifier { get; private set; }
 
             public override void OnApplied() {
-                Level = 1;
-                RollModifier = new (this, "Attack", "Shot") { Bonus = -Level };
+                RollModifier = new (this, "Attack", "Shot");
                 User.AddRollModifier(RollModifier);
+                Level = 1;
             }
 
             public override void Stack (StatusEffect new_effect) {
                 Level++;
-                RollModifier.Bonus = -Level;
             }
         }
     }

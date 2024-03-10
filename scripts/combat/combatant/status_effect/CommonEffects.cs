@@ -21,14 +21,12 @@ namespace Combat {
 
         public override void Tick () {
             InteractionManager.AddQueueEvent(async () => {
-                User.Damage(5, new [] { "Poison" });
+                User.Damage(Level--, new [] { "Poison" });
+
+                if (Level <= 0) {
+                    User.RemoveStatusEffect(Name);
+                }
             });
-
-            Level--;
-
-            if (Level <= 0) {
-                User.RemoveStatusEffect(Name);
-            }
         }
     }
 
