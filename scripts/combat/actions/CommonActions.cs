@@ -7,10 +7,6 @@ namespace Combat {
             public override string Name { get => "Move"; }
             public override int TempoCost { get; set; } = 1;
 
-            public override bool IsAvailable() {
-                return User.CanMove;
-            }
-
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new TargetSelector (TargetType.Position) {
                     Side = SideSelector.Same,
@@ -19,6 +15,10 @@ namespace Combat {
                         else return user.CanMoveTo(target.Position);
                     }
                 },
+            };
+
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.CanMove,
             };
 
             public Move (Combatant user) : base (user) {}
@@ -34,15 +34,15 @@ namespace Combat {
             public override string Name => "Switch";
             public override int TempoCost { get; set; } = 2;
 
-            public override bool IsAvailable () {
-                return User.CanMove;
-            }
-
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new (TargetType.Single) {
                     Side = SideSelector.Same,
                     Validator = (target, user, previous_targets) => target.Combatant.CanSwitch,
                 }
+            };
+
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.CanMove,
             };
 
             public Switch (Combatant user) : base (user) {}

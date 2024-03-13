@@ -35,9 +35,10 @@ namespace Combat {
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
-                public override bool IsAvailable () {
-                    return User.Row == 0;
-                }
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.FrontRow,
+                };
 
                 public new Anna User => base.User as Anna;
                 public Kick (Anna user) : base (user) {}
@@ -77,9 +78,9 @@ namespace Combat {
                     new (TargetType.Single) { Side = SideSelector.Opposite, }
                 };
 
-                public override bool IsAvailable () {
-                    return User.Row != 0;
-                }
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
 
                 public new Anna User => base.User as Anna;
                 public Aim (Anna user) : base (user) {}
@@ -121,9 +122,7 @@ namespace Combat {
                     new (TargetType.Single) { Side = SideSelector.Opposite, },
                 };
 
-                public override bool IsAvailable() {
-                    return User.Bullets > 0;
-                }
+                public override bool IsAvailable => base.IsAvailable && User.Bullets > 0;
 
                 public new Anna User => base.User as Anna;
                 public Shoot (Anna user) : base (user) {}
@@ -162,6 +161,7 @@ namespace Combat {
 
                 public override int TempoCost { get; set; } = 1;
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
+                public override bool IsAvailable => base.IsAvailable && User.Bullets < User.MaxBullets;
 
                 public new Anna User => base.User as Anna;
                 public Reload (Anna user) : base (user) {}
@@ -190,7 +190,7 @@ namespace Combat {
                 public override string Name => "Smoke";
                 public override int TempoCost { get; set; } = 1;
 
-                public override bool IsAvailable () => User.HasStatusEffect<TheShakes>();
+                public override bool IsAvailable => base.IsAvailable && User.HasStatusEffect<TheShakes>();
 
                 public new Anna User => base.User as Anna;
                 public Smoke (Anna user) : base (user) {}
@@ -207,7 +207,7 @@ namespace Combat {
                 public override string Name => "Leg-Shot";
                 public override int TempoCost { get; set; } = 1;
 
-                public override bool IsAvailable () => User.Bullets > 0;
+                public override bool IsAvailable => base.IsAvailable && User.Bullets > 0;
 
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, }
@@ -246,6 +246,8 @@ namespace Combat {
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, },
                 };
+
+                public override bool IsAvailable => base.IsAvailable && User.Bullets > 0;
 
                 public new Anna User => base.User as Anna;
                 public Unload (Anna user) : base (user) {}

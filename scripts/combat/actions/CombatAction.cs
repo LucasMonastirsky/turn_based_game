@@ -13,9 +13,9 @@ namespace Combat {
 
         public abstract int TempoCost { get; set; }
 
-        public virtual bool IsAvailable () {
-            return true;
-        }
+        public virtual List<ActionRestrictor> Restrictors { get; init; } = new () {};
+
+        public virtual bool IsAvailable => User.Tempo >= TempoCost && !Restrictors.Any(restrictor => !restrictor.IsValid(this));
 
         public Combatant User { get; protected set; }
 

@@ -38,6 +38,10 @@ namespace Combat {
                     CommonTargetSelectors.Melee,
                 };
 
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.FrontRow,
+                };
+
                 public new Hidan User => base.User as Hidan;
 
                 public Stab (Hidan user) : base (user) {}
@@ -68,6 +72,10 @@ namespace Combat {
 
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     new (TargetType.Double) { Side = SideSelector.Opposite, Row = 0, VerticalRange = 1 }
+                };
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.FrontRow,
                 };
                 
                 public new Hidan User => base.User as Hidan;
@@ -111,15 +119,17 @@ namespace Combat {
                 public override string Name => "Charge";
                 public override int TempoCost { get; set; } = 2;
 
-                public override bool IsAvailable() {
-                    return User.Row == 1;
-                }
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     new (TargetType.Single) {
                         Side = SideSelector.Same,
                         Row = 0,
                         Validator = (target, user, previous_targets) => target.Combatant.CanMove,
                     }
+                };
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                    ActionRestrictors.CanMove,
                 };
 
                 public new Hidan User => base.User as Hidan;
@@ -159,7 +169,9 @@ namespace Combat {
                 public override string Name => "Impatience";
                 public override int TempoCost { get; set; } = 1;
 
-                public override bool IsAvailable () => User.Row == 1;
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
 
                 public new Hidan User => base.User as Hidan;
                 public Impatience (Hidan user) : base (user) {}
@@ -174,10 +186,15 @@ namespace Combat {
                 public override string Name => "Unleash";
                 public override int TempoCost { get; set; } = 3;
 
-                public override bool IsAvailable () => User.Row == 0 && User.GetStatusEffect<Rage>()?.Level >= 10;
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.FrontRow,
+                };
+
+                public override bool IsAvailable => base.IsAvailable && User.GetStatusEffect<Rage>()?.Level >= 10;
 
                 public new Hidan User => base.User as Hidan;
                 public Unleash (Hidan user) : base (user) {}

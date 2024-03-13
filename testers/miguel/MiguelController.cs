@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Combat;
@@ -8,7 +9,16 @@ public partial class MiguelController : Controller {
     private new Miguel Combatant => base.Combatant as Miguel;
 
     public override async Task<CombatAction> RequestAction () {
-        await Timing.Delay();
+        //await Timing.Delay();
+
+        if (Combatant.Tempo >= 3 && Combatant.Row == 0) {
+            Dev.Log(Dev.Tags.BotController, "Checking for targets for combo");
+
+            var targets = Combatant.Enemies.OnRow(0).Alive.Where(x => Math.Abs(x.Slot - Combatant.Slot) < 2).ToList();
+
+            if (targets.Count > 0) return Combatant.Actions.Combo.Bind(RNG.SelectFrom(targets));
+            else Dev.Log(Dev.Tags.BotController, "No enemies in front row");
+        } 
 
         if (Combatant.Row == 1) {
             Dev.Log(Dev.Tags.BotController, "Back row");
@@ -23,14 +33,17 @@ public partial class MiguelController : Controller {
                 }
             }
 
-            Dev.Log(Dev.Tags.BotController, "Checking for unswitcherood allies");
-
             var front_allies = Combatant.Allies.OnRow(0);
-            var unswitcherood_allies = front_allies.Where(ally => !ally.HasStatusEffect<Miguel.ActionClasses.Switcheroo.SwitcherooEffect>()).ToList();
 
-            if (unswitcherood_allies.Count > 0) {
-                Dev.Log(Dev.Tags.BotController, "Found unswitcherood allies");
-                return Combatant.Actions.Switcheroo.Bind(RNG.SelectFrom(unswitcherood_allies));
+            if (Combatant.Tempo > 1) {
+                Dev.Log(Dev.Tags.BotController, "Checking for unswitcherood allies");
+
+                var unswitcherood_allies = front_allies.Where(ally => !ally.HasStatusEffect<Miguel.ActionClasses.Switcheroo.SwitcherooEffect>()).ToList();
+
+                if (unswitcherood_allies.Count > 0) {
+                    Dev.Log(Dev.Tags.BotController, "Found unswitcherood allies");
+                    return Combatant.Actions.Switcheroo.Bind(RNG.SelectFrom(unswitcherood_allies));
+                }
             }
 
             if (Combatant.CanMove) {
@@ -69,7 +82,7 @@ public partial class MiguelController : Controller {
         else {
             Dev.Log(Dev.Tags.BotController, "Front row");
 
-            var targets = Battle.Combatants.OnOppositeSide(Combatant.Side).OnRow(0).Alive.All;
+            var targets = Battle.Combatants.OnOppositeSide(Combatant.Side).OnRow(0).Alive.Where(x => Math.Abs(x.Slot - Combatant.Slot) < 2).ToList();;
 
             if (Combatant.Tempo < 2 || targets.Count < 1) return null;
             else return Combatant.Actions.Swing.Bind(RNG.SelectFrom(targets));

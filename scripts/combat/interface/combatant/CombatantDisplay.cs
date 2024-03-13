@@ -17,7 +17,7 @@ public partial class CombatantDisplay : Node2D {
             Scale = new Vector2 { X = 0.4f, Y = 0.4f },
         };
         AddChild(label);
-        try { EffectLabels.Add(effect.Name, label); } catch {}
+        EffectLabels.TryAdd(effect.Name, label);
     }
 
     public void RemoveStatusEffect (StatusEffect effect) {

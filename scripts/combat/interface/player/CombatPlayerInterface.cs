@@ -40,7 +40,7 @@ namespace Combat {
                 current.action_button_container.AddChild(button);
                 button.Action = action;
                 button.CompletionSource = completion_source;
-                button.Disabled = !action.IsAvailable() || action.TempoCost > combatant.Tempo;
+                button.Disabled = !action.IsAvailable;
                 current.buttons.Add(button);
             }
 
@@ -64,7 +64,7 @@ namespace Combat {
                 var button = current.action_button_scene.Instantiate<CombatPlayerInterfaceActionButton>();
                 current.action_button_container.AddChild(button);
                 button.Action = action;
-                button.Disabled = !action.IsAvailable() || action.TempoCost > combatant.Tempo;
+                button.Disabled = !action.IsAvailable;
                 current.buttons.Add(button);
             }
 

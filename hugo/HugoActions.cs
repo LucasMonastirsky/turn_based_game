@@ -29,12 +29,12 @@ public partial class Hugo {
             public override string Name { get => "Swing"; }
             public override int TempoCost { get; set; } = 2;
 
-            public override bool IsAvailable () {
-                return User.Row == 0;
-            }
-
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 CommonTargetSelectors.Melee,
+            };
+
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.FrontRow,
             };
 
             public new Hugo User { get => base.User as Hugo; }
@@ -74,6 +74,10 @@ public partial class Hugo {
                 new (TargetType.Single) { Side = SideSelector.Opposite, }
             };
 
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.BackRow,
+            };
+
             protected BasicAttackOptions attack_options = new BasicAttackOptions () {
                 HitRollTags = new string [] { "Attack", "Melee" },
                 ParryNegation = 4,
@@ -97,10 +101,6 @@ public partial class Hugo {
             public override string Name => "Shove";
             public override int TempoCost { get; set; } = 2;
 
-            public override bool IsAvailable () {
-                return User.Row == 0;
-            }
-
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 CommonTargetSelectors.Melee,
                 new (TargetType.Position) {
@@ -112,6 +112,10 @@ public partial class Hugo {
                         && Positioner.IsValidMovement(targets[0].Combatant, target.Position, true)
                     ),
                 },
+            };
+
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.FrontRow,
             };
 
             public new Hugo User => base.User as Hugo;

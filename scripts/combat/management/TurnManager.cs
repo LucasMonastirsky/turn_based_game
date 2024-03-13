@@ -30,6 +30,8 @@ namespace Combat {
                     CurrentAction = await ActiveCombatant.Controller.RequestAction();
 
                     if (CurrentAction != null) {
+                        if (!CurrentAction.PassesSelectors()) Dev.Error($"{ActiveCombatant}.{CurrentAction} does not pass selectors");
+
                         State = "Resolving";
                         Dev.Log(Dev.Tags.CombatManagement, $"Starting action {CurrentAction}");
 

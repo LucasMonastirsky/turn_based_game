@@ -30,12 +30,11 @@ public partial class Miguel {
             public override string Name => "Swing";
             public override int TempoCost { get; set; } = 2;
 
-            public override bool IsAvailable () {
-                return User.Row == 0;
-            }
-
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 CommonTargetSelectors.Melee,
+            };
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.FrontRow,
             };
 
             public new Miguel User => base.User as Miguel;
@@ -54,8 +53,8 @@ public partial class Miguel {
 
                 await User.Attack(target, options, async result => {
                     if (result.Hit) {
-                        var damage_roll = User.Roll(8, new string [] { "Damage" });
-                        target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
+                        var damage_roll = User.Roll(4, new string [] { "Damage" });
+                        target.Combatant.Damage(damage_roll + 2, new string [] { "Cut" });
                         target.Combatant.AddStatusEffect(new Poison(3));
                     }
                 });
@@ -66,7 +65,9 @@ public partial class Miguel {
             public override string Name => "Switcheroo";
             public override int TempoCost { get; set; } = 1;
 
-            public override bool IsAvailable () => User.Row == 1;
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.BackRow,
+            };
 
             public new Miguel User => base.User as Miguel;
 
@@ -138,6 +139,10 @@ public partial class Miguel {
 
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 CommonTargetSelectors.Melee,
+            };
+
+            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                ActionRestrictors.FrontRow,
             };
 
             public BasicAttackOptions [] AttackOptions { get; protected set; } = new [] {
