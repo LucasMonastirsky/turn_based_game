@@ -134,7 +134,7 @@ namespace Combat {
             for (var side = -1; side < 2; side += 2) {
                 for (var row = 0; row < MAX_ROW_COUNT; row++ ) {
                     for (var slot = 0; slot < ROW_SLOT_COUNT; slot++ ) {
-                        targets.Add(new CombatTarget(new CombatPosition () { Side = (Side) side, Row = row, Slot = slot }));
+                        targets.Add(new CombatTarget(new CombatPosition () { Side = new Side(side), Row = row, Slot = slot }));
                     }
                 }
             }

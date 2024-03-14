@@ -108,7 +108,7 @@ namespace Combat {
             var predicates = new List<Func<bool>> ();
 
             if (selector.Type == TargetType.Single) predicates.Add(() => target.Combatant != null);
-            if (selector.Side != null) predicates.Add(() => (int) User.Side * (int) selector.Side == (int) target.Side);
+            if (selector.Side != null) predicates.Add(() => User.Side.Value * (int) selector.Side == target.Side.Value);
             if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
             if (selector.VerticalRange != null) predicates.Add(() => Math.Abs(User.Slot - target.Slot) <= selector.VerticalRange);
             if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, Targets));
