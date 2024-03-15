@@ -42,7 +42,9 @@ namespace Combat {
                     if (arguments.Attacker == User && arguments.Result.Parried && !arguments.Result.Dodged) {
                         var delta = Level - arguments.Result.ParryDelta;
                         if (delta > 0) {
+                            await Timing.Delay();
                             arguments.Result.Defender.Damage(delta, new string [] { "Cut" }); // TODO: add way to check damage tags
+                            arguments.Result.ParryNegation += Level;
                         }
                     }
                 };

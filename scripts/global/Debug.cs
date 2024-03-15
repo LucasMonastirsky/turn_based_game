@@ -5,7 +5,9 @@ using Godot;
 
 namespace Development {
     public static class Dev {
+        public static bool LogAll = true;
         public static bool IsActive = true;
+        public static bool LogTags = true;
         public static bool LogColor = false;
         public static bool LogDate = false;
         public static bool LogDelta = true;
@@ -32,9 +34,10 @@ namespace Development {
         private static DateTime last_log_time = DateTime.Now;
 
         public static void Log (LogTag tag, string message) {
-            if (tag.Log) {
+            if (LogAll || tag.Log) {
                 var now = DateTime.Now;
                 var delta = (int) (now - last_log_time).TotalMilliseconds;
+                if (LogTags) message = $"{tag.Name}: {message}";
                 if (LogDelta) message = $"(+{Stringer.PadWithZeroes(delta, 3)}) {message}";
                 if (LogDate) message = $"{now:mm:ss:fff} {message}";
                 if (LogColor) message = $"[color=#{tag.Color}]{message}[/color]";

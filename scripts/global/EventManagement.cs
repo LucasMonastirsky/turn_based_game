@@ -60,6 +60,10 @@ public class EventManager<T> {
     public void Remove (Func<T, Task> handler) {
         if (!once_handlers.Remove(handler)) always_handlers.Remove(handler);
     }
+
+    public void Remove (Func<T, Task<bool>> handler) {
+        until_handlers.Remove(handler);
+    }
 }
 
 public delegate void EmptyDelegate ();

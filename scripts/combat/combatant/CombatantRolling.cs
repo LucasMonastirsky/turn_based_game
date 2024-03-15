@@ -33,25 +33,26 @@ namespace Combat {
             var rolls = new List<int> ();
 
             for (var i = 0; i < Math.Abs(advantage) + 1; i++) {
-                var total = 0;
+                var sum = 0;
 
                 for (var j = 0; j < sides.Length; j++) {
-                    total += RNG.Range(1, sides[j]);
+                    sum += RNG.Range(1, sides[j]);
                 }
 
-                rolls.Add(total);
+                rolls.Add(sum);
             }
 
             if (advantage >= 0) rolls.Sort((x, y) => y - x);
             else rolls.Sort((x, y) => x - y);
 
-            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {Stringer.Join(tags)}: {rolls[0]} + {bonus} ({advantage} advantage)");
+            var total = rolls[0] + bonus;
+            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {Stringer.Join(tags)}: {total} ({rolls[0]}+{bonus}) ({advantage} advantage)");
 
             foreach (var mod in mods) {
                 if (mod.Temporary) RemoveRollModifier(mod);
             }
 
-            return rolls[0] + bonus;
+            return total;
         }
 
         public RollModifier AddRollModifier (RollModifier roll_modifier) {

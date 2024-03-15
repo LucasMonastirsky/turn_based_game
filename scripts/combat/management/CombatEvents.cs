@@ -37,5 +37,6 @@ namespace Combat {
         #endregion
 
         public static EventManager<CombatAction> BeforeAction = new ();
+        public static EventManager<CombatAction> AfterAction = new ();
     }
 }

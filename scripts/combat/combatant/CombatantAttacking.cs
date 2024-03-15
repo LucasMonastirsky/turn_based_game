@@ -83,7 +83,7 @@ namespace Combat {
         public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions options) {
             var hit_roll = attacker.Roll(10, options.HitRollModifiers, options.HitRollTags);
             var parry_roll = IsDead ? 0 : Roll(10, new string [] { "Parry" });
-            var dodge_roll = IsDead ? 0 : Roll(10, new string [] { "Dodge" });
+            var dodge_roll = (IsDead || !CanMove) ? 0 : Roll(10, new string [] { "Dodge" });
 
             var result = new AttackResult {
                 Attacker = attacker,
@@ -91,12 +91,14 @@ namespace Combat {
                 HitRoll = hit_roll,
                 ParryRoll = parry_roll,
                 DodgeRoll = dodge_roll,
+                ParryNegation = options.ParryNegation,
+                DodgeNegation = options.DodgeNegation,
             };
 
             if (result.Parried && result.Dodged) OnAttackParriedAndDodged(result);
             else if (result.Parried) OnAttackParried(result);
             else if (result.Dodged) OnAttackDodged(result);
-            else if (result.Missed) Play(StandardAnimations.Idle);
+            else if (result.Missed && IsAlive) Play(StandardAnimations.Idle);
 
             Dev.Log(Dev.Tags.Combat, $"{result}");
 

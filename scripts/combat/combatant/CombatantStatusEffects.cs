@@ -67,8 +67,8 @@ namespace Combat {
             }
         }
 
-        public StatusEffect GetStatusEffect <T> () {
-            return StatusEffects.Find(effect => effect.GetType() == typeof(T));
+        public T GetStatusEffect <T> () where T : StatusEffect {
+            return StatusEffects.Find(effect => effect.GetType() == typeof(T)) as T;
         }
 
         public bool HasStatusEffect (StatusEffect effect) {

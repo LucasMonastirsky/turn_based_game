@@ -57,6 +57,9 @@ namespace Combat {
                         }
 
                         await InteractionManager.ResetCombatants();
+                        await CombatEvents.AfterAction.Trigger(CurrentAction);
+                        await InteractionManager.ResetCombatants();
+
                         CurrentAction = null;
                     }
 

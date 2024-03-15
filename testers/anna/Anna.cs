@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Combat {
     public partial class Anna : Combatant {
@@ -25,6 +26,15 @@ namespace Combat {
 
         public override void OnTurnEnd () {
             AddStatusEffect(new TheShakes ());
+        }
+
+        public override void ResetAnimation() {
+            if (HasStatusEffect<Overwatch>() || Enemies.Any(enemy => enemy.GetStatusEffect<LockedOn>()?.Caster == this)) {
+                Play(Animations.Shoot);
+            }
+            else {
+                Play(Animations.Idle);
+            }
         }
     }
 }

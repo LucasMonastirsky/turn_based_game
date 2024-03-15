@@ -60,13 +60,13 @@ namespace Combat {
                         if (result.Hit) {
                             var damage = User.Roll(10, "Damage", "Melee", "Unarmed");
                             target.Combatant.Damage(damage, new string [] { "Melee", "Unarmed" });
+
+                            if (User.Bullets > 0) {
+                                await Timing.Delay();
+                                await User.Actions.Shoot.Act(target);
+                            }
                         }
                     });
-
-                    if (!result.Dodged && User.Bullets > 0) {
-                        await Timing.Delay();
-                        await User.Actions.Shoot.Act(target);
-                    }
                 }
             }
 
@@ -273,35 +273,8 @@ namespace Combat {
                 public Guard (Anna user) : base (user) {}
 
                 public override async Task Run () {
-                    CombatEvents.BeforeMovement.Until(async movement => {
-                        if (movement.Side == User.Side || !movement.IsIntentional) return false;
-                        else {
-                            if (User.Bullets > 0) {
-                                User.Animator.Play(User.Animations.Shoot);
-                                User.Bullets -= 1;
-
-                                var attack_options = new BasicAttackOptions () {
-                                    HitRollTags = new string [] { "Attack", "Shot" },
-                                    ParryNegation = 10,
-                                    DodgeNegation = 3,
-                                };
-
-                                await User.Attack(movement.Start, attack_options, async result => {
-                                    User.Play(User.Sounds.Shot);
-
-                                    if (result.Hit) {
-                                        var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
-                                        movement.Start.Combatant.Damage(damage_roll, new string [] { "Bullet" });
-                                        movement.Prevent();
-                                    }
-                                });
-
-                                await Timing.Delay();
-                            }
-
-                            return true;
-                        }
-                    });
+                    User.AddStatusEffect(new Overwatch());
+                    TurnManager.PassTurn();
                 }
             }
         }
