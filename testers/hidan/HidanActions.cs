@@ -142,10 +142,12 @@ namespace Combat {
                     // TODO: make Side into class?
                     var opposite_slot = ally.Position.OppositeSide;
 
+                    var movement = await User.MoveTo(Targets[0].Position);
+
+                    if (movement.Prevented) return;
+
                     if (opposite_slot.Combatant != null) enemies = new () { opposite_slot.ToTarget() };
                     else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null && x.Combatant.IsAlive).Select(x => x.ToTarget()).ToList();
-
-                    User.MoveTo(Targets[0].Position);
 
                     var modifiers =  new RollModifier [] {
                         User.AddRollModifier(new (this, "Attack") { Advantage = 1 }),
@@ -228,12 +230,14 @@ namespace Combat {
                     User.Play(User.Animations.Punch);
                     await User.Attack(target, attack_options, async result => {
                         if (result.Hit) {
-                            var damage = User.Roll(4, "Damage", "Melee", "Unarmed");
-                            target.Combatant.Damage(damage, new [] { "Cut" });
+                            var enemy = target.Combatant;
 
-                            var switchers = target.Combatant.Allies.OnRow(1).Where(combatant => combatant.CanSwitch).ToList();
+                            var damage = User.Roll(4, "Damage", "Melee", "Unarmed");
+                            enemy.Damage(damage, new [] { "Cut" });
+
+                            var switchers = enemy.Allies.OnRow(1).Where(combatant => combatant.CanBeMoved).ToList();
                             if (switchers.Count > 0) {
-                                await target.Combatant.SwitchPlaces(RNG.SelectFrom(switchers));
+                                await User.Move(enemy, RNG.SelectFrom(switchers).Position);
                             }
                         }
                     });

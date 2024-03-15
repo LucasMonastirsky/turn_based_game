@@ -1,13 +1,15 @@
 using Utils;
 
 namespace Combat {
-    public abstract class StatusEffect : Identifiable {
+    public abstract class StatusEffect : Source {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }
 
         public virtual bool Stackable { get; protected set; } = false;
         public virtual int Level { get; set; } = 0;
+
+        public bool Removed { get; set; } = false;
 
         public Combatant User { get; set; }
 

@@ -1,6 +1,7 @@
 namespace Combat {
-    public interface Identifiable {
+    public interface Source {
         int Id { get; }
         string Name { get; }
+        Combatant User { get; }
     }
 }

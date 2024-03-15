@@ -43,7 +43,6 @@ namespace Combat {
                         var delta = Level - arguments.Result.ParryDelta;
                         if (delta > 0) {
                             arguments.Result.Defender.Damage(delta, new string [] { "Cut" }); // TODO: add way to check damage tags
-                            arguments.Result.ParryDelta -= Level;
                         }
                     }
                 };

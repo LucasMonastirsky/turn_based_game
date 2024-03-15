@@ -4,7 +4,7 @@ namespace Combat {
         public struct BeforeAttackArguments {
             public Combatant Attacker;
             public CombatTarget Target;
-            public Combatant.BasicAttackOptions Options;
+            public Combatant.BasicAttackOptions Options; // replace this class with an attack class
         }
 
         public static EventManager<BeforeAttackArguments> BeforeAttack = new ();
@@ -30,5 +30,12 @@ namespace Combat {
         }
         public static EventManager<AfterDeathArguments> AfterDeath = new ();
         #endregion
+    
+        public static EventManager<Movement> BeforeMovement = new ();
+
+        #region AfterMovement
+        #endregion
+
+        public static EventManager<CombatAction> BeforeAction = new ();
     }
 }

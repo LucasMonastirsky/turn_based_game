@@ -12,6 +12,7 @@ namespace Combat {
         protected override void Setup () {
             base.Setup();
             Actions = new (this);
+            Tempo = 4;
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {
@@ -24,32 +25,6 @@ namespace Combat {
 
         public override void OnTurnEnd () {
             AddStatusEffect(new TheShakes ());
-        }
-
-        public class TheShakes : StatusEffect {
-            public override string Name => "The Shakes";
-            public override bool Stackable => true;
-
-            private int _level;
-            public override int Level {
-                get => _level;
-                set {
-                    _level = value;
-                    RollModifier.Bonus = -value;
-                }
-            }
-
-            public RollModifier RollModifier { get; private set; }
-
-            public override void OnApplied() {
-                RollModifier = new (this, "Attack", "Shot");
-                User.AddRollModifier(RollModifier);
-                Level = 1;
-            }
-
-            public override void Stack (StatusEffect new_effect) {
-                Level++;
-            }
         }
     }
 }

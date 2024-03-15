@@ -48,7 +48,7 @@ namespace Combat {
             var slot_data = current.Rows[side][row][slot];
 
             if (slot_data.Combatant != null && slot_data.Combatant != combatant) {
-                if (forcible) return slot_data.Combatant.CanSwitch;
+                if (forcible) return slot_data.Combatant.CanBeMoved;
                 else return slot_data.Combatant.CanMove;
             }
             else if (

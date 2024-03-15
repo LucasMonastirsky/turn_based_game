@@ -40,12 +40,14 @@ namespace Combat {
 
             if (effect is null) return;
 
+            effect.Removed = true;
             StatusEffects.Remove(effect);
             effect.OnRemoved();
             Display.RemoveStatusEffect(effect);
         }
 
         public void RemoveStatusEffect (StatusEffect effect) {
+            effect.Removed = true;
             StatusEffects.Remove(effect);
             effect.OnRemoved();
             Display.RemoveStatusEffect(effect);
@@ -53,6 +55,7 @@ namespace Combat {
 
         public void RemoveStatusEffect <T> () {
             var index = StatusEffects.FindIndex(effect => effect.GetType() == typeof(T));
+            StatusEffects[index].Removed = true;
             StatusEffects.RemoveAt(index);
         }
 

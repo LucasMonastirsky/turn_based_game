@@ -16,6 +16,7 @@ namespace Combat {
             public ActionClasses.Reload Reload;
             public ActionClasses.Smoke Smoke;
             public ActionClasses.Unload Unload;
+            public ActionClasses.Guard Guard;
 
             public CommonActions.Move Move;
             public CommonActions.Switch Switch;
@@ -98,19 +99,6 @@ namespace Combat {
                     var enemy = Targets[0].Combatant;
 
                     enemy.AddStatusEffect(new LockedOn(User));
-
-                    CombatEvents.BeforeTurnEnd.Once(async () => {
-                        enemy.RemoveStatusEffect<LockedOn>();
-                    });
-                }
-
-                public class LockedOn : StatusEffect {
-                    public override string Name => "Locked-On";
-                    public Anna Caster;
-
-                    public LockedOn (Anna caster) {
-                        Caster = caster;
-                    }
                 }
             }
 
@@ -127,23 +115,19 @@ namespace Combat {
                 public new Anna User => base.User as Anna;
                 public Shoot (Anna user) : base (user) {}
 
-                public BasicAttackOptions AttackOptions { get; protected set; } = new () {
-                    HitRollTags = new string [] { "Attack", "Shot" },
-                    ParryNegation = 10,
-                    DodgeNegation = 3,
-                };
-
                 public override async Task Run () {
                     var target = Targets[0];
 
                     User.Animator.Play(User.Animations.Shoot);
                     User.Bullets -= 1;
 
-                    var locked_on_modifier = new RollModifier (User.Actions.Aim, "Attack") { Advantage = 1 }; // TODO: do this properly
-                    var locked_on = target.Combatant.GetStatusEffect<Aim.LockedOn>() as Aim.LockedOn;
-                    if (locked_on?.Caster == User) User.AddRollModifier(locked_on_modifier);
+                    var attack_options = new BasicAttackOptions () {
+                        HitRollTags = new string [] { "Attack", "Shot" },
+                        ParryNegation = 10,
+                        DodgeNegation = 3,
+                    };
 
-                    await User.Attack(target, AttackOptions, async result => {
+                    await User.Attack(target, attack_options, async result => {
                         User.Play(User.Sounds.Shot);
 
                         if (result.Hit) {
@@ -151,8 +135,6 @@ namespace Combat {
                             target.Combatant.Damage(damage_roll, new string [] { "Bullet" });
                         }
                     });
-
-                    User.TryRemoveRollModifier(locked_on_modifier);
                 }
             }
         
@@ -217,25 +199,23 @@ namespace Combat {
 
                 public LegShot (Anna user) : base (user) {}
 
-                public BasicAttackOptions AttackOptions = new () {
-                    HitRollTags = new [] { "Attack", "Shot" },
-                    ParryNegation = 10,
-                    DodgeNegation = 1,
-                };
-
                 public override async Task Run () {
                     var target = Targets[0];
                     User.Play(User.Animations.Shoot);
                     User.Play(User.Sounds.Shot);
                     User.Bullets -= 1;
 
-                    var result = await User.Attack(target, AttackOptions);
+                    var result = await User.Attack(target, new () {
+                        HitRollTags = new [] { "Attack", "Shot" },
+                        ParryNegation = 10,
+                        DodgeNegation = 1,
+                    });
 
                     if (result.Hit) {
                         var damage = User.Roll(4, "Damage", "Shot");
                         target.Combatant.Damage(damage, new [] { "Bullet" });
                         target.Combatant.AddStatusEffect(new Immobilized (2));
-                    }
+                    } // TODO: go back to async argument attacks
                 }
             }
         
@@ -257,17 +237,15 @@ namespace Combat {
 
                     User.Play(User.Animations.Shoot);
 
-                    var attack_options = new BasicAttackOptions () {
-                        HitRollTags = new string [] { "Attack", "Shot" },
-                        ParryNegation = 10,
-                        DodgeNegation = 4,
-                    };
-
-                    var hit_modifier = User.AddRollModifier(new (this, "Attack") { Advantage = -1, Bonus = 1 });
+                    var hit_modifier = User.AddRollModifier(new (this, "Attack") { Advantage = -1 });
                     var damage_modifier = User.AddRollModifier(new (this, "Damage") { Advantage = - 1 });
 
                     for (var i = 0; i < User.Bullets; i++) {
-                        var result = await User.Attack(target, attack_options);
+                        var result = await User.Attack(target, new BasicAttackOptions () {
+                            HitRollTags = new string [] { "Attack", "Shot" },
+                            ParryNegation = 10,
+                            DodgeNegation = 4,
+                        });
 
                         User.Play(User.Sounds.Shot);
 
@@ -278,12 +256,52 @@ namespace Combat {
 
                         hit_modifier.Bonus--;
 
-                        await Timing.Delay( 1f / User.Bullets * 2f);
+                        await Timing.Delay(1f / User.Bullets * 2f);
                     }
 
                     User.Bullets = 0;
                     User.RemoveRollModifier(hit_modifier);
                     User.RemoveRollModifier(damage_modifier);
+                }
+            }
+        
+            public class Guard : CombatAction {
+                public override string Name => "Guard";
+                public override int TempoCost { get; set; } = 1;
+
+                public new Anna User => base.User as Anna;
+                public Guard (Anna user) : base (user) {}
+
+                public override async Task Run () {
+                    CombatEvents.BeforeMovement.Until(async movement => {
+                        if (movement.Side == User.Side || !movement.IsIntentional) return false;
+                        else {
+                            if (User.Bullets > 0) {
+                                User.Animator.Play(User.Animations.Shoot);
+                                User.Bullets -= 1;
+
+                                var attack_options = new BasicAttackOptions () {
+                                    HitRollTags = new string [] { "Attack", "Shot" },
+                                    ParryNegation = 10,
+                                    DodgeNegation = 3,
+                                };
+
+                                await User.Attack(movement.Start, attack_options, async result => {
+                                    User.Play(User.Sounds.Shot);
+
+                                    if (result.Hit) {
+                                        var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
+                                        movement.Start.Combatant.Damage(damage_roll, new string [] { "Bullet" });
+                                        movement.Prevent();
+                                    }
+                                });
+
+                                await Timing.Delay();
+                            }
+
+                            return true;
+                        }
+                    });
                 }
             }
         }

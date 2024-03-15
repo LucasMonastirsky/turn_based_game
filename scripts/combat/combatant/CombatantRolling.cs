@@ -6,12 +6,15 @@ using Utils;
 
 namespace Combat {
     public partial class Combatant {
+        public int Roll (int sides, List<RollModifier> modifiers, params string [] tags) {
+            return Roll(new int [] { sides }, modifiers, tags);
+        }
         public int Roll (int sides, params string [] tags) {
-            return Roll(new int [] { sides }, tags);
+            return Roll(new int [] { sides }, new (), tags);
         }
 
-        public int Roll (int [] sides, params string [] tags) {
-            var mods = new List<RollModifier> ();
+        public int Roll (int [] sides, List<RollModifier> modifiers, params string [] tags) {
+            var mods = new List<RollModifier> (modifiers);
 
             foreach (var mod in RollModifiers) {
                 if (mod.Tags.All(tag => tags.Contains(tag))) {
@@ -24,7 +27,7 @@ namespace Combat {
 
             foreach (var mod in mods) {
                 bonus += mod.Bonus;
-                advantage = mod.Advantage;
+                advantage += mod.Advantage;
             }
 
             var rolls = new List<int> ();
@@ -92,9 +95,9 @@ namespace Combat {
             /// </summary>
             public bool Temporary { get; init; } = false;
 
-            public Identifiable Source { get; init; }
+            public Source Source { get; init; }
 
-            public RollModifier (Identifiable source, params string [] tags) {
+            public RollModifier (Source source, params string [] tags) {
                 Source = source;
                 Tags = tags.OrderBy(x => x).ToList();
             }

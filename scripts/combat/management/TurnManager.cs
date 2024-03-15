@@ -32,6 +32,8 @@ namespace Combat {
                     if (CurrentAction != null) {
                         if (!CurrentAction.PassesSelectors()) Dev.Error($"{ActiveCombatant}.{CurrentAction} does not pass selectors");
 
+                        await CombatEvents.BeforeAction.Trigger(CurrentAction);
+
                         State = "Resolving";
                         Dev.Log(Dev.Tags.CombatManagement, $"Starting action {CurrentAction}");
 

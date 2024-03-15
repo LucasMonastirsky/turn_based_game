@@ -108,18 +108,21 @@ public partial class Miguel {
                     });
 
                     CombatEvents.BeforeAttack.Until(async arguments => {
-                        if (Caster.IsDead || !User.HasStatusEffect(this)) return true;
+                        if (Caster.IsDead || Removed) return true;
 
                         if (arguments.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
                             return false;
                         }
                         else {
-                            await Positioner.SwitchCombatants(User, Caster);
-                            Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
-                            Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
-                            
                             foreach (var combatant in Battle.Combatants) {
                                 combatant.RemoveStatusEffectIf<SwitcherooEffect>(effect => effect.Caster == Caster);
+                            }
+
+                            var movement = await Caster.MoveTo(User); // TODO: shouldn't be forceful, add checks
+
+                            if (!movement.Prevented) {
+                                Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
+                                Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
                             }
 
                             return true;

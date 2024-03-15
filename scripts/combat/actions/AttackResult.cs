@@ -2,12 +2,20 @@ namespace Combat {
     public class AttackResult {
         public Combatant Attacker, Defender;
 
-        public int ParryDelta { get; set; }
-        public int DodgeDelta { get; set; }
+        public int ParryNegation { get; init; }
+        public int DodgeNegation { get; init; }
 
-        public bool Hit { get => !Parried && !Dodged; }
-        public bool Parried { get => ParryDelta > 0; }
-        public bool Dodged { get => DodgeDelta > 0; }
+        public int HitRoll { get; init; }
+        public int ParryRoll { get; init; }
+        public int DodgeRoll { get; init; }
+
+        public int ParryDelta => ParryRoll - HitRoll - ParryNegation;
+        public int DodgeDelta => DodgeRoll - HitRoll - DodgeNegation;
+
+        public bool Hit { get => !Missed && !Parried && !Dodged; }
+        public bool Parried { get => !Missed && ParryRoll > 0 && ParryDelta > 0; }
+        public bool Dodged { get => !Missed && DodgeRoll > 0 && DodgeDelta > 0; }
+        public bool Missed => HitRoll < 1;
 
         public bool AllowRiposte { get; set;} = true;
 
@@ -16,7 +24,7 @@ namespace Combat {
             if (Parried && Dodged) return "Parried + Dodged";
             if (Parried) return "Parried";
             if (Dodged) return "Dodged";
-            return "bro what";
+            return "Missed";
         }
     }
 }

@@ -6,7 +6,7 @@ using Development;
 using Utils;
 
 namespace Combat {
-    public abstract class CombatAction : Identifiable {
+    public abstract class CombatAction : Source {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }

@@ -26,7 +26,7 @@ namespace Combat {
             public override async Task Run () {
                 var target = Targets[0];
                 if (target.Combatant != null) target.Combatant.Tempo--;
-                await Positioner.SwitchPosition(User, target.Position);
+                await User.MoveTo(target.Position);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Combat {
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new (TargetType.Single) {
                     Side = SideSelector.Same,
-                    Validator = (target, user, previous_targets) => target.Combatant.CanSwitch,
+                    Validator = (target, user, previous_targets) => target.Combatant.CanBeMoved,
                 }
             };
 
@@ -48,7 +48,7 @@ namespace Combat {
             public Switch (Combatant user) : base (user) {}
 
             public override async Task Run () {
-                await Positioner.SwitchCombatants(User, Targets[0].Combatant);
+                await User.MoveTo(Targets[0], isForceful: true);
             }
         }
 

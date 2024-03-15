@@ -34,12 +34,12 @@ public class EventManager<T> {
         always_handlers.Add(handler);
     }
 
-    public async Task Trigger (T arguments) {
+    public async Task<T> Trigger (T arguments) {
         foreach (var handler in once_handlers) {
             await handler(arguments);
         }
 
-        foreach (var handler in always_handlers) { // TODO: maybe handlers should be tasks and awaited instead of added to a queue...
+        foreach (var handler in always_handlers) {
             await handler(arguments);
         }
 
@@ -53,6 +53,8 @@ public class EventManager<T> {
         completion_source = new ();
 
         once_handlers = new ();
+
+        return arguments;
     }
 
     public void Remove (Func<T, Task> handler) {
