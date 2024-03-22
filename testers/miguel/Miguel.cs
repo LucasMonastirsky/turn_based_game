@@ -9,6 +9,8 @@ public partial class Miguel : Combatant {
         base.Setup();
         Actions = new ActionStore(this);
 
+        CritSensitivity = 2;
+
         AddRollModifier(new RollModifier(this, "Parry") { Advantage = 0, Bonus = 0 });
     }
 

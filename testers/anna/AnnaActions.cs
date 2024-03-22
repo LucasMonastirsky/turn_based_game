@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static Dice;
 
 namespace Combat {
     public partial class Anna {
@@ -44,29 +45,25 @@ namespace Combat {
                 public new Anna User => base.User as Anna;
                 public Kick (Anna user) : base (user) {}
 
-                public BasicAttackOptions AttackOptions { get; protected set; } = new () {
-                    HitRollTags = new [] { "Attack", "Melee", "Unarmed" },
-                    ParryNegation = 2,
-                    DodgeNegation = 4,
-                };
-
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    User.Animator.Play(User.Animations.Kick);
-                    await User.DisplaceToMeleeDistance(target.Combatant);
+                    AttackOptions attack_options = new () {
+                        RollTags = new string [] { "Melee", "Unarmed" },
+                        ParryNegation = 4,
+                        DodgeNegation = 2,
+                        MoveToMeleeDistance = true,
+                        DamageRoll = D4.Plus(2),
+                        DamageTags = new string [] { "Blunt" },
+                        Sprite = User.Animations.Kick,
+                    };
 
-                    var result = await User.Attack(target, AttackOptions, async result => {
-                        if (result.Hit) {
-                            var damage = User.Roll(10, "Damage", "Melee", "Unarmed");
-                            target.Combatant.Damage(damage, new string [] { "Melee", "Unarmed" });
+                    var result = await User.Attack(target, attack_options);
 
-                            if (User.Bullets > 0) {
-                                await Timing.Delay();
-                                await User.Actions.Shoot.Act(target);
-                            }
-                        }
-                    });
+                    if (result.Hit && User.Bullets > 0) {
+                        await Timing.Delay();
+                        await User.Actions.Shoot.Act(target);
+                    }
                 }
             }
 
@@ -118,23 +115,19 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    User.Animator.Play(User.Animations.Shoot);
                     User.Bullets -= 1;
 
-                    var attack_options = new BasicAttackOptions () {
-                        HitRollTags = new string [] { "Attack", "Shot" },
+                    var attack_options = new AttackOptions () {
+                        RollTags = new string [] { "Shot" },
                         ParryNegation = 10,
                         DodgeNegation = 3,
+                        DamageRoll = User.BulletDamageRoll,
+                        DamageTags = new string [] { "Bullet" },
+                        Sprite = User.Animations.Shoot,
+                        Sound = User.Sounds.Shot,
                     };
 
-                    await User.Attack(target, attack_options, async result => {
-                        User.Play(User.Sounds.Shot);
-
-                        if (result.Hit) {
-                            var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
-                            target.Combatant.Damage(damage_roll, new string [] { "Bullet" });
-                        }
-                    });
+                    await User.Attack(target, attack_options);
                 }
             }
         
@@ -201,21 +194,24 @@ namespace Combat {
 
                 public override async Task Run () {
                     var target = Targets[0];
-                    User.Play(User.Animations.Shoot);
-                    User.Play(User.Sounds.Shot);
+
                     User.Bullets -= 1;
 
-                    var result = await User.Attack(target, new () {
-                        HitRollTags = new [] { "Attack", "Shot" },
-                        ParryNegation = 10,
-                        DodgeNegation = 1,
-                    });
+                    var attack_options = new AttackOptions () {
+                        RollTags = new string [] { "Shot" },
+                        ParryNegation = 15,
+                        DodgeNegation = 4,
+                        DamageRoll = User.BulletDamageRoll.WithDisadvantage(),
+                        DamageTags = new string [] { "Bullet" }, // TODO: Add DamageType or DamageInstance class
+                        Sprite = User.Animations.Shoot,
+                        Sound = User.Sounds.Shot,
+                    };
+
+                    var result = await User.Attack(target, attack_options);
 
                     if (result.Hit) {
-                        var damage = User.Roll(4, "Damage", "Shot");
-                        target.Combatant.Damage(damage, new [] { "Bullet" });
                         target.Combatant.AddStatusEffect(new Immobilized (2));
-                    } // TODO: go back to async argument attacks
+                    }
                 }
             }
         
@@ -235,33 +231,33 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    User.Play(User.Animations.Shoot);
-
                     var hit_modifier = User.AddRollModifier(new (this, "Attack") { Advantage = -1 });
-                    var damage_modifier = User.AddRollModifier(new (this, "Damage") { Advantage = - 1 });
+                    var damage_modifier = User.AddRollModifier(new (this, "Damage") { Advantage = -1 });
+                    var crit_modifier = User.AddRollModifier(new (this, "Critical") { Advantage = - 1 });
 
-                    for (var i = 0; i < User.Bullets; i++) {
-                        var result = await User.Attack(target, new BasicAttackOptions () {
-                            HitRollTags = new string [] { "Attack", "Shot" },
-                            ParryNegation = 10,
-                            DodgeNegation = 4,
-                        });
+                    var attack_options = new AttackOptions () {
+                        RollTags = new string [] { "Shot" },
+                        ParryNegation = 15,
+                        DodgeNegation = 8,
+                        DamageRoll = User.BulletDamageRoll,
+                        DamageTags = new string [] { "Bullet" },
+                        Sprite = User.Animations.Shoot,
+                        Sound = User.Sounds.Shot,
+                    };
 
-                        User.Play(User.Sounds.Shot);
+                    while (User.Bullets > 0) {
+                        User.Bullets--;
 
-                        if (result.Hit) {
-                            var damage = User.Roll(6, "Damage", "Shot");
-                            result.Defender.Damage(damage, new string [] { "Shot" });
-                        }
+                        await User.Attack(target, attack_options);
 
                         hit_modifier.Bonus--;
 
-                        await Timing.Delay(1f / User.Bullets * 2f);
+                        await Timing.Delay(1f / User.MaxBullets * 2f);
                     }
 
-                    User.Bullets = 0;
                     User.RemoveRollModifier(hit_modifier);
                     User.RemoveRollModifier(damage_modifier);
+                    User.RemoveRollModifier(crit_modifier);
                 }
             }
         

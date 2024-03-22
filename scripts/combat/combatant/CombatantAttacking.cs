@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Development;
+using Godot;
 using Utils;
 
 namespace Combat {
@@ -40,48 +42,51 @@ namespace Combat {
             Animator.Play(StandardAnimations.Dodge);
             Play(CommonSounds.Woosh);
         }
-        protected virtual void OnAttackParriedAndDodged (AttackResult attack_result) {
-            if (attack_result.ParryDelta > attack_result.DodgeDelta) OnAttackParried(attack_result);
-            else OnAttackDodged(attack_result);
-        }
-                    
-        public class BasicAttackOptions {
-            public int ParryNegation, DodgeNegation;
-            public string [] HitRollTags;
-            public List<RollModifier> HitRollModifiers;
 
-            public BasicAttackOptions () {
-                (ParryNegation, DodgeNegation) = (0, 0);
-                HitRollTags = new string [] {};
-                HitRollModifiers = new ();
+        public record AttackOptions {
+            public string [] RollTags = new string [] {};
+            public int ParryNegation, DodgeNegation = 0;
+            public List<RollModifier> RollModifiers = new ();
+            public DiceRoll DamageRoll = null;
+            public string [] DamageTags = new string [] {};
+            public bool MoveToMeleeDistance = false;
+            public SimpleSprite Sprite = null;
+            public AudioStream Sound = null;
+        }
+
+        public async Task<AttackResult> Attack (Targetable targetable, AttackOptions options, Func<AttackResult, Task> handler = null) {
+            var target = targetable.ToTarget();
+
+            if (options.MoveToMeleeDistance) await DisplaceToMeleeDistance(target);
+
+            await CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
+
+            var result = target.Combatant.ReceiveAttack(this, options);
+
+            if (options.Sprite != null) Play(options.Sprite);
+            if (options.Sound != null) Play(options.Sound);
+
+            if (result.Hit && options.DamageRoll != null) {
+                var crit_roll = Roll(Dice.D20, "Critical");
+
+                if (crit_roll > 20 - CritSensitivity) {
+                    Play(CommonSounds.Crit);
+                    options.DamageRoll.Times(2);
+                }
+
+                result.Defender.Damage(Roll(options.DamageRoll), options.DamageTags.Prepend("Damage").ToArray());
             }
-        }
 
-        public async Task<AttackResult> Attack (CombatTarget target, BasicAttackOptions options, Func<AttackResult, Task> function) {
-            await CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
+            if (handler != null) {
+                await handler(result);
+            }
 
-            var result = target.Combatant.ReceiveAttack(this, options);
-
-            await function(result);
-
-            await CombatEvents.AfterAttack.Trigger(new () { Attacker = result.Attacker, Options = options, Result = result, Target = result.Defender.ToTarget() });
-
-            TurnManager.LastAttack = result;
-            return result;
-        }
-
-        public async Task<AttackResult> Attack (CombatTarget target, BasicAttackOptions options) {
-            await CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
-
-            var result = target.Combatant.ReceiveAttack(this, options);
-
-            await CombatEvents.AfterAttack.Trigger(new () { Attacker = result.Attacker, Options = options, Result = result, Target = result.Defender.ToTarget() });
+            await CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Options = options, Result = result, Target = result.Defender.ToTarget() });
 
             return TurnManager.LastAttack = result;
         }
-
-        public AttackResult ReceiveAttack (Combatant attacker, BasicAttackOptions options) {
-            var hit_roll = attacker.Roll(10, options.HitRollModifiers, options.HitRollTags);
+        public AttackResult ReceiveAttack (Combatant attacker, AttackOptions options) {
+            var hit_roll = attacker.Roll(10, options.RollModifiers, options.RollTags.Prepend("Attack").ToArray());
             var parry_roll = IsDead ? 0 : Roll(10, new string [] { "Parry" });
             var dodge_roll = (IsDead || !CanMove) ? 0 : Roll(10, new string [] { "Dodge" });
 
@@ -95,10 +100,9 @@ namespace Combat {
                 DodgeNegation = options.DodgeNegation,
             };
 
-            if (result.Parried && result.Dodged) OnAttackParriedAndDodged(result);
-            else if (result.Parried) OnAttackParried(result);
-            else if (result.Dodged) OnAttackDodged(result);
-            else if (result.Missed && IsAlive) Play(StandardAnimations.Idle);
+            if (result.Parried) OnAttackParried(result);
+            if (result.Dodged) OnAttackDodged(result);
+            if (result.Missed && IsAlive) Play(StandardAnimations.Idle);
 
             Dev.Log(Dev.Tags.Combat, $"{result}");
 

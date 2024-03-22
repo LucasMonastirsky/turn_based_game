@@ -4,7 +4,7 @@ namespace Combat {
         public struct BeforeAttackArguments {
             public Combatant Attacker;
             public CombatTarget Target;
-            public Combatant.BasicAttackOptions Options; // replace this class with an attack class
+            public Combatant.AttackOptions Options;
         }
 
         public static EventManager<BeforeAttackArguments> BeforeAttack = new ();
@@ -14,7 +14,7 @@ namespace Combat {
         public struct AfterAttackArguments {
             public Combatant Attacker;
             public CombatTarget Target;
-            public Combatant.BasicAttackOptions Options;
+            public Combatant.AttackOptions Options;
             public AttackResult Result;
         }
         public static EventManager<AfterAttackArguments> AfterAttack = new ();

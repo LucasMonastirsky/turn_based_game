@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utils;
+using static Dice;
 
 namespace Combat {
     public partial class Hidan {
@@ -46,23 +47,18 @@ namespace Combat {
 
                 public Stab (Hidan user) : base (user) {}
 
-                public BasicAttackOptions AttackOptions = new () {
-                    HitRollTags = new string [] { "Attack", "Melee", "Armed", },
-                    ParryNegation = 4,
-                    DodgeNegation = 2,
-                };
-
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    await User.DisplaceToMeleeDistance(target);
-                    var result = await User.Attack(target, AttackOptions);
-                    User.Play(User.Animations.Stab);
-
-                    if (result.Hit) {
-                        var damage = User.Roll(10, "Damage", "Melee", "Armed") + 4;
-                        target.Combatant.Damage(damage, new string [] { "Melee", "Armed" });
-                    }
+                    await User.Attack(target, new () {
+                        RollTags = new string [] { "Melee", "Armed", },
+                        ParryNegation = 4,
+                        DodgeNegation = 1,
+                        DamageRoll = User.AxeDamageRoll,
+                        DamageTags = new string [] { "Cut", },
+                        Sprite = User.Animations.Stab,
+                        MoveToMeleeDistance = true,
+                    });
                 }
             }
         
@@ -81,12 +77,6 @@ namespace Combat {
                 public new Hidan User => base.User as Hidan;
                 public Sweep (Hidan user) : base (user) {}
 
-                public BasicAttackOptions AttackOptions = new () {
-                    HitRollTags = new string [] { "Attack", "Melee", "Armed" },
-                    ParryNegation = 0,
-                    DodgeNegation = 1,
-                };
-
                 public override async Task Run () {
                     var target = Targets[0];
                     var real_targets = new CombatTarget [] {
@@ -96,22 +86,22 @@ namespace Combat {
 
                     await User.DisplaceToMeleeDistance(target);
 
-                    User.Play(User.Animations.Sweeps[0]);
-                    var first_attack = await User.Attack(real_targets[0], AttackOptions);
-                    if (first_attack.Hit) {
-                        var damage = User.Roll(6, "Damage", "Melee", "Armed");
-                        real_targets[0].Combatant.Damage(damage, new string [] { "Melee" });
-                    }
+                    var attack_options = new AttackOptions () {
+                        RollTags = new string [] { "Melee", "Armed", },
+                        ParryNegation = 3,
+                        DodgeNegation = 3,
+                        DamageRoll = D4.Times(2),
+                        DamageTags = new string [] { "Cut" },
+                        Sprite = User.Animations.Sweeps[0],
+                    };
 
-                    if (!first_attack.Parried) {
-                        await Timing.Delay();
-                        User.Play(User.Animations.Sweeps[1]);
-                        var second_attack = await User.Attack(real_targets[1], AttackOptions);
-                        if (second_attack.Hit) {
-                            var damage = User.Roll(6, "Damage", "Melee", "Armed");
-                            real_targets[1].Combatant.Damage(damage, new string [] { "Melee" });
-                        }
-                    }
+                    var first_attack = await User.Attack(real_targets[0], attack_options);
+
+                    if (first_attack.Parried) return;
+
+                    await Timing.Delay();
+
+                    await User.Attack(real_targets[1], attack_options with { Sprite = User.Animations.Sweeps[1], });
                 }
             }
         
@@ -139,7 +129,6 @@ namespace Combat {
                     var ally = Targets[0];
                     var enemies = new List<CombatTarget> ();
 
-                    // TODO: make Side into class?
                     var opposite_slot = ally.Position.OppositeSide;
 
                     var movement = await User.MoveTo(Targets[0].Position);
@@ -201,43 +190,52 @@ namespace Combat {
                 public new Hidan User => base.User as Hidan;
                 public Unleash (Hidan user) : base (user) {}
 
-                BasicAttackOptions attack_options = new () {
-                    HitRollTags = new string [] { "Attack", "Melee", "Armed", },
-                    ParryNegation = 2,
-                    DodgeNegation = 2,
-                };
-                
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    await User.DisplaceToMeleeDistance(target);
+                    AttackOptions base_attack = new () {
+                        RollTags = new string [] { "Attack", "Melee", "Armed", },
+                        ParryNegation = 2,
+                        DodgeNegation = 2,
+                        DamageRoll = User.AxeDamageRoll,
+                        DamageTags = new string [] { "Cut", },
+                    };
 
-                    for (var i = 0; i < 3; i++) {
-                        if (i == 0) User.Play(User.Animations.Stab);
-                        if (i == 1) User.Play(User.Animations.Sweeps[0]);
-                        if (i == 2) User.Play(User.Animations.Sweeps[1]);
+                    await User.Attack(target, base_attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.Sweeps[0],
+                    });
 
-                        await User.Attack(target, attack_options, async result => {
-                            if (result.Hit) {
-                                var damage = User.Roll(6, "Damage", "Melee", "Armed");
-                                target.Combatant.Damage(damage, new [] { "Cut" });
-                            }
-                        });
+                    await Timing.Delay();
 
-                        await Timing.Delay();
-                    }
+                    await User.Attack(target, base_attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.Sweeps[1],
+                    });
 
-                    User.Play(User.Animations.Punch);
-                    await User.Attack(target, attack_options, async result => {
-                        if (result.Hit) {
-                            var enemy = target.Combatant;
+                    await Timing.Delay();
 
-                            var damage = User.Roll(4, "Damage", "Melee", "Unarmed");
-                            enemy.Damage(damage, new [] { "Cut" });
+                    await User.Attack(target, base_attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.Stab
+                    });
 
-                            var switchers = enemy.Allies.OnRow(1).Where(combatant => combatant.CanBeMoved).ToList();
+                    await Timing.Delay();
+
+                    var punch_attack = new AttackOptions () {
+                        RollTags = new string [] { "Melee", "Unarmed", },
+                        ParryNegation = 2,
+                        DodgeNegation = 6,
+                        DamageRoll = User.PunchDamageRoll,
+                        DamageTags = new string [] { "Blunt", },
+                        Sprite = User.Animations.Punch,
+                    };
+
+                    await User.Attack(target, punch_attack, async result => {
+                        if (!result.Dodged) {
+                            var switchers = target.Combatant.Allies.OnRow(1).Where(combatant => combatant.CanBeMoved).ToList();
                             if (switchers.Count > 0) {
-                                await User.Move(enemy, RNG.SelectFrom(switchers).Position);
+                                await User.Move(target.Combatant, RNG.SelectFrom(switchers).Position);
                             }
                         }
                     });

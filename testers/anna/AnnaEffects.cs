@@ -15,8 +15,8 @@ namespace Combat {
                 CombatEvents.BeforeAttack.Until(async attack => {
                     if (Removed) return true;
 
-                    if (attack.Attacker == Caster && attack.Options.HitRollTags.Contains("Shot")) {
-                        attack.Options.HitRollModifiers.Add(new (this) {
+                    if (attack.Attacker == Caster && attack.Options.RollTags.Contains("Shot")) {
+                        attack.Options.RollModifiers.Add(new (this) {
                             Advantage = 1,
                         });
                     }
@@ -108,23 +108,19 @@ namespace Combat {
                     if (movement.Side == User.Side || !movement.IsIntentional) return false;
 
                     if (User.Bullets > 0) {
-                        User.Animator.Play(User.Animations.Shoot);
                         User.Bullets -= 1;
 
-                        var attack_options = new BasicAttackOptions () {
-                            HitRollTags = new string [] { "Attack", "Shot" },
+                        var attack_options = new AttackOptions () {
+                            RollTags = new string [] { "Attack", "Shot" },
                             ParryNegation = 10,
                             DodgeNegation = 3,
+                            DamageRoll = Dice.D6.Plus(2),
+                            Sprite = User.Animations.Shoot,
+                            Sound = User.Sounds.Shot,
                         };
 
                         await User.Attack(movement.Start, attack_options, async result => {
-                            User.Play(User.Sounds.Shot);
-
-                            if (result.Hit) {
-                                var damage_roll = User.Roll(6, new string [] { "Damage", "Shot" });
-                                movement.Start.Combatant.Damage(damage_roll, new string [] { "Bullet" });
-                                movement.Prevent();
-                            }
+                            if (result.Hit) movement.Prevent();
                         });
 
                         await Timing.Delay();

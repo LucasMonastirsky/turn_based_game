@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 
 namespace Combat {
     public partial class CombatantNode : Node2D {
         public CombatAnimator Animator;
-        public AudioStreamPlayer AudioPlayer;
+        public List<AudioStreamPlayer> AudioPlayers = new ();
 
         private double movement_duration = (double) Timing.MoveDuration / 1000; 
         private bool moving = false;
@@ -15,10 +16,13 @@ namespace Combat {
         public CombatantNode () {
             Battle.Node.AddChild(this);
             Animator = new CombatAnimator ();
-            AudioPlayer = new AudioStreamPlayer ();
-            AudioPlayer.VolumeDb = -6;
             AddChild(Animator);
-            AddChild(AudioPlayer);
+
+            for (var i = 0; i < 3; i++) {
+                var audio_player = new AudioStreamPlayer () { VolumeDb = -6 };
+                AddChild(audio_player);
+                AudioPlayers.Add(audio_player);
+            }
         }
 
         public override void _Process (double delta) {

@@ -16,6 +16,8 @@ namespace Combat {
         public int StartingTempo { get; set; } = 2;
         public int Tempo { get; set; }
 
+        public int CritSensitivity { get; set; }
+
         public bool IsDead => Health < 1;
         public bool IsAlive => !IsDead;
 

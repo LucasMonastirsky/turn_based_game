@@ -13,6 +13,45 @@ namespace Combat {
             return Roll(new int [] { sides }, new (), tags);
         }
 
+        public int Roll (DiceRoll dice_roll, params string [] tags) {
+            var roll_data = dice_roll.Clone();
+            var mods = new List<RollModifier> ();
+
+            foreach (var mod in RollModifiers) {
+                if (mod.Tags.All(tag => tags.Contains(tag))) {
+                    mods.Add(mod);
+                }
+            }
+
+            foreach (var mod in mods) {
+                roll_data.Bonus += mod.Bonus;
+                roll_data.Advantage += mod.Advantage;
+            }
+
+            var rolls = new List<int> ();
+
+            for (var i = 0; i < Math.Abs(roll_data.Advantage) + 1; i++) {
+                var sum = 0;
+
+                roll_data.FaceCounts.ForEach(count => sum += RNG.Range(1, count));
+
+                rolls.Add(sum);
+            }
+
+            if (roll_data.Advantage >= 0) rolls.Sort((x, y) => y - x);
+            else rolls.Sort((x, y) => x - y);
+
+            var total = rolls[0] + roll_data.Bonus;
+            Dev.Log(Dev.Tags.Rolling, $"{this} rolling {dice_roll}");
+            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {Stringer.Join(tags)}: {total} ({rolls[0]}+{roll_data.Bonus}) ({roll_data.Advantage} advantage)");
+
+            foreach (var mod in mods) {
+                if (mod.Temporary) RemoveRollModifier(mod);
+            }
+
+            return total;
+        }
+
         public int Roll (int [] sides, List<RollModifier> modifiers, params string [] tags) {
             var mods = new List<RollModifier> (modifiers);
 
@@ -85,23 +124,5 @@ namespace Combat {
         }
 
         public List<RollModifier> RollModifiers = new ();
-
-        public class RollModifier {
-            public List<string> Tags { get; init; }
-            public int Bonus = 0;
-            public int Advantage = 0;
-
-            /// <summary>
-            /// Will be removed when used or on action end
-            /// </summary>
-            public bool Temporary { get; init; } = false;
-
-            public Source Source { get; init; }
-
-            public RollModifier (Source source, params string [] tags) {
-                Source = source;
-                Tags = tags.OrderBy(x => x).ToList();
-            }
-        }
     }
 }

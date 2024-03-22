@@ -7,8 +7,10 @@ namespace Combat {
         public static AudioStream SwordClash => RNG.SelectFrom(sword_clashes);
         public static AudioStream Woosh => RNG.SelectFrom(wooshes);
         public static AudioStream SwordWound => RNG.SelectFrom(sword_wounds);
+        public static AudioStream Crit => crit;
 
         private static List<AudioStream> sword_clashes, wooshes, sword_wounds;
+        private static AudioStream crit;
 
         public static void Load () {
             sword_clashes =  new List<AudioStream> () {
@@ -26,6 +28,8 @@ namespace Combat {
                 GD.Load<AudioStream>("res://sounds/sword_wound_1.wav"),
                 GD.Load<AudioStream>("res://sounds/sword_wound_2.wav"),
             };
+
+            crit = GD.Load<AudioStream>("res://sounds/crit.wav");
         }
     }
 }

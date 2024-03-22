@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using static Dice;
 
 namespace Combat {
     public partial class Anna : Combatant {
@@ -9,6 +10,8 @@ namespace Combat {
 
         public int Bullets = 6;
         public int MaxBullets = 6;
+
+        public DiceRoll BulletDamageRoll = D4.Plus(2);
 
         protected override void Setup () {
             base.Setup();

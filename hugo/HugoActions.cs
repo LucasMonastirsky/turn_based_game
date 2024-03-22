@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
+using static Dice;
 
 public partial class Hugo {
     public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
@@ -41,23 +42,16 @@ public partial class Hugo {
 
             public Swing (Combatant user) : base(user) {}
 
-            protected BasicAttackOptions attack_options = new BasicAttackOptions {
-                HitRollTags = new string [] { "Attack", "Melee" },
-                DodgeNegation = 3,
-            };
-
             public override async Task Run () {
                 var target = Targets[0];
 
-                User.Animator.Play(User.Animations.Swing);
-                await User.DisplaceToMeleeDistance(target.Combatant);
-
-                await User.Attack(target, attack_options, async (result) => {
-                    if (result.Hit) {
-                        var damage_roll = User.Roll(10, "Damage");
-                        target.Combatant.Damage(damage_roll, new string [] { "Cut" });
-                    }
-                    else result.AllowRiposte = true;
+                await User.Attack(target, new () {
+                    RollTags = new [] { "Melee", "Armed", },
+                    ParryNegation = 3,
+                    DodgeNegation = 2,
+                    DamageRoll = D8.Plus(2),
+                    Sprite = User.Animations.Swing,
+                    MoveToMeleeDistance = true,
                 });
             }
         }
@@ -78,21 +72,15 @@ public partial class Hugo {
                 ActionRestrictors.BackRow,
             };
 
-            protected BasicAttackOptions attack_options = new BasicAttackOptions () {
-                HitRollTags = new string [] { "Attack", "Melee" },
-                ParryNegation = 4,
-                DodgeNegation = 0,
-            };
-
             public override async Task Run() {
                 var target = Targets[0];
-                User.Animator.Play(User.Animations.Blast);
 
-                await User.Attack(target, attack_options, async result => {
-                    if (result.Hit) {
-                        var damage_roll = User.Roll(6, new string [] { "Damage" });
-                        target.Combatant.Damage(damage_roll, new string[] { "Ranged", "Blunt" });
-                    }
+                await User.Attack(target, new () {
+                    RollTags = new string [] { "Ranged", },
+                    ParryNegation = 8,
+                    DodgeNegation = 4,
+                    DamageRoll = D4.Plus(2),
+                    Sprite = User.Animations.Blast,
                 });
             }
         }
@@ -122,23 +110,18 @@ public partial class Hugo {
 
             public Shove (Combatant user) : base (user) {}
 
-            public BasicAttackOptions AttackOptions { get; protected set; } = new () {
-                HitRollTags = new [] { "Attack", "Melee" },
-                ParryNegation = 0,
-                DodgeNegation = 0,
-            };
-
             public override async Task Run () {
-                User.Animator.Play(User.Animations.Shove);
-                await User.DisplaceToMeleeDistance(Targets[0].Combatant);
+                var attack = new AttackOptions () {
+                    RollTags = new [] { "Melee", "Unarmed", },
+                    ParryNegation = 2,
+                    DodgeNegation = 4,
+                    DamageRoll = D4,
+                    Sprite = User.Animations.Shove,
+                    MoveToMeleeDistance = true,
+                };
 
-                await User.Attack(Targets[0], AttackOptions, async result => {
+                await User.Attack(Targets[0], attack, async result => {
                     if (!result.Dodged) {
-                        if (result.Hit) {
-                            var damage_roll = User.Roll(4, new string [] { "Damage" });
-                            Targets[0].Combatant.Damage(damage_roll, new string[] { "Cut" });
-                        }
-
                         await Targets[0].Combatant.MoveTo(Targets[1].Position);
                     }
                 });

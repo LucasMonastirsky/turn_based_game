@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
+using static Dice;
 
 public partial class Miguel {
     public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
@@ -43,18 +44,17 @@ public partial class Miguel {
             public override async Task Run () {
                 var target = Targets[0];
 
-                User.Animator.Play(User.Animations.Swing);
-                await User.DisplaceToMeleeDistance(target.Combatant);
-
-                var options = new BasicAttackOptions () {
-                    HitRollTags = new [] { "Attack", "Melee", },
-                    ParryNegation = 2, DodgeNegation = 0,
+                var options = new AttackOptions () {
+                    RollTags = new [] { "Melee", "Armed" },
+                    ParryNegation = 5,
+                    DodgeNegation = 4,
+                    DamageRoll = D8.Plus(2),
+                    Sprite = User.Animations.Swing,
+                    MoveToMeleeDistance = true,
                 };
 
                 await User.Attack(target, options, async result => {
                     if (result.Hit) {
-                        var damage_roll = User.Roll(4, new string [] { "Damage" });
-                        target.Combatant.Damage(damage_roll + 2, new string [] { "Cut" });
                         target.Combatant.AddStatusEffect(new Poison(3));
                     }
                 });
@@ -148,57 +148,34 @@ public partial class Miguel {
                 ActionRestrictors.FrontRow,
             };
 
-            public BasicAttackOptions [] AttackOptions { get; protected set; } = new [] {
-                new BasicAttackOptions () {
-                    HitRollTags = new [] { "Attack", "Melee", "Weapon", },
-                    ParryNegation = 4,
-                    DodgeNegation = 2,
-                },
-                new BasicAttackOptions () {
-                    HitRollTags = new [] { "Attack", "Melee", "Unarmed", },
-                    ParryNegation = 2,
-                    DodgeNegation = 6,
-                },
-                new BasicAttackOptions () {
-                    HitRollTags = new [] { "Attack", "Melee", "Unarmed", },
-                    ParryNegation = 2,
-                    DodgeNegation = 6,
-                },
-            };
-
             public override async Task Run() {
                 var target = Targets[0];
 
-                await User.DisplaceToMeleeDistance(target.Combatant);
+                var swing_attack = new AttackOptions () {
+                    RollTags = new [] { "Melee", "Armed", },
+                    ParryNegation = 5,
+                    DodgeNegation = 4,
+                    DamageRoll = D8.Plus(2),
+                    Sprite = User.Animations.Swing,
+                    MoveToMeleeDistance = true,
+                };
 
-                var first_attack = await User.Attack(target, AttackOptions[0]);
-                User.Animator.Play(User.Animations.Swing);
-                if (first_attack.Hit) {
-                    var damage_roll = User.Roll(8, new string [] { "Damage" });
-                    target.Combatant.Damage(damage_roll + 4, new string [] { "Cut" });
-                }
+                var unarmed_attack = new AttackOptions () {
+                    RollTags = new [] { "Melee", "Unarmed", },
+                    ParryNegation = 6,
+                    DodgeNegation = 6,
+                    DamageRoll = D4.Plus(1),
+                };
 
-                if (!first_attack.Parried) {
-                    await Timing.Delay();
+                await User.Attack(target, swing_attack);
 
-                    var second_attack = await User.Attack(target, AttackOptions[1]);
-                    if (second_attack.Hit) {
-                        var damage_roll = User.Roll(8, new string [] { "Damage" });
-                        target.Combatant.Damage(damage_roll, new string [] { "Blunt" });
-                    }
+                await Timing.Delay();
 
-                    User.Animator.Play(User.Animations.Combo_1);
+                await User.Attack(target, unarmed_attack with { Sprite = User.Animations.Combo_1 });
 
-                    await Timing.Delay();
+                await Timing.Delay();
 
-                    var third_attack = await User.Attack(target, AttackOptions[2]);
-                    if (third_attack.Hit) {
-                        var damage_roll = User.Roll(8, new string [] { "Damage" });
-                        target.Combatant.Damage(damage_roll, new string[] { "Blunt" });
-                    }
-
-                    User.Animator.Play(User.Animations.Combo_2);
-                }
+                await User.Attack(target, unarmed_attack with { Sprite = User.Animations.Combo_2 });
             }
         }
 

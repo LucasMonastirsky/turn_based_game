@@ -1,12 +1,16 @@
 using System;
 using System.Threading.Tasks;
 using Development;
+using static Dice;
 
 namespace Combat {
     public partial class Hidan : Combatant {
         public override string Name => "Hidan";
 
         public override Type DefaultControllerType => typeof(PlayerController);
+
+        public DiceRoll AxeDamageRoll = D6.Times(2).Plus(2);
+        public DiceRoll PunchDamageRoll = D4.Times(2).Plus(1);
 
         protected override void Setup () {
             base.Setup();

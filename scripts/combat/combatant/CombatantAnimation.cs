@@ -1,3 +1,5 @@
+using System.Linq;
+using Development;
 using Godot;
 
 namespace Combat {
@@ -23,8 +25,18 @@ namespace Combat {
         }
 
         public void Play (AudioStream audio) {
-            Node.AudioPlayer.Stream = audio;
-            Node.AudioPlayer.Play();
+            var audio_player = Node.AudioPlayers.FirstOrDefault(audio_player =>
+                audio_player.Stream?.ResourceName == audio.ResourceName
+                || !audio_player.Playing
+            );
+
+            if (audio_player is null) {
+                // Dev.Error($"No audio player available in {this}");
+            }
+            else {
+                audio_player.Stream = audio;
+                audio_player.Play();
+            }
         }
 
         public virtual void ResetAnimation () {
