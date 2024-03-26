@@ -6,14 +6,14 @@ using Utils;
 
 namespace Combat {
     public partial class Combatant {
-        public int Roll (int sides, List<RollModifier> modifiers, params string [] tags) {
+        public int Roll (int sides, List<RollModifier> modifiers, params RollTag [] tags) {
             return Roll(new int [] { sides }, modifiers, tags);
         }
-        public int Roll (int sides, params string [] tags) {
+        public int Roll (int sides, params RollTag [] tags) {
             return Roll(new int [] { sides }, new (), tags);
         }
 
-        public int Roll (DiceRoll dice_roll, params string [] tags) {
+        public int Roll (DiceRoll dice_roll, params RollTag [] tags) {
             var roll_data = dice_roll.Clone();
             var mods = new List<RollModifier> ();
 
@@ -52,7 +52,7 @@ namespace Combat {
             return total;
         }
 
-        public int Roll (int [] sides, List<RollModifier> modifiers, params string [] tags) {
+        public int Roll (int [] sides, List<RollModifier> modifiers, params RollTag [] tags) {
             var mods = new List<RollModifier> (modifiers);
 
             foreach (var mod in RollModifiers) {

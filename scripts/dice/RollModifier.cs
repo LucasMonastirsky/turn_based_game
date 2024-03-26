@@ -3,7 +3,7 @@ using System.Linq;
 using Combat;
 
 public class RollModifier {
-    public List<string> Tags { get; init; }
+    public List<RollTag> Tags { get; init; }
     public int Bonus = 0;
     public int Advantage = 0;
 
@@ -14,7 +14,7 @@ public class RollModifier {
 
     public Source Source { get; init; }
 
-    public RollModifier (Source source, params string [] tags) {
+    public RollModifier (Source source, params RollTag [] tags) {
         Source = source;
         Tags = tags.OrderBy(x => x).ToList();
     }

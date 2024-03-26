@@ -49,7 +49,6 @@ namespace Combat {
                     var target = Targets[0];
 
                     AttackOptions attack_options = new () {
-                        RollTags = new string [] { "Melee", "Unarmed" },
                         ParryNegation = 4,
                         DodgeNegation = 2,
                         MoveToMeleeDistance = true,
@@ -118,11 +117,11 @@ namespace Combat {
                     User.Bullets -= 1;
 
                     var attack_options = new AttackOptions () {
-                        RollTags = new string [] { "Shot" },
                         ParryNegation = 10,
                         DodgeNegation = 3,
                         DamageRoll = User.BulletDamageRoll,
                         DamageTags = new string [] { "Bullet" },
+                        IsRanged = true,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
                     };
@@ -198,7 +197,6 @@ namespace Combat {
                     User.Bullets -= 1;
 
                     var attack_options = new AttackOptions () {
-                        RollTags = new string [] { "Shot" },
                         ParryNegation = 15,
                         DodgeNegation = 4,
                         DamageRoll = User.BulletDamageRoll.WithDisadvantage(),
@@ -231,12 +229,10 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    var hit_modifier = User.AddRollModifier(new (this, "Attack") { Advantage = -1 });
-                    var damage_modifier = User.AddRollModifier(new (this, "Damage") { Advantage = -1 });
-                    var crit_modifier = User.AddRollModifier(new (this, "Critical") { Advantage = - 1 });
+                    var attack_modifier = User.AddRollModifier(new (this, RollTags.Attack) { Advantage = -1, });
+                    var hit_modifier = User.AddRollModifier(new (this, RollTags.Hit) { Bonus = -1 });
 
                     var attack_options = new AttackOptions () {
-                        RollTags = new string [] { "Shot" },
                         ParryNegation = 15,
                         DodgeNegation = 8,
                         DamageRoll = User.BulletDamageRoll,
@@ -255,9 +251,8 @@ namespace Combat {
                         await Timing.Delay(1f / User.MaxBullets * 2f);
                     }
 
+                    User.RemoveRollModifier(attack_modifier);
                     User.RemoveRollModifier(hit_modifier);
-                    User.RemoveRollModifier(damage_modifier);
-                    User.RemoveRollModifier(crit_modifier);
                 }
             }
         

@@ -45,7 +45,6 @@ public partial class Miguel {
                 var target = Targets[0];
 
                 var options = new AttackOptions () {
-                    RollTags = new [] { "Melee", "Armed" },
                     ParryNegation = 5,
                     DodgeNegation = 4,
                     DamageRoll = D8.Plus(2),
@@ -121,8 +120,8 @@ public partial class Miguel {
                             var movement = await Caster.MoveTo(User); // TODO: shouldn't be forceful, add checks
 
                             if (!movement.Prevented) {
-                                Caster.AddRollModifier(new (this, "Parry") { Advantage = 1, Temporary = true, });
-                                Caster.AddRollModifier(new (this, "Attack") { Advantage = 1, Temporary = true, });
+                                Caster.AddRollModifier(new (this, RollTags.Parry) { Advantage = 1, Temporary = true, });
+                                Caster.AddRollModifier(new (this, RollTags.Hit) { Advantage = 1, Temporary = true, });
                             }
 
                             return true;
@@ -152,7 +151,6 @@ public partial class Miguel {
                 var target = Targets[0];
 
                 var swing_attack = new AttackOptions () {
-                    RollTags = new [] { "Melee", "Armed", },
                     ParryNegation = 5,
                     DodgeNegation = 4,
                     DamageRoll = D8.Plus(2),
@@ -161,7 +159,6 @@ public partial class Miguel {
                 };
 
                 var unarmed_attack = new AttackOptions () {
-                    RollTags = new [] { "Melee", "Unarmed", },
                     ParryNegation = 6,
                     DodgeNegation = 6,
                     DamageRoll = D4.Plus(1),

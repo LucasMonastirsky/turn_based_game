@@ -39,7 +39,7 @@ namespace Combat {
             }
 
             public override void OnApplied() {
-                User.AddRollModifier(roll_modifier = new (this, "Damage"));
+                User.AddRollModifier(roll_modifier = new (this, RollTags.Damage));
                 roll_modifier.Bonus = Level;
 
                 attack_event_handler = async arguments => {

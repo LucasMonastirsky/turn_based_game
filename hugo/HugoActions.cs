@@ -46,7 +46,6 @@ public partial class Hugo {
                 var target = Targets[0];
 
                 await User.Attack(target, new () {
-                    RollTags = new [] { "Melee", "Armed", },
                     ParryNegation = 3,
                     DodgeNegation = 2,
                     DamageRoll = D8.Plus(2),
@@ -76,7 +75,6 @@ public partial class Hugo {
                 var target = Targets[0];
 
                 await User.Attack(target, new () {
-                    RollTags = new string [] { "Ranged", },
                     ParryNegation = 8,
                     DodgeNegation = 4,
                     DamageRoll = D4.Plus(2),
@@ -112,7 +110,6 @@ public partial class Hugo {
 
             public override async Task Run () {
                 var attack = new AttackOptions () {
-                    RollTags = new [] { "Melee", "Unarmed", },
                     ParryNegation = 2,
                     DodgeNegation = 4,
                     DamageRoll = D4,

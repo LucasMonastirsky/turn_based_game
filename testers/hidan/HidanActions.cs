@@ -51,7 +51,6 @@ namespace Combat {
                     var target = Targets[0];
 
                     await User.Attack(target, new () {
-                        RollTags = new string [] { "Melee", "Armed", },
                         ParryNegation = 4,
                         DodgeNegation = 1,
                         DamageRoll = User.AxeDamageRoll,
@@ -87,7 +86,6 @@ namespace Combat {
                     await User.DisplaceToMeleeDistance(target);
 
                     var attack_options = new AttackOptions () {
-                        RollTags = new string [] { "Melee", "Armed", },
                         ParryNegation = 3,
                         DodgeNegation = 3,
                         DamageRoll = D4.Times(2),
@@ -139,8 +137,8 @@ namespace Combat {
                     else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null && x.Combatant.IsAlive).Select(x => x.ToTarget()).ToList();
 
                     var modifiers =  new RollModifier [] {
-                        User.AddRollModifier(new (this, "Attack") { Advantage = 1 }),
-                        User.AddRollModifier(new (this, "Damage") { Advantage = -1 }),
+                        User.AddRollModifier(new (this, RollTags.Hit) { Advantage = 1 }),
+                        User.AddRollModifier(new (this, RollTags.Crit) { Advantage = -1 }),
                     };
 
                     if (enemies.Count == 1) {
@@ -194,7 +192,6 @@ namespace Combat {
                     var target = Targets[0];
 
                     AttackOptions base_attack = new () {
-                        RollTags = new string [] { "Attack", "Melee", "Armed", },
                         ParryNegation = 2,
                         DodgeNegation = 2,
                         DamageRoll = User.AxeDamageRoll,
@@ -223,7 +220,6 @@ namespace Combat {
                     await Timing.Delay();
 
                     var punch_attack = new AttackOptions () {
-                        RollTags = new string [] { "Melee", "Unarmed", },
                         ParryNegation = 2,
                         DodgeNegation = 6,
                         DamageRoll = User.PunchDamageRoll,

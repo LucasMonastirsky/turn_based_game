@@ -44,11 +44,13 @@ namespace Combat {
         }
 
         public record AttackOptions {
-            public string [] RollTags = new string [] {};
+
             public int ParryNegation, DodgeNegation = 0;
             public List<RollModifier> RollModifiers = new ();
             public DiceRoll DamageRoll = null;
             public string [] DamageTags = new string [] {};
+            public bool IsMelee = false;
+            public bool IsRanged = false;
             public bool MoveToMeleeDistance = false;
             public SimpleSprite Sprite = null;
             public AudioStream Sound = null;
@@ -67,7 +69,7 @@ namespace Combat {
             if (options.Sound != null) Play(options.Sound);
 
             if (result.Hit && options.DamageRoll != null) {
-                var crit_roll = Roll(Dice.D20, "Critical");
+                var crit_roll = Roll(Dice.D20, RollTags.Crit);
 
                 if (crit_roll > 20 - CritSensitivity) {
                     Play(CommonSounds.Crit);
@@ -77,18 +79,16 @@ namespace Combat {
                 result.Defender.Damage(Roll(options.DamageRoll), options.DamageTags.Prepend("Damage").ToArray());
             }
 
-            if (handler != null) {
-                await handler(result);
-            }
+            if (handler != null) await handler(result);
 
             await CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Options = options, Result = result, Target = result.Defender.ToTarget() });
 
             return TurnManager.LastAttack = result;
         }
         public AttackResult ReceiveAttack (Combatant attacker, AttackOptions options) {
-            var hit_roll = attacker.Roll(10, options.RollModifiers, options.RollTags.Prepend("Attack").ToArray());
-            var parry_roll = IsDead ? 0 : Roll(10, new string [] { "Parry" });
-            var dodge_roll = (IsDead || !CanMove) ? 0 : Roll(10, new string [] { "Dodge" });
+            var hit_roll = attacker.Roll(10, options.RollModifiers, RollTags.Attack, RollTags.Hit);
+            var parry_roll = IsDead ? 0 : Roll(10, RollTags.Defense, RollTags.Parry);
+            var dodge_roll = (IsDead || !CanMove) ? 0 : Roll(10, RollTags.Defense, RollTags.Dodge);
 
             var result = new AttackResult {
                 Attacker = attacker,

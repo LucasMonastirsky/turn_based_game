@@ -11,7 +11,7 @@ public partial class Miguel : Combatant {
 
         CritSensitivity = 2;
 
-        AddRollModifier(new RollModifier(this, "Parry") { Advantage = 0, Bonus = 0 });
+        AddRollModifier(new RollModifier(this, RollTags.Parry) { Advantage = 0, Bonus = 0 });
     }
 
     public override CombatAction GetRiposte (AttackResult attack_result) {

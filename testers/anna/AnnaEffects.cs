@@ -12,18 +12,6 @@ namespace Combat {
             }
 
             public override void OnApplied () {
-                CombatEvents.BeforeAttack.Until(async attack => {
-                    if (Removed) return true;
-
-                    if (attack.Attacker == Caster && attack.Options.RollTags.Contains("Shot")) {
-                        attack.Options.RollModifiers.Add(new (this) {
-                            Advantage = 1,
-                        });
-                    }
-
-                    return false;
-                });
-
                 CombatEvents.BeforeMovement.Until(async movement => {
                     if (Removed) return true;
                     if (!movement.Includes(Caster)) return false;
@@ -34,10 +22,18 @@ namespace Combat {
 
                 CombatEvents.BeforeAttack.Until(async attack => {
                     if (Removed) return true;
-                    if (attack.Target.Combatant != Caster) return false;
+                    if (attack.Attacker != Caster) return false;
 
-                    User.RemoveStatusEffect(this);
-                    return true;
+                    if (!attack.Options.IsRanged || attack.Target.Combatant != User) {
+                        User.RemoveStatusEffect(this);
+                        return true;
+                    }
+                    else {
+                        attack.Options.RollModifiers.Add(new (this) {
+                            Advantage = 1,
+                        });
+                        return false;
+                    }
                 });
 
                 CombatEvents.BeforeAction.Until(async action => {
@@ -79,7 +75,7 @@ namespace Combat {
             public RollModifier RollModifier { get; private set; }
 
             public override void OnApplied() {
-                RollModifier = new (this, "Attack", "Shot");
+                RollModifier = new (this, RollTags.Attack, RollTags.Ranged);
                 User.AddRollModifier(RollModifier);
                 Level = 1;
             }
@@ -111,7 +107,6 @@ namespace Combat {
                         User.Bullets -= 1;
 
                         var attack_options = new AttackOptions () {
-                            RollTags = new string [] { "Attack", "Shot" },
                             ParryNegation = 10,
                             DodgeNegation = 3,
                             DamageRoll = Dice.D6.Plus(2),
