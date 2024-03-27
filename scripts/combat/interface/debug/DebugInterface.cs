@@ -3,10 +3,13 @@ using Godot;
 using System;
 
 public partial class DebugInterface : Node2D {
+
 	Label label_turn_manager, label_interaction_manager;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
+		Visible = false;
+
 		label_turn_manager = new () {
 			Name = "LabelTurnManager",
 			Position = new (0, -100),

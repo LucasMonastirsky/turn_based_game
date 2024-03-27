@@ -19,14 +19,16 @@ namespace Combat {
 
             if (previous_health > 0 && IsDead) CombatEvents.AfterDeath.Trigger(new () { Combatant = this });
 
-            Play(CommonSounds.SwordWound); // TODO: add condition via tags
+            Play(CommonSounds.SwordWound);
 
-            OnDamaged(ref value, tags);
+            DamageLabel.Instantiate(this, $"{value}");
+
+            OnDamaged(value, tags);
 
             return value;
         }
 
-        protected virtual void OnDamaged (ref int value, string [] tags) {
+        protected virtual void OnDamaged (int value, string [] tags) {
 
         }
 
@@ -34,13 +36,16 @@ namespace Combat {
             return null;
         }
 
-        protected virtual void OnAttackParried (AttackResult attack_result) {
+        protected void OnAttackParried (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Parry);
             Play(CommonSounds.SwordClash);
+            DamageLabel.Instantiate(this, "Parry");
         }
-        protected virtual void OnAttackDodged (AttackResult attack_result) {
+
+        protected void OnAttackDodged (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Dodge);
             Play(CommonSounds.Woosh);
+            DamageLabel.Instantiate(this, "Dodge");
         }
 
         public record AttackOptions {
@@ -102,7 +107,10 @@ namespace Combat {
 
             if (result.Parried) OnAttackParried(result);
             if (result.Dodged) OnAttackDodged(result);
-            if (result.Missed && IsAlive) Play(StandardAnimations.Idle);
+            if (result.Missed && IsAlive) {
+                Play(StandardAnimations.Idle);
+                DamageLabel.Instantiate(this, "Miss");
+            }
 
             Dev.Log(Dev.Tags.Combat, $"{result}");
 

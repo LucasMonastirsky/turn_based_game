@@ -22,7 +22,7 @@ namespace Combat {
             else return null;
         }
 
-        protected override void OnDamaged (ref int value, string [] tags) {
+        protected override void OnDamaged (int value, string [] tags) {
             AddStatusEffect(new Rage(value));
         }
 

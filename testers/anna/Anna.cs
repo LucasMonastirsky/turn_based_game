@@ -16,7 +16,6 @@ namespace Combat {
         protected override void Setup () {
             base.Setup();
             Actions = new (this);
-            Tempo = 4;
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {

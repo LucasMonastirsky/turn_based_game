@@ -21,9 +21,4 @@ public partial class Miguel : Combatant {
 
         return null;
     }
-
-    protected override void OnAttackDodged(AttackResult attack_result) {
-        Animator.Play(Animations.Dodge);
-        Play(CommonSounds.Woosh);
-    }
 }

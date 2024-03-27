@@ -237,6 +237,7 @@ namespace Combat {
                         DodgeNegation = 8,
                         DamageRoll = User.BulletDamageRoll,
                         DamageTags = new string [] { "Bullet" },
+                        IsRanged = true,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
                     };
