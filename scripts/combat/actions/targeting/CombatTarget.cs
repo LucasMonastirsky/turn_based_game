@@ -4,6 +4,7 @@ namespace Combat {
     public class CombatTarget : Targetable {
         public CombatPosition Position;
         public Combatant Combatant => Positioner.GetSlotData(Position).Combatant;
+        public bool IsEmpty => Combatant == null;
 
         public Side Side => Position.Side;
         public int Row => Position.Row;

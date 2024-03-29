@@ -9,9 +9,13 @@ public partial class Miguel : Combatant {
         base.Setup();
         Actions = new ActionStore(this);
 
+        Health = 20;
+        MaxHealth = 20;
+
         CritSensitivity = 2;
 
-        AddRollModifier(new RollModifier(this, RollTags.Parry) { Advantage = 0, Bonus = 0 });
+        AddRollModifier(new RollModifier(this, RollTags.Parry) { Advantage = 0, Bonus = 3 });
+        AddRollModifier(new RollModifier(this, RollTags.Dodge) { Advantage = 0, Bonus = 3 });
     }
 
     public override CombatAction GetRiposte (AttackResult attack_result) {

@@ -16,6 +16,9 @@ namespace Combat {
         protected override void Setup () {
             base.Setup();
             Actions = new (this);
+
+            Health = 20;
+            MaxHealth = 20;
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {

@@ -3,11 +3,6 @@ using Combat;
 public partial class Miguel {
     private static string texture_path = "res://testers/miguel/textures";
 	public class AnimationStore : StandardAnimationStore {
-		public override SimpleAnimation Idle { get; set; }
-        public override SimpleSprite Hurt { get; set; }
-		public override SimpleSprite Dodge { get; set; }
-		public override SimpleSprite Parry { get; set; }
-		public override SimpleSprite Dead { get; set; }
 		public SimpleSprite Swing { get; set; }
 		public SimpleSprite Combo_1 { get; set; }
 		public SimpleSprite Combo_2 { get; set; }

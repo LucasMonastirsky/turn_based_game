@@ -35,6 +35,10 @@ namespace Combat {
             return this;
         }
 
+        public CombatAction RandomBind (List<List<CombatTarget>> target_sets) {
+            return Bind(RNG.SelectFrom(target_sets).ToArray());
+        }
+
         public void Unbind () {
             Bound = false;
             Targets = null;
@@ -104,14 +108,16 @@ namespace Combat {
             return Bind(Targets.ToArray());
         }
 
-        private bool IsValidTarget (CombatTarget target, TargetSelector selector) {
+        private bool IsValidTarget (CombatTarget target, TargetSelector selector, List<CombatTarget> previous_targets = null) {
+            if (previous_targets == null) previous_targets = Targets;
+
             var predicates = new List<Func<bool>> ();
 
             if (selector.Type == TargetType.Single) predicates.Add(() => target.Combatant != null);
             if (selector.Side != null) predicates.Add(() => User.Side.Value * (int) selector.Side == target.Side.Value);
             if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
             if (selector.VerticalRange != null) predicates.Add(() => Math.Abs(User.Slot - target.Slot) <= selector.VerticalRange);
-            if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, Targets));
+            if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, previous_targets));
             if (!selector.CanTargetSelf) predicates.Add(() => target.Combatant != User);
 
             if (selector.Type == TargetType.Double) predicates.Add(() => {
@@ -135,34 +141,35 @@ namespace Combat {
             return true;
         }
 
-        /*
-        // these won't work because of validator predicate
-        // TODO: implement ValidTargetSets
-        public List<List<CombatTarget>> ValidTargets {
-            get {
-                var lists = new List<List<CombatTarget>> ();
-                var targets = Positioner.GetCombatTargets();
+        public List<List<CombatTarget>> GetValidTargets () {
+            return GetValidTargets(null, 0);
+        }
 
-                foreach (var selector in TargetSelectors) {
-                    lists.Add(targets.Where(target => IsValidTarget(target, selector)).ToList());
+        private List<List<CombatTarget>> GetValidTargets (List<List<CombatTarget>> previous, int selector_index = 0) {
+            var results = new List<List<CombatTarget>> ();
+
+            if (selector_index == 0) {
+                Positioner.GetCombatTargets().ForEach(target => {
+                    if (IsValidTarget(target, TargetSelectors[selector_index])) {
+                        results.Add(new () { target });
+                    }
+                });
+            }
+            else {
+                for (var i = 0; i < previous.Count; i++) {
+                    Positioner.GetCombatTargets().ForEach(target => {
+                        if (IsValidTarget(target, TargetSelectors[selector_index], previous[i])) {
+                            var new_list = previous[i].ToList();
+                            new_list.Add(target);
+                            results.Add(new_list);
+                        }
+                    });
                 }
-
-                return lists;
             }
-        }
 
-        public bool HasValidTargets {
-            get {
-                var targets = Positioner.GetCombatTargets();
-
-                return TargetSelectors.Any(selector => !targets.Any(target => IsValidTarget(target, selector)));
-            }
+            if (results.Count == 0 || selector_index >= TargetSelectors.Count - 1) return results;
+            else return GetValidTargets(results, selector_index + 1);
         }
-
-        public CombatAction RandomBind () {
-            return Bind(ValidTargets.Select(targets => RNG.SelectFrom(targets)).ToArray());
-        }
-        */
 
         public override string ToString () {
             return Name;

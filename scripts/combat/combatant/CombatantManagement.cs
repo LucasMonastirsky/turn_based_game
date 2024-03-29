@@ -52,6 +52,7 @@ namespace Combat {
             }
         }
 
+        protected virtual void OnDeath () {}
         public override string ToString() {
             return $"{Name} ({Position})";
         }
