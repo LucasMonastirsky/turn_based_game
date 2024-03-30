@@ -23,12 +23,12 @@ namespace Combat {
                     if (Removed) return true;
                     if (attack.Attacker != Caster) return false;
 
-                    if (!attack.Options.IsRanged || attack.Target.Combatant != User) {
+                    if (!attack.IsRanged || attack.Target.Combatant != User) {
                         User.RemoveStatusEffect(this);
                         return true;
                     }
                     else {
-                        attack.Options.HitAdvantage += 1;
+                        attack.HitAdvantage += 1;
                         return false;
                     }
                 });
@@ -103,7 +103,7 @@ namespace Combat {
                     if (User.Bullets > 0) {
                         User.SpendBullet();
 
-                        var attack_options = new AttackOptions () {
+                        var attack_options = new Attack () {
                             ParryNegation = 10,
                             DodgeNegation = 3,
                             DamageRoll = Dice.D6.Plus(2),
@@ -111,7 +111,7 @@ namespace Combat {
                             Sound = User.Sounds.Shot,
                         };
 
-                        await User.Attack(movement.Start, attack_options, async result => {
+                        await User.SendAttack(movement.Start, attack_options, async result => {
                             if (result.Hit) movement.Prevent();
                         });
 

@@ -38,14 +38,14 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    var attack = new AttackOptions () {
+                    var attack = new Attack () {
                         DamageRoll = Dice.D4.Plus(2),
                         CanBeParried = false,
                         CanBeDodged = false,
                         Sprite = User.Animations.Spew,
                     };
 
-                    await User.Attack(target, attack);
+                    await User.SendAttack(target, attack);
                 }
             }
 

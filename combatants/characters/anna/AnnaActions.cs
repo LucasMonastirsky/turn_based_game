@@ -48,7 +48,7 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    AttackOptions attack_options = new () {
+                    Attack attack_options = new () {
                         ParryNegation = 4,
                         DodgeNegation = 2,
                         MoveToMeleeDistance = true,
@@ -56,7 +56,7 @@ namespace Combat {
                         Sprite = User.Animations.Kick,
                     };
 
-                    var result = await User.Attack(target, attack_options);
+                    var result = await User.SendAttack(target, attack_options);
 
                     if (result.Hit && User.Bullets > 0) {
                         await Timing.Delay();
@@ -115,7 +115,7 @@ namespace Combat {
 
                     User.SpendBullet();
 
-                    var attack_options = new AttackOptions () {
+                    var attack_options = new Attack () {
                         ParryNegation = 10,
                         DodgeNegation = 3,
                         DamageRoll = User.BulletDamageRoll,
@@ -124,7 +124,7 @@ namespace Combat {
                         Sound = User.Sounds.Shot,
                     };
 
-                    await User.Attack(target, attack_options);
+                    await User.SendAttack(target, attack_options);
                 }
             }
         
@@ -196,7 +196,7 @@ namespace Combat {
 
                     User.SpendBullet();
 
-                    var attack_options = new AttackOptions () {
+                    var attack_options = new Attack () {
                         ParryNegation = 15,
                         DodgeNegation = 4,
                         DamageRoll = User.BulletDamageRoll.WithDisadvantage(),
@@ -204,7 +204,7 @@ namespace Combat {
                         Sound = User.Sounds.Shot,
                     };
 
-                    var result = await User.Attack(target, attack_options);
+                    var result = await User.SendAttack(target, attack_options);
 
                     if (result.Hit) {
                         target.Combatant.AddStatusEffect(new Immobilized (2));
@@ -231,7 +231,7 @@ namespace Combat {
                     var attack_modifier = User.AddRollModifier(new (this, RollTags.Attack) { Advantage = -1, });
                     var hit_modifier = User.AddRollModifier(new (this, RollTags.Hit) { Bonus = -1 });
 
-                    var attack_options = new AttackOptions () {
+                    var attack_options = new Attack () {
                         ParryNegation = 15,
                         DodgeNegation = 8,
                         DamageRoll = User.BulletDamageRoll,
@@ -243,7 +243,7 @@ namespace Combat {
                     while (User.Bullets > 0) {
                         User.SpendBullet();
 
-                        await User.Attack(target, attack_options);
+                        await User.SendAttack(target, attack_options);
 
                         hit_modifier.Bonus--;
 

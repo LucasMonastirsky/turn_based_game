@@ -3,19 +3,15 @@ using Utils;
 
 public class DiceRoll {
     public List<int> FaceCounts;
-    public int Bonus;
-    public int Advantage;
+    public int Bonus = 0;
+    public int Advantage = 0;
 
     public DiceRoll (int face_count) {
         FaceCounts = new () { face_count };
-        Bonus = 0;
-        Advantage = 0;
     }
 
     public DiceRoll (params int [] face_counts) {
         FaceCounts = new (face_counts);
-        Bonus = 0;
-        Advantage = 0;
     }
 
     public DiceRoll Times (int multiple) {

@@ -32,6 +32,12 @@ namespace Combat {
             DodgeBonus = 2;
 
             AddStatusEffect(new BulletsEffect (MaxBullets));
+
+            CombatEvents.BeforeAttack.Always(async (attack) => {
+                if (attack.Attacker == this && attack.IsCrit) {
+                    attack.DamageRoll.Times(2);
+                }
+            });
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {

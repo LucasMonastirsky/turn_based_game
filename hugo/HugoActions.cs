@@ -45,7 +45,7 @@ public partial class Hugo {
             public override async Task Run () {
                 var target = Targets[0];
 
-                await User.Attack(target, new () {
+                await User.SendAttack(target, new () {
                     ParryNegation = 3,
                     DodgeNegation = 2,
                     DamageRoll = D8.Plus(2),
@@ -74,7 +74,7 @@ public partial class Hugo {
             public override async Task Run() {
                 var target = Targets[0];
 
-                await User.Attack(target, new () {
+                await User.SendAttack(target, new () {
                     ParryNegation = 8,
                     DodgeNegation = 4,
                     DamageRoll = D4.Plus(2),
@@ -109,7 +109,7 @@ public partial class Hugo {
             public Shove (Combatant user) : base (user) {}
 
             public override async Task Run () {
-                var attack = new AttackOptions () {
+                var attack = new Attack () {
                     ParryNegation = 2,
                     DodgeNegation = 4,
                     DamageRoll = D4,
@@ -117,7 +117,7 @@ public partial class Hugo {
                     MoveToMeleeDistance = true,
                 };
 
-                await User.Attack(Targets[0], attack, async result => {
+                await User.SendAttack(Targets[0], attack, async result => {
                     if (!result.Dodged) {
                         await Targets[0].Combatant.MoveTo(Targets[1].Position);
                     }

@@ -53,12 +53,15 @@ namespace Combat {
             DamageLabel.Instantiate(this, "Dodge");
         }
 
-        public record AttackOptions {
+        public record Attack {
+            public Combatant Attacker;
+            public CombatTarget Target;
             public int HitAdvantage, HitBonus = 0;
             public int ParryNegation, DodgeNegation = 0;
             public bool CanBeParried = true;
             public bool CanBeDodged = true;
             public DiceRoll DamageRoll = null;
+            public bool IsCrit = false;
             public bool IsMelee = false;
             public bool IsRanged = false;
             public bool MoveToMeleeDistance = false;
@@ -66,39 +69,38 @@ namespace Combat {
             public AudioStream Sound = null;
         }
 
-        public async Task<AttackResult> Attack (Targetable targetable, AttackOptions options, Func<AttackResult, Task> handler = null) {
-            var target = targetable.ToTarget();
+        public async Task<AttackResult> SendAttack (Targetable targetable, Attack attack, Func<AttackResult, Task> handler = null) {
+            attack.Attacker = this;
+            attack.Target = targetable.ToTarget();
 
-            if (options.MoveToMeleeDistance) await DisplaceToMeleeDistance(target);
+            if (attack.MoveToMeleeDistance) await DisplaceToMeleeDistance(attack.Target);
 
-            await CombatEvents.BeforeAttack.Trigger(new () { Attacker = this, Target = target, Options = options });
+            if (Roll(Dice.D20, RollTags.Crit) > 20) {
+                Play(CommonSounds.Crit);
+                attack.IsCrit = true;
+            }
 
-            var result = target.Combatant.ReceiveAttack(this, options);
+            await CombatEvents.BeforeAttack.Trigger(attack);
 
-            if (options.Sprite != null) Play(options.Sprite);
-            if (options.Sound != null) Play(options.Sound);
+            var result = attack.Target.Combatant.ReceiveAttack(this, attack);
 
-            if (result.Hit && options.DamageRoll != null) {
-                var crit_roll = Roll(Dice.D20, RollTags.Crit);
+            if (attack.Sprite != null) Play(attack.Sprite);
+            if (attack.Sound != null) Play(attack.Sound);
 
-                if (crit_roll > 20) {
-                    Play(CommonSounds.Crit);
-                    options.DamageRoll.Times(2);
-                }
-
-                result.Defender.Damage(Roll(options.DamageRoll));
+            if (result.Hit && attack.DamageRoll != null) {
+                result.Defender.Damage(Roll(attack.DamageRoll));
             }
 
             if (handler != null) await handler(result);
 
-            await CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Options = options, Result = result, Target = result.Defender.ToTarget() });
+            await CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Options = attack, Result = result, Target = result.Defender.ToTarget() });
 
             return TurnManager.LastAttack = result;
         }
-        public AttackResult ReceiveAttack (Combatant attacker, AttackOptions options) {
+        public AttackResult ReceiveAttack (Combatant attacker, Attack attack) {
             var hit_roll = attacker.Roll(Dice.D10, RollTags.Attack, RollTags.Hit);
-            var parry_roll = (!options.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Parry);
-            var dodge_roll = (!options.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Dodge);
+            var parry_roll = (!attack.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Parry);
+            var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Dodge);
 
             var result = new AttackResult {
                 Attacker = attacker,
@@ -106,8 +108,8 @@ namespace Combat {
                 HitRoll = hit_roll,
                 ParryRoll = parry_roll,
                 DodgeRoll = dodge_roll,
-                ParryNegation = options.ParryNegation,
-                DodgeNegation = options.DodgeNegation,
+                ParryNegation = attack.ParryNegation,
+                DodgeNegation = attack.DodgeNegation,
             };
 
             if (result.Parried) OnAttackParried(result);

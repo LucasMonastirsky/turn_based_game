@@ -44,7 +44,7 @@ public partial class Miguel {
             public override async Task Run () {
                 var target = Targets[0];
 
-                var options = new AttackOptions () {
+                var options = new Attack () {
                     ParryNegation = 5,
                     DodgeNegation = 4,
                     DamageRoll = D8.Plus(2),
@@ -52,7 +52,7 @@ public partial class Miguel {
                     MoveToMeleeDistance = true,
                 };
 
-                await User.Attack(target, options, async result => {
+                await User.SendAttack(target, options, async result => {
                     if (result.Hit) {
                         target.Combatant.AddStatusEffect(new Poison(3));
                     }
@@ -106,10 +106,10 @@ public partial class Miguel {
                         return false;
                     });
 
-                    CombatEvents.BeforeAttack.Until(async arguments => {
+                    CombatEvents.BeforeAttack.Until(async attack => {
                         if (Caster.IsDead || Removed) return true;
 
-                        if (arguments.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
+                        if (attack.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
                             return false;
                         }
                         else {
@@ -150,7 +150,7 @@ public partial class Miguel {
             public override async Task Run() {
                 var target = Targets[0];
 
-                var swing_attack = new AttackOptions () {
+                var swing_attack = new Attack () {
                     ParryNegation = 5,
                     DodgeNegation = 4,
                     DamageRoll = D8.Plus(2),
@@ -158,21 +158,21 @@ public partial class Miguel {
                     MoveToMeleeDistance = true,
                 };
 
-                var unarmed_attack = new AttackOptions () {
+                var unarmed_attack = new Attack () {
                     ParryNegation = 6,
                     DodgeNegation = 6,
                     DamageRoll = D4.Plus(1),
                 };
 
-                await User.Attack(target, swing_attack);
+                await User.SendAttack(target, swing_attack);
 
                 await Timing.Delay();
 
-                await User.Attack(target, unarmed_attack with { Sprite = User.Animations.Combo_1 });
+                await User.SendAttack(target, unarmed_attack with { Sprite = User.Animations.Combo_1 });
 
                 await Timing.Delay();
 
-                await User.Attack(target, unarmed_attack with { Sprite = User.Animations.Combo_2 });
+                await User.SendAttack(target, unarmed_attack with { Sprite = User.Animations.Combo_2 });
             }
         }
 

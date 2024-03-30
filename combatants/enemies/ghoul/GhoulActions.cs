@@ -39,7 +39,7 @@ namespace Combat {
                 public override async Task Run() {
                     var target = Targets[0];
 
-                    var attack = new AttackOptions {
+                    var attack = new Attack {
                         IsMelee = true,
                         MoveToMeleeDistance = true,
                         DamageRoll = Dice.D6.Plus(2),
@@ -48,7 +48,7 @@ namespace Combat {
                         DodgeNegation = 3,
                     };
 
-                    await User.Attack(target, attack);
+                    await User.SendAttack(target, attack);
                 }
             }
         
@@ -84,14 +84,14 @@ namespace Combat {
 
                     if (movement.Prevented) return;
 
-                    var attack = new AttackOptions {
+                    var attack = new Attack {
                         IsMelee = true,
                         MoveToMeleeDistance = true,
                         DamageRoll = Dice.D10.Plus(2),
                         Sprite = User.Animations.Charge,
                     };
 
-                    await User.Attack(target_enemy, attack);
+                    await User.SendAttack(target_enemy, attack);
                 }
             }
         }

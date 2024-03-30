@@ -1,20 +1,12 @@
 namespace Combat {
     public static class CombatEvents {
-        #region BeforeAttack
-        public struct BeforeAttackArguments {
-            public Combatant Attacker;
-            public CombatTarget Target;
-            public Combatant.AttackOptions Options;
-        }
-
-        public static EventManager<BeforeAttackArguments> BeforeAttack = new ();
-        #endregion
+        public static EventManager<Combatant.Attack> BeforeAttack = new ();
 
         #region AfterAttack
         public struct AfterAttackArguments {
             public Combatant Attacker;
             public CombatTarget Target;
-            public Combatant.AttackOptions Options;
+            public Combatant.Attack Options;
             public AttackResult Result;
         }
         public static EventManager<AfterAttackArguments> AfterAttack = new ();

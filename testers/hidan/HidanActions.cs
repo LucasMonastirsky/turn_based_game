@@ -50,7 +50,7 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    await User.Attack(target, new () {
+                    await User.SendAttack(target, new () {
                         ParryNegation = 4,
                         DodgeNegation = 1,
                         DamageRoll = User.AxeDamageRoll,
@@ -84,20 +84,20 @@ namespace Combat {
 
                     await User.DisplaceToMeleeDistance(target);
 
-                    var attack_options = new AttackOptions () {
+                    var attack_options = new Attack () {
                         ParryNegation = 3,
                         DodgeNegation = 3,
                         DamageRoll = D4.Times(2),
                         Sprite = User.Animations.Sweeps[0],
                     };
 
-                    var first_attack = await User.Attack(real_targets[0], attack_options);
+                    var first_attack = await User.SendAttack(real_targets[0], attack_options);
 
                     if (first_attack.Parried) return;
 
                     await Timing.Delay();
 
-                    await User.Attack(real_targets[1], attack_options with { Sprite = User.Animations.Sweeps[1], });
+                    await User.SendAttack(real_targets[1], attack_options with { Sprite = User.Animations.Sweeps[1], });
                 }
             }
         
@@ -180,41 +180,41 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    AttackOptions base_attack = new () {
+                    Attack base_attack = new () {
                         ParryNegation = 2,
                         DodgeNegation = 2,
                         DamageRoll = User.AxeDamageRoll,
                     };
 
-                    await User.Attack(target, base_attack with {
+                    await User.SendAttack(target, base_attack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Sweeps[0],
                     });
 
                     await Timing.Delay();
 
-                    await User.Attack(target, base_attack with {
+                    await User.SendAttack(target, base_attack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Sweeps[1],
                     });
 
                     await Timing.Delay();
 
-                    await User.Attack(target, base_attack with {
+                    await User.SendAttack(target, base_attack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Stab
                     });
 
                     await Timing.Delay();
 
-                    var punch_attack = new AttackOptions () {
+                    var punch_attack = new Attack () {
                         ParryNegation = 2,
                         DodgeNegation = 6,
                         DamageRoll = User.PunchDamageRoll,
                         Sprite = User.Animations.Punch,
                     };
 
-                    await User.Attack(target, punch_attack, async result => {
+                    await User.SendAttack(target, punch_attack, async result => {
                         if (!result.Dodged) {
                             var switchers = target.Combatant.Allies.OnRow(1).Where(combatant => combatant.CanBeMoved).ToList();
                             if (switchers.Count > 0) {
