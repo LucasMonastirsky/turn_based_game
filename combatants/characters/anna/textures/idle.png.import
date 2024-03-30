@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://doqkt5e6bc3qa"
-path="res://.godot/imported/shoot.png-847725a2308716032ea9839afff34492.ctex"
+uid="uid://kce1g3c1pp8l"
+path="res://.godot/imported/idle.png-dd38e6cdd8a554005545891f4cad9c7e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/anna/textures/shoot.png"
-dest_files=["res://.godot/imported/shoot.png-847725a2308716032ea9839afff34492.ctex"]
+source_file="res://combatants/characters/anna/textures/idle.png"
+dest_files=["res://.godot/imported/idle.png-dd38e6cdd8a554005545891f4cad9c7e.ctex"]
 
 [params]
 

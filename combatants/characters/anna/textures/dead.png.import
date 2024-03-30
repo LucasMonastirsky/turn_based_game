@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7uhewfoo4jw2"
-path="res://.godot/imported/smoke.png-3a469fee28a5545d711823db2a78f6c3.ctex"
+uid="uid://d4ntebdou8ow5"
+path="res://.godot/imported/dead.png-fe332d37cabc21f4421359d57bb6081b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/anna/textures/smoke.png"
-dest_files=["res://.godot/imported/smoke.png-3a469fee28a5545d711823db2a78f6c3.ctex"]
+source_file="res://combatants/characters/anna/textures/dead.png"
+dest_files=["res://.godot/imported/dead.png-fe332d37cabc21f4421359d57bb6081b.ctex"]
 
 [params]
 

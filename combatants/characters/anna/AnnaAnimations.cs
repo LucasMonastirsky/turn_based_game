@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Anna {
-        private static string texture_path = "res://testers/anna/textures";
+        private static string texture_path = "res://combatants/characters/anna/textures";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Shoot { get; set; }

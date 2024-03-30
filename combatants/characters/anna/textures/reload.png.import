@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckdihdcyd5k1q"
-path="res://.godot/imported/kick.png-caec79c2bb72da68dea6c84447beb680.ctex"
+uid="uid://dd07r5xoxopvl"
+path="res://.godot/imported/reload.png-43000267e633d784d13b2bf883607638.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/anna/textures/kick.png"
-dest_files=["res://.godot/imported/kick.png-caec79c2bb72da68dea6c84447beb680.ctex"]
+source_file="res://combatants/characters/anna/textures/reload.png"
+dest_files=["res://.godot/imported/reload.png-43000267e633d784d13b2bf883607638.ctex"]
 
 [params]
 

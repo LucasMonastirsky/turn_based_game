@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkre0gg8lk0sw"
-path="res://.godot/imported/dodge.png-d61f153fecb8430a73610778c32a544f.ctex"
+uid="uid://ckdihdcyd5k1q"
+path="res://.godot/imported/kick.png-407835a151c86a2365541d8ab1aad222.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/anna/textures/dodge.png"
-dest_files=["res://.godot/imported/dodge.png-d61f153fecb8430a73610778c32a544f.ctex"]
+source_file="res://combatants/characters/anna/textures/kick.png"
+dest_files=["res://.godot/imported/kick.png-407835a151c86a2365541d8ab1aad222.ctex"]
 
 [params]
 

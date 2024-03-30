@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl4ng4816agu4"
-path="res://.godot/imported/hurt.png-bfe05bd43cb106c59dbbcb0cbcb6a42b.ctex"
+uid="uid://doqkt5e6bc3qa"
+path="res://.godot/imported/shoot.png-c73a777f5e1c403974323b24c53db06f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/anna/textures/hurt.png"
-dest_files=["res://.godot/imported/hurt.png-bfe05bd43cb106c59dbbcb0cbcb6a42b.ctex"]
+source_file="res://combatants/characters/anna/textures/shoot.png"
+dest_files=["res://.godot/imported/shoot.png-c73a777f5e1c403974323b24c53db06f.ctex"]
 
 [params]
 
