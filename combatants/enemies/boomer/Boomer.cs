@@ -12,6 +12,8 @@ namespace Combat {
         protected override void Setup () {
             base.Setup();
             Actions = new (this);
+
+            MaxHealth = 15;
         }
 
         protected override void OnDeath () {

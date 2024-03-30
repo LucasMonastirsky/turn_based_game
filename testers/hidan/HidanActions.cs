@@ -54,7 +54,6 @@ namespace Combat {
                         ParryNegation = 4,
                         DodgeNegation = 1,
                         DamageRoll = User.AxeDamageRoll,
-                        DamageTags = new string [] { "Cut", },
                         Sprite = User.Animations.Stab,
                         MoveToMeleeDistance = true,
                     });
@@ -89,7 +88,6 @@ namespace Combat {
                         ParryNegation = 3,
                         DodgeNegation = 3,
                         DamageRoll = D4.Times(2),
-                        DamageTags = new string [] { "Cut" },
                         Sprite = User.Animations.Sweeps[0],
                     };
 
@@ -136,20 +134,11 @@ namespace Combat {
                     if (opposite_slot.Combatant != null) enemies = new () { opposite_slot.ToTarget() };
                     else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null && x.Combatant.IsAlive).Select(x => x.ToTarget()).ToList();
 
-                    var modifiers =  new RollModifier [] {
-                        User.AddRollModifier(new (this, RollTags.Hit) { Advantage = 1 }),
-                        User.AddRollModifier(new (this, RollTags.Crit) { Advantage = -1 }),
-                    };
-
                     if (enemies.Count == 1) {
                         await User.Actions.Stab.Act(enemies[0]);
                     }
                     else {
                         await User.Actions.Sweep.Act(enemies[0].Position with { Slot = ally.Slot });
-                    }
-
-                    foreach (var modifier in modifiers) {
-                        User.RemoveRollModifier(modifier);
                     }
                 }
             }
@@ -195,7 +184,6 @@ namespace Combat {
                         ParryNegation = 2,
                         DodgeNegation = 2,
                         DamageRoll = User.AxeDamageRoll,
-                        DamageTags = new string [] { "Cut", },
                     };
 
                     await User.Attack(target, base_attack with {
@@ -223,7 +211,6 @@ namespace Combat {
                         ParryNegation = 2,
                         DodgeNegation = 6,
                         DamageRoll = User.PunchDamageRoll,
-                        DamageTags = new string [] { "Blunt", },
                         Sprite = User.Animations.Punch,
                     };
 

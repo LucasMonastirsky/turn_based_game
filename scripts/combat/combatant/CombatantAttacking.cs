@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Development;
 using Godot;
-using Utils;
 
 namespace Combat {
     public partial class Combatant {
@@ -12,16 +9,15 @@ namespace Combat {
         public virtual bool CanParry => true;
         public virtual bool CanDodge => true;
 
-        public int Damage (int value) => Damage (value, new string [] {});
-
-        public int Damage(int value, string[] tags) {
+        public int Damage (int value, bool is_crit = false) {
             if (!IsDead) Animator.Play(StandardAnimations.Hurt);
 
-            var total = Math.Clamp(value, 0, 999);
+            var total = Math.Clamp(value - (is_crit ? Armor : 0), 1, 999);
 
             var previous_health = Health;
             Health -= total;
-            Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage {Stringer.Join(tags)}");
+
+            Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage");
 
             if (previous_health > 0 && IsDead) {
                 OnDeath(); // TODO: should this be elsewhere?
@@ -32,12 +28,12 @@ namespace Combat {
 
             DamageLabel.Instantiate(this, $"{value}");
 
-            OnDamaged(value, tags);
+            OnDamaged(value);
 
             return value;
         }
 
-        protected virtual void OnDamaged (int value, string [] tags) {
+        protected virtual void OnDamaged (int value) {
 
         }
 
@@ -58,12 +54,11 @@ namespace Combat {
         }
 
         public record AttackOptions {
-
+            public int HitAdvantage, HitBonus = 0;
             public int ParryNegation, DodgeNegation = 0;
-            public bool CanBeParried, CanBeDodged = true;
-            public List<RollModifier> RollModifiers = new ();
+            public bool CanBeParried = true;
+            public bool CanBeDodged = true;
             public DiceRoll DamageRoll = null;
-            public string [] DamageTags = new string [] {};
             public bool IsMelee = false;
             public bool IsRanged = false;
             public bool MoveToMeleeDistance = false;
@@ -86,12 +81,12 @@ namespace Combat {
             if (result.Hit && options.DamageRoll != null) {
                 var crit_roll = Roll(Dice.D20, RollTags.Crit);
 
-                if (crit_roll > 20 - CritSensitivity) {
+                if (crit_roll > 20) {
                     Play(CommonSounds.Crit);
                     options.DamageRoll.Times(2);
                 }
 
-                result.Defender.Damage(Roll(options.DamageRoll), options.DamageTags.Prepend("Damage").ToArray());
+                result.Defender.Damage(Roll(options.DamageRoll));
             }
 
             if (handler != null) await handler(result);
@@ -101,9 +96,9 @@ namespace Combat {
             return TurnManager.LastAttack = result;
         }
         public AttackResult ReceiveAttack (Combatant attacker, AttackOptions options) {
-            var hit_roll = attacker.Roll(10, options.RollModifiers, RollTags.Attack, RollTags.Hit);
-            var parry_roll = (!options.CanBeParried || IsDead || !CanParry) ? 0 : Roll(10, RollTags.Defense, RollTags.Parry);
-            var dodge_roll = (!options.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(10, RollTags.Defense, RollTags.Dodge);
+            var hit_roll = attacker.Roll(Dice.D10, RollTags.Attack, RollTags.Hit);
+            var parry_roll = (!options.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Parry);
+            var dodge_roll = (!options.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Dodge);
 
             var result = new AttackResult {
                 Attacker = attacker,

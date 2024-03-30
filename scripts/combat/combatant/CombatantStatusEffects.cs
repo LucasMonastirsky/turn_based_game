@@ -8,7 +8,7 @@ namespace Combat {
     public partial class Combatant {
         public List<StatusEffect> StatusEffects { get; } = new ();
 
-        public void AddStatusEffect (StatusEffect effect) {
+        public StatusEffect AddStatusEffect (StatusEffect effect) {
             var overriden_effect = StatusEffects.Find(x => x.Name == effect.Name);
 
             if (overriden_effect != null) {
@@ -33,6 +33,8 @@ namespace Combat {
 
                 Display.AddStatusEffect(effect);
             }
+
+            return overriden_effect ?? effect;
         }
 
         public void RemoveStatusEffect (string name) {

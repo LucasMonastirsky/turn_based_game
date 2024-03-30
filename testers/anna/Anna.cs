@@ -1,15 +1,22 @@
 using System;
 using System.Linq;
+using Development;
 using static Dice;
 
 namespace Combat {
     public partial class Anna : Combatant {
-        public override string Name => $"Anna {Bullets}/{MaxBullets}";
+        public override string Name => "Anna";
 
         public override Type DefaultControllerType => typeof (PlayerController);
 
-        public int Bullets = 6;
         public int MaxBullets = 6;
+        public int Bullets => GetStatusEffect<BulletsEffect>()?.Level ?? 0;
+
+        private void SpendBullet () {
+            if (Bullets < 1) Dev.Error("Tried to spend bullets without any");
+
+            GetStatusEffect<BulletsEffect>().Level -= 1;
+        }
 
         public DiceRoll BulletDamageRoll = D4.Plus(2);
 
@@ -19,6 +26,12 @@ namespace Combat {
 
             Health = 20;
             MaxHealth = 20;
+
+            HitBonus = 2;
+            ParryBonus = 0;
+            DodgeBonus = 2;
+
+            AddStatusEffect(new BulletsEffect (MaxBullets));
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {
@@ -39,6 +52,14 @@ namespace Combat {
             }
             else {
                 Play(Animations.Idle);
+            }
+        }
+
+        public class BulletsEffect : StatusEffect {
+            public override string Name => "Bullets";
+
+            public BulletsEffect (int amount) {
+                Level = amount;
             }
         }
     }

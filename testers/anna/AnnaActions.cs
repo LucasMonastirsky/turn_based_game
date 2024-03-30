@@ -53,7 +53,6 @@ namespace Combat {
                         DodgeNegation = 2,
                         MoveToMeleeDistance = true,
                         DamageRoll = D4.Plus(2),
-                        DamageTags = new string [] { "Blunt" },
                         Sprite = User.Animations.Kick,
                     };
 
@@ -114,13 +113,12 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    User.Bullets -= 1;
+                    User.SpendBullet();
 
                     var attack_options = new AttackOptions () {
                         ParryNegation = 10,
                         DodgeNegation = 3,
                         DamageRoll = User.BulletDamageRoll,
-                        DamageTags = new string [] { "Bullet" },
                         IsRanged = true,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
@@ -155,8 +153,10 @@ namespace Combat {
                         if (i < step_count - 1) await Timing.Delay((float) 1/step_count);
                     }
 
-                    User.Bullets += Amount;
-                    if (User.Bullets > User.MaxBullets) User.Bullets = User.MaxBullets;
+                    var effect = User.GetStatusEffect<BulletsEffect>() ?? User.AddStatusEffect(new BulletsEffect (0));
+                    effect.Level += Amount;
+
+                    if (effect.Level > User.MaxBullets) effect.Level = User.MaxBullets;
                 }
             }
         
@@ -194,13 +194,12 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    User.Bullets -= 1;
+                    User.SpendBullet();
 
                     var attack_options = new AttackOptions () {
                         ParryNegation = 15,
                         DodgeNegation = 4,
                         DamageRoll = User.BulletDamageRoll.WithDisadvantage(),
-                        DamageTags = new string [] { "Bullet" }, // TODO: Add DamageType or DamageInstance class
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
                     };
@@ -236,14 +235,13 @@ namespace Combat {
                         ParryNegation = 15,
                         DodgeNegation = 8,
                         DamageRoll = User.BulletDamageRoll,
-                        DamageTags = new string [] { "Bullet" },
                         IsRanged = true,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
                     };
 
                     while (User.Bullets > 0) {
-                        User.Bullets--;
+                        User.SpendBullet();
 
                         await User.Attack(target, attack_options);
 

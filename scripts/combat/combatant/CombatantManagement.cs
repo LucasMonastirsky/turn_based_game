@@ -24,12 +24,19 @@ namespace Combat {
             Display = CombatantDisplayManager.CreateDisplay(this);
 
             Animator.Play(StandardAnimations.Idle);
+
+            AddRollModifier(new (this, RollTags.Hit) { Bonus = HitBonus });
+            AddRollModifier(new (this, RollTags.Crit) { Bonus = CritBonus });
+            AddRollModifier(new (this, RollTags.Damage) { Bonus = DamageBonus });
+            AddRollModifier(new (this, RollTags.Parry) { Bonus = ParryBonus });
+            AddRollModifier(new (this, RollTags.Dodge) { Bonus = DodgeBonus });
         }
 
         public void LoadIn () {
-            Tempo = StartingTempo;
-
             Setup();
+
+            Tempo = TempoGain;
+            Health = MaxHealth;
         }
 
         public void LoadIn (CombatPosition position) {
@@ -40,7 +47,7 @@ namespace Combat {
         public bool FirstTurnTaken { get; private set; } = false;
         public void OnTurnStart () {
             if (FirstTurnTaken) {
-                Tempo += StartingTempo;
+                Tempo += TempoGain;
                 if (Tempo > MaxTempo) Tempo = MaxTempo;
             }
             else FirstTurnTaken = true;

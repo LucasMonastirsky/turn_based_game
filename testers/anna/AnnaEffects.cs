@@ -1,4 +1,3 @@
-using System.Linq;
 using static Combat.Anna.ActionClasses;
 
 namespace Combat {
@@ -29,9 +28,7 @@ namespace Combat {
                         return true;
                     }
                     else {
-                        attack.Options.RollModifiers.Add(new (this) {
-                            Advantage = 1,
-                        });
+                        attack.Options.HitAdvantage += 1;
                         return false;
                     }
                 });
@@ -104,7 +101,7 @@ namespace Combat {
                     if (movement.Side == User.Side || !movement.IsIntentional) return false;
 
                     if (User.Bullets > 0) {
-                        User.Bullets -= 1;
+                        User.SpendBullet();
 
                         var attack_options = new AttackOptions () {
                             ParryNegation = 10,

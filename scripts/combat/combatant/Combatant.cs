@@ -9,14 +9,9 @@ namespace Combat {
         public abstract string Name { get; }
         public Combatant User => this;
 
-        public int MaxHealth { get; protected set; } = 15;
         public int Health { get; protected set; } = 15;
         
-        public int MaxTempo { get; set; } = 3;
-        public int StartingTempo { get; set; } = 2;
         public int Tempo { get; set; }
-
-        public int CritSensitivity { get; set; }
 
         public bool IsDead => Health < 1;
         public bool IsAlive => !IsDead;

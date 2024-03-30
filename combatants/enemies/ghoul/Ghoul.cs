@@ -9,6 +9,10 @@ namespace Combat {
         protected override void Setup() {
             base.Setup();
             Actions = new (this);
+
+            MaxHealth = 20;
+
+            DodgeBonus = 2;
         }
     }
 }

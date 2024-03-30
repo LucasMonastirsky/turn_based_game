@@ -21,7 +21,7 @@ namespace Combat {
 
         public override void Tick () {
             InteractionManager.AddQueueEvent(async () => {
-                User.Damage(Level--, new [] { "Poison" });
+                User.Damage(Level--);
 
                 if (Level <= 0) {
                     User.RemoveStatusEffect(Name);

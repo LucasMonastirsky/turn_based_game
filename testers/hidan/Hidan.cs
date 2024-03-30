@@ -18,6 +18,10 @@ namespace Combat {
 
             Health = 30;
             MaxHealth = 30;
+
+            HitBonus = 2;
+            ParryBonus = 0;
+            DodgeBonus = 2;
         }
 
         public override CombatAction GetRiposte(AttackResult attack_result) {
@@ -25,7 +29,7 @@ namespace Combat {
             else return null;
         }
 
-        protected override void OnDamaged (int value, string [] tags) {
+        protected override void OnDamaged (int value) {
             AddStatusEffect(new Rage(value));
         }
 
@@ -50,7 +54,7 @@ namespace Combat {
                         var delta = Level - arguments.Result.ParryDelta;
                         if (delta > 0) {
                             await Timing.Delay();
-                            arguments.Result.Defender.Damage(delta, new string [] { "Cut" }); // TODO: add way to check damage tags
+                            arguments.Result.Defender.Damage(delta); // TODO: add way to check damage tags
                             arguments.Result.ParryNegation += Level;
                         }
                     }
