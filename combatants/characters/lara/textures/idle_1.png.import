@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dx5ytkfdvuatb"
-path="res://.godot/imported/punch.png-2317d9adf5b94011c73630e09c4911ae.ctex"
+uid="uid://dq8f3a5hiovba"
+path="res://.godot/imported/idle_1.png-4965b8a10125dcb648fe4a75f34eac30.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/textures/punch.png"
-dest_files=["res://.godot/imported/punch.png-2317d9adf5b94011c73630e09c4911ae.ctex"]
+source_file="res://combatants/characters/lara/textures/idle_1.png"
+dest_files=["res://.godot/imported/idle_1.png-4965b8a10125dcb648fe4a75f34eac30.ctex"]
 
 [params]
 

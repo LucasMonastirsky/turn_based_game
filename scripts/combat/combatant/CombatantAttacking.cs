@@ -88,7 +88,7 @@ namespace Combat {
             if (attack.Sound != null) Play(attack.Sound);
 
             if (result.Hit && attack.DamageRoll != null) {
-                result.Defender.Damage(Roll(attack.DamageRoll));
+                result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage));
             }
 
             if (handler != null) await handler(result);

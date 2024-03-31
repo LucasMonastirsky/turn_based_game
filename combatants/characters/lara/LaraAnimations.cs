@@ -1,8 +1,8 @@
 using Godot;
 
 namespace Combat {
-    public partial class Hidan {
-        private static string texture_path = "res://testers/hidan/textures";
+    public partial class Lara {
+        private static string texture_path = "res://combatants/characters/lara/textures";
 
         protected override StandardAnimationStore StandardAnimations => Animations;
 

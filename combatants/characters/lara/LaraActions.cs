@@ -6,7 +6,7 @@ using Utils;
 using static Dice;
 
 namespace Combat {
-    public partial class Hidan {
+    public partial class Lara {
         public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
 
         public ActionStore Actions;
@@ -22,7 +22,7 @@ namespace Combat {
             public CommonActions.Switch Switch;
             public CommonActions.Pass Pass;
 
-            public ActionStore (Hidan hidan) {
+            public ActionStore (Lara hidan) {
                 foreach (var field in typeof(ActionStore).GetFields()) {
                     field.SetValue(this, Activator.CreateInstance(field.FieldType, hidan));
                 }
@@ -43,9 +43,9 @@ namespace Combat {
                     ActionRestrictors.FrontRow,
                 };
 
-                public new Hidan User => base.User as Hidan;
+                public new Lara User => base.User as Lara;
 
-                public Stab (Hidan user) : base (user) {}
+                public Stab (Lara user) : base (user) {}
 
                 public override async Task Run () {
                     var target = Targets[0];
@@ -72,8 +72,8 @@ namespace Combat {
                     ActionRestrictors.FrontRow,
                 };
                 
-                public new Hidan User => base.User as Hidan;
-                public Sweep (Hidan user) : base (user) {}
+                public new Lara User => base.User as Lara;
+                public Sweep (Lara user) : base (user) {}
 
                 public override async Task Run () {
                     var target = Targets[0];
@@ -118,8 +118,8 @@ namespace Combat {
                     ActionRestrictors.CanMove,
                 };
 
-                public new Hidan User => base.User as Hidan;
-                public Charge (Hidan user) : base (user) {}
+                public new Lara User => base.User as Lara;
+                public Charge (Lara user) : base (user) {}
 
                 public override async Task Run () {
                     var ally = Targets[0];
@@ -151,8 +151,8 @@ namespace Combat {
                     ActionRestrictors.BackRow,
                 };
 
-                public new Hidan User => base.User as Hidan;
-                public Impatience (Hidan user) : base (user) {}
+                public new Lara User => base.User as Lara;
+                public Impatience (Lara user) : base (user) {}
 
                 public override async Task Run () {
                     User.AddStatusEffect(new Rage(2));
@@ -174,8 +174,8 @@ namespace Combat {
 
                 public override bool IsAvailable => base.IsAvailable && User.GetStatusEffect<Rage>()?.Level >= 10;
 
-                public new Hidan User => base.User as Hidan;
-                public Unleash (Hidan user) : base (user) {}
+                public new Lara User => base.User as Lara;
+                public Unleash (Lara user) : base (user) {}
 
                 public override async Task Run () {
                     var target = Targets[0];

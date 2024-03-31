@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cuu5eyb4xqwmb"
-path="res://.godot/imported/hurt.png-ff4e263fe0fb753ff274c092d47021cc.ctex"
+uid="uid://c5h4or6hphnij"
+path="res://.godot/imported/charge.png-606f72c5fc0879728f4382f291708480.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/textures/hurt.png"
-dest_files=["res://.godot/imported/hurt.png-ff4e263fe0fb753ff274c092d47021cc.ctex"]
+source_file="res://combatants/characters/lara/textures/charge.png"
+dest_files=["res://.godot/imported/charge.png-606f72c5fc0879728f4382f291708480.ctex"]
 
 [params]
 

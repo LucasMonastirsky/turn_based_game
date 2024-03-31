@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dq8f3a5hiovba"
-path="res://.godot/imported/idle_1.png-b181773f473faf75b213d7be195dd50a.ctex"
+uid="uid://b307aqe7wbg1h"
+path="res://.godot/imported/dodge.png-b345dec64d2d408286caceb31272684c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/textures/idle_1.png"
-dest_files=["res://.godot/imported/idle_1.png-b181773f473faf75b213d7be195dd50a.ctex"]
+source_file="res://combatants/characters/lara/textures/dodge.png"
+dest_files=["res://.godot/imported/dodge.png-b345dec64d2d408286caceb31272684c.ctex"]
 
 [params]
 

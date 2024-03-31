@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5h4or6hphnij"
-path="res://.godot/imported/charge.png-fbeea1c96b386905e5dbb4648860a6a0.ctex"
+uid="uid://dct0kuppnmnhb"
+path="res://.godot/imported/parry.png-3306ff59d3dc16db2674719c0c6a0230.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/textures/charge.png"
-dest_files=["res://.godot/imported/charge.png-fbeea1c96b386905e5dbb4648860a6a0.ctex"]
+source_file="res://combatants/characters/lara/textures/parry.png"
+dest_files=["res://.godot/imported/parry.png-3306ff59d3dc16db2674719c0c6a0230.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jhlprwt5e22t"
-path="res://.godot/imported/sweep_0.png-f1153ba5b51befe3a93ef9441740c724.ctex"
+uid="uid://k1jk5q4qh81b"
+path="res://.godot/imported/stab.png-27952b3ebab99a3a8bd292f0977ea40d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/textures/sweep_0.png"
-dest_files=["res://.godot/imported/sweep_0.png-f1153ba5b51befe3a93ef9441740c724.ctex"]
+source_file="res://combatants/characters/lara/textures/stab.png"
+dest_files=["res://.godot/imported/stab.png-27952b3ebab99a3a8bd292f0977ea40d.ctex"]
 
 [params]
 

@@ -35,7 +35,6 @@ namespace Combat {
             else rolls.Sort((x, y) => x - y);
 
             var total = rolls[0] + roll_data.Bonus;
-            Dev.Log(Dev.Tags.Rolling, $"{this} rolling {dice_roll}");
             Dev.Log(Dev.Tags.Rolling, $"{this} rolled {Stringer.Join(tags)}: {total} ({rolls[0]}+{roll_data.Bonus}) ({roll_data.Advantage} advantage)");
 
             foreach (var mod in mods) {

@@ -4,7 +4,7 @@ using Development;
 using static Dice;
 
 namespace Combat {
-    public partial class Hidan : Combatant {
+    public partial class Lara : Combatant {
         public override string Name => "Hidan";
 
         public override Type DefaultControllerType => typeof(PlayerController);

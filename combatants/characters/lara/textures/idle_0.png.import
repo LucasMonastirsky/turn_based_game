@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kxsodbenn5us"
-path="res://.godot/imported/sweep_1.png-87387586ccf6ce5b7f98a1e0400cb132.ctex"
+uid="uid://cl1vcwnorr66f"
+path="res://.godot/imported/idle_0.png-32cbd3af9024d4eb4efd53259d64d22a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/hidan/textures/sweep_1.png"
-dest_files=["res://.godot/imported/sweep_1.png-87387586ccf6ce5b7f98a1e0400cb132.ctex"]
+source_file="res://combatants/characters/lara/textures/idle_0.png"
+dest_files=["res://.godot/imported/idle_0.png-32cbd3af9024d4eb4efd53259d64d22a.ctex"]
 
 [params]
 
