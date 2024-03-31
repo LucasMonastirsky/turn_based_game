@@ -23,16 +23,6 @@ public partial class MiguelController : Controller {
         if (Combatant.Row == 1) {
             Dev.Log(Dev.Tags.BotController, "Back row");
 
-            if (Combatant.Tempo > 1 && Combatant.CanMove) {
-                Dev.Log(Dev.Tags.BotController, "Checking for dead allies");
-
-                var dead_allies = Combatant.Allies.OnRow(0).Dead.All;
-                if (dead_allies.Count > 0) {
-                    Dev.Log(Dev.Tags.BotController, "Found dead allies");
-                    return Combatant.Actions.Switch.Bind(RNG.SelectFrom(dead_allies));
-                }
-            }
-
             var front_allies = Combatant.Allies.OnRow(0);
 
             if (Combatant.Tempo > 1) {
@@ -69,7 +59,6 @@ public partial class MiguelController : Controller {
                     var allies_with_extra_tempo = weak_front_allies.Where(ally => ally.Tempo > 0).ToList();
 
                     if (allies_with_extra_tempo.Count > 0) return Combatant.Actions.Move.Bind(RNG.SelectFrom(allies_with_extra_tempo));
-                    else if (Combatant.Tempo > 1) return Combatant.Actions.Switch.Bind(RNG.SelectFrom(weak_front_allies));
                 }
             }
 

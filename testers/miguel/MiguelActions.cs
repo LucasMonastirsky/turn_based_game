@@ -16,7 +16,6 @@ public partial class Miguel {
         public ActionClasses.Immobilize Immobilize;
 
         public CommonActions.Move Move;
-        public CommonActions.Switch Switch;
         public CommonActions.Pass Pass;
 
         public ActionStore (Miguel miguel) {

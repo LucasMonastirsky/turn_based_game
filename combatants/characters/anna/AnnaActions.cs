@@ -20,7 +20,6 @@ namespace Combat {
             public ActionClasses.Guard Guard;
 
             public CommonActions.Move Move;
-            public CommonActions.Switch Switch;
             public CommonActions.Pass Pass;
 
             public ActionStore (Anna anna) {

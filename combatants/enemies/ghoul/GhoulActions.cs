@@ -12,7 +12,6 @@ namespace Combat {
             public ActionClasses.Charge Charge;
 
             public CommonActions.Move Move;
-            public CommonActions.Switch Switch;
             public CommonActions.Pass Pass;
 
             public ActionStore (Ghoul ghoul) {

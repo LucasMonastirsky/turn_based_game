@@ -19,7 +19,6 @@ namespace Combat {
             public ActionClasses.Impatience Impatience;
 
             public CommonActions.Move Move;
-            public CommonActions.Switch Switch;
             public CommonActions.Pass Pass;
 
             public ActionStore (Lara hidan) {

@@ -15,7 +15,6 @@ public partial class Hugo {
         public HugoActions.Blast Blast;
 
         public CommonActions.Move Move;
-        public CommonActions.Switch Switch;
         public CommonActions.Pass Pass;
 
         public ActionStore (Hugo hugo) {

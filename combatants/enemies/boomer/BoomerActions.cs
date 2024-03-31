@@ -13,7 +13,6 @@ namespace Combat {
             public ActionClasses.Burst Burst;
 
             public CommonActions.Move Move;
-            public CommonActions.Switch Switch;
             public CommonActions.Pass Pass;
 
             public ActionStore (Boomer boomer) {

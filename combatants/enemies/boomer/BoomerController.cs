@@ -17,10 +17,6 @@ namespace Combat {
             }
 
             if (Boomer.Row == 1) {
-                var dead_allies = Boomer.Allies.OnRow(0).Dead;
-
-                if (dead_allies.Count > 0 && Boomer.Tempo > 1) return Boomer.Actions.Switch.Bind(dead_allies.SelectRandom());
-
                 var movement_targets = Boomer.Actions.Move.GetValidTargets();
 
                 if (movement_targets.Count > 0) return Boomer.Actions.Move.RandomBind(movement_targets);
