@@ -1,3 +1,4 @@
+using System.Linq;
 using Development;
 
 namespace Combat {
@@ -54,6 +55,20 @@ namespace Combat {
                             }
 
                             LastAttack = null;
+                        }
+
+                        await InteractionManager.ResolveQueue();
+
+                        // TODO: might have to check this in interaction manager, in case a death happens while resolving an event
+
+                        var dead = Combatants.Where(combatant => combatant.DeathCheck()).ToList();
+                        if (dead.Count > 0) {
+                            Battle.Combatants.Remove(dead);
+                            await Positioner.AdjustPositionsAfterDeath();
+                            
+                            foreach (var combatant in dead) {
+                                combatant.Despawn();
+                            }
                         }
 
                         await InteractionManager.ResetCombatants();

@@ -131,7 +131,7 @@ namespace Combat {
                     if (movement.Prevented) return;
 
                     if (opposite_slot.Combatant != null) enemies = new () { opposite_slot.ToTarget() };
-                    else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null && x.Combatant.IsAlive).Select(x => x.ToTarget()).ToList();
+                    else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null).Select(x => x.ToTarget()).ToList();
 
                     if (enemies.Count == 1) {
                         await User.Actions.Stab.Act(enemies[0]);

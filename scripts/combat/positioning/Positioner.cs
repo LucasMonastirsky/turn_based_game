@@ -178,5 +178,37 @@ namespace Combat {
 
             return selected;
         }
+
+        public static async Task AdjustPositionsAfterDeath () {
+            foreach (var side in Side.Both ) {
+                var combatants = Battle.Combatants.OnSide(side);
+
+                var rows = new List<Combatant> [] {
+                    combatants.OnRow(0).ToList(),
+                    combatants.OnSide(side).OnRow(1).ToList(),
+                };
+
+                if (combatants.Count <= 2) {
+                    foreach (var combatant in rows[1]) {
+                        combatant.Position = combatant.Position with { Row = 0 };
+                    }
+                }
+                else {
+                    var delta = rows[0].Count - rows[1].Count;
+
+                    if (Math.Abs(delta) > 1) {
+                        var overflowed_row_index = delta < 0 ? 1 : 0;
+                        var overflowed_row = rows[overflowed_row_index];
+                        var other_row = rows[1 - overflowed_row_index];
+
+                        if (overflowed_row.Count % 2 > 0) {
+                            overflowed_row[1].Position = overflowed_row[1].Position with { Row = 1 - overflowed_row_index };
+                        }
+                    }
+                }
+
+                await recalculate_side(side);
+            }
+        }
     }
 }

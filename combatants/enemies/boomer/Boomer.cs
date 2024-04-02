@@ -16,11 +16,8 @@ namespace Combat {
             MaxHealth = 15;
         }
 
-        protected override void OnDeath () {
-            CombatEvents.AfterAction.Once(async (CombatAction action) => {
-                await Actions.Burst.Bind().Run();
-                await Timing.Delay();
-            });
-        }
+        public override InteractionManager.QueueEvent DeathEvent => async () => {
+            await Actions.Burst.Bind().Run();
+        };
     }
 }

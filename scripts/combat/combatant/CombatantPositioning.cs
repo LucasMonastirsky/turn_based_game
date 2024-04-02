@@ -45,7 +45,7 @@ namespace Combat {
         public Side Side { get => Position.Side; }
 
         public bool CanBeMoved => true;
-        public bool CanMove => IsAlive && !HasStatusEffect<Immobilized>();
+        public bool CanMove => !HasStatusEffect<Immobilized>();
 
         public bool CanMoveTo (CombatPosition position) {
             return CanMove && Positioner.IsValidMovement(this, position, false);

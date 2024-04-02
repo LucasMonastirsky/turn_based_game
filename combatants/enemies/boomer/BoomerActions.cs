@@ -89,6 +89,7 @@ namespace Combat {
 
                 public override async Task Run () {
                     User.Play(User.Animations.Explode);
+                    User.Play(User.Sounds.Pop);
 
                     var victims = new List<Combatant> ();
 

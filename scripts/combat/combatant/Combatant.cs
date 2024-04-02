@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Utils;
 
 namespace Combat {
@@ -9,12 +10,11 @@ namespace Combat {
         public abstract string Name { get; }
         public Combatant User => this;
 
-        public int Health { get; protected set; } = 15;
+        public int Health { get; set; } = 15;
         
         public int Tempo { get; set; }
 
-        public bool IsDead => Health < 1;
-        public bool IsAlive => !IsDead;
+        public bool IsDead { get; set; }
 
         public abstract List<CombatAction> ActionList { get; }
 
@@ -29,5 +29,7 @@ namespace Combat {
             Node = new () { Name = Name };
             Animator = Node.Animator;
         }
+
+        public virtual InteractionManager.QueueEvent DeathEvent { get; } = null;
     }
 }

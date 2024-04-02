@@ -6,6 +6,8 @@ namespace Combat {
         public static Side Left => new Side(-1);
         public static Side Right => new Side(1);
 
+        public static List<Side> Both => new () { Left, Right };
+
         public int Value { get; init; }
         public Side Opposite => Value == -1 ? Right : Left;
 

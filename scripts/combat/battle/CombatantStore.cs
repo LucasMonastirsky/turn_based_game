@@ -61,12 +61,28 @@ namespace Combat {
             return new (ToList().Where(predicate));
         }
 
+        public void ForEach (Action<Combatant> function) {
+            foreach (var combatant in combatants) {
+                function(combatant);
+            }
+        }
+
         public IEnumerator<Combatant> GetEnumerator() {
             return combatants.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
             return combatants.GetEnumerator();
+        }
+
+        public void Remove (Combatant combatant) {
+            combatants.Remove(combatant);
+        }
+
+        public void Remove (List<Combatant> combatants_to_remove) {
+            foreach (var combatant in combatants_to_remove) {
+                combatants.Remove(combatant);
+            }
         }
     }
 }

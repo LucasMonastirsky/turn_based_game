@@ -26,9 +26,11 @@ namespace Combat {
         public static async Task ResolveQueue () {
             Dev.Log(Dev.Tags.CombatManagement, "Resolving queue");
 
+            if (current.Queue.Count > 0) await Timing.Delay();
+
             while(current.Queue.Count > 0) {
-                await Timing.Delay();
                 await current.Queue.Dequeue()();
+                await Timing.Delay();
             }
         }
 

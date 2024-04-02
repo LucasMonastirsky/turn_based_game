@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Combat;
-using Development;
 using Godot;
 
 public partial class CombatantDisplayManager : Node {
@@ -16,6 +15,13 @@ public partial class CombatantDisplayManager : Node {
 		instance.AddChild(display);
 		displays.Add(display);
 		return display;
+	}
+
+	public static void RemoveDisplay (Combatant combatant) {
+		var display = displays.Find(display => display.User == combatant);
+
+		displays.Remove(display);
+		display.QueueFree();
 	}
 
 	public static void Hide () {

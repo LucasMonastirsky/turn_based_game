@@ -39,6 +39,10 @@ namespace Combat {
 			Position = sprite.Offset;
 		}
 
+		public void SetInvisible () {
+			Texture = null;
+		}
+
 		public void Play (SimpleSprite sprite) {
 			current_animation = null;
 			SetSprite(sprite);

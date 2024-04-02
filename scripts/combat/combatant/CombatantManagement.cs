@@ -59,7 +59,23 @@ namespace Combat {
             }
         }
 
+        public bool DeathCheck () {
+            if (Health < 1) {
+                IsDead = true;
+                Play(StandardAnimations.Dead);
+                return true;
+            }
+
+            return false;
+        }
+
         protected virtual void OnDeath () {}
+
+        public void Despawn () {
+            Node.QueueFree();
+            CombatantDisplayManager.RemoveDisplay(this);
+        }
+
         public override string ToString() {
             return $"{Name} ({Position})";
         }

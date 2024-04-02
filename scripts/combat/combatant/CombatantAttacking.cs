@@ -19,9 +19,8 @@ namespace Combat {
 
             Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage");
 
-            if (previous_health > 0 && IsDead) {
-                OnDeath(); // TODO: should this be elsewhere?
-                CombatEvents.AfterDeath.Trigger(new () { Combatant = this }); // TODO: move this and await it
+            if (previous_health > 0 && Health < 1) {
+                if (DeathEvent != null) InteractionManager.AddQueueEvent(DeathEvent);
             }
 
             Play(CommonSounds.SwordWound);
@@ -114,8 +113,8 @@ namespace Combat {
 
             if (result.Parried) OnAttackParried(result);
             if (result.Dodged) OnAttackDodged(result);
-            if (result.Missed && IsAlive) {
-                Play(StandardAnimations.Idle);
+            if (result.Missed) {
+                if (Health > 0) Play(StandardAnimations.Idle);
                 DamageLabel.Instantiate(this, "Miss");
             }
 
