@@ -26,6 +26,7 @@ namespace Combat {
         public virtual List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
         public List<CombatTarget> Targets;
         public int TargetCount => TargetSelectors.Count;
+        public CombatTarget Target => Targets[0];
 
         public bool Bound { get; protected set; } = false;
 

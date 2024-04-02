@@ -97,7 +97,7 @@ namespace Combat {
             return TurnManager.LastAttack = result;
         }
         public AttackResult ReceiveAttack (Combatant attacker, Attack attack) {
-            var hit_roll = attacker.Roll(Dice.D10, RollTags.Attack, RollTags.Hit);
+            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus).WithAdvantage(attack.HitAdvantage), RollTags.Attack, RollTags.Hit);
             var parry_roll = (!attack.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Parry);
             var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Dodge);
 

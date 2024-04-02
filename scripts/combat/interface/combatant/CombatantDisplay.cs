@@ -22,7 +22,7 @@ public partial class CombatantDisplay : Node2D {
 
     public void RemoveStatusEffect (StatusEffect effect) {
         if (EffectLabels.ContainsKey(effect.Name)) {
-            EffectLabels[effect.Name].QueueFree();
+            EffectLabels[effect.Name]?.QueueFree();
             EffectLabels.Remove(effect.Name);
         }
     }

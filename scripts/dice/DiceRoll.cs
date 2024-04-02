@@ -38,6 +38,11 @@ public class DiceRoll {
         return this;
     }
 
+    public DiceRoll WithAdvantage (int advantage) {
+        Advantage += advantage;
+        return this;
+    }
+
     public DiceRoll WithDisadvantage () {
         Advantage -= 1;
         return this;

@@ -59,18 +59,6 @@ namespace Combat {
 
                         await InteractionManager.ResolveQueue();
 
-                        // TODO: might have to check this in interaction manager, in case a death happens while resolving an event
-
-                        var dead = Combatants.Where(combatant => combatant.DeathCheck()).ToList();
-                        if (dead.Count > 0) {
-                            Battle.Combatants.Remove(dead);
-                            await Positioner.AdjustPositionsAfterDeath();
-                            
-                            foreach (var combatant in dead) {
-                                combatant.Despawn();
-                            }
-                        }
-
                         await InteractionManager.ResetCombatants();
                         await CombatEvents.AfterAction.Trigger(CurrentAction);
                         await InteractionManager.ResetCombatants();
@@ -91,10 +79,7 @@ namespace Combat {
                 await Timing.Delay();
                 await InteractionManager.ResetCombatants();
 
-                do {
-                    if (++turn_index >= Combatants.Count) turn_index = 0;
-                }
-                while (Combatants[turn_index].IsDead);
+                if (++turn_index >= Combatants.Count - 1) turn_index = 0;
             }
         }
 

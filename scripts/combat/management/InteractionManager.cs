@@ -35,6 +35,16 @@ namespace Combat {
         }
 
         public static async Task ResetCombatants () {
+            var dead = Battle.Combatants.Where(combatant => combatant.DeathCheck()).ToList();
+            if (dead.Count > 0) {
+                Battle.Combatants.Remove(dead);
+                await Positioner.AdjustPositionsAfterDeath();
+                
+                foreach (var combatant in dead) {
+                    combatant.Despawn();
+                }
+            }
+
             List<Task> tasks = new ();
 
             foreach (var combatant in Battle.Combatants) {

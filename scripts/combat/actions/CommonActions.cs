@@ -11,8 +11,7 @@ namespace Combat {
                 new TargetSelector (TargetType.Position) {
                     Side = SideSelector.Same,
                     Validator = (target, user, previous_targets) => {
-                        if (target.Combatant != null && target.Combatant.Tempo <= 1) return false;
-                        else return user.CanMoveTo(target.Position);
+                        return target.Combatant == null || user.CanMoveTo(target.Position);
                     }
                 },
             };
@@ -24,7 +23,7 @@ namespace Combat {
             public Move (Combatant user) : base (user) {}
 
             public override async Task Run () {
-                await User.MoveTo(Targets[0]);
+                await User.MoveTo(Target);
             }
         }
 
@@ -32,9 +31,7 @@ namespace Combat {
             public override string Name => "Pass";
             public override int TempoCost { get; set; } = 0;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-
-            };
+            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
 
             public Pass (Combatant user) : base (user) {}
 
