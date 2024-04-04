@@ -64,6 +64,16 @@ public class EventManager<T> {
     public void Remove (Func<T, Task<bool>> handler) {
         until_handlers.Remove(handler);
     }
+
+    public static EventManager<T> operator + (EventManager<T> event_manager, Func<T, Task> handler) {
+        event_manager.Always(handler);
+        return event_manager;
+    }
+
+    public static EventManager<T> operator - (EventManager<T> event_manager, Func<T, Task> handler) {
+        event_manager.Remove(handler);
+        return event_manager;
+    }
 }
 
 public delegate void EmptyDelegate ();

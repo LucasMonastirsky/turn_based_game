@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://da4rphlb4er0"
-path="res://.godot/imported/parry.png-9ef30d3623f77c70da847d843e705e6f.ctex"
+uid="uid://cg2w35ysu0axn"
+path="res://.godot/imported/idle_sheath_1.png-69bc15915689567e601ab32bd8245c8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/miguel/textures/parry.png"
-dest_files=["res://.godot/imported/parry.png-9ef30d3623f77c70da847d843e705e6f.ctex"]
+source_file="res://combatants/characters/oda/textures/idle_sheath_1.png"
+dest_files=["res://.godot/imported/idle_sheath_1.png-69bc15915689567e601ab32bd8245c8a.ctex"]
 
 [params]
 

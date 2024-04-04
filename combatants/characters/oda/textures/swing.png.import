@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://w7vkhn0rv2a"
-path="res://.godot/imported/dodge.png-a607cccf522cf36f8e9eee3cd8d4ca01.ctex"
+uid="uid://y5ai66jxfdo1"
+path="res://.godot/imported/swing.png-21d36877b1d3696767db8cab9532836b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/miguel/textures/dodge.png"
-dest_files=["res://.godot/imported/dodge.png-a607cccf522cf36f8e9eee3cd8d4ca01.ctex"]
+source_file="res://combatants/characters/oda/textures/swing.png"
+dest_files=["res://.godot/imported/swing.png-21d36877b1d3696767db8cab9532836b.ctex"]
 
 [params]
 

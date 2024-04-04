@@ -79,6 +79,7 @@ namespace Combat {
                 attack.IsCrit = true;
             }
 
+            await Events.BeforeAttack.Trigger(attack);
             await CombatEvents.BeforeAttack.Trigger(attack);
 
             var result = attack.Target.Combatant.ReceiveAttack(this, attack);

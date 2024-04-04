@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbnvei8h4jled"
-path="res://.godot/imported/seal.png-fbf82f4ce91c2cdbb879f16f028324db.ctex"
+uid="uid://b8fna0cttq377"
+path="res://.godot/imported/hurt.png-51e549542e64e7ada98a106c4dfb8e1b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/miguel/textures/seal.png"
-dest_files=["res://.godot/imported/seal.png-fbf82f4ce91c2cdbb879f16f028324db.ctex"]
+source_file="res://combatants/characters/oda/textures/hurt.png"
+dest_files=["res://.godot/imported/hurt.png-51e549542e64e7ada98a106c4dfb8e1b.ctex"]
 
 [params]
 

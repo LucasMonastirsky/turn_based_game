@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcws6jlnw6m4k"
-path="res://.godot/imported/dead.png-3a2e2bf0f31617e86a8b6f582cb7a77f.ctex"
+uid="uid://b8f6x5l6ucv4m"
+path="res://.godot/imported/idle_0.png-a87c7273fec934a59d2b7e3ea0757ed5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/miguel/textures/dead.png"
-dest_files=["res://.godot/imported/dead.png-3a2e2bf0f31617e86a8b6f582cb7a77f.ctex"]
+source_file="res://combatants/characters/oda/textures/idle_0.png"
+dest_files=["res://.godot/imported/idle_0.png-a87c7273fec934a59d2b7e3ea0757ed5.ctex"]
 
 [params]
 

@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8h1qk64dpov"]
-
-[ext_resource type="Script" path="res://testers/miguel/Miguel.cs" id="1_nm45b"]
-
-[node name="Miguel" type="Node2D"]
-script = ExtResource("1_nm45b")

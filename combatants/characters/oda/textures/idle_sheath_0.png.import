@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8fna0cttq377"
-path="res://.godot/imported/hurt.png-d12a30060ad84085ce5adccdecfccb0a.ctex"
+uid="uid://5bur7mlyieqh"
+path="res://.godot/imported/idle_sheath_0.png-e7ab6c9c4e10a8ad5d6c1b832ebc256a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://testers/miguel/textures/hurt.png"
-dest_files=["res://.godot/imported/hurt.png-d12a30060ad84085ce5adccdecfccb0a.ctex"]
+source_file="res://combatants/characters/oda/textures/idle_sheath_0.png"
+dest_files=["res://.godot/imported/idle_sheath_0.png-e7ab6c9c4e10a8ad5d6c1b832ebc256a.ctex"]
 
 [params]
 

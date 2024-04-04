@@ -6,7 +6,7 @@ namespace Combat {
         private static int turn_index = 0;
 
         public static CombatantStore Combatants => Battle.Combatants;
-        public static Combatant ActiveCombatant => Combatants[turn_index];
+        public static Combatant ActiveCombatant => Combatants[turn_index] ?? Combatants[++turn_index];
 
         public static CombatAction CurrentAction { get; protected set; }
 
@@ -23,7 +23,7 @@ namespace Combat {
                 IsPassQueued = false;
                 ActiveCombatant.OnTurnStart();
 
-                while (ActiveCombatant.Tempo > 0 && !ActiveCombatant.IsDead && !IsPassQueued) {
+                while (ActiveCombatant.Tempo > 0 && !IsPassQueued) {
                     State = "Requesting";
                     Dev.Log(Dev.Tags.CombatManagement, $"Requesting action from {ActiveCombatant}");
 

@@ -29,6 +29,8 @@ namespace Combat {
             Source = source;
             (Start, End) = (start.ToTarget(), end.ToTarget());
         }
+
+        public Movement Reversed => new Movement (Source, End, Start);
     }
 
     public partial class Combatant {
@@ -53,23 +55,31 @@ namespace Combat {
 
         public async Task<Movement> MoveTo (Targetable target, bool isForceful = false) {
             var movement = await CombatEvents.BeforeMovement.Trigger(new (this, this, target) { IsForceful = isForceful });
+            var other_combatant = movement.End.Combatant;
 
-            if (movement.End.Combatant != null) {
+            if (other_combatant != null) {
                 if (!isForceful && !movement.End.Combatant.CanMove) movement.Prevent();
                 if (isForceful && !movement.End.Combatant.CanBeMoved) movement.Prevent();
             }
 
             if (!movement.Prevented) {
                 await Positioner.SwitchPosition(this, target.ToTarget().Position);
+
+                await Events.AfterMovement.Trigger(movement);
+
+                if (other_combatant != null) await other_combatant.Events.AfterMovement.Trigger(movement.Reversed);
             }
 
             return movement;
         }
 
         public async Task Move (Combatant target_combatant, Targetable target_position) {
-            await CombatEvents.BeforeMovement.Trigger(new (this, target_combatant, target_position) { IsForceful = true });
+            var movement = new Movement (this, target_combatant, target_position) { IsForceful = true };
+            await CombatEvents.BeforeMovement.Trigger(movement);
 
             await Positioner.SwitchPosition(target_combatant, target_position.Position);
+
+            await target_combatant.Events.AfterMovement.Trigger(movement.Reversed);
         }
 
         public Task DisplaceTo (Vector2 target_position) {
