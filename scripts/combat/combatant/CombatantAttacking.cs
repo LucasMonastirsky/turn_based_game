@@ -103,6 +103,7 @@ namespace Combat {
             var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, RollTags.Defense, RollTags.Dodge);
 
             var result = new AttackResult {
+                Attack = attack,
                 Attacker = attacker,
                 Defender = this,
                 HitRoll = hit_roll,
@@ -118,6 +119,8 @@ namespace Combat {
                 if (Health > 0) Play(StandardAnimations.Idle);
                 DamageLabel.Instantiate(this, "Miss");
             }
+
+            User.Events.AfterAttack.Trigger(result); // TODO: should await this
 
             var anti_parry = result.HitRoll + result.ParryNegation;
             var anti_dodge = result.HitRoll + result.DodgeNegation;

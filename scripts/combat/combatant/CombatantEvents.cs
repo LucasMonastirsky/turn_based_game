@@ -4,6 +4,7 @@ namespace Combat {
 
         public class CombatantEvents {
             public EventManager<Attack> BeforeAttack = new ();
+            public EventManager<AttackResult> AfterAttack = new ();
 
             public EventManager<Movement> AfterMovement = new ();
         }

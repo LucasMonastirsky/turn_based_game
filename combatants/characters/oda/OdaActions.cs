@@ -222,37 +222,35 @@ namespace Combat {
                         Caster = caster;
                     }
 
+                    private Func<CombatEvents.AfterDeathArguments, Task> after_death_handler;
+                    private Func<Attack, Task> before_attack_handler;
+
                     public override void OnApplied () {
-                        CombatEvents.AfterDeath.Until(async arguments => {
+                        CombatEvents.AfterDeath.Always(after_death_handler = async arguments => {
                             if (arguments.Combatant == Caster) {
                                 User.RemoveStatusEffect(this);
-                                return true;
                             }
-
-                            return false;
                         });
 
-                        CombatEvents.BeforeAttack.Until(async attack => {
-                            if (Caster.IsDead || Removed) return true;
-
-                            if (attack.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
-                                return false;
-                            }
-                            else {
+                        CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
+                            if (attack.Target.Combatant == User && TurnManager.ActiveCombatant != User) {
                                 foreach (var combatant in Battle.Combatants) {
                                     combatant.RemoveStatusEffectIf<Substitute>(effect => effect.Caster == Caster);
                                 }
 
-                                var movement = await Caster.MoveTo(User); // TODO: shouldn't be forceful, add checks
+                                var movement = await Caster.MoveTo(User); // MAYBE: shouldn't be forceful?
 
                                 if (!movement.Prevented) {
                                     Caster.AddRollModifier(new (this, RollTags.Parry) { Advantage = 1, Temporary = true, });
                                     Caster.AddRollModifier(new (this, RollTags.Hit) { Advantage = 1, Temporary = true, });
                                 }
-
-                                return true;
                             }
                         });
+                    }
+
+                    public override void OnRemoved() {
+                        CombatEvents.AfterDeath.Remove(after_death_handler);
+                        CombatEvents.BeforeAttack.Remove(before_attack_handler);
                     }
                 }
             }

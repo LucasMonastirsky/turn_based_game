@@ -14,6 +14,9 @@ public class EventManager : EventManager<object> {
 }
 
 public class EventManager<T> {
+    private bool resolving = false;
+    private List<Func<T, Task>> removal_queue = new ();
+
     private TaskCompletionSource completion_source = new ();
     public Task Wait () {
         return completion_source.Task;
@@ -24,29 +27,20 @@ public class EventManager<T> {
         once_handlers.Add(handler);
     }
 
-    private List<Func<T, Task<bool>>> until_handlers = new ();
-    public void Until (Func<T, Task<bool>> handler) {
-        until_handlers.Add(handler);
-    }
-
     public List<Func<T, Task>> always_handlers = new ();
     public void Always (Func<T, Task> handler) {
         always_handlers.Add(handler);
     }
 
     public async Task<T> Trigger (T arguments) {
+        resolving = true;
+
         foreach (var handler in once_handlers) {
             await handler(arguments);
         }
 
         foreach (var handler in always_handlers) {
-            await handler(arguments);
-        }
-
-        foreach (var handler in until_handlers.ToList()) {
-            if (await handler(arguments)) {
-                until_handlers.Remove(handler);
-            }
+            if (!removal_queue.Contains(handler)) await handler(arguments);
         }
 
         completion_source.SetResult();
@@ -54,15 +48,18 @@ public class EventManager<T> {
 
         once_handlers = new ();
 
+        resolving = false;
+
+        foreach (var handler in removal_queue) {
+            Remove(handler);
+        }
+
         return arguments;
     }
 
     public void Remove (Func<T, Task> handler) {
-        if (!once_handlers.Remove(handler)) always_handlers.Remove(handler);
-    }
-
-    public void Remove (Func<T, Task<bool>> handler) {
-        until_handlers.Remove(handler);
+        if (resolving) removal_queue.Add(handler);
+        else if (!once_handlers.Remove(handler)) always_handlers.Remove(handler);
     }
 
     public static EventManager<T> operator + (EventManager<T> event_manager, Func<T, Task> handler) {

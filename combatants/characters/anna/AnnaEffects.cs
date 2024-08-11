@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using static Combat.Anna.ActionClasses;
 
 namespace Combat {
@@ -10,49 +12,47 @@ namespace Combat {
                 Caster = caster;
             }
 
-            public override void OnApplied () {
-                CombatEvents.BeforeMovement.Until(async movement => {
-                    if (Removed) return true;
-                    if (!movement.Includes(Caster)) return false;
+            private Func<Movement, Task> before_movement_handler;
+            private Func<Attack, Task> before_attack_handler;
+            private Func<CombatAction, Task> before_action_handler;
+            private Func<CombatAction, Task> after_action_handler;
 
-                    User.RemoveStatusEffect(this);
-                    return true;
+            public override void OnApplied () {
+                CombatEvents.BeforeMovement.Always(before_movement_handler = async movement => {
+                    if (movement.Includes(Caster)) {
+                        User.RemoveStatusEffect(this);
+                    }
                 });
 
-                CombatEvents.BeforeAttack.Until(async attack => {
-                    if (Removed) return true;
-                    if (attack.Attacker != Caster) return false;
+                CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
+                    if (attack.Attacker != Caster) return;
 
                     if (!attack.IsRanged || attack.Target.Combatant != User) {
                         User.RemoveStatusEffect(this);
-                        return true;
                     }
                     else {
                         attack.HitAdvantage += 1;
-                        return false;
                     }
                 });
 
-                CombatEvents.BeforeAction.Until(async action => {
+                CombatEvents.BeforeAction.Always(before_action_handler = async action => {
                     if (action.User == Caster && !(action is Shoot or Unload or LegShot or CommonActions.Pass)) {
                         User.RemoveStatusEffect(this);
-                        return true;
                     }
-
-                    if (Removed) return true;
-                    else return false;
                 });
 
-                CombatEvents.AfterAction.Until(async action => {
-                    if (Removed) return true;                    
-
+                CombatEvents.AfterAction.Always(after_action_handler = async action => {
                     if (Caster.Bullets < 1) {
                         User.RemoveStatusEffect(this);
-                        return true;
                     }
-
-                    return false;
                 });
+            }
+
+            public override void OnRemoved () {
+                CombatEvents.BeforeMovement.Remove(before_movement_handler);
+                CombatEvents.BeforeAttack.Remove(before_attack_handler);
+                CombatEvents.BeforeAction.Remove(before_action_handler);
+                CombatEvents.AfterAction.Remove(after_action_handler);
             }
         }
     
@@ -65,16 +65,15 @@ namespace Combat {
                 get => _level;
                 set {
                     _level = value;
-                    RollModifier.Bonus = -value;
+                    User.UpdateBonus(this, Stat.HitBonus, -value);
                 }
             }
 
             public RollModifier RollModifier { get; private set; }
 
             public override void OnApplied() {
-                RollModifier = new (this, RollTags.Attack, RollTags.Ranged);
-                User.AddRollModifier(RollModifier);
                 Level = 1;
+                User.AddBonus(new (this, Stat.HitBonus, -Level));
             }
 
             public override void Stack (StatusEffect new_effect) {
@@ -87,39 +86,41 @@ namespace Combat {
 
             public new Anna User => base.User as Anna;
 
+            private Func<CombatAction, Task> before_action_handler;
+            private Func<Movement, Task> before_movement_handler;
+
             public override void OnApplied () {
-                CombatEvents.BeforeAction.Until(async action => {
-                    if (Removed) return true;
-                    if (action.User != User) return false;
+                CombatEvents.BeforeAction.Always(before_action_handler = async action => {
+                    if (action.User == User) User.RemoveStatusEffect(this);
+                });
+
+                CombatEvents.BeforeMovement.Always(before_movement_handler = async movement => {
+                    if (movement.Side == User.Side || !movement.IsIntentional) return;
+                    if (User.Bullets < 1) return;
+
+                    User.SpendBullet();
+
+                    var attack_options = new Attack () {
+                        ParryNegation = 10,
+                        DodgeNegation = 3,
+                        DamageRoll = Dice.D6.Plus(2),
+                        Sprite = User.Animations.Shoot,
+                        Sound = User.Sounds.Shot,
+                    };
+
+                    await User.SendAttack(movement.Start, attack_options, async result => {
+                        if (result.Hit) movement.Prevent();
+                    });
+
+                    await Timing.Delay();
 
                     User.RemoveStatusEffect(this);
-                    return true;
                 });
+            }
 
-                CombatEvents.BeforeMovement.Until(async movement => {
-                    if (Removed) return true;
-                    if (movement.Side == User.Side || !movement.IsIntentional) return false;
-
-                    if (User.Bullets > 0) {
-                        User.SpendBullet();
-
-                        var attack_options = new Attack () {
-                            ParryNegation = 10,
-                            DodgeNegation = 3,
-                            DamageRoll = Dice.D6.Plus(2),
-                            Sprite = User.Animations.Shoot,
-                            Sound = User.Sounds.Shot,
-                        };
-
-                        await User.SendAttack(movement.Start, attack_options, async result => {
-                            if (result.Hit) movement.Prevent();
-                        });
-
-                        await Timing.Delay();
-                    }
-
-                    return true;
-                });
+            public override void OnRemoved() {
+                CombatEvents.BeforeAction.Remove(before_action_handler);
+                CombatEvents.BeforeMovement.Remove(before_movement_handler);
             }
         }
     }

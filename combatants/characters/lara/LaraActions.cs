@@ -96,7 +96,7 @@ namespace Combat {
 
                     await Timing.Delay();
 
-                    await User.SendAttack(real_targets[1], attack_options with { Sprite = User.Animations.Sweeps[1], });
+                    await User.SendAttack(real_targets[1], attack_options with { Sprite = User.Animations.Sweeps[1] });
                 }
             }
         

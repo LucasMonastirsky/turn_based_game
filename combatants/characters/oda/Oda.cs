@@ -16,23 +16,10 @@ namespace Combat {
             BaseParryBonus = 5;
             BaseDodgeBonus = 3;
 
-            AddStatusEffect(new Sheathed());
-
-            Events.BeforeAttack.Always(async attack => {
-                if (attack.Target.Combatant == this && !attack.IsMelee) AddRollModifier(new (this, RollTags.Parry) { Bonus = 10 });
-            });
-
-            Events.AfterMovement.Always(async movement => {
-                if (Row == 1 && movement.Start.Row != movement.End.Row && !HasStatusEffect<Sheathed>()) AddStatusEffect(new Sheathed());
-            });
-
-            Play(Animations.SheathedIdle);
-        }
-
-        protected override void OnAttackParried(AttackResult attack_result) { // TODO: do this through events?
-            base.OnAttackParried(attack_result);
-
-            if (HasStatusEffect<Sheathed>()) RemoveStatusEffect<Sheathed>();
+            Passives = new () {
+                new Dojutsu (this),
+                new Iaido (this),
+            };
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {

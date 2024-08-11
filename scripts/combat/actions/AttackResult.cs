@@ -1,5 +1,6 @@
 namespace Combat {
     public class AttackResult {
+        public Combatant.Attack Attack;
         public Combatant Attacker, Defender;
 
         public int ParryNegation { get; set; }
