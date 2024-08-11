@@ -13,7 +13,7 @@ namespace Combat {
             base.Setup();
             Actions = new (this);
 
-            MaxHealth = 15;
+            BaseMaxHealth = 15;
         }
 
         public override InteractionManager.QueueEvent DeathEvent => async () => {

@@ -40,7 +40,7 @@ namespace Combat {
             return null;
         }
 
-        protected void OnAttackParried (AttackResult attack_result) {
+        protected virtual void OnAttackParried (AttackResult attack_result) {
             Animator.Play(StandardAnimations.Parry);
             Play(CommonSounds.SwordClash);
             DamageLabel.Instantiate(this, "Parry");
@@ -119,7 +119,9 @@ namespace Combat {
                 DamageLabel.Instantiate(this, "Miss");
             }
 
-            Dev.Log(Dev.Tags.Combat, $"{result}");
+            var anti_parry = result.HitRoll + result.ParryNegation;
+            var anti_dodge = result.HitRoll + result.DodgeNegation;
+            Dev.Log(Dev.Tags.Combat, $"{result} P{result.ParryRoll}/{anti_parry} D{result.DodgeRoll}/{anti_dodge}");
 
             return result;
         }

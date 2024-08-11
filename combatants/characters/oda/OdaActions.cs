@@ -14,6 +14,8 @@ namespace Combat {
             public ActionClasses.Swing Swing;
             public ActionClasses.Combo Combo;
             public ActionClasses.Release Release;
+            public ActionClasses.Substitution Substitution;
+            public ActionClasses.Shuriken Shuriken;
 
             public CommonActions.Move Move;
             public CommonActions.Pass Pass;
@@ -107,7 +109,52 @@ namespace Combat {
                     await User.SendAttack(target, unarmed_attack with { Sprite = User.Animations.Combo_2 });
                 }
             }
-        
+
+
+            public class Shuriken : CombatAction {
+                public Shuriken(Combatant user) : base(user) {}
+
+                public override string Name => "Shuriken";
+
+                public override int TempoCost { get; set; } = 2;
+
+                public new Oda User => base.User as Oda;
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new () {
+                        Type = TargetType.Single,
+                        Side = SideSelector.Opposite,
+                    },
+                    new () {
+                        Type = TargetType.Single,
+                        Side = SideSelector.Opposite,
+                    },
+                    new () {
+                        Type = TargetType.Single,
+                        Side = SideSelector.Opposite,
+                    },
+                };
+
+                public override async Task Run () {
+                    var options = new Attack () {
+                        ParryNegation = 10,
+                        DodgeNegation = 6,
+                        DamageRoll = D4,
+                        Sprite = User.Animations.Throw,
+                        MoveToMeleeDistance = false,
+                        IsMelee = false,
+                    };
+
+                    foreach (var target in Targets) {
+                        await User.SendAttack(target, options);
+                        await Timing.Delay(1/6f);
+                    }
+                }
+            }
             public class Release : CombatAction {
                 public override string Name => "Release";
                 public override int TempoCost { get; set; } = 1;
@@ -136,6 +183,76 @@ namespace Combat {
                         }
 
                         await Timing.Delay((float) 1/max_cuts);
+                    }
+                }
+            }
+            public class Substitution : CombatAction {
+                public override string Name => "Substitution";
+                public override int TempoCost { get; set; } = 1;
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
+
+                public new Oda User => base.User as Oda;
+
+                public Substitution (Combatant user) : base(user) {}
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new TargetSelector(TargetType.Single) {
+                        Side = SideSelector.Same,
+                        Row = 0,
+                        Validator = (target, user, previous_targets) => !target.Combatant.HasStatusEffect<Substitute>()
+                    },
+                };
+
+                public override async Task Run () {
+                    var target = Targets[0];
+
+                    User.Animator.Play(User.Animations.Seal);
+                    target.Combatant.AddStatusEffect(new Substitute (User));
+                }
+
+                public class Substitute : StatusEffect {
+                    public override string Name => "Substitute";
+
+                    public Combatant Caster;
+
+                    public Substitute (Combatant caster) {
+                        Caster = caster;
+                    }
+
+                    public override void OnApplied () {
+                        CombatEvents.AfterDeath.Until(async arguments => {
+                            if (arguments.Combatant == Caster) {
+                                User.RemoveStatusEffect(this);
+                                return true;
+                            }
+
+                            return false;
+                        });
+
+                        CombatEvents.BeforeAttack.Until(async attack => {
+                            if (Caster.IsDead || Removed) return true;
+
+                            if (attack.Target.Combatant != User || TurnManager.ActiveCombatant == User) {
+                                return false;
+                            }
+                            else {
+                                foreach (var combatant in Battle.Combatants) {
+                                    combatant.RemoveStatusEffectIf<Substitute>(effect => effect.Caster == Caster);
+                                }
+
+                                var movement = await Caster.MoveTo(User); // TODO: shouldn't be forceful, add checks
+
+                                if (!movement.Prevented) {
+                                    Caster.AddRollModifier(new (this, RollTags.Parry) { Advantage = 1, Temporary = true, });
+                                    Caster.AddRollModifier(new (this, RollTags.Hit) { Advantage = 1, Temporary = true, });
+                                }
+
+                                return true;
+                            }
+                        });
                     }
                 }
             }

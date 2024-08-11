@@ -10,19 +10,29 @@ namespace Combat {
             Actions = new ActionStore(this);
 
             Health = 20;
-            MaxHealth = 20;
+            BaseMaxHealth = 20;
 
-            HitBonus = 5;
-            ParryBonus = 5;
-            DodgeBonus = 3;
+            BaseHitBonus = 5;
+            BaseParryBonus = 5;
+            BaseDodgeBonus = 3;
 
             AddStatusEffect(new Sheathed());
+
+            Events.BeforeAttack.Always(async attack => {
+                if (attack.Target.Combatant == this && !attack.IsMelee) AddRollModifier(new (this, RollTags.Parry) { Bonus = 10 });
+            });
 
             Events.AfterMovement.Always(async movement => {
                 if (Row == 1 && movement.Start.Row != movement.End.Row && !HasStatusEffect<Sheathed>()) AddStatusEffect(new Sheathed());
             });
 
             Play(Animations.SheathedIdle);
+        }
+
+        protected override void OnAttackParried(AttackResult attack_result) { // TODO: do this through events?
+            base.OnAttackParried(attack_result);
+
+            if (HasStatusEffect<Sheathed>()) RemoveStatusEffect<Sheathed>();
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {

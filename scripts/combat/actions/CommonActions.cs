@@ -11,7 +11,7 @@ namespace Combat {
                 new TargetSelector (TargetType.Position) {
                     Side = SideSelector.Same,
                     Validator = (target, user, previous_targets) => {
-                        return target.Combatant == null || user.CanMoveTo(target.Position);
+                        return user.CanMoveTo(target.Position);
                     }
                 },
             };

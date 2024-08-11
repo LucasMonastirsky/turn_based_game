@@ -25,11 +25,11 @@ namespace Combat {
             Actions = new (this);
 
             Health = 20;
-            MaxHealth = 20;
+            BaseMaxHealth = 20;
 
-            HitBonus = 2;
-            ParryBonus = 0;
-            DodgeBonus = 2;
+            BaseHitBonus = 2;
+            BaseParryBonus = 0;
+            BaseDodgeBonus = 3;
 
             AddStatusEffect(new BulletsEffect (MaxBullets));
 

@@ -76,7 +76,8 @@ namespace Combat {
             var all_targets = Positioner.GetCombatTargets();
             Targets = new ();
 
-            foreach (var selector in TargetSelectors) {
+            for (var i = 0; i < TargetSelectors.Count; i++) {
+                var selector = TargetSelectors[i];
                 var selectable_targets = new List<CombatTarget> ();
 
                 foreach (var target in all_targets) {
@@ -104,6 +105,8 @@ namespace Combat {
                 else {
                     Targets.Add(selection);
                 }
+
+                if (i != TargetSelectors.Count - 1) await Timing.Delay(1/5f);
             }
 
             return Bind(Targets.ToArray());

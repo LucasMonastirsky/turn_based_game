@@ -6,7 +6,7 @@ namespace Combat {
         private static int turn_index = 0;
 
         public static CombatantStore Combatants => Battle.Combatants;
-        public static Combatant ActiveCombatant => Combatants[turn_index] ?? Combatants[++turn_index];
+        public static Combatant ActiveCombatant { get; private set; }
 
         public static CombatAction CurrentAction { get; protected set; }
 
@@ -17,13 +17,15 @@ namespace Combat {
 
         public static async void BeginLoop () {
             while (true) {
+                ActiveCombatant = Combatants[turn_index];
+
                 State = "Starting";
                 Dev.Log(Dev.Tags.CombatManagement, $"Starting turn of {ActiveCombatant}");
 
                 IsPassQueued = false;
                 ActiveCombatant.OnTurnStart();
 
-                while (ActiveCombatant.Tempo > 0 && !IsPassQueued) {
+                while (!ActiveCombatant.IsDead && ActiveCombatant.Tempo > 0 && !IsPassQueued) {
                     State = "Requesting";
                     Dev.Log(Dev.Tags.CombatManagement, $"Requesting action from {ActiveCombatant}");
 
@@ -79,7 +81,7 @@ namespace Combat {
                 await Timing.Delay();
                 await InteractionManager.ResetCombatants();
 
-                if (++turn_index >= Combatants.Count - 1) turn_index = 0;
+                if (++turn_index >= Combatants.Count) turn_index = 0;
             }
         }
 

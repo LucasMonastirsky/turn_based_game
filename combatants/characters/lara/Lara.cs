@@ -17,11 +17,11 @@ namespace Combat {
             Actions = new (this);
 
             Health = 30;
-            MaxHealth = 30;
+            BaseMaxHealth = 30;
 
-            HitBonus = 2;
-            ParryBonus = 0;
-            DodgeBonus = 2;
+            BaseHitBonus = 2;
+            BaseParryBonus = 1;
+            BaseDodgeBonus = 3;
         }
 
         public override CombatAction GetRiposte(AttackResult attack_result) {
@@ -38,7 +38,6 @@ namespace Combat {
 
             public override bool Stackable => true;
 
-            RollModifier roll_modifier;
             Func<CombatEvents.AfterAttackArguments, Task> attack_event_handler;
 
             public Rage (int level) {
@@ -46,8 +45,7 @@ namespace Combat {
             }
 
             public override void OnApplied() {
-                User.AddRollModifier(roll_modifier = new (this, RollTags.Damage));
-                roll_modifier.Bonus = Level;
+                User.AddBonus(new (this, Stat.DamageBonus, this.Level));
 
                 attack_event_handler = async arguments => {
                     if (arguments.Attacker == User && arguments.Result.Parried && !arguments.Result.Dodged) {
@@ -64,7 +62,7 @@ namespace Combat {
             }
 
             public override void OnRemoved() {
-                User.RemoveRollModifier(roll_modifier);
+                User.RemoveBonusesFromSource(this);
                 CombatEvents.AfterAttack.Remove(attack_event_handler);
             }
 
@@ -75,7 +73,7 @@ namespace Combat {
 
                 if (Level > 10) Level = 10;
 
-                roll_modifier.Bonus = Level;
+                User.UpdateBonus(this, Stat.DamageBonus, Level);
             }
         }
     }

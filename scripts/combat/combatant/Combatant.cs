@@ -1,6 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Utils;
 
 namespace Combat {
@@ -28,8 +27,13 @@ namespace Combat {
         public Combatant () {
             Node = new () { Name = Name };
             Animator = Node.Animator;
+
+            StatBonuses = new ();
+            foreach (Stat stat in Enum.GetValues(typeof(Stat))) {
+                StatBonuses.Add(stat, new ());
+            }
         }
 
-        public virtual InteractionManager.QueueEvent DeathEvent { get; } = null;
+        public virtual InteractionManager.QueueEvent DeathEvent { get; } = null; // TODO: just use the event system
     }
 }
