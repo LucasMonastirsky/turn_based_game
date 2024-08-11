@@ -17,6 +17,7 @@ namespace Combat {
             public ActionClasses.Charge Charge;
             public ActionClasses.Unleash Unleash;
             public ActionClasses.Impatience Impatience;
+            public ActionClasses.Relax Relax;
 
             public CommonActions.Move Move;
             public CommonActions.Pass Pass;
@@ -222,6 +223,25 @@ namespace Combat {
                         }
                     });
 
+                    User.RemoveStatusEffect<Rage>();
+                }
+            }
+
+            public class Relax : CombatAction {
+                public override string Name => "Relax";
+                public override int TempoCost { get; set; } = 2;
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                    new (action => (action.User.GetStatusEffect<Rage>()?.Level ?? 0) > 1),
+                };
+
+                public Relax (Lara user) : base (user) {}
+
+                public override async Task Run() {
+                    var dice_roll = D4.Times(User.GetStatusEffect<Rage>().Level / 2);
+
+                    User.Heal(User.Roll(dice_roll));
                     User.RemoveStatusEffect<Rage>();
                 }
             }

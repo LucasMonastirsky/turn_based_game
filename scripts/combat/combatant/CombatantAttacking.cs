@@ -14,12 +14,21 @@ namespace Combat {
 
             var total = Math.Clamp(value - (is_crit ? Armor : 0), 1, 999);
 
-            var previous_health = Health;
-            Health -= total;
+            var previous_total_health = TotalHealth;
+            
+            if (ExtraHealth > 0) {
+                if ((ExtraHealth -= value) < 0) {
+                    Health -= -ExtraHealth;
+                    ExtraHealth = 0;
+                }
+            }
+            else {
+                Health -= value;
+            }
 
             Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage");
 
-            if (previous_health > 0 && Health < 1) {
+            if (previous_total_health > 0 && Health < 1) {
                 if (DeathEvent != null) InteractionManager.AddQueueEvent(DeathEvent);
             }
 
@@ -28,6 +37,18 @@ namespace Combat {
             DamageLabel.Instantiate(this, $"{value}");
 
             OnDamaged(value);
+
+            return value;
+        }
+
+        public int Heal (int value) {
+            int sum = Health + ExtraHealth + value;
+
+            if (sum > MaxHealth) value = MaxHealth - TotalHealth;
+  
+            ExtraHealth += value;
+
+            DamageLabel.Instantiate(this, $"+{value}");
 
             return value;
         }
@@ -88,7 +109,7 @@ namespace Combat {
             if (attack.Sound != null) Play(attack.Sound);
 
             if (result.Hit && attack.DamageRoll != null) {
-                result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage));
+                result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage));
             }
 
             if (handler != null) await handler(result);

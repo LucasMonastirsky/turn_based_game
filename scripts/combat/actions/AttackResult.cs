@@ -17,6 +17,7 @@ namespace Combat {
         public bool Parried { get => !Dodged && !Missed && ParryRoll > 0 && ParryDelta > 0; }
         public bool Dodged { get => !Missed && DodgeRoll > 0 && DodgeDelta > 0; }
         public bool Missed => HitRoll < 1;
+        public int DamageDone { get; set; } = 0;
 
         public bool AllowRiposte { get; set;} = true;
 

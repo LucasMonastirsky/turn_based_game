@@ -84,13 +84,17 @@ namespace Combat {
                     if (movement.Prevented) return;
 
                     var attack = new Attack {
+                        ParryNegation = 5,
+                        DodgeNegation = 6,
                         IsMelee = true,
                         MoveToMeleeDistance = true,
                         DamageRoll = Dice.D10.Plus(2),
                         Sprite = User.Animations.Charge,
                     };
 
-                    await User.SendAttack(target_enemy, attack);
+                    await User.SendAttack(target_enemy, attack, async result => {
+                        if (result.DamageDone > 0) User.Heal(result.DamageDone / 2);
+                    });
                 }
             }
         }

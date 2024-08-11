@@ -1,11 +1,9 @@
 using System;
-using System.Threading.Tasks;
-using Development;
 using static Dice;
 
 namespace Combat {
     public partial class Lara : Combatant {
-        public override string Name => "Hidan";
+        public override string Name => "Lara";
 
         public override Type DefaultControllerType => typeof(PlayerController);
 
@@ -16,7 +14,6 @@ namespace Combat {
             base.Setup();
             Actions = new (this);
 
-            Health = 30;
             BaseMaxHealth = 30;
 
             BaseHitBonus = 2;
@@ -30,7 +27,7 @@ namespace Combat {
         }
 
         protected override void OnDamaged (int value) {
-            AddStatusEffect(new Rage(value));
+            if (value > 5) AddStatusEffect(new Rage(value / 5));
         }
     }
 }

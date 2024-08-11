@@ -10,6 +10,8 @@ namespace Combat {
         public Combatant User => this;
 
         public int Health { get; set; } = 15;
+        public int ExtraHealth { get; protected set; } = 0;
+        public int TotalHealth => Health + ExtraHealth;
         
         public int Tempo { get; set; }
 

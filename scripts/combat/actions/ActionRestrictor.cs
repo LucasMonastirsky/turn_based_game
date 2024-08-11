@@ -1,8 +1,13 @@
 using System;
 
 namespace Combat {
-    public class ActionRestrictor {
+    public class ActionRestrictor { // we will use this to put icons in the ui
         public virtual Predicate<CombatAction> IsValid { get; init; }
+
+        public ActionRestrictor () {}
+        public ActionRestrictor (Predicate<CombatAction> predicate) {
+            IsValid = predicate;
+        }
     }
 
     public static class ActionRestrictors {

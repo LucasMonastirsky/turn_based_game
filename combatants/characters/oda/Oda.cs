@@ -2,7 +2,7 @@ using System;
 
 namespace Combat {
     public partial class Oda : Combatant {
-        public override string Name => "Miguel";
+        public override string Name => "Oda";
         public override Type DefaultControllerType => typeof(PlayerController);
 
         protected override void Setup () {
