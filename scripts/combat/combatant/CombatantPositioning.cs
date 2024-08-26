@@ -68,6 +68,8 @@ namespace Combat {
                 await Events.AfterMovement.Trigger(movement);
 
                 if (other_combatant != null) await other_combatant.Events.AfterMovement.Trigger(movement.Reversed);
+
+                await CombatEvents.AfterMovement.Trigger(movement);
             }
 
             return movement;
@@ -79,7 +81,8 @@ namespace Combat {
 
             await Positioner.SwitchPosition(target_combatant, target_position.Position);
 
-            await target_combatant.Events.AfterMovement.Trigger(movement.Reversed);
+            await target_combatant.Events.AfterMovement.Trigger(movement.Reversed); // TODO having self and global events simultaneously might be bad
+            await CombatEvents.AfterMovement.Trigger(movement);
         }
 
         public Task DisplaceTo (Vector2 target_position) {

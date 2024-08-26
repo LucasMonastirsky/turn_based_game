@@ -76,7 +76,7 @@ namespace Combat {
         public record Attack {
             public Combatant Attacker;
             public CombatTarget Target;
-            public int HitAdvantage, HitBonus = 0;
+            public int HitAdvantage, HitBonus, CritBonus = 0;
             public int ParryNegation, DodgeNegation = 0;
             public bool CanBeParried = true;
             public bool CanBeDodged = true;
@@ -95,11 +95,6 @@ namespace Combat {
 
             if (attack.MoveToMeleeDistance) await DisplaceToMeleeDistance(attack.Target);
 
-            if (Roll(Dice.D20, RollTags.Crit) > 20) {
-                Play(CommonSounds.Crit);
-                attack.IsCrit = true;
-            }
-
             await Events.BeforeAttack.Trigger(attack);
             await CombatEvents.BeforeAttack.Trigger(attack);
 
@@ -109,12 +104,18 @@ namespace Combat {
             if (attack.Sound != null) Play(attack.Sound);
 
             if (result.Hit && attack.DamageRoll != null) {
+                if (Roll(Dice.D20.Plus(attack.CritBonus), RollTags.Crit) > 20) {
+                    Play(CommonSounds.Crit);
+                    result.IsCrit = true;
+                    attack.DamageRoll = attack.DamageRoll.Times(2);
+                }
+
                 result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage));
             }
 
             if (handler != null) await handler(result);
 
-            await CombatEvents.AfterAttack.Trigger(new () { Attacker = this, Options = attack, Result = result, Target = result.Defender.ToTarget() });
+            await CombatEvents.AfterAttack.Trigger(result);
 
             return TurnManager.LastAttack = result;
         }
@@ -132,6 +133,7 @@ namespace Combat {
                 DodgeRoll = dodge_roll,
                 ParryNegation = attack.ParryNegation,
                 DodgeNegation = attack.DodgeNegation,
+                IsCrit = attack.IsCrit,
             };
 
             if (result.Parried) OnAttackParried(result);

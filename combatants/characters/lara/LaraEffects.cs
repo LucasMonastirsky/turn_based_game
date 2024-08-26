@@ -8,7 +8,7 @@ namespace Combat {
 
             public override bool Stackable => true;
 
-            Func<CombatEvents.AfterAttackArguments, Task> attack_event_handler;
+            Func<AttackResult, Task> attack_event_handler;
 
             public Rage (int level) {
                 Level = level;
@@ -17,13 +17,13 @@ namespace Combat {
             public override void OnApplied() {
                 User.AddBonus(new (this, Stat.DamageBonus, this.Level));
 
-                CombatEvents.AfterAttack.Always(attack_event_handler = async arguments => {
-                    if (arguments.Attacker == User && arguments.Result.Parried && !arguments.Result.Dodged) {
-                        var delta = Level - arguments.Result.ParryDelta;
+                CombatEvents.AfterAttack.Always(attack_event_handler = async attack_result => {
+                    if (attack_result.Attacker == User && attack_result.Parried && !attack_result.Dodged) {
+                        var delta = Level - attack_result.ParryDelta;
                         if (delta > 0) {
                             await Timing.Delay();
-                            arguments.Result.Defender.Damage(delta);
-                            arguments.Result.ParryNegation += Level;
+                            attack_result.Defender.Damage(delta);
+                            attack_result.ParryNegation += Level;
                         }
                     }
                 });

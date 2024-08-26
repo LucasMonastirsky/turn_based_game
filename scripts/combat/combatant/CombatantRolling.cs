@@ -26,7 +26,7 @@ namespace Combat {
             for (var i = 0; i < Math.Abs(roll_data.Advantage) + 1; i++) {
                 var sum = 0;
 
-                roll_data.FaceCounts.ForEach(count => sum += RNG.Range(1, count));
+                roll_data.FaceCounts.ForEach(count => sum += RNG.Roll(count));
 
                 rolls.Add(sum);
             }

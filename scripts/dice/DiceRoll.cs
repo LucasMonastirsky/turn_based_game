@@ -15,37 +15,40 @@ public class DiceRoll {
     }
 
     public DiceRoll Times (int multiple) {
-        var new_list = new List<int> ();
+        var new_roll = this.Clone();
+        new_roll.FaceCounts = new ();
 
         FaceCounts.ForEach(value => {
             for (var i = 0; i < multiple; i++) {
-                new_list.Add(value);
+                new_roll.FaceCounts.Add(value);
             }
         });
 
-        FaceCounts = new_list;
-
-        return this;
+        return new_roll;
     }
 
     public DiceRoll Plus (int bonus) {
-        Bonus += bonus;
-        return this;
+        var new_roll = this.Clone();
+        new_roll.Bonus += bonus;
+        return new_roll;
     }
 
     public DiceRoll WithAdvantage () {
-        Advantage += 1;
-        return this;
+        var new_roll = this.Clone();
+        new_roll.Advantage += 1;
+        return new_roll;
     }
 
     public DiceRoll WithAdvantage (int advantage) {
-        Advantage += advantage;
-        return this;
+        var new_roll = this.Clone();
+        new_roll.Advantage += advantage;
+        return new_roll;
     }
 
     public DiceRoll WithDisadvantage () {
-        Advantage -= 1;
-        return this;
+        var new_roll = this.Clone();
+        new_roll.Advantage -= 1;
+        return new_roll;
     }
 
     public override string ToString () {
@@ -53,7 +56,8 @@ public class DiceRoll {
     }
 
     public DiceRoll Clone () {
-        return new DiceRoll (FaceCounts.ToArray()) {
+        return new DiceRoll () {
+            FaceCounts = FaceCounts,
             Advantage = Advantage,
             Bonus = Bonus,
         };

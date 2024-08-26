@@ -2,15 +2,7 @@ namespace Combat {
     public static class CombatEvents {
         public static EventManager<Combatant.Attack> BeforeAttack = new ();
 
-        #region AfterAttack
-        public struct AfterAttackArguments {
-            public Combatant Attacker;
-            public CombatTarget Target;
-            public Combatant.Attack Options;
-            public AttackResult Result;
-        }
-        public static EventManager<AfterAttackArguments> AfterAttack = new ();
-        #endregion
+        public static EventManager<AttackResult> AfterAttack = new ();
 
         #region BeforeTurnEnd
         public static EventManager BeforeTurnEnd = new ();
@@ -24,6 +16,7 @@ namespace Combat {
         #endregion
     
         public static EventManager<Movement> BeforeMovement = new ();
+        public static EventManager<Movement> AfterMovement = new ();
 
         #region AfterMovement
         #endregion

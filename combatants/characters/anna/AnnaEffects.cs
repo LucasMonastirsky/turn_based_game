@@ -109,7 +109,10 @@ namespace Combat {
                     };
 
                     await User.SendAttack(movement.Start, attack_options, async result => {
-                        if (result.Hit) movement.Prevent();
+                        if (result.Hit) {
+                            movement.Prevent();
+                            result.Defender.AddStatusEffect(new Immobilized());
+                        }
                     });
 
                     await Timing.Delay();

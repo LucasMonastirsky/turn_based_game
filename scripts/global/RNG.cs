@@ -15,9 +15,9 @@ namespace Utils {
             return value;
         }
 
-        public static int Range (int min, int max) {
-            var value = (int) (GD.Randi() % (max - min)) + min;
-            Dev.Log(Dev.Tags.Random, $"RNG.Range({min}, {max}): {value}");
+        public static int Roll (int max) {
+            var value = (int) (GD.Randi() % max) + 1;
+            Dev.Log(Dev.Tags.Random, $"RNG.Roll({max}): {value}");
             return value;
         }
 

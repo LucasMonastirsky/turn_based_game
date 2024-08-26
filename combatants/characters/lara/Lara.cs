@@ -7,7 +7,7 @@ namespace Combat {
 
         public override Type DefaultControllerType => typeof(PlayerController);
 
-        public DiceRoll AxeDamageRoll = D6.Times(2).Plus(2);
+        public DiceRoll AxeDamageRoll = D12.Plus(2);
         public DiceRoll PunchDamageRoll = D4.Times(2).Plus(1);
 
         protected override void Setup () {
@@ -22,7 +22,7 @@ namespace Combat {
         }
 
         public override CombatAction GetRiposte(AttackResult attack_result) {
-            if (attack_result.Hit) return Actions.Stab.Bind(attack_result.Attacker);
+            if (attack_result.Hit && this.Row == 0 && attack_result.Attacker.Row == 0) return Actions.Stab.Bind(attack_result.Attacker);
             else return null;
         }
 

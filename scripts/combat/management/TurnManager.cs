@@ -44,7 +44,7 @@ namespace Combat {
                         ActiveCombatant.Tempo -= CurrentAction.TempoCost;
                         await CurrentAction.Act();
 
-                        if (!IsPassQueued) await Timing.Delay();
+                        if (!IsPassQueued) await Timing.Delay(1/2f);
 
                         if (LastAttack != null) {
                             if (LastAttack.AllowRiposte && !LastAttack.Defender.IsDead) {
@@ -74,11 +74,11 @@ namespace Combat {
                 State = "Ending";
                 Dev.Log(Dev.Tags.CombatManagement, $"Ending turn of {ActiveCombatant}");
 
-                CombatEvents.BeforeTurnEnd.Trigger();
+                await CombatEvents.BeforeTurnEnd.Trigger();
                 ActiveCombatant.OnTurnEnd();
 
                 await InteractionManager.ResolveQueue();
-                await Timing.Delay();
+                if (!IsPassQueued) await Timing.Delay();
                 await InteractionManager.ResetCombatants();
 
                 if (++turn_index >= Combatants.Count) turn_index = 0;

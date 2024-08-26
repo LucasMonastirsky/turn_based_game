@@ -30,16 +30,9 @@ namespace Combat {
         }
 
         public class ActionClasses {
-            public class Kick : CombatAction {
+            public class Kick : MeleeAction {
                 public override string Name => "Kick";
                 public override int TempoCost { get; set; } = 2;
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                    CommonTargetSelectors.Melee,
-                };
-
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
-                };
 
                 public new Anna User => base.User as Anna;
                 public Kick (Anna user) : base (user) {}

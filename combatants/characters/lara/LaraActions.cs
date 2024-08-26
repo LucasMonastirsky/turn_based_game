@@ -87,7 +87,7 @@ namespace Combat {
                     var attack_options = new Attack () {
                         ParryNegation = 3,
                         DodgeNegation = 3,
-                        DamageRoll = D4.Times(2),
+                        DamageRoll = User.AxeDamageRoll.Plus(-2),
                         Sprite = User.Animations.Sweeps[0],
                     };
 

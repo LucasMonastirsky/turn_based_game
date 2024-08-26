@@ -18,6 +18,7 @@ namespace Combat {
         public bool Dodged { get => !Missed && DodgeRoll > 0 && DodgeDelta > 0; }
         public bool Missed => HitRoll < 1;
         public int DamageDone { get; set; } = 0;
+        public bool IsCrit { get; set; } = false;
 
         public bool AllowRiposte { get; set;} = true;
 

@@ -2,6 +2,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Combat {
+    public abstract class MeleeAction : CombatAction {
+        public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+            CommonTargetSelectors.Melee,
+        };
+
+        public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+            ActionRestrictors.FrontRow,
+        };
+
+        public MeleeAction (Combatant user) : base (user) {}
+    }
+
     public static class CommonActions {
         public class Move : CombatAction {
             public override string Name { get => "Move"; }

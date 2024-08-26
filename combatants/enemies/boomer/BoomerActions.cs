@@ -31,6 +31,10 @@ namespace Combat {
                     CommonTargetSelectors.Melee,
                 };
 
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
+
                 public new Boomer User => base.User as Boomer;
                 public Spew (Boomer user) : base (user) {}
 

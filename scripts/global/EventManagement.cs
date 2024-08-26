@@ -8,8 +8,8 @@ public class EventManager : EventManager<object> {
         Once((object a) => handler());
     }
 
-    public void Trigger () {
-        Trigger(null);
+    public async Task Trigger () {
+        await Trigger(null);
     }
 }
 

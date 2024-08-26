@@ -1,0 +1,232 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Combat {
+    public partial class Joseph {
+        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+
+        public ActionStore Actions;
+        public class ActionStore {
+            public ActionClasses.Swing Swing;
+            public ActionClasses.Stab Stab;
+            public ActionClasses.CalfHook CalfHook;
+            public ActionClasses.ApplyTheory ApplyTheory;
+            public ActionClasses.Expose Study;
+            public ActionClasses.Inspire Inspire;
+
+            public CommonActions.Move Move;
+            public CommonActions.Pass Pass;
+
+            public ActionStore (Joseph joseph) {
+                foreach (var field in typeof(ActionStore).GetFields()) {
+                    field.SetValue(this, Activator.CreateInstance(field.FieldType, joseph));
+                }
+            }
+        }
+
+        public class ActionClasses {
+            public class ApplyTheory : MeleeAction {
+                public override string Name => "Apply Theory";
+                public override int TempoCost { get; set; } = 3;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    CommonTargetSelectors.Melee with {
+                        Validator = (target, _, _) => target.Combatant.HasStatusEffect<Studied>(),
+                    },
+                };
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.FrontRow,
+                };
+
+                public new Joseph User => base.User as Joseph;
+                public ApplyTheory (Joseph user) : base (user) {}
+
+                public override async Task Run () {
+                    Attack attack = new () {
+                        ParryNegation = 6,
+                        DodgeNegation = 6,
+                        DamageRoll = Dice.D8.Plus(6),
+                        IsMelee = true,
+                    };
+
+                    var result_0 = await User.SendAttack(Target, attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.Swing,
+                    });
+
+                    await Timing.Delay(1/2f);
+
+                    var result_1 = await User.SendAttack(Target, attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.Stab,
+                    });
+
+                    await Timing.Delay(1/2f);
+
+                    var result_2 = await User.SendAttack(Target, attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.BigSwing,
+                    });
+
+                    await Timing.Delay(1/2f);
+                }
+            }
+            public class Swing : MeleeAction {
+                public override string Name => "Zornhau";
+                public override int TempoCost { get; set; } = 2;
+
+                public new Joseph User => base.User as Joseph;
+                public Swing (Joseph user) : base (user) {}
+
+                public override async Task Run() {
+                    Attack attack = new () {
+                        ParryNegation = 7,
+                        DodgeNegation = 4,
+                        MoveToMeleeDistance = true,
+                        DamageRoll = Dice.D8.Plus(6),
+                        Sprite = User.Animations.Swing,
+                    };
+
+                    await User.SendAttack(Target, attack);
+                }
+            }
+
+            public class Stab : MeleeAction {
+                public override string Name => "Stab";
+                public override int TempoCost { get; set; } = 2;
+
+                public new Joseph User => base.User as Joseph;
+                public Stab (Joseph user) : base (user) {}
+
+                public override async Task Run() {
+                    Attack attack = new () {
+                        ParryNegation = 5,
+                        DodgeNegation = 7,
+                        CritBonus = 5,
+                        MoveToMeleeDistance = true,
+                        DamageRoll = Dice.D8.Plus(2),
+                        Sprite = User.Animations.Stab,
+                    };
+
+                    await User.SendAttack(Target, attack);
+                }
+            }
+
+            public class CalfHook : MeleeAction {
+                public override string Name => "Calf Hook";
+                public override int TempoCost { get; set; } = 2;
+
+                public new Joseph User => base.User as Joseph;
+                public CalfHook (Joseph user) : base (user) {}
+
+                public override async Task Run() {
+                    Attack attack = new () {
+                        ParryNegation = 8,
+                        DodgeNegation = 4,
+                        MoveToMeleeDistance = true,
+                        DamageRoll = Dice.D8.Plus(2),
+                        Sprite = User.Animations.BigSwing,
+                    };
+
+                    var result = await User.SendAttack(Target, attack);
+
+                    if (result.Hit) {
+                        result.Defender.AddStatusEffect(new Immobilized(result.IsCrit ? 5 : 1));
+                    }
+                }
+            }
+        
+            public class Expose : CombatAction {
+                public override string Name => "Expose";
+                public override int TempoCost { get; set; } = 2;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new (TargetType.Single) {
+                        Side = SideSelector.Opposite,
+                        Validator = (target, user, previous_targets) => target.Combatant.HasStatusEffect<Studied>(),
+                    }
+                };
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
+
+                public new Joseph User => base.User as Joseph;
+                public Expose (Joseph user) : base (user) {}
+
+                public override async Task Run () {
+                    User.Play(User.Animations.Point);
+                    
+                    var studied_effect = Target.Combatant.GetStatusEffect<Studied>();
+
+                    Target.Combatant.RemoveStatusEffect(studied_effect);
+                    Target.Combatant.AddStatusEffect(new Exposed(studied_effect.Level));
+                }
+
+                public class Exposed : StackableEffect {
+                    public override string Name => "Exposed";
+
+                    private Func<Attack, Task> before_attack_handler;
+
+                    public Exposed (int level) {
+                        Level = level;
+                    }
+
+                    public override void OnApplied () {
+                        User.AddBonus(new (this, Stat.HitBonus, Level));
+
+                        CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
+                            if (attack.Target.Combatant == User) {
+                                attack.HitBonus -= Level;
+                            }
+                        });
+                    }
+
+                    public override void OnRemoved () {
+                        User.RemoveBonusesFromSource(this);
+                        CombatEvents.BeforeAttack.Remove(before_attack_handler);
+                    }
+
+                    public override void Stack(StatusEffect new_effect) {
+                        base.Stack(new_effect);
+                        User.UpdateBonus(this, Stat.HitBonus, Level);
+                    }
+                }
+            }
+        
+            public class Inspire : CombatAction {
+                public override string Name => "Inspire";
+                public override int TempoCost { get; set; } = 2;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
+
+                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
+                    ActionRestrictors.BackRow,
+                };
+
+                public new Joseph User => base.User as Joseph;
+                public Inspire (Joseph user) : base (user) {}
+
+                public override async Task Run () {
+                    User.Play(User.Animations.Point);
+                    User.Allies.ForEach(ally => ally.AddStatusEffect(new Inspired()));
+                }
+
+                public class Inspired : StatusEffect {
+                    public override string Name => "Inspired";
+
+                    private RollModifier roll_modifier;
+
+                    public override void OnApplied () {
+                        User.AddRollModifier(roll_modifier = new RollModifier(this, RollTags.Damage) { Advantage = 1 });
+                    }
+
+                    public override void OnRemoved () {
+                        User.RemoveRollModifier(roll_modifier);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -14,6 +14,8 @@ namespace Combat {
             public Passive (Combatant user) {
                 User = user;
             }
+
+            public virtual void OnRemoved () {}
         }
 
         public List<Passive> Passives;

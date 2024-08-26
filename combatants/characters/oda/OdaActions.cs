@@ -12,7 +12,7 @@ namespace Combat {
 
         public class ActionStore {
             public ActionClasses.Swing Swing;
-            public ActionClasses.Combo Combo;
+            public ActionClasses.Kirin Kirin;
             public ActionClasses.Release Release;
             public ActionClasses.Substitution Substitution;
             public ActionClasses.Shuriken Shuriken;
@@ -62,55 +62,6 @@ namespace Combat {
                 }
             }
 
-            public class Combo : CombatAction {
-                public override string Name => "Combo";
-                public override int TempoCost { get; set; } = 3;
-
-                public new Oda User => base.User as Oda;
-
-                public Combo (Oda user) : base (user) {}
-
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                    CommonTargetSelectors.Melee,
-                };
-
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
-                };
-
-                public override async Task Run() {
-                    var target = Targets[0];
-
-                    var swing_attack = new Attack () {
-                        ParryNegation = 5,
-                        DodgeNegation = 4,
-                        DamageRoll = D8.Plus(2),
-                        Sprite = User.Animations.Swing,
-                        MoveToMeleeDistance = true,
-                        IsMelee = true,
-                    };
-
-                    var unarmed_attack = new Attack () {
-                        ParryNegation = 6,
-                        DodgeNegation = 6,
-                        DamageRoll = D4.Plus(1),
-                    };
-
-                    await User.SendAttack(target, swing_attack, async result => {
-                        if (result.Hit) result.Defender.AddStatusEffect(new LagCut());
-                    });
-
-                    await Timing.Delay();
-
-                    await User.SendAttack(target, unarmed_attack with { Sprite = User.Animations.Combo_1 });
-
-                    await Timing.Delay();
-
-                    await User.SendAttack(target, unarmed_attack with { Sprite = User.Animations.Combo_2 });
-                }
-            }
-
-
             public class Shuriken : CombatAction {
                 public Shuriken(Combatant user) : base(user) {}
 
@@ -149,9 +100,18 @@ namespace Combat {
                         IsMelee = false,
                     };
 
+                    var hit_combatants = new Dictionary<int, Combatant> ();
+
                     foreach (var target in Targets) {
-                        await User.SendAttack(target, options);
+                        await User.SendAttack(target, options, async result => {
+                            if (result.Hit) hit_combatants[result.Defender.Id] = result.Defender;
+                        });
+
                         await Timing.Delay(1/6f);
+
+                        foreach (var combatant in hit_combatants.Values) {
+                            combatant.AddStatusEffect(new LagCut());
+                        }
                     }
                 }
             }
@@ -253,6 +213,44 @@ namespace Combat {
                         CombatEvents.BeforeAttack.Remove(before_attack_handler);
                     }
                 }
+            }
+        
+            public class Kirin : CombatAction {
+                public override string Name => "Kirin";
+                public override int TempoCost { get; set; } = 3;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    CommonTargetSelectors.Melee with {
+                        Validator = (target, _, __) => target.Combatant.HasStatusEffect<LagCut>()
+                    }
+                };
+
+                public new Oda User => base.User as Oda;
+
+                public Kirin (Oda user) : base (user) {}
+
+                public override async Task Run() {
+                    var target = Targets[0];
+
+                    var attack = new Attack () {
+                        ParryNegation = 5,
+                        DodgeNegation = 4,
+                        DamageRoll = D8.Plus(2),
+                        Sprite = User.Animations.Swing,
+                        MoveToMeleeDistance = true,
+                        IsMelee = true,
+                    };
+
+                    var effect = target.Combatant.GetStatusEffect<LagCut>();
+
+                    while (effect.Level-- > 0) {
+                        await User.SendAttack(target, attack);
+                        await Timing.Delay(1/6f);
+                    }
+
+                    effect.Remove();
+                }
+
             }
         }
     }

@@ -31,6 +31,10 @@ namespace Combat {
 
         }
 
+        public void Remove () {
+            User.RemoveStatusEffect(this);
+        }
+
         public override string ToString () {
             var result = Name;
             if (Level != 0) result += $" {Level}";
