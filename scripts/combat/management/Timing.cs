@@ -7,7 +7,7 @@ namespace Combat {
         public const int DelayUnit = 500;
         public const int MoveDuration = DelayUnit / 4;
         public static async Task Delay (float multiplier = 1) {
-            Dev.Log("Delay");
+            Dev.Log(Dev.Tags.Timing, "Delay");
             if (MANUAL_DELAY) await AsyncInput.Continue.Wait();
             else await Task.Delay((int) (DelayUnit * multiplier));
         }

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Godot;
+using Utils;
 
 namespace Combat {
     public class Movement {
@@ -84,6 +85,8 @@ namespace Combat {
             await target_combatant.Events.AfterMovement.Trigger(movement.Reversed); // TODO having self and global events simultaneously might be bad
             await CombatEvents.AfterMovement.Trigger(movement);
         }
+
+        public bool IsDisplaced => Vectorer.Abs(Node.Position) - Vectorer.Abs(Positioner.GetWorldPosition(Position)) < 1;
 
         public Task DisplaceTo (Vector2 target_position) {
             return Node.DisplaceTo(target_position);

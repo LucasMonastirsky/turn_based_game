@@ -9,54 +9,6 @@ namespace Combat {
         public virtual bool CanParry => true;
         public virtual bool CanDodge => true;
 
-        public int Damage (int value, bool is_crit = false) {
-            if (!IsDead) Animator.Play(StandardAnimations.Hurt);
-
-            var total = Math.Clamp(value - (is_crit ? Armor : 0), 1, 999);
-
-            var previous_total_health = TotalHealth;
-            
-            if (ExtraHealth > 0) {
-                if ((ExtraHealth -= value) < 0) {
-                    Health -= -ExtraHealth;
-                    ExtraHealth = 0;
-                }
-            }
-            else {
-                Health -= value;
-            }
-
-            Dev.Log(Dev.Tags.Combat, $"{this} received {total} damage");
-
-            if (previous_total_health > 0 && Health < 1) {
-                if (DeathEvent != null) InteractionManager.AddQueueEvent(DeathEvent);
-            }
-
-            Play(CommonSounds.SwordWound);
-
-            DamageLabel.Instantiate(this, $"{value}");
-
-            OnDamaged(value);
-
-            return value;
-        }
-
-        public int Heal (int value) {
-            int sum = Health + ExtraHealth + value;
-
-            if (sum > MaxHealth) value = MaxHealth - TotalHealth;
-  
-            ExtraHealth += value;
-
-            DamageLabel.Instantiate(this, $"+{value}");
-
-            return value;
-        }
-
-        protected virtual void OnDamaged (int value) {
-
-        }
-
         public virtual CombatAction GetRiposte (AttackResult attack_result) {
             return null;
         }
@@ -73,22 +25,6 @@ namespace Combat {
             DamageLabel.Instantiate(this, "Dodge");
         }
 
-        public record Attack {
-            public Combatant Attacker;
-            public CombatTarget Target;
-            public int HitAdvantage, HitBonus, CritBonus = 0;
-            public int ParryNegation, DodgeNegation = 0;
-            public bool CanBeParried = true;
-            public bool CanBeDodged = true;
-            public DiceRoll DamageRoll = null;
-            public bool IsCrit = false;
-            public bool IsMelee = false;
-            public bool IsRanged = false;
-            public bool MoveToMeleeDistance = false;
-            public SimpleSprite Sprite = null;
-            public AudioStream Sound = null;
-        }
-
         public async Task<AttackResult> SendAttack (Targetable targetable, Attack attack, Func<AttackResult, Task> handler = null) {
             attack.Attacker = this;
             attack.Target = targetable.ToTarget();
@@ -100,17 +36,22 @@ namespace Combat {
 
             var result = attack.Target.Combatant.ReceiveAttack(this, attack);
 
+            if (result.Hit && !result.IsCrit && Roll(Dice.D20.Plus(attack.CritBonus), RollTags.Crit) > 20) {
+                result.IsCrit = true;
+            }
+
+            if (attack.OnResult != null) attack.OnResult(result);
+
             if (attack.Sprite != null) Play(attack.Sprite);
             if (attack.Sound != null) Play(attack.Sound);
 
             if (result.Hit && attack.DamageRoll != null) {
-                if (Roll(Dice.D20.Plus(attack.CritBonus), RollTags.Crit) > 20) {
+                if (result.IsCrit) {
                     Play(CommonSounds.Crit);
-                    result.IsCrit = true;
                     attack.DamageRoll = attack.DamageRoll.Times(2);
                 }
 
-                result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage));
+                result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage), this);
             }
 
             if (handler != null) await handler(result);
@@ -142,8 +83,6 @@ namespace Combat {
                 if (Health > 0) Play(StandardAnimations.Idle);
                 DamageLabel.Instantiate(this, "Miss");
             }
-
-            User.Events.AfterAttack.Trigger(result); // TODO: should await this
 
             var anti_parry = result.HitRoll + result.ParryNegation;
             var anti_dodge = result.HitRoll + result.DodgeNegation;

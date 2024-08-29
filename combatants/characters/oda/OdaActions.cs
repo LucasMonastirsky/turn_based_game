@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Development;
 using static Dice;
 
 namespace Combat {
@@ -35,8 +36,8 @@ namespace Combat {
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.FrontRow,
                 };
 
                 public new Oda User => base.User as Oda;
@@ -56,7 +57,7 @@ namespace Combat {
 
                     await User.SendAttack(target, options, async result => {
                         if (result.Hit) {
-                            target.Combatant.AddStatusEffect(new LagCut());
+                            target.Combatant.AddStatusEffect(new LagCut (1));
                         }
                     });
                 }
@@ -71,8 +72,8 @@ namespace Combat {
 
                 public new Oda User => base.User as Oda;
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    CommonRestrictors.BackRow,
                 };
 
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
@@ -108,10 +109,10 @@ namespace Combat {
                         });
 
                         await Timing.Delay(1/6f);
+                    }
 
-                        foreach (var combatant in hit_combatants.Values) {
-                            combatant.AddStatusEffect(new LagCut());
-                        }
+                    foreach (var combatant in hit_combatants.Values) {
+                        combatant.AddStatusEffect(new LagCut (1));
                     }
                 }
             }
@@ -129,10 +130,11 @@ namespace Combat {
 
                     var enemies = User.Enemies.Where(enemy => enemy.HasStatusEffect<LagCut>()).ToList();
                     var max_cuts = enemies.Select(combatant => combatant.GetStatusEffect<LagCut>().Level).OrderBy(level => level).Last();
+                    var total_cuts = enemies.Select(enemy => enemy.GetStatusEffect<LagCut>().Level).Aggregate((current, next) => current + next);
 
                     while (enemies.Count > 0) {
                         foreach (var enemy in enemies.ToList()) {
-                            enemy.Damage(User.Roll(D4, RollTags.Damage));
+                            enemy.Damage(User.Roll(D4, RollTags.Damage), User);
                             
                             var effect = enemy.GetStatusEffect<LagCut>();
 
@@ -140,9 +142,9 @@ namespace Combat {
                                 enemy.RemoveStatusEffect(effect);
                                 enemies.Remove(enemy);
                             }
-                        }
 
-                        await Timing.Delay((float) 1/max_cuts);
+                            await Timing.Delay((float) 1 / total_cuts);
+                        }
                     }
                 }
             }
@@ -150,8 +152,8 @@ namespace Combat {
                 public override string Name => "Substitution";
                 public override int TempoCost { get; set; } = 1;
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Oda User => base.User as Oda;

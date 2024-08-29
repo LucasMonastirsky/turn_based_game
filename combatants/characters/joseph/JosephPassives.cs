@@ -42,11 +42,11 @@ namespace Combat {
             public Study (Combatant user) : base(user) {
                 CombatEvents.AfterAttack.Always(after_attack_handler = async attack_result => {
                     if (attack_result.Defender == User) {
-                        attack_result.Attacker.AddStatusEffect(new Studied(User, attack_result.Hit ? 2 : 1));
+                        attack_result.Attacker.AddStatusEffect(new Studied(attack_result.Hit ? 2 : 1, User));
                     }
 
                     if (attack_result.Attacker == User) {
-                        attack_result.Defender.AddStatusEffect(new Studied(User, attack_result.Hit ? 1 : 2));
+                        attack_result.Defender.AddStatusEffect(new Studied(attack_result.Hit ? 1 : 2, User));
                     }
                 });
             }
@@ -63,9 +63,8 @@ namespace Combat {
 
             private Func<Attack, Task> before_attack_handler;
 
-            public Studied (Combatant caster, int level = 1) {
+            public Studied (int level, Combatant caster) : base (level) {
                 Caster = caster;
-                Level = level;
             }
 
             public override void OnApplied () {

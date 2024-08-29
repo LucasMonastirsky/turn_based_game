@@ -1,7 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 
 namespace Utils {
+    public static class Vectorer {
+        public static float Abs (Vector2 vector) {
+            return vector.Abs().X + vector.Abs().Y;
+        }
+    }
+
     public static class Stringer {
         public static string Join (params object [] objects) {
             return $"[{string.Join(", ", objects)}]";

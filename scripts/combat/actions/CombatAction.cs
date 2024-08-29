@@ -13,7 +13,7 @@ namespace Combat {
 
         public abstract int TempoCost { get; set; }
 
-        public virtual List<ActionRestrictor> Restrictors { get; init; } = new () {};
+        public virtual List<Restrictor> Restrictors { get; init; } = new () {};
 
         public virtual bool IsAvailable => User.Tempo >= TempoCost && !Restrictors.Any(restrictor => !restrictor.IsValid(this));
 
@@ -54,11 +54,12 @@ namespace Combat {
 
         public abstract Task Run ();
 
-        public async Task Act () {
+        public async Task<CombatAction> Act () {
             if (!Bound) Dev.Error($"Tried to act unbound action {this}");
 
             await Run();
-            Unbind();
+
+            return this;
         }
 
         public async Task Act (params Targetable [] targetables) {
@@ -113,6 +114,14 @@ namespace Combat {
         }
 
         private bool IsValidTarget (CombatTarget target, TargetSelector selector, List<CombatTarget> previous_targets = null) {
+            if (
+                target.Combatant != null
+                && target.Combatant.Side != User.Side
+                && target.Combatant.HasStatusEffect<Hidden>()
+            ) {
+                return false;
+            }
+
             if (previous_targets == null) previous_targets = Targets;
 
             var predicates = new List<Func<bool>> ();

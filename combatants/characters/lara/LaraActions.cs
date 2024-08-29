@@ -39,8 +39,8 @@ namespace Combat {
                     CommonTargetSelectors.Melee,
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.FrontRow,
                 };
 
                 public new Lara User => base.User as Lara;
@@ -68,8 +68,8 @@ namespace Combat {
                     new (TargetType.Double) { Side = SideSelector.Opposite, Row = 0, VerticalRange = 1 }
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.FrontRow,
                 };
                 
                 public new Lara User => base.User as Lara;
@@ -113,9 +113,9 @@ namespace Combat {
                     }
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
-                    ActionRestrictors.CanMove,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
+                    Combat.CommonRestrictors.CanMove,
                 };
 
                 public new Lara User => base.User as Lara;
@@ -147,8 +147,8 @@ namespace Combat {
                 public override string Name => "Impatience";
                 public override int TempoCost { get; set; } = 1;
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Lara User => base.User as Lara;
@@ -168,8 +168,8 @@ namespace Combat {
                     CommonTargetSelectors.Melee,
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.FrontRow,
                 };
 
                 public override bool IsAvailable => base.IsAvailable && User.GetStatusEffect<Rage>()?.Level >= 10;
@@ -231,8 +231,8 @@ namespace Combat {
                 public override string Name => "Relax";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                     new (action => (action.User.GetStatusEffect<Rage>()?.Level ?? 0) > 1),
                 };
 

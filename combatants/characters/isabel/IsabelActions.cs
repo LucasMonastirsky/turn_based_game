@@ -1,0 +1,153 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Combat {
+    public partial class Isabel {
+        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+
+        public ActionStore Actions;
+        public class ActionStore {
+            public ActionClasses.Swing Swing;
+            public ActionClasses.Hide Hide;
+            public ActionClasses.BackStab BackStab;
+            public ActionClasses.Poison Poison;
+
+            public CommonActions.Move Move;
+            public CommonActions.Pass Pass;
+
+            public ActionStore (Isabel isabel) {
+                foreach (var field in typeof(ActionStore).GetFields()) {
+                    field.SetValue(this, Activator.CreateInstance(field.FieldType, isabel));
+                }
+            }
+        }
+
+        public static class ActionClasses {
+            public class Swing : MeleeAction {
+                public override string Name => "Swing";
+
+                public override int TempoCost { get; set; } = 2;
+
+                public new Isabel User => base.User as Isabel;
+
+                public Swing (Isabel user) : base (user) {}
+
+                public override async Task Run () {
+                    var attack = new Attack () {
+                        ParryNegation = 6,
+                        DodgeNegation = 6,
+                        DamageRoll = Dice.D8.Plus(6),
+                        IsMelee = true,
+                    };
+
+                    var result_0 = await User.SendAttack(Target, attack with {
+                        MoveToMeleeDistance = true,
+                        Sprite = User.Animations.Swing,
+                    });
+                }
+            }
+        
+            public class Hide : CombatAction {
+                public override string Name => "Hide";
+                public override int TempoCost { get; set; } = 1;
+
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    CommonRestrictors.BackRow,
+                };
+
+                public Hide (Isabel user) : base (user) {}
+
+                public override async Task Run () {
+                    User.AddStatusEffect(new Hidden());
+                }
+            }
+        
+            public class BackStab : CombatAction {
+                public override string Name => "BackStab";
+                public override int TempoCost { get; set; } = 2;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    new () { Type = TargetType.Single, Side = SideSelector.Opposite, Row = 1, },
+                };
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    CommonRestrictors.BackRow,
+                };
+
+
+                public new Isabel User => base.User as Isabel;
+                public BackStab (Isabel user) : base (user) {}
+
+                public override async Task Run () {
+                    User.Play(User.Animations.Teleport);
+
+                    await Timing.Delay(1/4f);
+
+                    User.Node.Position = Target.Combatant.Node.Position with { X = Target.Combatant.Node.Position.X + 25 * (1 - User.Side.Value) };
+                    User.Node.Animator.FlipH ^= true;
+
+                    await Timing.Delay(1/4f);
+
+                    var attack = new Attack () {
+                        DamageRoll = Dice.D6,
+                        CritBonus = 5,
+                        Sprite = User.Animations.Swing,
+                        IsMelee = true,
+                    };
+
+                    var result = await User.SendAttack(Target, attack);
+                    if (result.Parried || result.Dodged) result.Defender.Node.Animator.FlipH ^= true; 
+
+                    await Timing.Delay();
+
+                    result.Defender.ResetAnimation();
+                    User.Play(User.Animations.Teleport);
+
+                    await Timing.Delay(1/4f);
+
+                    User.Node.Position = Positioner.GetWorldPosition(User.Position);
+                    User.Node.Animator.FlipH = !User.Node.Animator.FlipH;
+
+                    await Timing.Delay(1/4f);
+
+                    User.Play(User.Animations.Idle);
+                }
+            }
+        
+            public class Poison : CombatAction {
+                public override string Name => "Poison";
+                public override int TempoCost { get; set; } = 1;
+
+                public new Isabel User => base.User as Isabel;
+                public Poison (Isabel user) : base (user) {}
+
+                public override async Task Run () {
+                    User.Play(User.Animations.Jutsu);
+                    User.AddStatusEffect(new Imbued (3));
+
+                }
+
+                public class Imbued : StackableEffect {
+                    public override string Name => "Imbued (Poison)";
+
+                    private Func<DamageInstance, Task> after_damage_handler;
+
+                    public Imbued (int level) : base (level) {}
+
+                    public override void OnApplied () {
+                        CombatEvents.AfterDamage.Always(after_damage_handler = async damage_instance => {
+                            if (damage_instance.Sender == User && damage_instance.Amount > 0) {
+                                damage_instance.Receiver.AddStatusEffect(new Poisoned(3));
+                                if (--Level < 1) Remove();
+                            }
+                        });
+                    }
+
+                    public override void OnRemoved () {
+                        CombatEvents.AfterDamage.Remove(after_damage_handler);
+                    }
+                }
+            }
+        }
+    }
+}

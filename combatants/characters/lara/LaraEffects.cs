@@ -22,7 +22,7 @@ namespace Combat {
                         var delta = Level - attack_result.ParryDelta;
                         if (delta > 0) {
                             await Timing.Delay();
-                            attack_result.Defender.Damage(delta);
+                            attack_result.Defender.Damage(delta, User);
                             attack_result.ParryNegation += Level;
                         }
                     }

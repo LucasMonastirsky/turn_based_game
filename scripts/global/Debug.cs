@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Development {
     public static class Dev {
-        public static bool LogAll = true;
+        public static bool LogAll = false;
         public static bool IsActive = true;
         public static bool LogTags = true;
         public static bool LogColor = false;
@@ -31,6 +31,7 @@ namespace Development {
             public static LogTag Rolling = new () { Name = "Rolling", Color = "f28735", Log = false };
             public static LogTag Interface = new () { Name = "Interface", Color = "FFFFFF", Log = false };
             public static LogTag Random = new () { Name = "Random", Color = "FFFFFF", Log = false };
+            public static LogTag Timing = new () { Name = "Timing", Color = "FFFFFF", Log = true };
         }
 
         private static DateTime last_log_time = DateTime.Now;

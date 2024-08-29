@@ -44,7 +44,7 @@ namespace Combat {
                         ActiveCombatant.Tempo -= CurrentAction.TempoCost;
                         await CurrentAction.Act();
 
-                        if (!IsPassQueued) await Timing.Delay(1/2f);
+                        if (!IsPassQueued) await Timing.Delay();
 
                         if (LastAttack != null) {
                             if (LastAttack.AllowRiposte && !LastAttack.Defender.IsDead) {
@@ -65,6 +65,7 @@ namespace Combat {
                         await CombatEvents.AfterAction.Trigger(CurrentAction);
                         await InteractionManager.ResetCombatants();
 
+                        CurrentAction.Unbind();
                         CurrentAction = null;
                     }
 

@@ -1,9 +1,10 @@
 const iterations = 100000
 const minimum_bonus = 0
 const maximum_bonus = 10
-const resolve_ties = false
+const resolve_ties = true
 const advantage = 1
 const split_for_google = true
+const use_buffed_advantage = true
 
 let results = []
 
@@ -18,7 +19,9 @@ for (let bonus_1 = minimum_bonus; bonus_1 <= maximum_bonus; bonus_1++) {
 
             for (let i = 0; i <= advantage; i++) {
                 var roll =  Math.ceil(Math.random() * 10)
-                roll_1 = roll > roll_1 ? roll : roll_1
+                
+                if (!use_buffed_advantage) roll_1 = roll > roll_1 ? roll : roll_1
+                else roll_1 += roll
             }
 
             const roll_2 = Math.ceil(Math.random() * 10)

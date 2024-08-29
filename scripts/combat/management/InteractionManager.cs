@@ -52,6 +52,7 @@ namespace Combat {
                 tasks.Add(combatant.ReturnToPosition());
             }
 
+            Dev.Log(Dev.Tags.Timing, "Waiting for position reset");
             await Task.WhenAll(tasks);
         }
     }

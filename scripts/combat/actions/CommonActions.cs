@@ -7,8 +7,8 @@ namespace Combat {
             CommonTargetSelectors.Melee,
         };
 
-        public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-            ActionRestrictors.FrontRow,
+        public override List<Restrictor> Restrictors { get; init; } = new () {
+            Combat.CommonRestrictors.FrontRow,
         };
 
         public MeleeAction (Combatant user) : base (user) {}
@@ -28,8 +28,8 @@ namespace Combat {
                 },
             };
 
-            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                ActionRestrictors.CanMove,
+            public override List<Restrictor> Restrictors { get; init; } = new () {
+                Combat.CommonRestrictors.CanMove,
             };
 
             public Move (Combatant user) : base (user) {}

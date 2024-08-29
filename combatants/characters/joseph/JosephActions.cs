@@ -35,8 +35,8 @@ namespace Combat {
                         Validator = (target, _, _) => target.Combatant.HasStatusEffect<Studied>(),
                     },
                 };
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.FrontRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.FrontRow,
                 };
 
                 public new Joseph User => base.User as Joseph;
@@ -148,8 +148,8 @@ namespace Combat {
                     }
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Joseph User => base.User as Joseph;
@@ -169,9 +169,7 @@ namespace Combat {
 
                     private Func<Attack, Task> before_attack_handler;
 
-                    public Exposed (int level) {
-                        Level = level;
-                    }
+                    public Exposed (int level) : base (level) {}
 
                     public override void OnApplied () {
                         User.AddBonus(new (this, Stat.HitBonus, Level));
@@ -201,8 +199,8 @@ namespace Combat {
 
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Joseph User => base.User as Joseph;

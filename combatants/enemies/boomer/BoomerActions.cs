@@ -28,11 +28,11 @@ namespace Combat {
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                    CommonTargetSelectors.Melee,
+                    new () { Type = TargetType.Single, Side = SideSelector.Opposite, },
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Boomer User => base.User as Boomer;
@@ -115,7 +115,7 @@ namespace Combat {
                     var damage = User.Roll(Dice.D6.Plus(2).Times(build_up_level + 1));
 
                     foreach (var victim in victims) {
-                        victim.Damage(damage);
+                        victim.Damage(damage, User);
                     }
 
                     if (User.Health > 0) User.Health = 0;

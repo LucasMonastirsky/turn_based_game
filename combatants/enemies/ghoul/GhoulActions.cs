@@ -72,8 +72,8 @@ namespace Combat {
                     }
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Ghoul User => base.User as Ghoul;

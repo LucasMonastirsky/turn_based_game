@@ -19,15 +19,15 @@ namespace Combat {
             BaseHitBonus = 2;
             BaseParryBonus = 1;
             BaseDodgeBonus = 3;
+
+            CombatEvents.AfterDamage.Always(async damage_instance => {
+                if (damage_instance.Receiver == this) AddStatusEffect(new Rage(1));
+            });
         }
 
         public override CombatAction GetRiposte(AttackResult attack_result) {
             if (attack_result.Hit && this.Row == 0 && attack_result.Attacker.Row == 0) return Actions.Stab.Bind(attack_result.Attacker);
             else return null;
-        }
-
-        protected override void OnDamaged (int value) {
-            if (value > 5) AddStatusEffect(new Rage(value / 5));
         }
     }
 }

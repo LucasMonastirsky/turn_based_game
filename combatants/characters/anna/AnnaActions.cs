@@ -66,8 +66,8 @@ namespace Combat {
                     new (TargetType.Single) { Side = SideSelector.Opposite, }
                 };
 
-                public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                    ActionRestrictors.BackRow,
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    Combat.CommonRestrictors.BackRow,
                 };
 
                 public new Anna User => base.User as Anna;

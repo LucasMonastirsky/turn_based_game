@@ -48,6 +48,12 @@ namespace Combat {
 
         public CombatPosition OppositeSide => this with { Side = Side.Opposite };
 
+        public CombatPosition (Side side, int row, int slot) {
+            Side = side;
+            Row = row;
+            Slot = slot;
+        }
+
         public List<CombatPosition> Neighbours {
             get {
                 var result = new List<CombatPosition> ();

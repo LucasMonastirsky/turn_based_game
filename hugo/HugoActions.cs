@@ -33,8 +33,8 @@ public partial class Hugo {
                 CommonTargetSelectors.Melee,
             };
 
-            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                ActionRestrictors.FrontRow,
+            public override List<Restrictor> Restrictors { get; init; } = new () {
+                Combat.CommonRestrictors.FrontRow,
             };
 
             public new Hugo User { get => base.User as Hugo; }
@@ -66,8 +66,8 @@ public partial class Hugo {
                 new (TargetType.Single) { Side = SideSelector.Opposite, }
             };
 
-            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                ActionRestrictors.BackRow,
+            public override List<Restrictor> Restrictors { get; init; } = new () {
+                Combat.CommonRestrictors.BackRow,
             };
 
             public override async Task Run() {
@@ -99,8 +99,8 @@ public partial class Hugo {
                 },
             };
 
-            public override List<ActionRestrictor> Restrictors { get; init; } = new () {
-                ActionRestrictors.FrontRow,
+            public override List<Restrictor> Restrictors { get; init; } = new () {
+                Combat.CommonRestrictors.FrontRow,
             };
 
             public new Hugo User => base.User as Hugo;

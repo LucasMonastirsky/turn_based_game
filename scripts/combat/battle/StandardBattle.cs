@@ -12,8 +12,9 @@ namespace Combat {
 			Combatants = new List<Combatant> {
 				new Joseph { Position = new () { Side = Side.Left, Row = 0, Slot = 1, }},
 				new Lara { Position = new () { Side = Side.Left, Row = 0, Slot = 3, }},
-				new Oda { Position = new () { Side = Side.Left, Row = 1, Slot = 1, }},
-				new Anna { Position = new () { Side = Side.Left, Row = 1, Slot = 3, }},
+				new Oda { Position = new () { Side = Side.Left, Row = 1, Slot = 0, }},
+				new Isabel { Position = new () { Side = Side.Left, Row = 1, Slot = 2, }},
+				new Anna { Position = new () { Side = Side.Left, Row = 1, Slot = 4, }},
 				new Ghoul { Position = new () { Side = Side.Right, Row = 0, Slot = 1 }},
 				new Ghoul { Position = new () { Side = Side.Right, Row = 0, Slot = 3 }},
 				new Boomer { Position = new () { Side = Side.Right, Row = 1, Slot = 0 }},
@@ -23,7 +24,7 @@ namespace Combat {
 
 			foreach (var combatant in Combatants) {
 				combatant.LoadIn();
-				combatant.Controller = new PlayerController () { Combatant = combatant };
+				//combatant.Controller = new PlayerController () { Combatant = combatant };
 			}
 
 			Positioner.Setup();

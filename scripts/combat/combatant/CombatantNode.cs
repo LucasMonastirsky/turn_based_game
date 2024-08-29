@@ -10,7 +10,7 @@ namespace Combat {
         private double movement_duration = (double) Timing.MoveDuration / 1000; 
         private bool moving = false;
         private Vector2 moving_from, moving_towards;
-        private double moving_time;
+        private double moving_time, movement_skip_threshold;
         private TaskCompletionSource move_completion_source;
 
         public CombatantNode () {
@@ -27,6 +27,14 @@ namespace Combat {
 
         public override void _Process (double delta) {
             if (moving) { // TODO: this is kinda dirty, use callback list?
+                if (
+                    Mathf.Abs(Position.Abs().X - moving_towards.Abs().X) < movement_skip_threshold
+                    && Mathf.Abs(Position.Abs().Y - moving_towards.Abs().Y) < movement_skip_threshold
+                ) {
+                    move_completion_source.TrySetResult();
+                    Position = moving_towards;
+                }
+
                 moving_time += delta;
                 Position = moving_from.Lerp(moving_towards, (float) (moving_time / movement_duration));
                 if (moving_time >= movement_duration) {
@@ -43,6 +51,7 @@ namespace Combat {
             moving_from = Position;
             moving_towards = target_position;
             moving_time = 0;
+            movement_skip_threshold = 1;
 
             await move_completion_source.Task;
         }
