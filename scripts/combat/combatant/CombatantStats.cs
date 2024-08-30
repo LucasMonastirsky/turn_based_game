@@ -59,6 +59,8 @@ namespace Combat {
             public Source Source;
             public int Value;
 
+            public bool Enabled = true;
+
             public Bonus (Source source, Stat stat, int value) {
                 Source = source;
                 Stat = stat;
@@ -95,6 +97,10 @@ namespace Combat {
             foreach (var list in StatBonuses.Values) {
                 list.RemoveAll(bonus => bonus.Source == source);
             }
+        }
+
+        public Bonus GetBonus (Source source, Stat stat) {
+            return StatBonuses[stat].Find(bonus => bonus.Source == source);
         }
 
         public int GetTotalBonuses(Stat stat) {

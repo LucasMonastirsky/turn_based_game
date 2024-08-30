@@ -93,6 +93,7 @@ namespace Combat {
                         CritBonus = 5,
                         Sprite = User.Animations.Swing,
                         IsMelee = true,
+                        Tags = new () { Attack.Tag.Backhit },
                     };
 
                     var result = await User.SendAttack(Target, attack);
@@ -107,8 +108,6 @@ namespace Combat {
 
                     User.Node.Position = Positioner.GetWorldPosition(User.Position);
                     User.Node.Animator.FlipH = !User.Node.Animator.FlipH;
-
-                    await Timing.Delay(1/4f);
 
                     User.Play(User.Animations.Idle);
                 }

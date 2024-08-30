@@ -220,8 +220,7 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    var attack_modifier = User.AddRollModifier(new (this, RollTags.Attack) { Advantage = -1, });
-                    var hit_modifier = User.AddRollModifier(new (this, RollTags.Hit) { Bonus = -1 });
+                    var hit_modifier = User.AddRollModifier(new (this, Stat.HitBonus) { Bonus = -1, Advantage = -1, }); // TODO: add crit and dmg
 
                     var attack_options = new Attack () {
                         ParryNegation = 15,
@@ -242,7 +241,6 @@ namespace Combat {
                         await Timing.Delay(1f / User.MaxBullets * 2f);
                     }
 
-                    User.RemoveRollModifier(attack_modifier);
                     User.RemoveRollModifier(hit_modifier);
                 }
             }

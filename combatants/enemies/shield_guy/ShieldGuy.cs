@@ -25,20 +25,35 @@ partial class ShieldGuy : Combatant {
     public class Shield : StatusEffect {
         public override string Name => "Shield";
 
+        private Bonus bonus;
+
+        Func<Attack, Task> before_attack_handler;
         Func<AttackResult, Task> after_attack_handler;
 
         public override void OnApplied () {
-            User.AddBonus(new (this, Stat.ParryBonus, 15));
-            CombatEvents.AfterAttack.Always(after_attack_handler = async attack_result => {
-                if (attack_result.Defender == User && attack_result.Parried) {
-                    var damage = attack_result.Attacker.Roll(attack_result.Attack.DamageRoll, RollTags.Damage);
-                    if ((Level -= damage ) < 1) Remove();
+            bonus = User.AddBonus(new (this, Stat.ParryBonus, 15));
+
+            CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
+                if (attack.Is(Attack.Tag.Backhit)) {
+                    bonus.Enabled = false;
                 }
+            });
+
+            CombatEvents.AfterAttack.Always(after_attack_handler = async attack_result => {
+                if (bonus.Enabled && attack_result.Defender == User && attack_result.Parried) {
+                    Level -= attack_result.Attacker.Roll(attack_result.Attack.DamageRoll, Stat.DamageBonus);
+
+                }
+
+                bonus.Enabled = true;
+
+                if (Level < 1) Remove();
             });
         }
 
         public override void OnRemoved () {
             User.RemoveBonusesFromSource(this);
+            CombatEvents.BeforeAttack.Remove(before_attack_handler);
             CombatEvents.AfterAttack.Remove(after_attack_handler);
         }
     }

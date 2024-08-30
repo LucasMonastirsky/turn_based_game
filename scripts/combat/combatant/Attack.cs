@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 namespace Combat {
@@ -15,6 +16,12 @@ namespace Combat {
         public bool IsMelee = false;
         public bool IsRanged = false;
         public bool MoveToMeleeDistance = false;
+
+        public enum Tag {
+            Backhit,
+        }
+        public List<Tag> Tags = new ();
+        public bool Is (Tag tag) => Tags.Contains(tag);
 
         public DiceRoll DamageRoll = null;
         public Action<AttackResult> OnResult = null;

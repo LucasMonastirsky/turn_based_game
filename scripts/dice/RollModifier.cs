@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using Combat;
 
 public class RollModifier {
-    public List<RollTag> Tags { get; init; }
+    public Combatant.Stat Stat;
     public int Bonus = 0;
     public int Advantage = 0;
 
@@ -14,8 +12,8 @@ public class RollModifier {
 
     public Source Source { get; init; }
 
-    public RollModifier (Source source, params RollTag [] tags) {
+    public RollModifier (Source source, Combatant.Stat stat) {
         Source = source;
-        Tags = tags.OrderBy(x => x).ToList();
+        Stat = stat;
     }
 }

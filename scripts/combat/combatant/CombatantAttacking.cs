@@ -36,7 +36,7 @@ namespace Combat {
 
             var result = attack.Target.Combatant.ReceiveAttack(this, attack);
 
-            if (result.Hit && !result.IsCrit && Roll(Dice.D20.Plus(attack.CritBonus), RollTags.Crit) > 20) {
+            if (result.Hit && !result.IsCrit && Roll(Dice.D20.Plus(attack.CritBonus), Stat.CritBonus) > 20) {
                 result.IsCrit = true;
             }
 
@@ -51,7 +51,7 @@ namespace Combat {
                     attack.DamageRoll = attack.DamageRoll.Times(2);
                 }
 
-                result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, RollTags.Damage), this);
+                result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, Stat.CritBonus), this);
             }
 
             if (handler != null) await handler(result);
@@ -61,9 +61,9 @@ namespace Combat {
             return TurnManager.LastAttack = result;
         }
         public AttackResult ReceiveAttack (Combatant attacker, Attack attack) {
-            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus).WithAdvantage(attack.HitAdvantage), RollTags.Hit);
-            var parry_roll = (!attack.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, RollTags.Parry);
-            var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, RollTags.Dodge);
+            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus).WithAdvantage(attack.HitAdvantage), Stat.HitBonus);
+            var parry_roll = (!attack.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, Stat.ParryBonus);
+            var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, Stat.DodgeBonus);
 
             var result = new AttackResult {
                 Attack = attack,

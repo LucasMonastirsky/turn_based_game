@@ -7,7 +7,7 @@ namespace Combat {
             public Dojutsu (Oda user) : base (user) {
                 User.Events.BeforeAttack.Always(async attack => {
                     if (attack.Target.Combatant == user && !attack.IsMelee) { // TODO: add rolls directly to attack
-                        user.AddRollModifier(new (this, RollTags.Parry) { Bonus = 10, Temporary = true });
+                        user.AddRollModifier(new (this, Stat.ParryBonus) { Bonus = 10, Temporary = true });
                     }
                 });
             }

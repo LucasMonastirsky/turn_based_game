@@ -217,7 +217,7 @@ namespace Combat {
                     private RollModifier roll_modifier;
 
                     public override void OnApplied () {
-                        User.AddRollModifier(roll_modifier = new RollModifier(this, RollTags.Damage) { Advantage = 1 });
+                        User.AddRollModifier(roll_modifier = new RollModifier(this, Stat.DamageBonus) { Advantage = 1 });
                     }
 
                     public override void OnRemoved () {

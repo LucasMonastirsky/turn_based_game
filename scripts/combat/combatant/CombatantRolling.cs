@@ -6,25 +6,17 @@ using Utils;
 
 namespace Combat {
     public partial class Combatant {
-        public int Roll (DiceRoll dice_roll, RollTag tag = null) {
+        public int Roll (DiceRoll dice_roll, Stat stat) {
             var bonus = 0;
             var advantage = 0;
 
             var mods = new List<RollModifier> ();
 
             foreach (var mod in RollModifiers) {
-                if (mod.Tags.Contains(tag)) mods.Add(mod);
+                if (mod.Stat == stat) mods.Add(mod);
             }
 
-            var bonus_map = new Dictionary<RollTag, int> () {
-                { RollTags.Hit, HitBonus },
-                { RollTags.Crit, CritBonus },
-                { RollTags.Damage, DamageBonus },
-                { RollTags.Parry, ParryBonus },
-                { RollTags.Dodge, DodgeBonus },
-            };
-
-            bonus += bonus_map[tag];
+            bonus += StatBonuses[stat].Where(bonus => bonus.Enabled).Select(bonus => bonus.Value).Aggregate(0, (x, y) => x + y);
 
             foreach (var mod in mods) {
                 bonus += mod.Bonus;
@@ -45,7 +37,7 @@ namespace Combat {
             else rolls.Sort((x, y) => x - y);
 
             var total = rolls[0] + bonus;
-            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {tag}: {total} ({rolls[0]}+{bonus}) ({advantage} advantage)");
+            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {stat}: {total} ({rolls[0]}+{bonus}) ({advantage} advantage)");
 
             foreach (var mod in mods) {
                 if (mod.Temporary) RemoveRollModifier(mod);
@@ -80,7 +72,7 @@ namespace Combat {
         }
 
         public int FindRollModifierIndex (RollModifier roll_modifier) {
-            return RollModifiers.FindIndex(item => item.Source == roll_modifier.Source && item.Tags == roll_modifier.Tags);
+            return RollModifiers.FindIndex(item => item.Source == roll_modifier.Source && item.Stat == roll_modifier.Stat);
         }
 
         public List<RollModifier> RollModifiers = new ();
