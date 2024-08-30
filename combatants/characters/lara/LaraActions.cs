@@ -15,6 +15,7 @@ namespace Combat {
             public ActionClasses.Stab Stab;
             public ActionClasses.Sweep Sweep;
             public ActionClasses.Charge Charge;
+            public ActionClasses.Push Push;
             public ActionClasses.Unleash Unleash;
             public ActionClasses.Impatience Impatience;
             public ActionClasses.Relax Relax;
@@ -89,6 +90,7 @@ namespace Combat {
                         DodgeNegation = 3,
                         DamageRoll = User.AxeDamageRoll.Plus(-2),
                         Sprite = User.Animations.Sweeps[0],
+                        IsMelee = true,
                     };
 
                     var first_attack = await User.SendAttack(real_targets[0], attack_options);
@@ -101,6 +103,46 @@ namespace Combat {
                 }
             }
         
+            public class Push : CombatAction {
+                public override string Name => "Push";
+                public override int TempoCost { get; set; } = 1;
+
+                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                    CommonTargetSelectors.Melee,
+                    new () {
+                        Type = TargetType.Position,
+                        Side = SideSelector.Opposite,
+                        Row = 1,
+                        Validator = (target, user, previous_targets) => {
+                            return Positioner.IsValidMovement(previous_targets[0].Combatant, target.Position, true);
+                        }
+                    }
+                };
+
+                public override List<Restrictor> Restrictors { get; init; } = new () {
+                    CommonRestrictors.FrontRow,
+                };
+
+                public new Lara User => base.User as Lara;
+                public Push (Lara user) : base (user) {}
+
+                public override async Task Run () {
+                    var attack = new Attack {
+                        DamageRoll = D6,
+                        ParryNegation = 2,
+                        DodgeNegation = 6,
+                        Sprite = User.Animations.Push,
+                        IsMelee = true,
+                        MoveToMeleeDistance = true,
+                    };
+
+                    User.SendAttack(Target, attack, async result => {
+                        if ((result.Hit || result.Parried) && result.Defender.CanBeMoved) {
+                            Positioner.SwitchPosition(result.Defender, Targets[1].Position);
+                        } 
+                    });
+                }
+            }
             public class Charge : CombatAction {
                 public override string Name => "Charge";
                 public override int TempoCost { get; set; } = 2;
@@ -239,9 +281,7 @@ namespace Combat {
                 public Relax (Lara user) : base (user) {}
 
                 public override async Task Run() {
-                    var dice_roll = D4.Times(User.GetStatusEffect<Rage>().Level / 2);
-
-                    User.Heal(User.Roll(dice_roll));
+                    User.Heal(User.GetStatusEffect<Rage>().Level);
                     User.RemoveStatusEffect<Rage>();
                 }
             }

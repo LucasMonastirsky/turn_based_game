@@ -28,7 +28,7 @@ public class EventManager<T> {
     }
 
     public List<Func<T, Task>> always_handlers = new ();
-    public void Always (Func<T, Task> handler) {
+    public void Always (Func<T, Task> handler) { // TODO: add overload with source argument, allowing to remove by source
         always_handlers.Add(handler);
     }
 

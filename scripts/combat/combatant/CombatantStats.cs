@@ -29,7 +29,7 @@ namespace Combat {
         public int MaxTempo => BaseMaxTempo + GetTotalBonuses(Stat.MaxTempo);
         public int TempoGain => BaseTempoGain + GetTotalBonuses(Stat.TempoGain);
 
-        public int HitBonus => BaseHitBonus+ GetTotalBonuses(Stat.HitBonus);
+        public int HitBonus => BaseHitBonus + GetTotalBonuses(Stat.HitBonus);
         public int CritBonus => BaseCritBonus + GetTotalBonuses(Stat.CritBonus);
         public int DamageBonus => BaseDamageBonus + GetTotalBonuses(Stat.DamageBonus);
 

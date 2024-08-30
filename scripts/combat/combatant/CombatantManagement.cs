@@ -31,12 +31,6 @@ namespace Combat {
 
             Tempo = TempoGain;
             Health = MaxHealth;
-
-            AddRollModifier(new (this, RollTags.Hit) { Bonus = HitBonus });
-            AddRollModifier(new (this, RollTags.Crit) { Bonus = CritBonus });
-            AddRollModifier(new (this, RollTags.Damage) { Bonus = DamageBonus });
-            AddRollModifier(new (this, RollTags.Parry) { Bonus = ParryBonus });
-            AddRollModifier(new (this, RollTags.Dodge) { Bonus = DodgeBonus });
         }
 
         public void LoadIn (CombatPosition position) {
@@ -62,7 +56,7 @@ namespace Combat {
         public bool DeathCheck () {
             if (Health < 1) {
                 IsDead = true;
-                Play(StandardAnimations.Dead);
+                //Play(StandardAnimations.Dead);
                 StatusEffects.ToList().ForEach(effect => RemoveStatusEffect(effect));
                 return true;
             }

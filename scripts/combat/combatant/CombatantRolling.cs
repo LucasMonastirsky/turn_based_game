@@ -6,36 +6,46 @@ using Utils;
 
 namespace Combat {
     public partial class Combatant {
-        public int Roll (DiceRoll dice_roll, params RollTag [] tags) {
-            var roll_data = dice_roll.Clone();
+        public int Roll (DiceRoll dice_roll, RollTag tag = null) {
+            var bonus = 0;
+            var advantage = 0;
+
             var mods = new List<RollModifier> ();
 
             foreach (var mod in RollModifiers) {
-                if (mod.Tags.All(tag => tags.Contains(tag))) {
-                    mods.Add(mod);
-                }
+                if (mod.Tags.Contains(tag)) mods.Add(mod);
             }
 
+            var bonus_map = new Dictionary<RollTag, int> () {
+                { RollTags.Hit, HitBonus },
+                { RollTags.Crit, CritBonus },
+                { RollTags.Damage, DamageBonus },
+                { RollTags.Parry, ParryBonus },
+                { RollTags.Dodge, DodgeBonus },
+            };
+
+            bonus += bonus_map[tag];
+
             foreach (var mod in mods) {
-                roll_data.Bonus += mod.Bonus;
-                roll_data.Advantage += mod.Advantage;
+                bonus += mod.Bonus;
+                advantage += mod.Advantage;
             }
 
             var rolls = new List<int> ();
 
-            for (var i = 0; i < Math.Abs(roll_data.Advantage) + 1; i++) {
+            for (var i = 0; i < Math.Abs(advantage) + 1; i++) {
                 var sum = 0;
 
-                roll_data.FaceCounts.ForEach(count => sum += RNG.Roll(count));
+                dice_roll.FaceCounts.ForEach(count => sum += RNG.Roll(count));
 
                 rolls.Add(sum);
             }
 
-            if (roll_data.Advantage >= 0) rolls.Sort((x, y) => y - x);
+            if (advantage >= 0) rolls.Sort((x, y) => y - x);
             else rolls.Sort((x, y) => x - y);
 
-            var total = rolls[0] + roll_data.Bonus;
-            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {Stringer.Join(tags)}: {total} ({rolls[0]}+{roll_data.Bonus}) ({roll_data.Advantage} advantage)");
+            var total = rolls[0] + bonus;
+            Dev.Log(Dev.Tags.Rolling, $"{this} rolled {tag}: {total} ({rolls[0]}+{bonus}) ({advantage} advantage)");
 
             foreach (var mod in mods) {
                 if (mod.Temporary) RemoveRollModifier(mod);
