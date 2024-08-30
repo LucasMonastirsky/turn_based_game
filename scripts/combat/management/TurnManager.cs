@@ -75,7 +75,7 @@ namespace Combat {
                 State = "Ending";
                 Dev.Log(Dev.Tags.CombatManagement, $"Ending turn of {ActiveCombatant}");
 
-                await CombatEvents.BeforeTurnEnd.Trigger();
+                await CombatEvents.BeforeTurnEnd.Trigger(ActiveCombatant);
                 ActiveCombatant.OnTurnEnd();
 
                 await InteractionManager.ResolveQueue();

@@ -1,4 +1,5 @@
 using Combat;
+using Godot;
 
 public partial class ShieldGuy {
     private static string texture_path = "res://combatants/enemies/shield_guy/textures";
@@ -23,4 +24,16 @@ public partial class ShieldGuy {
         Throw = new (texture_path, "throw"),
         ShieldBlock = new (texture_path, "shield_block"),
     };
+
+    public SoundStore Sounds = new ();
+
+    public class SoundStore {
+        public AudioStream Bash;
+        public AudioStream ShieldHit;
+
+        public SoundStore () {
+            Bash = GD.Load<AudioStream>("res://combatants/enemies/shield_guy/sounds/bash.wav");
+            ShieldHit = GD.Load<AudioStream>("res://combatants/enemies/shield_guy/sounds/shield_hit.wav");
+        }
+    }
 }

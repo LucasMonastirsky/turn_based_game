@@ -52,6 +52,7 @@ namespace Combat {
                 }
 
                 result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, Stat.CritBonus), this);
+                if (result.DamageDone > 0) Play(attack.HitSound ?? CommonSounds.SwordWound);
             }
 
             if (handler != null) await handler(result);

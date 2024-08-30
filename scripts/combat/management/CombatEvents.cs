@@ -9,7 +9,7 @@ namespace Combat {
         public static EventManager<DamageInstance> BeforeDamage = new ();
         public static EventManager<DamageInstance> AfterDamage = new ();
 
-        public static EventManager BeforeTurnEnd = new ();
+        public static EventManager<Combatant> BeforeTurnEnd = new ();
     
         public struct AfterDeathArguments {
             public Combatant Combatant;

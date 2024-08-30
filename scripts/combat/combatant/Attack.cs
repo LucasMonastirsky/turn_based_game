@@ -28,5 +28,6 @@ namespace Combat {
 
         public SimpleSprite Sprite = null;
         public AudioStream Sound = null;
+        public AudioStream HitSound = null;
     }
 }

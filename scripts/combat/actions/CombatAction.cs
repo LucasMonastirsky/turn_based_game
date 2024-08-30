@@ -132,6 +132,7 @@ namespace Combat {
             if (selector.VerticalRange != null) predicates.Add(() => Math.Abs(User.Slot - target.Slot) <= selector.VerticalRange);
             if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, previous_targets));
             if (!selector.CanTargetSelf) predicates.Add(() => target.Combatant != User);
+            if (selector.IsValidMovement) predicates.Add(() => Positioner.IsValidMovement(User, target.Position, false));
 
             if (selector.Type == TargetType.Double) predicates.Add(() => {
                 if (target.Slot is 0 or 4) return false;

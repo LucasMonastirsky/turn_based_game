@@ -148,16 +148,16 @@ namespace Combat {
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                    new (TargetType.Single) {
+                    new (TargetType.Position) {
                         Side = SideSelector.Same,
                         Row = 0,
-                        Validator = (target, user, previous_targets) => target.Combatant.CanMove,
+                        IsValidMovement = true,
                     }
                 };
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
-                    Combat.CommonRestrictors.BackRow,
-                    Combat.CommonRestrictors.CanMove,
+                    CommonRestrictors.BackRow,
+                    CommonRestrictors.CanMove,
                 };
 
                 public new Lara User => base.User as Lara;

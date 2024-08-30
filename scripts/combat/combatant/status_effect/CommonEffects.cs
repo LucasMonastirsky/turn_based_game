@@ -33,6 +33,25 @@ namespace Combat {
         }
     }
 
+    public class Stunned : StatusEffect {
+        public override string Name => "Stunned";
+
+        private Func<Combatant, Task> before_turn_end_handler; 
+
+        public override void OnApplied () {
+            User.Tempo = 0;
+            User.AddBonus(new (this, Combatant.Stat.TempoGain, -User.TempoGain));
+
+            CombatEvents.BeforeTurnEnd.Always(before_turn_end_handler = async combatant => {
+                if (combatant == User) Remove();
+            });
+        }
+
+        public override void OnRemoved () {
+            User.RemoveBonusesFromSource(this);
+        }
+    }
+
     public class Hidden : StatusEffect {
         public override string Name => "Hidden";
 

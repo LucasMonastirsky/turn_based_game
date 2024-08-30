@@ -39,7 +39,7 @@ namespace Combat {
             }
 
             if (!IsDead) Animator.Play(StandardAnimations.Hurt);
-            Play(CommonSounds.SwordWound);
+            // Play(CommonSounds.SwordWound);
 
             DamageLabel.Instantiate(this, $"{amount}");
 

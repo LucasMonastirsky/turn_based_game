@@ -59,9 +59,7 @@ namespace Combat {
                     new (TargetType.Position) {
                         Side = SideSelector.Same,
                         Row = 0,
-                        Validator = (target, user, previous_targets) => (
-                            user.CanMoveTo(target.Position) && (target.IsEmpty || target.Combatant.CanMove)
-                        )
+                        IsValidMovement = true,
                     },
                     new (TargetType.Single) {
                         Side = SideSelector.Opposite,

@@ -22,14 +22,12 @@ namespace Combat {
             public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
                 new TargetSelector (TargetType.Position) {
                     Side = SideSelector.Same,
-                    Validator = (target, user, previous_targets) => {
-                        return user.CanMoveTo(target.Position);
-                    }
+                    IsValidMovement = true,
                 },
             };
 
             public override List<Restrictor> Restrictors { get; init; } = new () {
-                Combat.CommonRestrictors.CanMove,
+                CommonRestrictors.CanMove,
             };
 
             public Move (Combatant user) : base (user) {}

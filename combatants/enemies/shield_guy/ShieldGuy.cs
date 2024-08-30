@@ -22,6 +22,19 @@ partial class ShieldGuy : Combatant {
         AddStatusEffect(new ActionClasses.Throw.BackupJavelin ());
     }
 
+    protected override void OnAttackParried (AttackResult attack_result) {
+        if (HasStatusEffect<Shield>()) {
+            Animator.Play(Animations.ShieldBlock);
+            Play(Sounds.ShieldHit);
+            DamageLabel.Instantiate(this, "Block");
+        }
+        else {
+            Animator.Play(StandardAnimations.Parry);
+            Play(CommonSounds.SwordClash);
+            DamageLabel.Instantiate(this, "Parry");
+        }
+    }
+
     public class Shield : StatusEffect {
         public override string Name => "Shield";
 

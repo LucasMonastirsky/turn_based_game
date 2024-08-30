@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 public class EventManager : EventManager<object> {
     public void Once (Func<Task> handler) {
-        Once((object a) => handler());
+        Once((object _) => handler());
+    }
+
+    public void Always (Func<Task> handler) {
+        always_handlers.Add((object _) => handler());
     }
 
     public async Task Trigger () {

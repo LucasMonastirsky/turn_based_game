@@ -21,6 +21,7 @@ namespace Combat {
         public int? VerticalRange { get; init; } = null;
 
         public bool CanTargetSelf { get; init; } = false;
+        public bool IsValidMovement { get; init; } = false;
 
         public delegate bool ValidatorDelegate (CombatTarget target, Combatant user, List<CombatTarget> previous_targets);
         public ValidatorDelegate Validator { get; init; } = null;
