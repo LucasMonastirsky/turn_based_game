@@ -29,7 +29,7 @@ public partial class Hugo {
             public override string Name { get => "Swing"; }
             public override int TempoCost { get; set; } = 2;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+            public override List<Selector> Selectors { get; protected set; } = new () {
                 CommonTargetSelectors.Melee,
             };
 
@@ -62,7 +62,7 @@ public partial class Hugo {
 
             public Blast (Combatant user) : base (user) {}
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+            public override List<Selector> Selectors { get; protected set; } = new () {
                 new (TargetType.Single) { Side = SideSelector.Opposite, }
             };
 
@@ -86,7 +86,7 @@ public partial class Hugo {
             public override string Name => "Shove";
             public override int TempoCost { get; set; } = 2;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+            public override List<Selector> Selectors { get; protected set; } = new () {
                 CommonTargetSelectors.Melee,
                 new (TargetType.Position) {
                     Side = SideSelector.Opposite,

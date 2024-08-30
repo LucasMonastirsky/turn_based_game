@@ -23,10 +23,10 @@ namespace Combat {
             User = user;
         }
 
-        public virtual List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
-        public List<CombatTarget> Targets;
-        public int TargetCount => TargetSelectors.Count;
-        public CombatTarget Target => Targets[0];
+        public virtual List<Selector> Selectors { get; protected set; } = new () {};
+        public List<Target> Targets;
+        public int TargetCount => Selectors.Count;
+        public Target Target => Targets[0];
 
         public bool Bound { get; protected set; } = false;
 
@@ -36,7 +36,7 @@ namespace Combat {
             return this;
         }
 
-        public CombatAction RandomBind (List<List<CombatTarget>> target_sets) {
+        public CombatAction RandomBind (List<List<Target>> target_sets) {
             return Bind(RNG.SelectFrom(target_sets).ToArray());
         }
 
@@ -77,15 +77,15 @@ namespace Combat {
             var all_targets = Positioner.GetCombatTargets();
             Targets = new ();
 
-            for (var i = 0; i < TargetSelectors.Count; i++) {
-                var selector = TargetSelectors[i];
-                var selectable_targets = new List<CombatTarget> ();
+            for (var i = 0; i < Selectors.Count; i++) {
+                var selector = Selectors[i];
+                var selectable_targets = new List<Target> ();
 
                 foreach (var target in all_targets) {
                     if (IsValidTarget(target, selector)) selectable_targets.Add(target);
                 }
 
-                CombatTarget selection = null;
+                Target selection = null;
                 switch (selector.Type) {
                     case TargetType.Position:
                         selection = await TargetingInterface.SelectPosition(selectable_targets);
@@ -107,13 +107,13 @@ namespace Combat {
                     Targets.Add(selection);
                 }
 
-                if (i != TargetSelectors.Count - 1) await Timing.Delay(1/5f);
+                if (i != Selectors.Count - 1) await Timing.Delay(1/5f);
             }
 
             return Bind(Targets.ToArray());
         }
 
-        private bool IsValidTarget (CombatTarget target, TargetSelector selector, List<CombatTarget> previous_targets = null) {
+        private bool IsValidTarget (Target target, Selector selector, List<Target> previous_targets = null) {
             if (
                 target.Combatant != null
                 && target.Combatant.Side != User.Side
@@ -146,8 +146,8 @@ namespace Combat {
         }
 
         public bool PassesSelectors () {
-            for (var i = 0; i < TargetSelectors.Count; i++) {
-                if (Targets?[i] is null || !IsValidTarget(Targets[i], TargetSelectors[i])) {
+            for (var i = 0; i < Selectors.Count; i++) {
+                if (Targets?[i] is null || !IsValidTarget(Targets[i], Selectors[i])) {
                     return false;
                 }
             }
@@ -155,16 +155,16 @@ namespace Combat {
             return true;
         }
 
-        public List<List<CombatTarget>> GetValidTargets () {
+        public List<List<Target>> GetValidTargets () {
             return GetValidTargets(null, 0);
         }
 
-        private List<List<CombatTarget>> GetValidTargets (List<List<CombatTarget>> previous, int selector_index = 0) {
-            var results = new List<List<CombatTarget>> ();
+        private List<List<Target>> GetValidTargets (List<List<Target>> previous, int selector_index = 0) {
+            var results = new List<List<Target>> ();
 
             if (selector_index == 0) {
                 Positioner.GetCombatTargets().ForEach(target => {
-                    if (IsValidTarget(target, TargetSelectors[selector_index])) {
+                    if (IsValidTarget(target, Selectors[selector_index])) {
                         results.Add(new () { target });
                     }
                 });
@@ -172,7 +172,7 @@ namespace Combat {
             else {
                 for (var i = 0; i < previous.Count; i++) {
                     Positioner.GetCombatTargets().ForEach(target => {
-                        if (IsValidTarget(target, TargetSelectors[selector_index], previous[i])) {
+                        if (IsValidTarget(target, Selectors[selector_index], previous[i])) {
                             var new_list = previous[i].ToList();
                             new_list.Add(target);
                             results.Add(new_list);
@@ -181,7 +181,7 @@ namespace Combat {
                 }
             }
 
-            if (results.Count == 0 || selector_index >= TargetSelectors.Count - 1) return results;
+            if (results.Count == 0 || selector_index >= Selectors.Count - 1) return results;
             else return GetValidTargets(results, selector_index + 1);
         }
 

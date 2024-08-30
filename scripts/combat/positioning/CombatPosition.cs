@@ -42,7 +42,7 @@ namespace Combat {
 
         public Vector2 WorldPosition => Positioner.GetWorldPosition(this);
 
-        public CombatTarget ToTarget () => new CombatTarget (this);
+        public Target ToTarget () => new Target (this);
 
         public Combatant Combatant => Positioner.GetSlotData(this).Combatant;
 

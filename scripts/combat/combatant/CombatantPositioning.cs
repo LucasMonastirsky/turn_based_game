@@ -1,39 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Godot;
 using Utils;
 
 namespace Combat {
-    public class Movement {
-        public Source Source;
-        public CombatTarget Start, End;
-
-        public Side Side => Start.Side;
-
-        /// <summary>
-        /// Whether the end combatant is being forcefully moved, bypassing immobilized effects
-        /// </summary>
-        public bool IsForceful = false;
-
-        public bool Prevented = false;
-        public void Prevent () {
-            Prevented = true;
-        }
-
-        /// <summary>
-        /// Whether the movement was initiated by the starting combatant
-        /// </summary>
-        public bool IsIntentional => Source.User == Start.Combatant;
-
-        public bool Includes (Combatant combatant) => Start.Combatant == combatant || End.Combatant == combatant;
-
-        public Movement (Source source, Targetable start, Targetable end) {
-            Source = source;
-            (Start, End) = (start.ToTarget(), end.ToTarget());
-        }
-
-        public Movement Reversed => new Movement (Source, End, Start);
-    }
-
     public partial class Combatant {
         private CombatPosition _position;
         public CombatPosition Position {
@@ -52,6 +22,10 @@ namespace Combat {
 
         public bool CanMoveTo (CombatPosition position) {
             return CanMove && Positioner.IsValidMovement(this, position, false);
+        }
+
+        public int VerticalDistanceTo (Targetable target) {
+            return Math.Abs(Slot - target.Position.Slot);
         }
 
         public async Task<Movement> MoveTo (Targetable target, bool isForceful = false) {
@@ -100,7 +74,7 @@ namespace Combat {
             return DisplaceTo(target.Node.Position with { X = target.Node.Position.X + 50 * Position.Side.Value }); // TODO: put melee range var somewhere
         }
 
-        public Task DisplaceToMeleeDistance (CombatTarget target) {
+        public Task DisplaceToMeleeDistance (Target target) {
             var node_position = target.Combatant == null ? target.Position.WorldPosition : target.Combatant.Node.Position;
             return DisplaceTo(node_position with { X = node_position.X + 50 * Position.Side.Value });
         }

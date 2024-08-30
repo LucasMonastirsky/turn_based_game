@@ -27,7 +27,7 @@ namespace Combat {
 
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
 
@@ -55,7 +55,7 @@ namespace Combat {
                 public override string Name => "Charge";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Position) {
                         Side = SideSelector.Same,
                         Row = 0,

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Combat {
     public abstract class MeleeAction : CombatAction {
-        public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+        public override List<Selector> Selectors { get; protected set; } = new () {
             CommonTargetSelectors.Melee,
         };
 
@@ -19,8 +19,8 @@ namespace Combat {
             public override string Name { get => "Move"; }
             public override int TempoCost { get; set; } = 1;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                new TargetSelector (TargetType.Position) {
+            public override List<Selector> Selectors { get; protected set; } = new () {
+                new Selector (TargetType.Position) {
                     Side = SideSelector.Same,
                     IsValidMovement = true,
                 },
@@ -41,7 +41,7 @@ namespace Combat {
             public override string Name => "Pass";
             public override int TempoCost { get; set; } = 0;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
+            public override List<Selector> Selectors { get; protected set; } = new () {};
 
             public Pass (Combatant user) : base (user) {}
 

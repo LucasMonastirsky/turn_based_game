@@ -1,7 +1,7 @@
 using System;
 
 namespace Combat {
-    public class CombatTarget : Targetable {
+    public class Target : Targetable {
         public CombatPosition Position;
         public Combatant Combatant => Positioner.GetSlotData(Position).Combatant;
         public bool IsEmpty => Combatant == null;
@@ -10,17 +10,17 @@ namespace Combat {
         public int Row => Position.Row;
         public int Slot => Position.Slot;
 
-        public CombatTarget (CombatPosition position) {
+        public Target (CombatPosition position) {
             Position = position;
         }
 
-        public CombatTarget (Combatant combatant) {
+        public Target (Combatant combatant) {
             Position = combatant.Position;
         }
 
-        public CombatTarget ToTarget () => this;
+        public Target ToTarget () => this;
 
-        public int VerticalDistanceTo (CombatTarget target) {
+        public int VerticalDistanceTo (Target target) {
             return Math.Abs(Position.Slot - target.Position.Slot);
         }
     }

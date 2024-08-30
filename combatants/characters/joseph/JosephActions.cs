@@ -9,7 +9,7 @@ namespace Combat {
         public ActionStore Actions;
         public class ActionStore {
             public ActionClasses.Swing Swing;
-            public ActionClasses.Stab Stab;
+            public ActionClasses.FlatStrike Stab;
             public ActionClasses.CalfHook CalfHook;
             public ActionClasses.ApplyTheory ApplyTheory;
             public ActionClasses.Expose Study;
@@ -30,13 +30,13 @@ namespace Combat {
                 public override string Name => "Apply Theory";
                 public override int TempoCost { get; set; } = 3;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee with {
                         Validator = (target, _, _) => target.Combatant.HasStatusEffect<Studied>(),
                     },
                 };
                 public override List<Restrictor> Restrictors { get; init; } = new () {
-                    Combat.CommonRestrictors.FrontRow,
+                    CommonRestrictors.FrontRow,
                 };
 
                 public new Joseph User => base.User as Joseph;
@@ -84,7 +84,7 @@ namespace Combat {
                         ParryNegation = 7,
                         DodgeNegation = 4,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D8.Plus(6),
+                        DamageRoll = Dice.D10.Plus(6),
                         Sprite = User.Animations.Swing,
                     };
 
@@ -92,12 +92,12 @@ namespace Combat {
                 }
             }
 
-            public class Stab : MeleeAction {
-                public override string Name => "Stab";
+            public class FlatStrike : MeleeAction {
+                public override string Name => "Flat Strike";
                 public override int TempoCost { get; set; } = 2;
 
                 public new Joseph User => base.User as Joseph;
-                public Stab (Joseph user) : base (user) {}
+                public FlatStrike (Joseph user) : base (user) {}
 
                 public override async Task Run() {
                     Attack attack = new () {
@@ -105,11 +105,13 @@ namespace Combat {
                         DodgeNegation = 7,
                         CritBonus = 5,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D8.Plus(2),
-                        Sprite = User.Animations.Stab,
+                        DamageRoll = Dice.D6.Plus(4),
+                        Sprite = User.Animations.Swing,
                     };
 
-                    await User.SendAttack(Target, attack);
+                    await User.SendAttack(Target, attack, async attack_result => {
+                        if (attack_result.Hit) attack_result.Defender.AddStatusEffect(new Stunned());
+                    });
                 }
             }
 
@@ -141,7 +143,7 @@ namespace Combat {
                 public override string Name => "Expose";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) {
                         Side = SideSelector.Opposite,
                         Validator = (target, user, previous_targets) => target.Combatant.HasStatusEffect<Studied>(),
@@ -197,10 +199,10 @@ namespace Combat {
                 public override string Name => "Inspire";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
+                public override List<Selector> Selectors { get; protected set; } = new () {};
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
-                    Combat.CommonRestrictors.BackRow,
+                    CommonRestrictors.BackRow,
                 };
 
                 public new Joseph User => base.User as Joseph;

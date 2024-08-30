@@ -67,15 +67,15 @@ namespace Combat {
             return false;
         }
 
-        public static List<CombatTarget> GetMoveTargets (Combatant combatant, bool forcible) {
-            var targets = new List<CombatTarget>();
+        public static List<Target> GetMoveTargets (Combatant combatant, bool forcible) {
+            var targets = new List<Target>();
             var side = combatant.Side;
 
             for (int row = 0; row < MAX_ROW_COUNT; row++) {
                 for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
                     var position = new CombatPosition { Side = side, Row = row, Slot = slot};
 
-                    if (IsValidMovement(combatant, position, forcible)) targets.Add(new CombatTarget (position));
+                    if (IsValidMovement(combatant, position, forcible)) targets.Add(new Target (position));
                 }
             }
 
@@ -128,13 +128,13 @@ namespace Combat {
             return current.Rows[position.Side][position.Row][position.Slot];
         }
 
-        public static List<CombatTarget> GetCombatTargets () {
-            var targets = new List<CombatTarget> ();
+        public static List<Target> GetCombatTargets () {
+            var targets = new List<Target> ();
 
             for (var side = -1; side < 2; side += 2) {
                 for (var row = 0; row < MAX_ROW_COUNT; row++ ) {
                     for (var slot = 0; slot < ROW_SLOT_COUNT; slot++ ) {
-                        targets.Add(new CombatTarget(new CombatPosition () { Side = new Side(side), Row = row, Slot = slot }));
+                        targets.Add(new Target(new CombatPosition () { Side = new Side(side), Row = row, Slot = slot }));
                     }
                 }
             }
@@ -142,7 +142,7 @@ namespace Combat {
             return targets;
         }
 
-        public static CombatTarget SelectClosest (Targetable target, List<CombatTarget> positions) {
+        public static Target SelectClosest (Targetable target, List<Target> positions) {
             var results = new Dictionary<int, Targetable> ();
 
             foreach (var position in positions) {
@@ -157,20 +157,20 @@ namespace Combat {
                 results.TryAdd(distance, position); // maybe return a random one instead, or a list of ties
             }
 
-            return results.MinBy(kvp => kvp.Key).Value as CombatTarget;
+            return results.MinBy(kvp => kvp.Key).Value as Target;
         }
         
-        public static List<CombatTarget> TargetsInRange (Targetable target, int horizontal_range, int vertical_range = 5) {
+        public static List<Target> TargetsInRange (Targetable target, int horizontal_range, int vertical_range = 5) {
             var origin = target.ToTarget().Position;
             var rows = current.Rows[origin.Side];
 
-            var selected = new List<CombatTarget> ();
+            var selected = new List<Target> ();
 
             foreach (var row in rows) {
                 if (Math.Abs(origin.Row - row.Index) <= horizontal_range) {
                     foreach (var slot in row.Slots) {
                         if (Math.Abs(origin.Slot - slot.Index) <= vertical_range) {
-                            selected.Add(new CombatTarget(slot.Position));
+                            selected.Add(new Target(slot.Position));
                         }
                     }
                 }

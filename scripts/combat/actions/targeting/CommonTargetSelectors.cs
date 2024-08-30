@@ -1,6 +1,6 @@
 namespace Combat {
     public static class CommonTargetSelectors {
-        public static TargetSelector Melee => new TargetSelector() {
+        public static Selector Melee => new Selector() {
             Type = TargetType.Single,
             Side = SideSelector.Opposite,
             Row = 0,

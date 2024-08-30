@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Combat;
+using Utils;
 
 public partial class ShieldGuy {
     public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
@@ -48,12 +50,12 @@ public partial class ShieldGuy {
             public override string Name => "Bash";
             public override int TempoCost { get; set; } = 2;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+            public override List<Selector> Selectors { get; protected set; } = new () {
                 new (TargetType.Position) { Side = SideSelector.Same, Row = 0, IsValidMovement = true, },
                 new (TargetType.Single) {
                     Side = SideSelector.Opposite,
                     Row = 0,
-                    Validator = (CombatTarget target, Combatant user, List<CombatTarget> previous_targets) => {
+                    Validator = (Target target, Combatant user, List<Target> previous_targets) => {
                         var (slot_a, slot_b) = (target.Slot, previous_targets[0].Slot);
                         return Math.Abs(slot_a - slot_b) <= 1;
                     }
@@ -83,7 +85,19 @@ public partial class ShieldGuy {
                 };
 
                 await User.SendAttack(Targets[1], attack, async result => {
-                    result.Defender.AddStatusEffect(new Stunned());
+                    var enemy = result.Defender;
+
+                    if (result.Hit) enemy.AddStatusEffect(new Stunned());
+                    else if (result.Parried && enemy.CanBeMoved) {
+                        var targets = Positioner.GetAvailablePositions().Where(position => 
+                            position.Side == enemy.Side
+                            && enemy.VerticalDistanceTo(position) <= 1
+                        ).Select(pos => pos.ToTarget());
+
+                        if (targets.Count() < 1) return;
+
+                        enemy.MoveTo(RNG.SelectFrom(targets), true);
+                    }
                 });
             }
         }
@@ -92,7 +106,7 @@ public partial class ShieldGuy {
             public override string Name => "Throw";
             public override int TempoCost { get; set; } = 2;
 
-            public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+            public override List<Selector> Selectors { get; protected set; } = new () {
                 new (TargetType.Single) { Side = SideSelector.Opposite, }
             };
             public override List<Restrictor> Restrictors { get; init; } = new () {

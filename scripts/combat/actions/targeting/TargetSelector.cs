@@ -12,7 +12,7 @@ namespace Combat {
         Opposite = -1,
     }
 
-    public struct TargetSelector {
+    public struct Selector {
         public TargetType Type { get; init; }
  
         public SideSelector? Side { get; init; } = null;
@@ -23,10 +23,10 @@ namespace Combat {
         public bool CanTargetSelf { get; init; } = false;
         public bool IsValidMovement { get; init; } = false;
 
-        public delegate bool ValidatorDelegate (CombatTarget target, Combatant user, List<CombatTarget> previous_targets);
+        public delegate bool ValidatorDelegate (Target target, Combatant user, List<Target> previous_targets);
         public ValidatorDelegate Validator { get; init; } = null;
 
-        public TargetSelector (TargetType type) {
+        public Selector (TargetType type) {
             Type = type;
         }        
     }

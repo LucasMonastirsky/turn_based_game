@@ -5,7 +5,7 @@ using Godot;
 namespace Combat {
     public record Attack {
         public Combatant Attacker;
-        public CombatTarget Target;
+        public Target Target;
 
         public int HitAdvantage, HitBonus, CritBonus = 0;
         public int ParryNegation, DodgeNegation = 0;

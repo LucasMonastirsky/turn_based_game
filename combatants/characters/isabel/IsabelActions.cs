@@ -67,7 +67,7 @@ namespace Combat {
                 public override string Name => "BackStab";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new () { Type = TargetType.Single, Side = SideSelector.Opposite, Row = 1, },
                 };
                 public override List<Restrictor> Restrictors { get; init; } = new () {

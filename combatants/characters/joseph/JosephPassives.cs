@@ -17,7 +17,7 @@ namespace Combat {
                     if (movement.End.Row != movement.Start.Row) {
                         var target = movement.End.Row == 0 ? movement.End : movement.Start;
 
-                        if (target.Combatant == null) return;
+                        if (target.Combatant == null || target.Combatant.VerticalDistanceTo(User) > 1) return;
 
                         await User.SendAttack(target, new () {
                             ParryNegation = 6,
@@ -32,6 +32,10 @@ namespace Combat {
                         await User.ReturnToPosition();
                     } 
                 });
+            }
+
+            public override void OnRemoved(){
+                CombatEvents.AfterMovement.Remove(after_movement_handler);
             }
         }
 

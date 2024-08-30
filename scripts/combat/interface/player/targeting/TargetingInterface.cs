@@ -25,7 +25,7 @@ public partial class TargetingInterface : Node2D {
 		current = this;
 	}
 
-	public static async Task<CombatTarget> SelectSingleCombatant (List<CombatTarget> targets) {
+	public static async Task<Target> SelectSingleCombatant (List<Target> targets) {
 		CombatPlayerInterface.HideActionList();
 
 		var cancel = new TaskCompletionSource();
@@ -34,13 +34,13 @@ public partial class TargetingInterface : Node2D {
 		});
 
 		var markers = new Queue<SelectionMarker>();
-		var selection = new TaskCompletionSource<CombatTarget>();
+		var selection = new TaskCompletionSource<Target>();
 
 		foreach (var combatant in targets.Select(target => target.Combatant)) {
 			var marker = current.single_marker_scene.Instantiate<SelectionMarker>(); // TODO: I don't like setting public fields like this
 			marker.Position = combatant.Node.Position;
 			marker.OnCombatantSelected = () => {
-				selection.TrySetResult(new CombatTarget(combatant));
+				selection.TrySetResult(new Target(combatant));
 			};
 			current.AddChild(marker);
 			markers.Enqueue(marker);
@@ -60,14 +60,14 @@ public partial class TargetingInterface : Node2D {
 		}
 	}
 
-	public static async Task<CombatTarget> SelectPosition (List<CombatTarget> targets) {
+	public static async Task<Target> SelectPosition (List<Target> targets) {
 		var cancel = new TaskCompletionSource();
 		AsyncInput.Cancel.Once(async () => {
 			cancel.SetResult();
 		});
 
 		var markers = new Queue<SelectionMarker>();
-		var selection = new TaskCompletionSource<CombatTarget>();
+		var selection = new TaskCompletionSource<Target>();
 
 		foreach (var target in targets) {
 			var marker = current.single_marker_scene.Instantiate<SelectionMarker>();

@@ -33,7 +33,7 @@ namespace Combat {
                 public override string Name => "Swing";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
                 public override List<Restrictor> Restrictors { get; init; } = new () {
@@ -76,7 +76,7 @@ namespace Combat {
                     CommonRestrictors.BackRow,
                 };
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new () {
                         Type = TargetType.Single,
                         Side = SideSelector.Opposite,
@@ -160,8 +160,8 @@ namespace Combat {
 
                 public Substitution (Combatant user) : base(user) {}
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
-                    new TargetSelector(TargetType.Single) {
+                public override List<Selector> Selectors { get; protected set; } = new () {
+                    new Selector(TargetType.Single) {
                         Side = SideSelector.Same,
                         Row = 0,
                         Validator = (target, user, previous_targets) => !target.Combatant.HasStatusEffect<Substitute>()
@@ -221,7 +221,7 @@ namespace Combat {
                 public override string Name => "Kirin";
                 public override int TempoCost { get; set; } = 3;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee with {
                         Validator = (target, _, __) => target.Combatant.HasStatusEffect<LagCut>()
                     }

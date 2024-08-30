@@ -62,7 +62,7 @@ namespace Combat {
 
                 public override int TempoCost { get; set; } = 1;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, }
                 };
 
@@ -93,7 +93,7 @@ namespace Combat {
                 public override string Name => "Shoot";
                 public override int TempoCost { get; set; } = 1;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, },
                 };
 
@@ -124,7 +124,7 @@ namespace Combat {
                 public override string Name => "Reload";
 
                 public override int TempoCost { get; set; } = 1;
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {};
+                public override List<Selector> Selectors { get; protected set; } = new () {};
                 public override bool IsAvailable => base.IsAvailable && User.Bullets < User.MaxBullets;
 
                 public new Anna User => base.User as Anna;
@@ -175,7 +175,7 @@ namespace Combat {
 
                 public override bool IsAvailable => base.IsAvailable && User.Bullets > 0;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, }
                 };
 
@@ -208,7 +208,7 @@ namespace Combat {
                 public override string Name => "Unload";
                 public override int TempoCost { get; set; } = 3;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, },
                 };
 

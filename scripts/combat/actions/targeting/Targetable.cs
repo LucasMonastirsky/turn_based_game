@@ -1,6 +1,6 @@
 namespace Combat {
     public interface Targetable {
-        public CombatTarget ToTarget ();
+        public Target ToTarget ();
         public CombatPosition Position => ToTarget().Position;
     }
 }

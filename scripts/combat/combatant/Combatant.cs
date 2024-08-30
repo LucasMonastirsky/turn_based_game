@@ -19,7 +19,7 @@ namespace Combat {
 
         public abstract List<CombatAction> ActionList { get; }
 
-        public CombatTarget ToTarget () => new CombatTarget (this);
+        public Target ToTarget () => new Target (this);
 
         public CombatantStore Allies => new CombatantStore(Battle.Combatants.OnSide(Side).Where(combatant => combatant != this));
         public CombatantStore Enemies => new CombatantStore(Battle.Combatants.OnOppositeSide(Side));

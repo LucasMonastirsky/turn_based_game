@@ -36,7 +36,7 @@ namespace Combat {
 
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
 
@@ -65,7 +65,7 @@ namespace Combat {
                 public override string Name => "Sweep";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Double) { Side = SideSelector.Opposite, Row = 0, VerticalRange = 1 }
                 };
 
@@ -78,9 +78,9 @@ namespace Combat {
 
                 public override async Task Run () {
                     var target = Targets[0];
-                    var real_targets = new CombatTarget [] {
-                        new CombatTarget (target.Position with { Slot = target.Slot - 1 }),
-                        new CombatTarget (target.Position with { Slot = target.Slot + 1 }),
+                    var real_targets = new Target [] {
+                        new Target (target.Position with { Slot = target.Slot - 1 }),
+                        new Target (target.Position with { Slot = target.Slot + 1 }),
                     };
 
                     await User.DisplaceToMeleeDistance(target);
@@ -107,7 +107,7 @@ namespace Combat {
                 public override string Name => "Push";
                 public override int TempoCost { get; set; } = 1;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                     new () {
                         Type = TargetType.Position,
@@ -147,7 +147,7 @@ namespace Combat {
                 public override string Name => "Charge";
                 public override int TempoCost { get; set; } = 2;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Position) {
                         Side = SideSelector.Same,
                         Row = 0,
@@ -165,7 +165,7 @@ namespace Combat {
 
                 public override async Task Run () {
                     var ally = Targets[0];
-                    var enemies = new List<CombatTarget> ();
+                    var enemies = new List<Target> ();
 
                     var opposite_slot = ally.Position.OppositeSide;
 
@@ -206,7 +206,7 @@ namespace Combat {
                 public override string Name => "Unleash";
                 public override int TempoCost { get; set; } = 3;
 
-                public override List<TargetSelector> TargetSelectors { get; protected set; } = new () {
+                public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
 

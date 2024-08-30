@@ -27,8 +27,8 @@ namespace Utils {
             return value == 1;
         }
 
-        public static T SelectFrom <T> (List<T> values) {
-            var selected = values[LessThan(values.Count())];
+        public static T SelectFrom <T> (IEnumerable<T> values) {
+            var selected = values.ToList()[LessThan(values.Count())];
             return selected;
         }
 
