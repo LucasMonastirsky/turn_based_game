@@ -47,7 +47,7 @@ namespace Combat {
                         if (!IsPassQueued) await Timing.Delay();
 
                         if (LastAttack != null) {
-                            if (LastAttack.AllowRiposte && !LastAttack.Defender.IsDead) {
+                            if (LastAttack.AllowRiposte && !LastAttack.Defender.IsDead && !LastAttack.Defender.HasStatusEffect<Stunned>()) {
                                 var riposte = LastAttack.Defender.GetRiposte(LastAttack);
 
                                 if (riposte != null) {

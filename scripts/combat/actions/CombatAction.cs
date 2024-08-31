@@ -114,17 +114,15 @@ namespace Combat {
         }
 
         private bool IsValidTarget (Target target, Selector selector, List<Target> previous_targets = null) {
-            if (
-                target.Combatant != null
-                && target.Combatant.Side != User.Side
-                && target.Combatant.HasStatusEffect<Hidden>()
-            ) {
+            if (target.Combatant != null && target.Combatant.Side != User.Side && target.Combatant.HasStatusEffect<Hidden>()) {
                 return false;
             }
 
             if (previous_targets == null) previous_targets = Targets;
 
             var predicates = new List<Func<bool>> ();
+
+            if (target.Combatant != null && !target.Combatant.IsTargetableBy(this)) return false;
 
             if (selector.Type == TargetType.Single) predicates.Add(() => target.Combatant != null);
             if (selector.Side != null) predicates.Add(() => User.Side.Value * (int) selector.Side == target.Side.Value);
@@ -136,10 +134,13 @@ namespace Combat {
 
             if (selector.Type == TargetType.Double) predicates.Add(() => {
                 if (target.Slot is 0 or 4) return false;
-                if (Positioner.GetSlotData(target.Position with { Slot = target.Slot - 1 }).Combatant == null) return false;
-                if (Positioner.GetSlotData(target.Position with { Slot = target.Slot + 1 }).Combatant == null) return false;
 
-                return true;
+                var combatants = new List<Combatant> () {
+                    Positioner.GetSlotData(target.Position with { Slot = target.Slot - 1 }).Combatant,
+                    Positioner.GetSlotData(target.Position with { Slot = target.Slot + 1 }).Combatant
+                };
+
+                return combatants.All(combatant => combatant.IsTargetableBy(this));
             });
 
             return !predicates.Any(predicate => !predicate());
