@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Combat;
 using Godot;
 
@@ -24,6 +25,11 @@ public partial class CombatantDisplay : Node2D {
         if (EffectLabels.ContainsKey(effect.Name)) {
             EffectLabels[effect.Name].QueueFree();
             EffectLabels.Remove(effect.Name);
+
+            var effect_label_list = EffectLabels.Values.ToList();
+            for (var i = 0; i < effect_label_list.Count(); i++) {
+                effect_label_list[i].Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10 * (i + 1) };
+            }
         }
     }
 
