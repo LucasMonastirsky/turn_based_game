@@ -29,44 +29,16 @@ namespace Combat {
         public int MaxTempo => BaseMaxTempo + GetTotalBonuses(Stat.MaxTempo);
         public int TempoGain => BaseTempoGain + GetTotalBonuses(Stat.TempoGain);
 
-        public int HitBonus => BaseHitBonus + GetTotalBonuses(Stat.HitBonus);
-        public int CritBonus => BaseCritBonus + GetTotalBonuses(Stat.CritBonus);
-        public int DamageBonus => BaseDamageBonus + GetTotalBonuses(Stat.DamageBonus);
+        public int HitBonus => BaseHitBonus + GetTotalBonuses(Stat.Hit);
+        public int CritBonus => BaseCritBonus + GetTotalBonuses(Stat.Crit);
+        public int DamageBonus => BaseDamageBonus + GetTotalBonuses(Stat.Damage);
 
         public int ParryNegation => BaseParryNegation + GetTotalBonuses(Stat.ParryNegation);
         public int DodgeNegation => BaseDodgeNegation + GetTotalBonuses(Stat.DodgeNegation);
 
-        public int ParryBonus => BaseParryBonus + GetTotalBonuses(Stat.ParryBonus);
-        public int DodgeBonus => BaseDodgeBonus + GetTotalBonuses(Stat.DodgeBonus);
+        public int ParryBonus => BaseParryBonus + GetTotalBonuses(Stat.Parry);
+        public int DodgeBonus => BaseDodgeBonus + GetTotalBonuses(Stat.Dodge);
         #endregion
-
-        public enum Stat {
-            MaxHealth,
-            Armor,
-            MaxTempo,
-            TempoGain,
-            HitBonus,
-            CritBonus,
-            DamageBonus,
-            ParryBonus,
-            DodgeBonus,
-            ParryNegation,
-            DodgeNegation,
-        }
-
-        public class Bonus {
-            public Stat Stat;
-            public Source Source;
-            public int Value;
-
-            public bool Enabled = true;
-
-            public Bonus (Source source, Stat stat, int value) {
-                Source = source;
-                Stat = stat;
-                Value = value;
-            }
-        }
 
         public Dictionary<Stat, List<Bonus>> StatBonuses;
 

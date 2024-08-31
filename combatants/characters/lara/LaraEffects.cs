@@ -15,7 +15,7 @@ namespace Combat {
             }
 
             public override void OnApplied() {
-                User.AddBonus(new (this, Stat.DamageBonus, this.Level));
+                User.AddBonus(new (this, Stat.Damage, this.Level));
 
                 CombatEvents.AfterAttack.Always(attack_event_handler = async attack_result => {
                     if (attack_result.Attacker == User && attack_result.Parried && !attack_result.Dodged) {
@@ -39,7 +39,7 @@ namespace Combat {
 
                 if (Level > 10) Level = 10;
 
-                User.UpdateBonus(this, Stat.DamageBonus, Level);
+                User.UpdateBonus(this, Stat.Damage, Level);
             }
         }
     }

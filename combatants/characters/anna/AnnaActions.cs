@@ -220,7 +220,7 @@ namespace Combat {
                 public override async Task Run () {
                     var target = Targets[0];
 
-                    var hit_modifier = User.AddRollModifier(new (this, Stat.HitBonus) { Bonus = -1, Advantage = -1, }); // TODO: add crit and dmg
+                    var hit_modifier = User.AddRollModifier(new (this, Stat.Hit) { Bonus = -1, Advantage = -1, }); // TODO: add crit and dmg
 
                     var attack_options = new Attack () {
                         ParryNegation = 15,

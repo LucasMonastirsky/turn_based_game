@@ -112,7 +112,7 @@ namespace Combat {
                     }
 
                     var build_up_level = User.GetStatusEffect<BuildUp.Pressurized>()?.Level ?? 0;
-                    var damage = User.Roll(Dice.D6.Plus(2).Times(build_up_level + 1), Stat.DamageBonus);
+                    var damage = User.Roll(Dice.D6.Plus(2).Times(build_up_level + 1), Stat.Damage);
 
                     foreach (var victim in victims) {
                         victim.Damage(damage, User);

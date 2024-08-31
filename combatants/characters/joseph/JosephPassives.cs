@@ -74,11 +74,11 @@ namespace Combat {
             public override void OnApplied () {
                 CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => { // TODO: maybe should handle conditional bonuses separately
                     if (attack.Attacker == User && attack.Target.Combatant == Caster) {
-                        attack.HitBonus -= Level;
+                        attack.Bonuses.Add(new (this, Stat.Hit, -Level));
                     }
 
                     if (attack.Attacker == Caster && attack.Target.Combatant == User) {
-                        attack.HitBonus += Level;
+                        attack.Bonuses.Add(new (this, Stat.Hit, Level));
                     }
                 });
             }

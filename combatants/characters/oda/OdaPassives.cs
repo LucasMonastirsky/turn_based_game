@@ -7,7 +7,7 @@ namespace Combat {
             public Dojutsu (Oda user) : base (user) {
                 User.Events.BeforeAttack.Always(async attack => {
                     if (attack.Target.Combatant == user && !attack.IsMelee) { // TODO: add rolls directly to attack
-                        user.AddRollModifier(new (this, Stat.ParryBonus) { Bonus = 10, Temporary = true });
+                        user.AddRollModifier(new (this, Stat.Parry) { Bonus = 10, Temporary = true });
                     }
                 });
             }
@@ -37,7 +37,7 @@ namespace Combat {
             private Func<AttackResult, Task> after_attack_handler;
 
             public override void OnApplied () {
-                User.AddBonus(new Bonus (this, Stat.ParryBonus, 4));
+                User.AddBonus(new Bonus (this, Stat.Parry, 4));
 
                 User.Events.BeforeAttack.Always(before_attack_handler = async attack => {
                     if (!attack.IsMelee) return;
@@ -46,7 +46,7 @@ namespace Combat {
 
                     Oda.Play(Oda.Sounds.Unsheath);
 
-                    attack.HitAdvantage += 1;
+                    attack.Bonuses.Add(new (this, Stat.Hit, 5));
                     attack.DamageRoll.FaceCounts.Add(4);
 
                     User.RemoveStatusEffect(this);
@@ -60,7 +60,7 @@ namespace Combat {
             }
 
             public override void OnRemoved () {
-                User.RemoveBonus(this, Stat.ParryBonus);
+                User.RemoveBonus(this, Stat.Parry);
                 User.Events.BeforeAttack.Remove(before_attack_handler);
                 User.Events.AfterAttack.Remove(after_attack_handler);
             }

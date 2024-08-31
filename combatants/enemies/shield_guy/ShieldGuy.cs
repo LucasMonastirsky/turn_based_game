@@ -44,7 +44,7 @@ partial class ShieldGuy : Combatant {
         Func<AttackResult, Task> after_attack_handler;
 
         public override void OnApplied () {
-            bonus = User.AddBonus(new (this, Stat.ParryBonus, 15));
+            bonus = User.AddBonus(new (this, Stat.Parry, 15));
 
             CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
                 if (attack.Is(Attack.Tag.Backhit)) {
@@ -54,7 +54,7 @@ partial class ShieldGuy : Combatant {
 
             CombatEvents.AfterAttack.Always(after_attack_handler = async attack_result => {
                 if (bonus.Enabled && attack_result.Defender == User && attack_result.Parried) {
-                    Level -= attack_result.Attacker.Roll(attack_result.Attack.DamageRoll, Stat.DamageBonus);
+                    Level -= attack_result.Attacker.Roll(attack_result.Attack.DamageRoll, Stat.Damage);
 
                 }
 

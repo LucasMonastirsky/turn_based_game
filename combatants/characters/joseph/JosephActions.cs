@@ -174,11 +174,11 @@ namespace Combat {
                     public Exposed (int level) : base (level) {}
 
                     public override void OnApplied () {
-                        User.AddBonus(new (this, Stat.HitBonus, Level));
+                        User.AddBonus(new (this, Stat.Hit, -Level));
 
                         CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
                             if (attack.Target.Combatant == User) {
-                                attack.HitBonus -= Level;
+                                attack.Bonuses.Add(new (this, Stat.Hit, Level));
                             }
                         });
                     }
@@ -188,9 +188,14 @@ namespace Combat {
                         CombatEvents.BeforeAttack.Remove(before_attack_handler);
                     }
 
-                    public override void Stack(StatusEffect new_effect) {
+                    public override void Stack (StatusEffect new_effect) {
                         base.Stack(new_effect);
-                        User.UpdateBonus(this, Stat.HitBonus, Level);
+                        User.UpdateBonus(this, Stat.Hit, -Level);
+                    }
+
+                    public override void Tick () {
+                        Level -= 1;
+                        User.UpdateBonus(this, Stat.Hit, -Level);
                     }
                 }
             }
@@ -210,20 +215,35 @@ namespace Combat {
 
                 public override async Task Run () {
                     User.Play(User.Animations.Point);
-                    User.Allies.ForEach(ally => ally.AddStatusEffect(new Inspired()));
+                    User.Allies.ForEach(ally => ally.AddStatusEffect(new Inspired(2)));
                 }
 
-                public class Inspired : StatusEffect {
+                public class Inspired : StackableEffect {
                     public override string Name => "Inspired";
 
                     private RollModifier roll_modifier;
 
+                    public Inspired(int level) : base(level) {}
+
                     public override void OnApplied () {
-                        User.AddRollModifier(roll_modifier = new RollModifier(this, Stat.DamageBonus) { Advantage = 1 });
+                        User.AddBonus(new (this, Stat.Damage, Level));
+                        User.AddRollModifier(roll_modifier = new RollModifier(this, Stat.Damage) { Advantage = 1 });
                     }
 
                     public override void OnRemoved () {
+                        User.RemoveBonusesFromSource(this);
                         User.RemoveRollModifier(roll_modifier);
+                    }
+
+                    public override void Stack (StatusEffect new_effect) {
+                        base.Stack(new_effect);
+
+                        User.UpdateBonus(this, Stat.Damage, Level);
+                    }
+
+                    public override void Tick () {
+                        Level--;
+                        if (Level < 1) Remove();
                     }
                 }
             }

@@ -7,8 +7,12 @@ namespace Combat {
         public Combatant Attacker;
         public Target Target;
 
-        public int HitAdvantage, HitBonus, CritBonus = 0;
-        public int ParryNegation, DodgeNegation = 0;
+        public int HitBonus { get; init; } = 0;
+        public int CritBonus { get; init; } = 0;
+        public int ParryNegation { get; init; } = 0;
+        public int DodgeNegation { get; init; } = 0;
+
+        public List<Bonus> Bonuses = new ();
 
         public bool CanBeParried = true;
         public bool CanBeDodged = true;

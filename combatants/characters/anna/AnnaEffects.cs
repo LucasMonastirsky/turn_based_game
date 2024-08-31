@@ -31,7 +31,7 @@ namespace Combat {
                         User.RemoveStatusEffect(this);
                     }
                     else {
-                        attack.HitAdvantage += 1;
+                        attack.Bonuses.Add(new (this, Stat.Hit, 5));
                     }
                 });
 
@@ -65,7 +65,7 @@ namespace Combat {
                 get => _level;
                 set {
                     _level = value;
-                    User.UpdateBonus(this, Stat.HitBonus, -value);
+                    User.UpdateBonus(this, Stat.Hit, -value);
                 }
             }
 
@@ -73,7 +73,7 @@ namespace Combat {
 
             public override void OnApplied() {
                 Level = 1;
-                User.AddBonus(new (this, Stat.HitBonus, -Level));
+                User.AddBonus(new (this, Stat.Hit, -Level));
             }
 
             public override void Stack (StatusEffect new_effect) {

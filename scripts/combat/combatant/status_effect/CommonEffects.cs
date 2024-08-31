@@ -40,7 +40,7 @@ namespace Combat {
 
         public override void OnApplied () {
             User.Tempo = 0;
-            User.AddBonus(new (this, Combatant.Stat.TempoGain, -User.TempoGain));
+            User.AddBonus(new (this, Stat.TempoGain, -User.TempoGain));
 
             CombatEvents.BeforeTurnEnd.Always(before_turn_end_handler = async combatant => {
                 if (combatant == User) Remove();

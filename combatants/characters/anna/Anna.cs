@@ -27,7 +27,7 @@ namespace Combat {
             Health = 20;
             BaseMaxHealth = 20;
 
-            BaseHitBonus = 2;
+            BaseHitBonus = 5;
             BaseParryBonus = 0;
             BaseDodgeBonus = 3;
 

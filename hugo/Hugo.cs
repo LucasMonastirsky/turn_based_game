@@ -17,8 +17,8 @@ public partial class Hugo : Combatant {
 		Actions = new ActionStore(this);
 
 		
-		AddRollModifier(parry_modifier = new (this, Stat.ParryBonus) { Bonus = 2 });
-		AddRollModifier(attack_modifier = new (this, Stat.HitBonus) { Bonus = 4 });
+		AddRollModifier(parry_modifier = new (this, Stat.Parry) { Bonus = 2 });
+		AddRollModifier(attack_modifier = new (this, Stat.Hit) { Bonus = 4 });
 	}
 
 	public override CombatAction GetRiposte (AttackResult attack_result) {

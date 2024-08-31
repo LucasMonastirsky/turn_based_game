@@ -6,9 +6,9 @@ using Utils;
 
 namespace Combat {
     public partial class Combatant {
-        public int Roll (DiceRoll dice_roll, Stat stat) {
-            var bonus = 0;
-            var advantage = 0;
+        public int Roll (DiceRoll dice_roll, Stat stat, List<Bonus> bonuses = null) {
+            var bonus = dice_roll.Bonus;
+            var advantage = dice_roll.Advantage;
 
             var mods = new List<RollModifier> ();
 
@@ -17,6 +17,7 @@ namespace Combat {
             }
 
             bonus += StatBonuses[stat].Where(bonus => bonus.Enabled).Select(bonus => bonus.Value).Aggregate(0, (x, y) => x + y);
+            if (bonuses != null) bonus += bonuses.Select(x => x.Value).Aggregate(0, (x, y) => x + y);
 
             foreach (var mod in mods) {
                 bonus += mod.Bonus;

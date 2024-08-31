@@ -134,7 +134,7 @@ namespace Combat {
 
                     while (enemies.Count > 0) {
                         foreach (var enemy in enemies.ToList()) {
-                            enemy.Damage(User.Roll(D4, Stat.DamageBonus), User);
+                            enemy.Damage(User.Roll(D4, Stat.Damage), User);
                             
                             var effect = enemy.GetStatusEffect<LagCut>();
 
@@ -203,8 +203,8 @@ namespace Combat {
                                 var movement = await Caster.MoveTo(User); // MAYBE: shouldn't be forceful?
 
                                 if (!movement.Prevented) {
-                                    Caster.AddRollModifier(new (this, Stat.ParryBonus) { Advantage = 1, Temporary = true, });
-                                    Caster.AddRollModifier(new (this, Stat.HitBonus) { Advantage = 1, Temporary = true, });
+                                    Caster.AddRollModifier(new (this, Stat.Parry) { Advantage = 1, Temporary = true, });
+                                    Caster.AddRollModifier(new (this, Stat.Hit) { Advantage = 1, Temporary = true, });
                                 }
                             }
                         });

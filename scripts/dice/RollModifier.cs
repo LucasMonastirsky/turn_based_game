@@ -1,7 +1,7 @@
 using Combat;
 
 public class RollModifier {
-    public Combatant.Stat Stat;
+    public Stat Stat;
     public int Bonus = 0;
     public int Advantage = 0;
 
@@ -12,7 +12,7 @@ public class RollModifier {
 
     public Source Source { get; init; }
 
-    public RollModifier (Source source, Combatant.Stat stat) {
+    public RollModifier (Source source, Stat stat) {
         Source = source;
         Stat = stat;
     }
