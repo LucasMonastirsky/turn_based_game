@@ -14,7 +14,7 @@ namespace Combat {
             public virtual SimpleSprite Dead { get; set; } // PCs get knocked instead, and die the third time?
         }
 
-        protected abstract StandardAnimationStore StandardAnimations { get; }
+        public abstract StandardAnimationStore StandardAnimations { get; }
 
         public void Play (SimpleAnimation animation) {
             Animator.Play(animation);

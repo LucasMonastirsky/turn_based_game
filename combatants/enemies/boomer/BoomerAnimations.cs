@@ -2,7 +2,7 @@ namespace Combat {
     public partial class Boomer {
         private static string texture_path = "res://combatants/enemies/boomer/textures";
 
-        protected override StandardAnimationStore StandardAnimations => Animations;
+        public override StandardAnimationStore StandardAnimations => Animations;
 
         public AnimationStore Animations = new () {
             Idle = new SimpleAnimation () {

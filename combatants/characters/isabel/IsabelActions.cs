@@ -63,7 +63,7 @@ namespace Combat {
                 }
             }
         
-            public class BackStab : CombatAction {
+            public class BackStab : MeleeAction {
                 public override string Name => "BackStab";
                 public override int TempoCost { get; set; } = 2;
 

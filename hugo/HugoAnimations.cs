@@ -12,7 +12,7 @@ public partial class Hugo : Combatant {
         public SimpleSprite Blast { get; set; }
         public SimpleSprite Shove { get; set; }
     }
-    protected override StandardAnimationStore StandardAnimations { get => Animations; }
+    public override StandardAnimationStore StandardAnimations { get => Animations; }
     protected AnimationStore Animations = new () {
         Idle = new SimpleAnimation() {
             Sprites = new SimpleSprite[] {

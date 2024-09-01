@@ -7,7 +7,7 @@ namespace Combat {
             public SimpleSprite Charge { get; set; }
         }
 
-        protected override StandardAnimationStore StandardAnimations => Animations;
+        public override StandardAnimationStore StandardAnimations => Animations;
 
         public AnimationStore Animations = new () {
             Idle = new SimpleAnimation () {

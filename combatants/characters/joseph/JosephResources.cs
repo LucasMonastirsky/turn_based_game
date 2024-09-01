@@ -9,7 +9,7 @@ namespace Combat {
             public SimpleSprite Point { get; set; }
         }
 
-        protected override StandardAnimationStore StandardAnimations => Animations;
+        public override StandardAnimationStore StandardAnimations => Animations;
     
         public AnimationStore Animations = new () {
             Idle = new SimpleAnimation () {

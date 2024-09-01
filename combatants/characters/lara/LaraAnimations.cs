@@ -4,7 +4,7 @@ namespace Combat {
     public partial class Lara {
         private static string texture_path = "res://combatants/characters/lara/textures";
 
-        protected override StandardAnimationStore StandardAnimations => Animations;
+        public override StandardAnimationStore StandardAnimations => Animations;
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Stab, Charge, Punch, Push;

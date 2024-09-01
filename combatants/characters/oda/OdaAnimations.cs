@@ -12,7 +12,7 @@ namespace Combat {
 			public SimpleSprite Throw { get; set; }
 		}
 
-		protected override StandardAnimationStore StandardAnimations { get => Animations; }
+		public override StandardAnimationStore StandardAnimations { get => Animations; }
 		public AnimationStore Animations = new () {
 			Idle = new SimpleAnimation() {
 				Sprites = new SimpleSprite[] {

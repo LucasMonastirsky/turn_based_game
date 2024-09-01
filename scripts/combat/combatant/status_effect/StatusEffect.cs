@@ -6,6 +6,7 @@ namespace Combat {
         public int Id => _id;
         public abstract string Name { get; }
 
+        public virtual bool Decays { get; set; } = false;
         public virtual bool Stackable { get; protected set; } = false;
         public virtual int Level { get; set; } = 0;
 
@@ -16,7 +17,10 @@ namespace Combat {
         public StatusEffect () {}
 
         public virtual void Tick () {
-            
+            if (Decays) {
+                Level -= 1;
+                if (Level < 1) Remove();
+            }
         }
 
         public virtual void OnApplied () {

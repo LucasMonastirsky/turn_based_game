@@ -1,14 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Utils;
 
 namespace Combat {
+    public class Evading : StatusEffect {
+        public override string Name => "Evading";
+        public override bool Decays { get; set; } = true;
+        
+        public override void OnApplied () {
+            User.AddBonus(new (this, Stat.Dodge, User.BaseDodgeBonus));
+        }
+
+        public override void OnRemoved () {
+            User.RemoveBonusesFromSource(this);
+        }
+    }   
+
     partial class Bird {
         public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
 
         public ActionStore Actions;
         public class ActionStore {
             public ActionClasses.Peck Peck;
+            public ActionClasses.Screech Screech;
+            public ActionClasses.Evade Evade;
 
             public CommonActions.Move Move;
             public CommonActions.Pass Pass;
@@ -45,6 +61,39 @@ namespace Combat {
                     };
 
                     await User.SendAttack(Target, attack);
+                }
+            }
+        
+            public class Screech : CombatAction {
+                public override string Name => "Screech";
+                public override int TempoCost { get; set; } = 3;
+
+                public new Bird User => base.User as Bird;
+                public Screech (Bird user) : base (user) {}
+
+                public override async Task Run () {
+                    User.Play(User.Animations.Screech);
+
+                    User.Enemies.ForEach(enemy => {
+                        if (RNG.LessThan(2) == 0) {
+                            enemy.Play(enemy.StandardAnimations.Hurt);
+                            enemy.AddStatusEffect(new Stunned());
+                        }
+                    });
+
+                    await Timing.Delay();
+                }
+            }
+        
+            public class Evade : CombatAction {
+                public override string Name => "Evasion";
+                public override int TempoCost { get; set; } = 1;
+
+                public new Bird User => base.User as Bird;
+                public Evade (Bird user) : base (user) {}
+
+                public override async Task Run () {
+                    User.AddStatusEffect(new Evading());
                 }
             }
         }

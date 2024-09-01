@@ -8,7 +8,7 @@ public partial class ShieldGuy {
         public SimpleSprite Stab, Throw, ShieldBlock;
     }
 
-    protected override StandardAnimationStore StandardAnimations => Animations;
+    public override StandardAnimationStore StandardAnimations => Animations;
 
     public AnimationStore Animations = new () {
         Idle = new SimpleAnimation () {
