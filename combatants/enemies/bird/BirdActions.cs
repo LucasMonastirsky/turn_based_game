@@ -76,7 +76,7 @@ namespace Combat {
 
                     User.Enemies.ForEach(enemy => {
                         if (RNG.LessThan(2) == 0) {
-                            enemy.Play(enemy.StandardAnimations.Hurt);
+                            enemy.Play(enemy.Animations.Hurt);
                             enemy.AddStatusEffect(new Stunned());
                         }
                     });

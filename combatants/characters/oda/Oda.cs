@@ -31,7 +31,7 @@ namespace Combat {
         }
 
         public override void ResetAnimation() {
-            if (IsDead) Animator.Play(StandardAnimations.Dead);
+            if (IsDead) Animator.Play(Animations.Dead);
             else if (HasStatusEffect<Sheathed>()) Animator.Play(Animations.SheathedIdle);
             else Animator.Play(Animations.Idle);
         }

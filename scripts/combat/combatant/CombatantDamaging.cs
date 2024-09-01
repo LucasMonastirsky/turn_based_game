@@ -38,7 +38,7 @@ namespace Combat {
                 if (DeathEvent != null) InteractionManager.AddQueueEvent(DeathEvent);
             }
 
-            Animator.Play(StandardAnimations.Hurt);
+            Animator.Play(Animations.Hurt);
             // Play(CommonSounds.SwordWound);
 
             DamageLabel.Instantiate(this, $"{amount}");

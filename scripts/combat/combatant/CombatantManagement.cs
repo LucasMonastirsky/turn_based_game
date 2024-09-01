@@ -23,10 +23,11 @@ namespace Combat {
 
             Display = CombatantDisplayManager.CreateDisplay(this);
 
-            Animator.Play(StandardAnimations.Idle);
+            Animator.Play(Animations.Idle);
         }
 
         public void LoadIn () {
+            LoadResources();
             Setup();
 
             Tempo = TempoGain;

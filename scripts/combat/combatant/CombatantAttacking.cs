@@ -15,13 +15,13 @@ namespace Combat {
         }
 
         protected virtual void OnAttackParried (AttackResult attack_result) {
-            Animator.Play(StandardAnimations.Parry);
+            Animator.Play(Animations.Parry);
             Play(CommonSounds.SwordClash);
             DamageLabel.Instantiate(this, "Parry");
         }
 
         protected void OnAttackDodged (AttackResult attack_result) {
-            Animator.Play(StandardAnimations.Dodge);
+            Animator.Play(Animations.Dodge);
             Play(CommonSounds.Woosh);
             DamageLabel.Instantiate(this, "Dodge");
         }
@@ -83,7 +83,7 @@ namespace Combat {
             if (result.Parried) OnAttackParried(result);
             if (result.Dodged) OnAttackDodged(result);
             if (result.Missed) {
-                if (Health > 0) Play(StandardAnimations.Idle);
+                if (Health > 0) Play(Animations.Idle);
                 DamageLabel.Instantiate(this, "Miss");
             }
 

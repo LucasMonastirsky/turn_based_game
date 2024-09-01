@@ -12,9 +12,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mlgid")
 action_button_scene = ExtResource("2_3nlpr")
-action_button_container = NodePath("HBoxContainer/GridContainer")
+action_button_container = NodePath("CombatLowerDisplay/ActionIconContainer")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="CombatLowerDisplay" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -23,6 +23,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer"]
+[node name="ActionIconContainer" type="GridContainer" parent="CombatLowerDisplay"]
 layout_mode = 2
 columns = 4

@@ -29,7 +29,7 @@ partial class ShieldGuy : Combatant {
             DamageLabel.Instantiate(this, "Block");
         }
         else {
-            Animator.Play(StandardAnimations.Parry);
+            Animator.Play(Animations.Parry);
             Play(CommonSounds.SwordClash);
             DamageLabel.Instantiate(this, "Parry");
         }

@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Isabel {
-        private static string texture_path = "res://combatants/characters/isabel/textures";
+        protected override string resources_path => "res://combatants/characters/isabel/resources";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Swing { get; set; }
@@ -8,22 +8,25 @@ namespace Combat {
             public SimpleSprite Jutsu { get; set; }
         }
 
-        public override StandardAnimationStore StandardAnimations => Animations;
+        public override AnimationStore Animations => _animations;
+        private AnimationStore _animations;
 
-        public AnimationStore Animations = new () {
-            Idle = new SimpleAnimation () {
-                Sprites = new SimpleSprite [] {
-                    new (texture_path, "idle_0"),
-                    new (texture_path, "idle_1"),
-                }
-            },
-            Hurt = new (texture_path, "hurt"),
-            Parry = new (texture_path, "parry"),
-            Dodge = new (texture_path, "dodge"),
-            Dead = new (texture_path, "dead"),
-            Swing = new (texture_path, "swing"),
-            Teleport = new (texture_path, "teleport"),
-            Jutsu = new (texture_path, "jutsu"),
-        };
+        protected override void LoadSprites () {
+            _animations = new () {
+                Idle = new SimpleAnimation () {
+                    Sprites = new SimpleSprite [] {
+                        LoadSprite("idle_0"),
+                        LoadSprite("idle_1"),
+                    }
+                },
+                Hurt = LoadSprite("hurt"),
+                Parry = LoadSprite("parry"),
+                Dodge = LoadSprite("dodge"),
+                Dead = LoadSprite("dead"),
+                Swing = LoadSprite("swing"),
+                Teleport = LoadSprite("teleport"),
+                Jutsu = LoadSprite("jutsu"),
+            };
+        }
     }
 }

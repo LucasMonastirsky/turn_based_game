@@ -14,7 +14,7 @@ namespace Combat {
             public virtual SimpleSprite Dead { get; set; } // PCs get knocked instead, and die the third time?
         }
 
-        public abstract StandardAnimationStore StandardAnimations { get; }
+        public virtual StandardAnimationStore Animations { get; }
 
         public void Play (SimpleAnimation animation) {
             Animator.Play(animation);
@@ -40,8 +40,8 @@ namespace Combat {
         }
 
         public virtual void ResetAnimation () {
-            if (!IsDead) Animator.Play(StandardAnimations.Idle);
-            else Animator.Play(StandardAnimations.Dead);
+            if (!IsDead) Animator.Play(Animations.Idle);
+            else Animator.Play(Animations.Dead);
 
             Node.Animator.FlipH = Side == Side.Right;
         }

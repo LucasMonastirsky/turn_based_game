@@ -1,22 +1,25 @@
 namespace Combat {
     public partial class Boomer {
-        private static string texture_path = "res://combatants/enemies/boomer/textures";
+        protected override string resources_path => "res://combatants/enemies/boomer/resources";
 
-        public override StandardAnimationStore StandardAnimations => Animations;
+        public override AnimationStore Animations => _animations;
+        private AnimationStore _animations;
 
-        public AnimationStore Animations = new () {
-            Idle = new SimpleAnimation () {
-                Sprites = new SimpleSprite [] {
-                    new SimpleSprite (texture_path, "idle_0"),
-                    new SimpleSprite (texture_path, "idle_1"),
-                }
-            },
-            Dead = new SimpleSprite (texture_path, "dead"),
-            Hurt = new SimpleSprite (texture_path, "hurt"),
-            Spew = new SimpleSprite (texture_path, "spew"),
-            Charge = new SimpleSprite (texture_path, "charge"),
-            Explode = new SimpleSprite (texture_path, "explode"),
-        };
+        protected override void LoadSprites () {
+            _animations = new () {
+                Idle = new SimpleAnimation () {
+                    Sprites = new SimpleSprite [] {
+                        LoadSprite("idle_0"),
+                        LoadSprite("idle_1"),
+                    }
+                },
+                Dead = LoadSprite("dead"),
+                Hurt = LoadSprite("hurt"),
+                Spew = LoadSprite("spew"),
+                Charge = LoadSprite("charge"),
+                Explode = LoadSprite("explode"),
+            };
+        }
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Spew { get; set; }

@@ -1,27 +1,20 @@
 namespace Combat {
     public partial class Ghoul {
-        private static string texture_path = "res://combatants/enemies/ghoul/textures";
+        protected override string resources_path => "res://combatants/enemies/ghoul/resources";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Punch { get; set; }
             public SimpleSprite Charge { get; set; }
         }
 
-        public override StandardAnimationStore StandardAnimations => Animations;
+        public override AnimationStore Animations => _animations;
+        private AnimationStore _animations;
 
-        public AnimationStore Animations = new () {
-            Idle = new SimpleAnimation () {
-                Sprites = new SimpleSprite [] {
-                    new (texture_path, "idle_0"),
-                    new (texture_path, "idle_1"),
-                },
-            },
-            Hurt = new (texture_path, "hurt"),
-            Parry = new (texture_path, "parry"),
-            Dodge = new (texture_path, "dodge"),
-            Dead = new (texture_path, "dead"),
-            Punch = new (texture_path, "punch"),
-            Charge = new (texture_path, "charge"),
-        };
+        protected override void LoadSprites () {
+            _animations = new ();
+            LoadStandardSprites();
+            _animations.Punch = LoadSprite("punch");
+            _animations.Charge = LoadSprite("charge");
+        }
     }
 }

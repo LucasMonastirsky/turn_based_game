@@ -21,9 +21,11 @@ namespace Combat {
 
         private List<CombatPlayerInterfaceActionButton> buttons = new ();
 
+        private CombatLowerDisplay CombatLowerDisplay;
 
         public override void _EnterTree () {
             current = this;
+            CombatLowerDisplay = new (this);
         }
 
         public static async Task<CombatAction> RequestAction (Combatant combatant) {
