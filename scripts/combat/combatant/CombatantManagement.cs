@@ -55,8 +55,6 @@ namespace Combat {
 
         public bool DeathCheck () {
             if (Health < 1) {
-                IsDead = true;
-                //Play(StandardAnimations.Dead);
                 StatusEffects.ToList().ForEach(effect => RemoveStatusEffect(effect));
                 return true;
             }

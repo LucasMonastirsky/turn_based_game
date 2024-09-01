@@ -40,6 +40,17 @@ namespace Combat {
         public int DodgeBonus => BaseDodgeBonus + GetTotalBonuses(Stat.Dodge);
         #endregion
 
+        public int GetBaseBonus (Stat stat) {
+            if (stat == Stat.Hit) return BaseHitBonus;
+            if (stat == Stat.Damage) return BaseDamageBonus;
+            if (stat == Stat.Crit) return BaseCritBonus;
+            if (stat == Stat.Parry) return BaseParryBonus;
+            if (stat == Stat.Dodge) return BaseDodgeBonus;
+
+            Dev.Error("Didn't find base bonus");
+            return 0;
+        }
+
         public Dictionary<Stat, List<Bonus>> StatBonuses;
 
         public Bonus AddBonus (Bonus bonus) {

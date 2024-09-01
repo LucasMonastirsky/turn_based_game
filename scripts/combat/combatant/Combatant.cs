@@ -15,7 +15,7 @@ namespace Combat {
         
         public int Tempo { get; set; }
 
-        public bool IsDead { get; set; }
+        public bool IsDead => TotalHealth < 1;
 
         public abstract List<CombatAction> ActionList { get; }
 
