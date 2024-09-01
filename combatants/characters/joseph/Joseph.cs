@@ -23,7 +23,7 @@ namespace Combat {
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {
-            if (attack_result.Parried) return Actions.Swing.Bind(attack_result.Attacker);
+            if (attack_result.Parried && attack_result.Attack.IsMelee) return Actions.Swing.Bind(attack_result.Attacker);
             else return null;
         }
     }

@@ -61,7 +61,7 @@ namespace Combat {
                 }
             }
         
-            public class Sweep : CombatAction {
+            public class Sweep : MeleeAction {
                 public override string Name => "Sweep";
                 public override int TempoCost { get; set; } = 2;
 

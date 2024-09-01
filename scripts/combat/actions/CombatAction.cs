@@ -6,6 +6,10 @@ using Development;
 using Utils;
 
 namespace Combat {
+    public enum ActionTag {
+        Melee,
+    }
+
     public abstract class CombatAction : Source {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
@@ -16,6 +20,8 @@ namespace Combat {
         public virtual List<Restrictor> Restrictors { get; init; } = new () {};
 
         public virtual bool IsAvailable => User.Tempo >= TempoCost && !Restrictors.Any(restrictor => !restrictor.IsValid(this));
+
+        public virtual List<ActionTag> Tags { get; init; } = new ();
 
         public Combatant User { get; protected set; }
 
@@ -140,7 +146,7 @@ namespace Combat {
                     Positioner.GetSlotData(target.Position with { Slot = target.Slot + 1 }).Combatant
                 };
 
-                return combatants.All(combatant => combatant.IsTargetableBy(this));
+                return combatants.All(combatant => combatant != null && combatant.IsTargetableBy(this));
             });
 
             return !predicates.Any(predicate => !predicate());

@@ -4,7 +4,8 @@ using Godot;
 
 namespace Combat {
     public partial class Positioner {
-        public Dictionary<Side, List<RowData>> Rows;
+        public static Dictionary<Side, List<RowData>> Rows => current.rows;
+        private Dictionary<Side, List<RowData>> rows;
 
         public class RowData {
             public List<SlotData> Slots;

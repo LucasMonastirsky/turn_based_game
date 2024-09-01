@@ -17,12 +17,12 @@ namespace Combat {
             foreach (var combatant in Battle.Combatants) {
                 var pos = combatant.Position;
                 combatant.DisplaceTo(GetWorldPosition(pos));
-                current.Rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
+                current.rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
             }
         }
 
         public static Vector2 GetWorldPosition (CombatPosition position) {
-            return current.Rows[position.Side][position.Row][position.Slot].WorldPosition;
+            return current.rows[position.Side][position.Row][position.Slot].WorldPosition;
         }
 
         public static List<CombatPosition> GetAvailablePositions () {
@@ -31,7 +31,7 @@ namespace Combat {
             foreach (var side in new Side[] { Side.Left, Side.Right }) {
                 for (int row = 0; row < MAX_ROW_COUNT; row++) {
                     for (int slot = 0; slot < ROW_SLOT_COUNT; slot++) {
-                        if (current.Rows[side][row][slot].Combatant == null) {
+                        if (current.rows[side][row][slot].Combatant == null) {
                             available_positions.Add(new CombatPosition() { Side = side, Row = row, Slot = slot });
                         }
                     }
@@ -45,7 +45,7 @@ namespace Combat {
             var side = position.Side;
             var row = position.Row;
             var slot = position.Slot;
-            var slot_data = current.Rows[side][row][slot];
+            var slot_data = current.rows[side][row][slot];
 
             if (slot_data.Combatant != null && slot_data.Combatant != combatant) {
                 if (forcible) return slot_data.Combatant.CanBeMoved;
@@ -54,11 +54,11 @@ namespace Combat {
             else if (
                 row != combatant.Row
                 && slot_data.Row.CombatantCount < MAX_ROW_SIZE
-                && current.Rows[combatant.Side][combatant.Row].CombatantCount > slot_data.Row.CombatantCount
+                && current.rows[combatant.Side][combatant.Row].CombatantCount > slot_data.Row.CombatantCount
             ) {
                 if (
-                    (slot < ROW_SLOT_COUNT - 2 && current.Rows[side][row][slot + 1].Combatant != null)
-                    || (slot > 0 && current.Rows[side][row][slot - 1].Combatant != null)
+                    (slot < ROW_SLOT_COUNT - 2 && current.rows[side][row][slot + 1].Combatant != null)
+                    || (slot > 0 && current.rows[side][row][slot - 1].Combatant != null)
                 ) {
                     return true;
                 }
@@ -125,7 +125,7 @@ namespace Combat {
         }
         
         public static SlotData GetSlotData (CombatPosition position) {
-            return current.Rows[position.Side][position.Row][position.Slot];
+            return current.rows[position.Side][position.Row][position.Slot];
         }
 
         public static List<Target> GetCombatTargets () {
@@ -162,7 +162,7 @@ namespace Combat {
         
         public static List<Target> TargetsInRange (Targetable target, int horizontal_range, int vertical_range = 5) {
             var origin = target.ToTarget().Position;
-            var rows = current.Rows[origin.Side];
+            var rows = current.rows[origin.Side];
 
             var selected = new List<Target> ();
 

@@ -42,7 +42,8 @@ namespace Combat {
 
         public override CombatAction GetRiposte (AttackResult attack_result) {
             if (attack_result.Dodged) {
-                return Actions.Kick.Bind(attack_result.Attacker);
+                if (attack_result.Attack.IsMelee) return Actions.Kick.Bind(attack_result.Attacker);
+                else if (Bullets > 0) return Actions.Shoot.Bind(attack_result.Attacker);
             }
 
             return null;

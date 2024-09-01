@@ -43,26 +43,26 @@ namespace Combat {
 
         #region Functions
         private void calculate_positions () {
-            Rows = new () {
+            rows = new () {
                 { Side.Left, new List<RowData>() },
                 { Side.Right, new List<RowData>() },
             };
 
             for (var row_index = 0; row_index < MAX_ROW_COUNT; row_index++) {
-                Rows[Side.Left].Add(new RowData(Side.Left));
-                Rows[Side.Right].Add(new RowData(Side.Right));
+                rows[Side.Left].Add(new RowData(Side.Left));
+                rows[Side.Right].Add(new RowData(Side.Right));
 
                 for (var slot_index = 0; slot_index < ROW_SLOT_COUNT; slot_index++) {
                     var x = center_distance + horizontal_distance * row_index;
                     var y = vertical_offset + vertical_distance * slot_index / ROW_SLOT_COUNT;
                     y -= vertical_distance / ROW_SLOT_COUNT * 2;
 
-                    Rows[Side.Left][row_index][slot_index].WorldPosition = new Vector2(-x, y);
-                    Rows[Side.Right][row_index][slot_index].WorldPosition = new Vector2(x, y);
+                    rows[Side.Left][row_index][slot_index].WorldPosition = new Vector2(-x, y);
+                    rows[Side.Right][row_index][slot_index].WorldPosition = new Vector2(x, y);
                 }
 
-                Rows[Side.Left][row_index].Index = row_index;
-                Rows[Side.Right][row_index].Index = row_index;
+                rows[Side.Left][row_index].Index = row_index;
+                rows[Side.Right][row_index].Index = row_index;
             }
 
             QueueRedraw();
@@ -71,7 +71,7 @@ namespace Combat {
         private static async Task recalculate_side (Side side) {
             var tasks = new List<Task>();
 
-            foreach (var row in current.Rows[side]) {
+            foreach (var row in current.rows[side]) {
                 foreach (var slot in row.Slots) {
                     slot.Combatant = null;
                 }

@@ -68,7 +68,13 @@ namespace Combat {
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
-                    new () { Type = TargetType.Single, Side = SideSelector.Opposite, Row = 1, },
+                    new () {
+                        Type = TargetType.Single,
+                        Side = SideSelector.Opposite,
+                        Validator = (target, user, previous_targets) => (
+                            target.Row == 1 || Positioner.Rows[user.Side.Opposite][1].CombatantCount < 1
+                        ),
+                    },
                 };
                 public override List<Restrictor> Restrictors { get; init; } = new () {
                     CommonRestrictors.BackRow,

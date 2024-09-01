@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace Combat {
     public abstract class MeleeAction : CombatAction {
+        public override List<ActionTag> Tags { get; init; } = new () { ActionTag.Melee, };
         public override List<Selector> Selectors { get; protected set; } = new () {
             CommonTargetSelectors.Melee,
         };
