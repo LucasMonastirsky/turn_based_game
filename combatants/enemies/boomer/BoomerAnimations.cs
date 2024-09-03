@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Boomer {
-        protected override string resources_path => "res://combatants/enemies/boomer/resources";
+        public override string resources_path => "res://combatants/enemies/boomer/resources";
 
         public override AnimationStore Animations => _animations;
         private AnimationStore _animations;

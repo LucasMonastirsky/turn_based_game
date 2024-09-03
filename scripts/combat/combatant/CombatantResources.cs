@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Combatant {
-        protected abstract string resources_path { get; }
+        public abstract string resources_path { get; }
 
         protected SimpleSprite LoadSprite (string name) => new SimpleSprite (resources_path, $"sprites/{name}");
         protected virtual void LoadSprites () {} // TODO: abstract this

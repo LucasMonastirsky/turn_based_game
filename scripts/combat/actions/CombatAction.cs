@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Development;
+using Godot;
+using ResourceHelpers;
 using Utils;
 
 namespace Combat {
@@ -10,10 +12,14 @@ namespace Combat {
         Melee,
     }
 
-    public abstract class CombatAction : Source {
+    public abstract partial class CombatAction : Source {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }
+
+        public virtual string IconFileName => null;
+        public Texture2D IconTexture = null;
+        public virtual int? DisplayIndex => null;
 
         public abstract int TempoCost { get; set; }
 
@@ -27,6 +33,10 @@ namespace Combat {
 
         public CombatAction (Combatant user) {
             User = user;
+
+            if (IconFileName is not null) {
+                IconTexture = Resources.LoadTexture(user.resources_path, $"icons/skills/{IconFileName}");
+            }
         }
 
         public virtual List<Selector> Selectors { get; protected set; } = new () {};
@@ -77,8 +87,8 @@ namespace Combat {
             Unbind();
         }
 
-        public async Task<CombatAction> RequestBind () {
-            CombatPlayerInterface.HideActionList();
+        public async void RequestBind () {
+            ActionDisplay.HideActionList();
 
             var all_targets = Positioner.GetCombatTargets();
             Targets = new ();
@@ -106,8 +116,8 @@ namespace Combat {
 
                 if (selection == null) {
                     Targets = new ();
-                    CombatPlayerInterface.ShowActionList();
-                    return null;
+                    User.Controller.CancelSelection();
+                    return;
                 }
                 else {
                     Targets.Add(selection);
@@ -116,82 +126,8 @@ namespace Combat {
                 if (i != Selectors.Count - 1) await Timing.Delay(1/5f);
             }
 
-            return Bind(Targets.ToArray());
+            User.Controller.DeliverAction(Bind(Targets.ToArray()));
         }
-
-        private bool IsValidTarget (Target target, Selector selector, List<Target> previous_targets = null) {
-            if (target.Combatant != null && target.Combatant.Side != User.Side && target.Combatant.HasStatusEffect<Hidden>()) {
-                return false;
-            }
-
-            if (previous_targets == null) previous_targets = Targets;
-
-            var predicates = new List<Func<bool>> ();
-
-            if (target.Combatant != null && !target.Combatant.IsTargetableBy(this)) return false;
-
-            if (selector.Type == TargetType.Single) predicates.Add(() => target.Combatant != null);
-            if (selector.Side != null) predicates.Add(() => User.Side.Value * (int) selector.Side == target.Side.Value);
-            if (selector.Row != null) predicates.Add(() => target.Row == selector.Row);
-            if (selector.VerticalRange != null) predicates.Add(() => Math.Abs(User.Slot - target.Slot) <= selector.VerticalRange);
-            if (selector.Validator != null) predicates.Add(() => selector.Validator(target, User, previous_targets));
-            if (!selector.CanTargetSelf) predicates.Add(() => target.Combatant != User);
-            if (selector.IsValidMovement) predicates.Add(() => Positioner.IsValidMovement(User, target.Position, false));
-
-            if (selector.Type == TargetType.Double) predicates.Add(() => {
-                if (target.Slot is 0 or 4) return false;
-
-                var combatants = new List<Combatant> () {
-                    Positioner.GetSlotData(target.Position with { Slot = target.Slot - 1 }).Combatant,
-                    Positioner.GetSlotData(target.Position with { Slot = target.Slot + 1 }).Combatant
-                };
-
-                return combatants.All(combatant => combatant != null && combatant.IsTargetableBy(this));
-            });
-
-            return !predicates.Any(predicate => !predicate());
-        }
-
-        public bool PassesSelectors () {
-            for (var i = 0; i < Selectors.Count; i++) {
-                if (Targets?[i] is null || !IsValidTarget(Targets[i], Selectors[i])) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public List<List<Target>> GetValidTargets () {
-            return GetValidTargets(null, 0);
-        }
-
-        private List<List<Target>> GetValidTargets (List<List<Target>> previous, int selector_index = 0) {
-            var results = new List<List<Target>> ();
-
-            if (selector_index == 0) {
-                Positioner.GetCombatTargets().ForEach(target => {
-                    if (IsValidTarget(target, Selectors[selector_index])) {
-                        results.Add(new () { target });
-                    }
-                });
-            }
-            else {
-                for (var i = 0; i < previous.Count; i++) {
-                    Positioner.GetCombatTargets().ForEach(target => {
-                        if (IsValidTarget(target, Selectors[selector_index], previous[i])) {
-                            var new_list = previous[i].ToList();
-                            new_list.Add(target);
-                            results.Add(new_list);
-                        }
-                    });
-                }
-            }
-
-            if (results.Count == 0 || selector_index >= Selectors.Count - 1) return results;
-            else return GetValidTargets(results, selector_index + 1);
-        }
-
         public override string ToString () {
             return Name;
             // return $"{User.Name}.{Name}";

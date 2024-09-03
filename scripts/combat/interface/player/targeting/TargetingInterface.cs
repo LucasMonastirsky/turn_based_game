@@ -26,7 +26,7 @@ public partial class TargetingInterface : Node2D {
 	}
 
 	public static async Task<Target> SelectSingleCombatant (List<Target> targets) {
-		CombatPlayerInterface.HideActionList();
+		ActionDisplay.HideActionList();
 
 		var cancel = new TaskCompletionSource();
 		AsyncInput.Cancel.Once(async () => {

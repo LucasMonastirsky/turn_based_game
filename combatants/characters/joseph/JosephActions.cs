@@ -8,7 +8,7 @@ namespace Combat {
 
         public ActionStore Actions;
         public class ActionStore {
-            public ActionClasses.Swing Swing;
+            public ActionClasses.Zornhau Swing;
             public ActionClasses.FlatStrike Stab;
             public ActionClasses.CalfHook CalfHook;
             public ActionClasses.ApplyTheory ApplyTheory;
@@ -28,6 +28,7 @@ namespace Combat {
         public class ActionClasses {
             public class ApplyTheory : MeleeAction {
                 public override string Name => "Apply Theory";
+                public override string IconFileName => "icon_apply_theory";
                 public override int TempoCost { get; set; } = 3;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -72,12 +73,14 @@ namespace Combat {
                     await Timing.Delay(1/2f);
                 }
             }
-            public class Swing : MeleeAction {
+            public class Zornhau : MeleeAction {
                 public override string Name => "Zornhau";
+                public override string IconFileName => "icon_zornhau";
+
                 public override int TempoCost { get; set; } = 2;
 
                 public new Joseph User => base.User as Joseph;
-                public Swing (Joseph user) : base (user) {}
+                public Zornhau (Joseph user) : base (user) {}
 
                 public override async Task Run() {
                     Attack attack = new () {
@@ -94,6 +97,7 @@ namespace Combat {
 
             public class FlatStrike : MeleeAction {
                 public override string Name => "Flat Strike";
+                public override string IconFileName => "icon_flat_strike";
                 public override int TempoCost { get; set; } = 2;
 
                 public new Joseph User => base.User as Joseph;
@@ -117,6 +121,7 @@ namespace Combat {
 
             public class CalfHook : MeleeAction {
                 public override string Name => "Calf Hook";
+                public override string IconFileName => "icon_calf_hook";
                 public override int TempoCost { get; set; } = 2;
 
                 public new Joseph User => base.User as Joseph;
@@ -141,6 +146,7 @@ namespace Combat {
         
             public class Expose : CombatAction {
                 public override string Name => "Expose";
+                public override string IconFileName => "icon_expose";
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -202,6 +208,7 @@ namespace Combat {
         
             public class Inspire : CombatAction {
                 public override string Name => "Inspire";
+                public override string IconFileName => "icon_inspire";
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {};

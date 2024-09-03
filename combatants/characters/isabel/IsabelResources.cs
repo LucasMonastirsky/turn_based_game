@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Isabel {
-        protected override string resources_path => "res://combatants/characters/isabel/resources";
+        public override string resources_path => "res://combatants/characters/isabel/resources";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Swing { get; set; }

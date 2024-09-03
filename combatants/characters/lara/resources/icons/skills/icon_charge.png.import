@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ivh5gbfjglhv"
-path="res://.godot/imported/icon_zornhau.png-1e61dc8e632225bd7d865e45fa1716f6.ctex"
+uid="uid://cssrl0qm83u0v"
+path="res://.godot/imported/icon_charge.png-fc89d3e5c2b56c79f032eff988a6fe1e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://combatants/characters/joseph/resources/icons/icon_zornhau.png"
-dest_files=["res://.godot/imported/icon_zornhau.png-1e61dc8e632225bd7d865e45fa1716f6.ctex"]
+source_file="res://combatants/characters/lara/resources/icons/skills/icon_charge.png"
+dest_files=["res://.godot/imported/icon_charge.png-fc89d3e5c2b56c79f032eff988a6fe1e.ctex"]
 
 [params]
 

@@ -7,7 +7,9 @@ using static Dice;
 
 namespace Combat {
     public partial class Oda {
-        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+        public override List<CombatAction> ActionList => new () {
+            Actions.Swing, Actions.Kirin, Actions.Shuriken, Actions.Release, Actions.Substitution, null, Actions.Move, Actions.Pass,
+        };
 
         public ActionStore Actions;
 
@@ -31,6 +33,8 @@ namespace Combat {
         public class ActionClasses {
             public class Swing : CombatAction {
                 public override string Name => "Swing";
+                public override string IconFileName => "icon_cut";
+
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -64,13 +68,13 @@ namespace Combat {
             }
 
             public class Shuriken : CombatAction {
-                public Shuriken(Combatant user) : base(user) {}
-
                 public override string Name => "Shuriken";
+                public override string IconFileName => "icon_shuriken";
 
                 public override int TempoCost { get; set; } = 2;
 
                 public new Oda User => base.User as Oda;
+                public Shuriken(Combatant user) : base(user) {}
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
                     CommonRestrictors.BackRow,
@@ -118,6 +122,8 @@ namespace Combat {
             }
             public class Release : CombatAction {
                 public override string Name => "Release";
+                public override string IconFileName => "icon_release";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public override bool IsAvailable => User.Enemies.Any(enemy => enemy.HasStatusEffect<LagCut>());
@@ -150,6 +156,8 @@ namespace Combat {
             }
             public class Substitution : CombatAction {
                 public override string Name => "Substitution";
+                public override string IconFileName => "icon_substitution";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
@@ -219,6 +227,8 @@ namespace Combat {
         
             public class Kirin : CombatAction {
                 public override string Name => "Kirin";
+                public override string IconFileName => "icon_kirin";
+
                 public override int TempoCost { get; set; } = 3;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {

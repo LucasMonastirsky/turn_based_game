@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Ghoul {
-        protected override string resources_path => "res://combatants/enemies/ghoul/resources";
+        public override string resources_path => "res://combatants/enemies/ghoul/resources";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Punch { get; set; }

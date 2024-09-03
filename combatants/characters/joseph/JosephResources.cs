@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Joseph {
-        protected override string resources_path => "res://combatants/characters/joseph/resources";
+        public override string resources_path => "res://combatants/characters/joseph/resources";
 
         public override AnimationStore Animations => _animations;
         private AnimationStore _animations;
@@ -29,10 +29,6 @@ namespace Combat {
                 Stab = LoadSprite("stab"),
                 Point = LoadSprite("point"),
             };
-        }
-
-        public class IconStore {
-
         }
     }
 }

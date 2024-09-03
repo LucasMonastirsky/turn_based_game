@@ -2,7 +2,7 @@ using Godot;
 
 namespace Combat {
     public partial class Lara {
-        protected override string resources_path => "res://combatants/characters/lara/resources";
+        public override string resources_path => "res://combatants/characters/lara/resources";
 
         public override AnimationStore Animations => _animations;
         private AnimationStore _animations;

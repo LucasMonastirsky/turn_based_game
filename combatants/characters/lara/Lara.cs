@@ -26,7 +26,7 @@ namespace Combat {
         }
 
         public override CombatAction GetRiposte(AttackResult attack_result) {
-            if (attack_result.Hit && this.Row == 0 && attack_result.Attack.IsMelee) return Actions.Stab.Bind(attack_result.Attacker);
+            if (attack_result.Hit && this.Row == 0 && attack_result.Attack.IsMelee) return Actions.Chop.Bind(attack_result.Attacker);
             else return null;
         }
     }

@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 
 namespace Combat {
     public partial class Isabel {
-        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+        public override List<CombatAction> ActionList => new () {
+            Actions.Swing, Actions.BackStab, Actions.Poison, Actions.Hide, null, null, Actions.Move, Actions.Pass,
+        };
 
         public ActionStore Actions;
         public class ActionStore {
@@ -26,6 +28,7 @@ namespace Combat {
         public static class ActionClasses {
             public class Swing : MeleeAction {
                 public override string Name => "Swing";
+                public override string IconFileName => "icon_swing";
 
                 public override int TempoCost { get; set; } = 2;
 
@@ -50,6 +53,8 @@ namespace Combat {
         
             public class Hide : CombatAction {
                 public override string Name => "Hide";
+                public override string IconFileName => "icon_hide";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
@@ -65,6 +70,8 @@ namespace Combat {
         
             public class BackStab : MeleeAction {
                 public override string Name => "BackStab";
+                public override string IconFileName => "icon_backstab";
+
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -121,6 +128,8 @@ namespace Combat {
         
             public class Poison : CombatAction {
                 public override string Name => "Poison";
+                public override string IconFileName => "icon_poison";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public new Isabel User => base.User as Isabel;

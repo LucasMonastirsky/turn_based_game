@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Anna {
-        protected override string resources_path => "res://combatants/characters/anna/resources";
+        public override string resources_path => "res://combatants/characters/anna/resources";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Shoot { get; set; }

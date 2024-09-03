@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dflloh8ffso0m"
-path="res://.godot/imported/icon_skill_shoot.png-56d0ffaf5f36ff5d2729734bbabf5555.ctex"
+uid="uid://n0t7w2wno4ho"
+path="res://.godot/imported/default.png-657479019ff192cd282ac73ca3814a14.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://combatants/characters/anna/resources/icons/skills/icon_skill_shoot.png"
-dest_files=["res://.godot/imported/icon_skill_shoot.png-56d0ffaf5f36ff5d2729734bbabf5555.ctex"]
+source_file="res://assets/textures/combat/action_icons/default.png"
+dest_files=["res://.godot/imported/default.png-657479019ff192cd282ac73ca3814a14.ctex"]
 
 [params]
 

@@ -2,7 +2,7 @@ using Combat;
 using Godot;
 
 public partial class ShieldGuy {
-    protected override string resources_path => "res://combatants/enemies/shield_guy/resources";
+    public override string resources_path => "res://combatants/enemies/shield_guy/resources";
 
     public class AnimationStore : StandardAnimationStore {
         public SimpleSprite Stab, Throw, ShieldBlock;

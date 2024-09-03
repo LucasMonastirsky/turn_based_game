@@ -10,10 +10,10 @@ namespace Combat {
 
         public ActionStore Actions;
         public class ActionStore {
-            public ActionClasses.Kick Kick;
+            // public ActionClasses.Kick Kick;
             public ActionClasses.Aim Aim;
             public ActionClasses.Shoot Shoot;
-            public ActionClasses.LegShot LegShot;
+            // public ActionClasses.LegShot LegShot;
             public ActionClasses.Reload Reload;
             public ActionClasses.Smoke Smoke;
             public ActionClasses.Unload Unload;
@@ -59,6 +59,7 @@ namespace Combat {
 
             public class Aim : CombatAction {
                 public override string Name => "Aim";
+                public override string IconFileName => "icon_aim";
 
                 public override int TempoCost { get; set; } = 1;
 
@@ -74,8 +75,6 @@ namespace Combat {
                 public Aim (Anna user) : base (user) {}
 
                 public override async Task Run() {
-                    // TODO: implement event to dynamically add mods to attacks
-                    // TODO: add OnMove and OnActionStart events
                     User.Play(User.Animations.Shoot);
                     User.Play(User.Sounds.Cock);
 
@@ -91,6 +90,8 @@ namespace Combat {
 
             public class Shoot : CombatAction {
                 public override string Name => "Shoot";
+                public override string IconFileName => "icon_shoot";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -122,6 +123,7 @@ namespace Combat {
         
             public class Reload : CombatAction {
                 public override string Name => "Reload";
+                public override string IconFileName => "icon_reload";
 
                 public override int TempoCost { get; set; } = 1;
                 public override List<Selector> Selectors { get; protected set; } = new () {};
@@ -154,6 +156,8 @@ namespace Combat {
         
             public class Smoke : CombatAction {
                 public override string Name => "Smoke";
+                public override string IconFileName => "icon_smoke";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public override bool IsAvailable => base.IsAvailable && User.HasStatusEffect<TheShakes>();
@@ -206,6 +210,8 @@ namespace Combat {
         
             public class Unload : CombatAction {
                 public override string Name => "Unload";
+                public override string IconFileName => "icon_unload";
+
                 public override int TempoCost { get; set; } = 3;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -247,6 +253,8 @@ namespace Combat {
         
             public class Guard : CombatAction {
                 public override string Name => "Guard";
+                public override string IconFileName => "icon_guard";
+
                 public override int TempoCost { get; set; } = 1;
 
                 public new Anna User => base.User as Anna;

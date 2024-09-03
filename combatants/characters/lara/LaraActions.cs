@@ -7,12 +7,20 @@ using static Dice;
 
 namespace Combat {
     public partial class Lara {
-        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+        public override List<CombatAction> ActionList => Row == 0 ? (
+            new () {
+                Actions.Chop, Actions.Sweep, Actions.Push, Actions.Unleash, null, null, Actions.Move, Actions.Pass,
+            }
+        ) : (
+            new () {
+                Actions.Charge, Actions.Relax, Actions.Impatience, null, null, null, Actions.Move, Actions.Pass,
+            }
+        );
 
         public ActionStore Actions;
 
         public class ActionStore {
-            public ActionClasses.Stab Stab;
+            public ActionClasses.Chop Chop;
             public ActionClasses.Sweep Sweep;
             public ActionClasses.Charge Charge;
             public ActionClasses.Push Push;
@@ -31,9 +39,9 @@ namespace Combat {
         }
 
         public static class ActionClasses {
-            public class Stab : CombatAction {
-                public override string Name => "Stab";
-
+            public class Chop : MeleeAction {
+                public override string Name => "Chop";
+                public override string IconFileName => "icon_chop";
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -46,7 +54,7 @@ namespace Combat {
 
                 public new Lara User => base.User as Lara;
 
-                public Stab (Lara user) : base (user) {}
+                public Chop (Lara user) : base (user) {}
 
                 public override async Task Run () {
                     var target = Targets[0];
@@ -63,6 +71,7 @@ namespace Combat {
         
             public class Sweep : MeleeAction {
                 public override string Name => "Sweep";
+                public override string IconFileName => "icon_sweep";
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -103,8 +112,9 @@ namespace Combat {
                 }
             }
         
-            public class Push : CombatAction {
+            public class Push : MeleeAction {
                 public override string Name => "Push";
+                public override string IconFileName => "icon_push";
                 public override int TempoCost { get; set; } = 1;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -128,7 +138,7 @@ namespace Combat {
 
                 public override async Task Run () {
                     var attack = new Attack {
-                        DamageRoll = D6,
+                        DamageRoll = D4,
                         ParryNegation = 2,
                         DodgeNegation = 6,
                         Sprite = User.Animations.Push,
@@ -143,8 +153,9 @@ namespace Combat {
                     });
                 }
             }
-            public class Charge : CombatAction {
+            public class Charge : MeleeAction {
                 public override string Name => "Charge";
+                public override string IconFileName => "icon_charge";
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -177,7 +188,7 @@ namespace Combat {
                     else enemies = opposite_slot.Neighbours.Where(x => x.Combatant != null).Select(x => x.ToTarget()).ToList();
 
                     if (enemies.Count == 1) {
-                        await User.Actions.Stab.Act(enemies[0]);
+                        await User.Actions.Chop.Act(enemies[0]);
                     }
                     else {
                         await User.Actions.Sweep.Act(enemies[0].Position with { Slot = ally.Slot });
@@ -187,6 +198,7 @@ namespace Combat {
 
             public class Impatience : CombatAction {
                 public override string Name => "Impatience";
+                public override string IconFileName => "icon_alternative_therapy";
                 public override int TempoCost { get; set; } = 1;
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
@@ -204,6 +216,7 @@ namespace Combat {
 
             public class Unleash : CombatAction {
                 public override string Name => "Unleash";
+                public override string IconFileName => "icon_alternative_therapy";
                 public override int TempoCost { get; set; } = 3;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
@@ -271,6 +284,7 @@ namespace Combat {
 
             public class Relax : CombatAction {
                 public override string Name => "Relax";
+                public override string IconFileName => "icon_relax";
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {

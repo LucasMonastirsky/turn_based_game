@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://cnlxxooonoceh"]
+
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
+[ext_resource type="PackedScene" uid="uid://brpvat47srqx2" path="res://scripts/combat/interface/player/ActionButton.tscn" id="2_let35"]
+
+[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_6uhtl")
+ActionButtonContainer = NodePath("ActionButtonContainer")
+ActionButtonScene = ExtResource("2_let35")
+
+[node name="ActionButtonContainer" type="GridContainer" parent="."]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="ActionButton0" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton1" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton2" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton3" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton4" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton5" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton6" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2
+
+[node name="ActionButton7" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+layout_mode = 2

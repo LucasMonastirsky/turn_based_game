@@ -2,7 +2,7 @@ using Combat;
 
 namespace Combat {
 	public partial class Oda {
-		protected override string resources_path => "res://combatants/characters/oda/resources";
+		public override string resources_path => "res://combatants/characters/oda/resources";
 
 		public class AnimationStore : StandardAnimationStore {
 			public SimpleAnimation SheathedIdle { get; set; }

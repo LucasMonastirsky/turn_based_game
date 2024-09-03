@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://psdm87c3wa3w"
-path="res://.godot/imported/icon_skill_sweep.png-87e7aabe49f2a9a4240df1aa289827f1.ctex"
+uid="uid://c7whrjabidht2"
+path="res://.godot/imported/icon_shuriken.png-6a0458f2a9156c892b7c6bfe67dd7295.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://combatants/characters/lara/resources/icons/skills/icon_skill_sweep.png"
-dest_files=["res://.godot/imported/icon_skill_sweep.png-87e7aabe49f2a9a4240df1aa289827f1.ctex"]
+source_file="res://combatants/characters/oda/resources/icons/skills/icon_shuriken.png"
+dest_files=["res://.godot/imported/icon_shuriken.png-6a0458f2a9156c892b7c6bfe67dd7295.ctex"]
 
 [params]
 

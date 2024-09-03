@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 namespace Combat {
@@ -6,5 +5,7 @@ namespace Combat {
         public Combatant Combatant;
 
         public abstract Task<CombatAction> RequestAction ();
+        public virtual void DeliverAction (CombatAction action) {}
+        public virtual void CancelSelection () {}
     }
 }

@@ -1,6 +1,6 @@
 namespace Combat {
     public partial class Bird {
-        protected override string resources_path => "res://combatants/enemies/bird/resources";
+        public override string resources_path => "res://combatants/enemies/bird/resources";
 
         public class AnimationStore : StandardAnimationStore {
             public SimpleSprite Peck { get; set; }
