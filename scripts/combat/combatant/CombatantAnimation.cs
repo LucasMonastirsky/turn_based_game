@@ -41,7 +41,6 @@ namespace Combat {
 
         public virtual void ResetAnimation () {
             if (!IsDead) Animator.Play(Animations.Idle);
-            else Animator.Play(Animations.Dead);
 
             Node.Animator.FlipH = Side == Side.Right;
         }

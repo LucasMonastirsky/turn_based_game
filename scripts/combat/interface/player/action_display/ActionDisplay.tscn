@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="2_lkpc5"]
 [ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
 
-[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription")]
+[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription", "ProfileIcon")]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -17,8 +17,9 @@ script = ExtResource("1_6uhtl")
 ActionButtonContainer = NodePath("ActionButtonContainer")
 ActionDetailTitle = NodePath("ActionDetailBox/ActionDetailTitle")
 ActionDetailDescription = NodePath("ActionDetailBox/ActionDetailDescription")
+ProfileIcon = NodePath("ProfileIcon")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="ProfileIcon" type="TextureRect" parent="."]
 layout_mode = 2
 texture = ExtResource("2_lkpc5")
 expand_mode = 2

@@ -6,11 +6,15 @@ using static Dice;
 namespace Combat {
     public partial class Anna {
 
-        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+        public override List<CombatAction> ActionList => Row == 0 ? new () {
+            Actions.Kick, null, null, null, null, null, Actions.Move, Actions.Pass,
+        } : new () {
+            Actions.Shoot, Actions.Unload, Actions.Aim, Actions.Guard, Actions.Reload, Actions.Smoke, Actions.Move, Actions.Pass,
+        };
 
         public ActionStore Actions;
         public class ActionStore {
-            // public ActionClasses.Kick Kick;
+            public ActionClasses.Kick Kick;
             public ActionClasses.Aim Aim;
             public ActionClasses.Shoot Shoot;
             // public ActionClasses.LegShot LegShot;
@@ -32,6 +36,8 @@ namespace Combat {
         public class ActionClasses {
             public class Kick : MeleeAction {
                 public override string Name => "Kick";
+                public override string IconFileName => "icon_kick";
+
                 public override int TempoCost { get; set; } = 2;
 
                 public new Anna User => base.User as Anna;

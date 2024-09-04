@@ -1,12 +1,18 @@
+using Godot;
+using ResourceHelpers;
+
 namespace Combat {
     public partial class Combatant {
         public abstract string resources_path { get; }
+
+        public Texture2D Icon = null;
 
         protected SimpleSprite LoadSprite (string name) => new SimpleSprite (resources_path, $"sprites/{name}");
         protected virtual void LoadSprites () {} // TODO: abstract this
 
         public void LoadResources () {
             LoadSprites();
+            Icon = Resources.LoadTexture(resources_path, "icons/icon_profile");
         }
 
         protected void LoadStandardSprites () {
