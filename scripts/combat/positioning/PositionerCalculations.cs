@@ -10,7 +10,9 @@ namespace Combat {
         private const int ROW_SLOT_COUNT = MAX_ROW_SIZE * 2 - 1;
 
         #region Exports
-        protected int center_distance, vertical_distance, horizontal_distance, vertical_offset;
+        protected int center_distance, vertical_distance, horizontal_distance, vertical_offset, slot_offset;
+        protected float combatant_scale;
+
         [Export] protected int CenterDistance {
             get => center_distance;
             set {
@@ -39,6 +41,20 @@ namespace Combat {
                 calculate_positions();
             }
         }
+        [Export] protected int SlotOffset {
+            get => slot_offset;
+            set {
+                slot_offset = value;
+                calculate_positions();
+            }
+        }
+        [Export] protected float CombatantScale {
+            get => combatant_scale;
+            set {
+                combatant_scale = value;
+                calculate_positions();
+            }
+        }
         #endregion
 
         #region Functions
@@ -57,8 +73,10 @@ namespace Combat {
                     var y = vertical_offset + vertical_distance * slot_index / ROW_SLOT_COUNT;
                     y -= vertical_distance / ROW_SLOT_COUNT * 2;
 
-                    rows[Side.Left][row_index][slot_index].WorldPosition = new Vector2(-x, y);
-                    rows[Side.Right][row_index][slot_index].WorldPosition = new Vector2(x, y);
+                    var final_slot_offset = slot_offset * (((MAX_ROW_SIZE + 1 )/ 2) - slot_index);
+
+                    rows[Side.Left][row_index][slot_index].WorldPosition = new Vector2(-x + final_slot_offset, y);
+                    rows[Side.Right][row_index][slot_index].WorldPosition = new Vector2(x + final_slot_offset, y);
                 }
 
                 rows[Side.Left][row_index].Index = row_index;

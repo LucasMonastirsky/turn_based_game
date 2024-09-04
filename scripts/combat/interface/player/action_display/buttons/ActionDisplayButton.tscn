@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcupdkuj0nvmh"]
+
+[ext_resource type="Texture2D" uid="uid://c2firavhsr73k" path="res://scripts/combat/interface/player/action_display/buttons/textures/test_texture.png" id="1_okt0i"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/buttons/ActionDisplayButton.cs" id="1_trqra"]
+
+[node name="ActionDisplayButton" type="TextureButton"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 200.0
+offset_bottom = 200.0
+texture_normal = ExtResource("1_okt0i")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("1_trqra")
+DefaultTexture = ExtResource("1_okt0i")

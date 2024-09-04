@@ -1,24 +1,21 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Development;
 using Godot;
 
-
 namespace Combat {
     public partial class ActionDisplay : HBoxContainer {
+        private static ActionDisplay Current;
+
+        [Export] private Container ActionButtonContainer;
+        [Export] private RichTextLabel ActionDetailTitle, ActionDetailDescription;
+
+        private List<ActionButton> Buttons;
 
         public bool Disabled {
             get => !Visible;
             set { Visible = !value; }
         }
-
-        private static ActionDisplay Current;
-
-        [Export] private Container ActionButtonContainer;
-        [Export] private PackedScene ActionButtonScene;
-
-        private List<ActionButton> Buttons;
 
         public override void _EnterTree () {
             Current = this;
@@ -49,6 +46,20 @@ namespace Combat {
 
         public static void HideActionList () {
             Current.Visible = false;
+        }
+
+        public static void SetHoveredAction (CombatAction action) {
+            Current.ActionDetailTitle.Text = action.Name;
+        }
+
+        public override void _Process (double delta) {
+            ActionDetailTitle.Text = "";
+
+            Buttons.ForEach(button => {
+                if (button.IsHovered && button.Action is not null) {
+                    ActionDetailTitle.Text = button.Action.Name;
+                }
+            });
         }
     }
 }

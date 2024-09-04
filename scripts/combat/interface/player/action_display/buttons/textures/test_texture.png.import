@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c2firavhsr73k"
-path="res://.godot/imported/test_texture.png-b65f830d3317364bd7498c5d0d7dcfc4.ctex"
+path="res://.godot/imported/test_texture.png-20ae889536da803542cefe07740f720e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test_texture.png"
-dest_files=["res://.godot/imported/test_texture.png-b65f830d3317364bd7498c5d0d7dcfc4.ctex"]
+source_file="res://scripts/combat/interface/player/action_display/buttons/textures/test_texture.png"
+dest_files=["res://.godot/imported/test_texture.png-20ae889536da803542cefe07740f720e.ctex"]
 
 [params]
 

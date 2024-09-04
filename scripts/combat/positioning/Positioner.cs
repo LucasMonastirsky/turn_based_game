@@ -11,6 +11,7 @@ namespace Combat {
 
         public override void _Ready () {
             current = this;
+            calculate_positions();
         }
 
         public static void Setup () {
@@ -19,6 +20,8 @@ namespace Combat {
                 combatant.DisplaceTo(GetWorldPosition(pos));
                 current.rows[pos.Side][pos.Row][pos.Slot].Combatant = combatant;
             }
+
+            Battle.Combatants.ForEach(combatant => combatant.Node.Scale = new Vector2(current.combatant_scale, current.combatant_scale));
         }
 
         public static Vector2 GetWorldPosition (CombatPosition position) {

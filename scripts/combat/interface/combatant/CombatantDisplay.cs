@@ -36,6 +36,7 @@ public partial class CombatantDisplay : Node2D {
     public override void _Ready () {
         var health_label = new Label {
             Scale = new Vector2 { X = 0.5f, Y = 0.5f },
+            Position = new Vector2 { X = 0, Y = -30, },
         };
 
         AddChild(health_label);

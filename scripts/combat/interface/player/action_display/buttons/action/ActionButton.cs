@@ -4,14 +4,11 @@ using Godot;
 
 namespace Combat {
     public partial class ActionButton : CenterContainer {
-        [Export] private TextureButton Button;
-        [Export] private Texture2D DefaultTexture;
+        [Export] private ActionDisplayButton Button;
+        [Export] public string ActionName { get => Action.Name; set { } }
 
         public bool Disabled { get => Button.Disabled; set { Button.Disabled = value; } }
-
-        public Action<CombatAction> OnPressed;
-
-        public TaskCompletionSource<CombatAction> CompletionSource;
+        public bool IsHovered => Button.IsHovered();
 
         private CombatAction _action;
         public CombatAction Action {
@@ -21,11 +18,11 @@ namespace Combat {
 
                 if (value is null) {
                     Button.Disabled = true;
-                    Button.TextureNormal = DefaultTexture;
+                    Button.TextureNormal = Button.DefaultTexture;
                 }
                 else {
                     Button.Disabled = !value.IsAvailable;
-                    Button.TextureNormal = _action.IconTexture ?? DefaultTexture;
+                    Button.TextureNormal = _action.IconTexture ?? Button.DefaultTexture;
                 }
             }
         }

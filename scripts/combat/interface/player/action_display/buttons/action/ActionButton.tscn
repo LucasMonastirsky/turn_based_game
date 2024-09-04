@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://52f5l8jv80e7"]
+
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.cs" id="1_stjtf"]
+[ext_resource type="PackedScene" uid="uid://bcupdkuj0nvmh" path="res://scripts/combat/interface/player/action_display/buttons/ActionDisplayButton.tscn" id="2_1srsp"]
+
+[node name="ActionButton" type="CenterContainer" node_paths=PackedStringArray("Button")]
+script = ExtResource("1_stjtf")
+Button = NodePath("ActionDisplayButton")
+
+[node name="ActionDisplayButton" parent="." instance=ExtResource("2_1srsp")]
+layout_mode = 2

@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cnlxxooonoceh"]
+[gd_scene load_steps=5 format=3 uid="uid://cnlxxooonoceh"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
-[ext_resource type="PackedScene" uid="uid://brpvat47srqx2" path="res://scripts/combat/interface/player/ActionButton.tscn" id="2_let35"]
+[ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
+[ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="2_lkpc5"]
+[ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
 
-[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer")]
+[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription")]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -13,7 +15,13 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_6uhtl")
 ActionButtonContainer = NodePath("ActionButtonContainer")
-ActionButtonScene = ExtResource("2_let35")
+ActionDetailTitle = NodePath("ActionDetailBox/ActionDetailTitle")
+ActionDetailDescription = NodePath("ActionDetailBox/ActionDetailDescription")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_lkpc5")
+expand_mode = 2
 
 [node name="ActionButtonContainer" type="GridContainer" parent="."]
 layout_mode = 2
@@ -21,26 +29,76 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 4
 
-[node name="ActionButton0" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton0" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton1" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton1" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton2" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton2" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton3" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton3" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton4" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton4" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton5" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton5" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton6" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton6" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionButton7" parent="ActionButtonContainer" instance=ExtResource("2_let35")]
+[node name="ActionButton7" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
+
+[node name="ActionDetailBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ActionDetailTitle" type="RichTextLabel" parent="ActionDetailBox"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+text = "Action Name"
+scroll_active = false
+
+[node name="ActionDetailDescription" type="RichTextLabel" parent="ActionDetailBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "This is the action description, which will some day contain many characters and symbols, in any of many languages."
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 4
+
+[node name="ItemButton0" parent="GridContainer" instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+
+[node name="ItemButton1" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")
+
+[node name="ItemButton2" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")
+
+[node name="ItemButton3" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")
+
+[node name="ItemButton4" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")
+
+[node name="ItemButton5" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")
+
+[node name="ItemButton6" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")
+
+[node name="ItemButton7" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
+layout_mode = 2
+Button = NodePath("../ItemButton0/ActionDisplayButton")

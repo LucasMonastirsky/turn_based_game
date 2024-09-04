@@ -20,6 +20,11 @@ script = ExtResource("1_ufhvr")
 zoom = Vector2(2, 2)
 
 [node name="Positioner" parent="." instance=ExtResource("3_tio48")]
+CenterDistance = 105
+VerticalDistance = 220
+HorizontalDistance = 170
+SlotOffset = 40
+CombatantScale = 1.75
 
 [node name="TargetingInterface" parent="." instance=ExtResource("3_c64x3")]
 
