@@ -24,10 +24,10 @@ namespace Combat {
 
 			foreach (var combatant in Combatants) {
 				combatant.LoadIn();
-				//combatant.Controller = new PlayerController () { Combatant = combatant };
 			}
 
 			Positioner.Setup();
+			RoundManager.Begin();
 			TurnManager.BeginLoop();
 		}
 	}

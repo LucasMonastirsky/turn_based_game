@@ -1,5 +1,6 @@
 namespace Combat {
     public enum Stat {
+        Initiative,
         MaxHealth,
         Armor,
         MaxTempo,

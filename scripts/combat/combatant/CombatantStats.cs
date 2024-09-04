@@ -20,6 +20,8 @@ namespace Combat {
 
         public int BaseParryNegation { get; protected set; } = 0;
         public int BaseDodgeNegation { get; protected set; } = 0;
+
+        public int BaseInitiativeBonus { get; protected set; } = 0;
         #endregion
 
         #region Total Stats
@@ -38,6 +40,8 @@ namespace Combat {
 
         public int ParryBonus => BaseParryBonus + GetTotalBonuses(Stat.Parry);
         public int DodgeBonus => BaseDodgeBonus + GetTotalBonuses(Stat.Dodge);
+
+        public int InitiativeBonus => BaseInitiativeBonus + GetTotalBonuses(Stat.Initiative);
         #endregion
 
         public int GetBaseBonus (Stat stat) {
@@ -46,6 +50,7 @@ namespace Combat {
             if (stat == Stat.Crit) return BaseCritBonus;
             if (stat == Stat.Parry) return BaseParryBonus;
             if (stat == Stat.Dodge) return BaseDodgeBonus;
+            if (stat == Stat.Initiative) return BaseInitiativeBonus;
 
             Dev.Error("Didn't find base bonus");
             return 0;

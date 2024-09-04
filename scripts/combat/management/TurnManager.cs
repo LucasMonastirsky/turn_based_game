@@ -17,7 +17,7 @@ namespace Combat {
 
         public static async void BeginLoop () {
             while (true) {
-                ActiveCombatant = Combatants[turn_index];
+                ActiveCombatant = RoundManager.ActiveCombatant;
 
                 State = "Starting";
                 Dev.Log(Dev.Tags.CombatManagement, $"Starting turn of {ActiveCombatant}");
@@ -82,7 +82,7 @@ namespace Combat {
                 if (!IsPassQueued) await Timing.Delay();
                 await InteractionManager.ResetCombatants();
 
-                if (++turn_index >= Combatants.Count) turn_index = 0;
+                RoundManager.Next();
             }
         }
 
