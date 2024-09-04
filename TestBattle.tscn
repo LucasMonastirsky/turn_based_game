@@ -15,16 +15,17 @@ script = ExtResource("1_ufhvr")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" parent="CanvasLayer" instance=ExtResource("3_jla18")]
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
 
 [node name="Positioner" parent="." instance=ExtResource("3_tio48")]
-CenterDistance = 105
-VerticalDistance = 220
-HorizontalDistance = 170
-SlotOffset = 40
-CombatantScale = 1.75
+CenterDistance = 125
+VerticalDistance = 275
+HorizontalDistance = 250
+SlotOffset = 50
+CombatantScale = 3.0
 
 [node name="TargetingInterface" parent="." instance=ExtResource("3_c64x3")]
 

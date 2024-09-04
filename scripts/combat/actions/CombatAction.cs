@@ -56,6 +56,12 @@ namespace Combat {
             return Bind(RNG.SelectFrom(target_sets).ToArray());
         }
 
+        public CombatAction RandomBind () {
+            var target_sets = GetValidTargets();
+
+            return target_sets.Count > 0 ? RandomBind(target_sets) : null;
+        }
+
         public void Unbind () {
             Bound = false;
             Targets = null;

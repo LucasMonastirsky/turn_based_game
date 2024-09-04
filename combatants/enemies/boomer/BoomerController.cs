@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Utils;
 
@@ -17,7 +18,7 @@ namespace Combat {
             }
 
             if (Boomer.Row == 1) {
-                var movement_targets = Boomer.Actions.Move.GetValidTargets();
+                var movement_targets = Boomer.Actions.Move.GetValidTargets().Where(set => set.All(target => target.Row == 0)).ToList();
 
                 if (movement_targets.Count > 0) return Boomer.Actions.Move.RandomBind(movement_targets);
                 else if (Boomer.Tempo > 1) return Boomer.Actions.BuildUp.Bind();

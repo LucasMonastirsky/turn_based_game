@@ -18,9 +18,7 @@ namespace Combat {
             }
 
             if (Bird.Tempo >= 2) {
-                var targets = Bird.Actions.Peck.GetValidTargets();
-
-                if (targets.Count > 0) return Bird.Actions.Peck.Bind(RNG.SelectFrom(targets)[0]);
+                return Bird.Actions.Peck.RandomBind();
             }
             
             return null;

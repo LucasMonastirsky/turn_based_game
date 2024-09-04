@@ -4,7 +4,7 @@ using Combat;
 
 partial class ShieldGuy : Combatant {
     public override string Name => "Shield Guy";
-    public override Type DefaultControllerType => typeof (PlayerController);
+    public override Type DefaultControllerType => typeof (ShieldGuyController);
 
     protected override void Setup () {
         base.Setup();

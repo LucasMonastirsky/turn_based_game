@@ -9,17 +9,11 @@ namespace Combat {
             if (Ghoul.Tempo < 2) return null;
 
             if (Ghoul.Row == 0) {
-                var targets = Ghoul.Actions.Punch.GetValidTargets();
-
-                if (targets.Count > 0) return Ghoul.Actions.Punch.Bind(RNG.SelectFrom(targets).ToArray());
+                return Ghoul.Actions.Punch.RandomBind();
             }
             else {
-                var targets = Ghoul.Actions.Charge.GetValidTargets();
-
-                if (targets.Count > 0) return Ghoul.Actions.Charge.Bind(RNG.SelectFrom(targets).ToArray());
+                return Ghoul.Actions.Charge.RandomBind();
             }
-            
-            return null;
         }
     }
 }
