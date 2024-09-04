@@ -15,10 +15,10 @@ namespace Combat {
 				new Oda { Position = new () { Side = Side.Left, Row = 1, Slot = 0, }},
 				new Isabel { Position = new () { Side = Side.Left, Row = 1, Slot = 2, }},
 				new Anna { Position = new () { Side = Side.Left, Row = 1, Slot = 4, }},
-				new Bird { Position = new () { Side = Side.Right, Row = 0, Slot = 1 }},
+				//new Bird { Position = new () { Side = Side.Right, Row = 0, Slot = 1 }},
 				new ShieldGuy { Position = new () { Side = Side.Right, Row = 1, Slot = 2 }},
 				new Ghoul { Position = new () { Side = Side.Right, Row = 1, Slot = 0 }},
-				new Bird { Position = new () { Side = Side.Right, Row = 0, Slot = 3 }},
+				//new Bird { Position = new () { Side = Side.Right, Row = 0, Slot = 3 }},
 				new Boomer { Position = new () { Side = Side.Right, Row = 1, Slot = 4 }},
 			};
 

@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://bcfrnqly5pa20"]
+
+[ext_resource type="Script" path="res://scripts/combat/interface/player/round_display/RoundDisplay.cs" id="1_08tnb"]
+[ext_resource type="PackedScene" uid="uid://u58gb7725qyu" path="res://scripts/combat/interface/player/round_display/icon/RoundDisplaySwapButton.tscn" id="2_up7db"]
+[ext_resource type="PackedScene" uid="uid://b5rl4ae3p3jon" path="res://scripts/combat/interface/player/round_display/icon/RoundDisplayIcon.tscn" id="2_xhktk"]
+
+[node name="RoundDisplay" type="HBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 124.0
+grow_horizontal = 2
+rotation = 0.00221778
+script = ExtResource("1_08tnb")
+
+[node name="RoundDisplayIcon0" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton0" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon1" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton1" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon2" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton2" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon3" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton3" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon4" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton4" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon5" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton5" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon6" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton6" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon7" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton7" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon8" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RoundDisplaySwapButton8" parent="." instance=ExtResource("2_up7db")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.25
+
+[node name="RoundDisplayIcon9" parent="." instance=ExtResource("2_xhktk")]
+layout_mode = 2

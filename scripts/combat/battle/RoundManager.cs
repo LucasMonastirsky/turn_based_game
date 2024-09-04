@@ -13,28 +13,41 @@ namespace Combat {
             }
         }
 
-        public static Queue<RoundItem> CurrentRound, NextRound;
+        public static List<RoundItem> CurrentRound, NextRound;
 
         public static Combatant ActiveCombatant => CurrentRound.First().Combatant;
+
+        public static Combatant GetCombatant (int index) {
+            if (index < CurrentRound.Count) return CurrentRound[index].Combatant;
+            else {
+                var new_index = index - (CurrentRound.Count - 1);
+                if (new_index < NextRound.Count) return NextRound[new_index].Combatant; 
+            }
+
+            return null;
+        }
 
         public static void Begin () {
             var items = Battle.Combatants.All.Select(combatant => new RoundItem (combatant));
 
             CurrentRound = new (items.OrderBy(item => item.Priority));
             NextRound = new ();
+
+            RoundDisplay.UpdateIcons();
         }
 
         public static void Next () {
-            var combatant = CurrentRound.Dequeue().Combatant;
-            var new_item = new RoundItem (combatant);
+            var new_item = new RoundItem (CurrentRound[0].Combatant);
+            CurrentRound.RemoveAt(0);
 
-            NextRound.Enqueue(new_item);
-            NextRound.OrderBy(item => item.Priority);
+            NextRound.Append(new_item).OrderBy(item => item.Priority);
 
             if (CurrentRound.Count < 1) {
                 CurrentRound = NextRound;
                 NextRound = new ();
             }
+
+            RoundDisplay.UpdateIcons();
         }
     }
 }

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://u58gb7725qyu"]
+
+[ext_resource type="Texture2D" uid="uid://dmbl3lkbx04qc" path="res://scripts/combat/interface/player/round_display/icon/inter_icon_button.png" id="1_xlav2"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/round_display/icon/RoundDisplaySwapButton.cs" id="2_wgh23"]
+
+[node name="RoundDisplaySwapButton" type="TextureRect"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_xlav2")
+expand_mode = 1
+stretch_mode = 4
+script = ExtResource("2_wgh23")
