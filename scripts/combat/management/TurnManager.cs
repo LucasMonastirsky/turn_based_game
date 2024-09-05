@@ -1,16 +1,16 @@
-using System.Linq;
 using Development;
 
 namespace Combat {
     public class TurnManager {
-        private static int turn_index = 0;
-
         public static CombatantStore Combatants => Battle.Combatants;
         public static Combatant ActiveCombatant { get; private set; }
 
         public static CombatAction CurrentAction { get; protected set; }
 
-        public static string State = "Idle";
+        public enum TurnState {
+            Idle, Starting, Requesting, Resolving, Ending,
+        }
+        public static TurnState State = TurnState.Idle;
         private static bool IsPassQueued = false;
 
         public static AttackResult LastAttack = null;
@@ -20,25 +20,26 @@ namespace Combat {
                 ActiveCombatant = RoundManager.ActiveCombatant;
                 CombatantDetail.Combatant = ActiveCombatant;
 
-                State = "Starting";
+                State = TurnState.Starting;
                 Dev.Log(Dev.Tags.CombatManagement, $"Starting turn of {ActiveCombatant}");
 
                 IsPassQueued = false;
                 ActiveCombatant.OnTurnStart();
 
                 while (!ActiveCombatant.IsDead && ActiveCombatant.Tempo > 0 && !IsPassQueued) {
-                    State = "Requesting";
+                    State = TurnState.Requesting;
                     Dev.Log(Dev.Tags.CombatManagement, $"Requesting action from {ActiveCombatant}");
 
                     CombatantDisplayManager.Show();
                     CurrentAction = await ActiveCombatant.Controller.RequestAction();
+                    ActionDisplay.HideActionList();
 
                     if (CurrentAction != null) {
                         if (!CurrentAction.PassesSelectors()) Dev.Error($"{ActiveCombatant}.{CurrentAction} does not pass selectors");
 
                         await CombatEvents.BeforeAction.Trigger(CurrentAction);
 
-                        State = "Resolving";
+                        State = TurnState.Resolving;
                         Dev.Log(Dev.Tags.CombatManagement, $"Starting action {CurrentAction}");
 
                         CombatantDisplayManager.Hide();
@@ -73,7 +74,7 @@ namespace Combat {
                     else IsPassQueued = true;
                 }
 
-                State = "Ending";
+                State = TurnState.Ending;
                 Dev.Log(Dev.Tags.CombatManagement, $"Ending turn of {ActiveCombatant}");
 
                 await CombatEvents.BeforeTurnEnd.Trigger(ActiveCombatant);

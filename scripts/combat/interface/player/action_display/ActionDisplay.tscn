@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnlxxooonoceh"]
+[gd_scene load_steps=7 format=3 uid="uid://cnlxxooonoceh"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
 [ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
-[ext_resource type="PackedScene" uid="uid://703evdqfefn1" path="res://scripts/combat/interface/player/action_display/combatant_display/CombatantDetail.tscn" id="2_jgxsb"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_detail/CombatantDetail.cs" id="2_c2qaw"]
+[ext_resource type="PackedScene" uid="uid://doerpx5d6chaf" path="res://scripts/combat/interface/player/action_display/combatant_detail/stat_label/StatLabel.tscn" id="3_ljc2d"]
 [ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
+[ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="4_psvi2"]
 
 [node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription")]
 anchors_preset = 12
@@ -20,8 +22,30 @@ ActionButtonContainer = NodePath("ActionButtonContainer")
 ActionDetailTitle = NodePath("ActionDetailBox/ActionDetailTitle")
 ActionDetailDescription = NodePath("ActionDetailBox/ActionDetailDescription")
 
-[node name="CombatantDetail" parent="." instance=ExtResource("2_jgxsb")]
+[node name="CombatantDetail" type="HBoxContainer" parent="." node_paths=PackedStringArray("Icon", "LabelName", "StatLabelContainer")]
 layout_mode = 2
+script = ExtResource("2_c2qaw")
+Icon = NodePath("CombatantIcon")
+LabelName = NodePath("CombatantDescription/CombatantName")
+StatLabelContainer = NodePath("CombatantDescription/CombatantStatContainer")
+StatLabelScene = ExtResource("3_ljc2d")
+
+[node name="CombatantIcon" type="TextureRect" parent="CombatantDetail"]
+layout_mode = 2
+texture = ExtResource("4_psvi2")
+expand_mode = 2
+
+[node name="CombatantDescription" type="VBoxContainer" parent="CombatantDetail"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CombatantName" type="Label" parent="CombatantDetail/CombatantDescription"]
+layout_mode = 2
+text = "Combatant Name"
+
+[node name="CombatantStatContainer" type="GridContainer" parent="CombatantDetail/CombatantDescription"]
+layout_mode = 2
+columns = 2
 
 [node name="ActionButtonContainer" type="GridContainer" parent="."]
 layout_mode = 2

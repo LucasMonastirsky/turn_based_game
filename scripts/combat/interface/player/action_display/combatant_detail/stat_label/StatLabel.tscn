@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://doerpx5d6chaf"]
 
-[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_display/stat_label/StatLabel.cs" id="1_5pbuh"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_detail/stat_label/StatLabel.cs" id="1_5pbuh"]
 
 [node name="StatLabel" type="HBoxContainer" node_paths=PackedStringArray("LabelTitle", "LabelValue")]
 script = ExtResource("1_5pbuh")

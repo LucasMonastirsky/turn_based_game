@@ -12,6 +12,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
 texture = ExtResource("1_xlav2")
 expand_mode = 1
 stretch_mode = 4

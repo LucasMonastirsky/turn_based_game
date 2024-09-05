@@ -17,63 +17,54 @@ layout_mode = 2
 
 [node name="RoundDisplaySwapButton0" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon1" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton1" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon2" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton2" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon3" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton3" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon4" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton4" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon5" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton5" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon6" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton6" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon7" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton7" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon8" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
 [node name="RoundDisplaySwapButton8" parent="." instance=ExtResource("2_up7db")]
 layout_mode = 2
-size_flags_stretch_ratio = 0.25
 
 [node name="RoundDisplayIcon9" parent="." instance=ExtResource("2_xhktk")]
 layout_mode = 2

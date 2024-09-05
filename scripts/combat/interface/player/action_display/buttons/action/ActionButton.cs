@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Development;
 using Godot;
 
 namespace Combat {
@@ -7,7 +8,13 @@ namespace Combat {
         [Export] private ActionDisplayButton Button;
         [Export] public string ActionName { get => Action.Name; set { } }
 
-        public bool Disabled { get => Button.Disabled; set { Button.Disabled = value; } }
+        public bool Disabled {
+            get => Button.Disabled;
+            set {
+                Button.Disabled = value;
+                Button.TextureNormal = value ? null : Action?.IconTexture;
+            } 
+        }
         public bool IsHovered => Button.IsHovered();
 
         private CombatAction _action;
@@ -36,7 +43,8 @@ namespace Combat {
 
         public override void _EnterTree () {
             Button.Pressed += () => {
-                Action.RequestBind();
+                Dev.Log($"Pressed button while disabled == {Disabled}");
+                if (!Disabled) Action.RequestBind();
             };
         }
     }

@@ -41,11 +41,11 @@ namespace Combat {
         }
 
         public static void ShowActionList () {
-            Current.Visible = true;
+            Current.Buttons.ForEach(button => button.Disabled = false);
         }
 
         public static void HideActionList () {
-            Current.Visible = false;
+            Current.Buttons.ForEach(button => button.Disabled = true);
         }
 
         public static void SetHoveredAction (CombatAction action) {
