@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
 [ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
-[ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="2_lkpc5"]
+[ext_resource type="PackedScene" uid="uid://703evdqfefn1" path="res://scripts/combat/interface/player/action_display/combatant_display/CombatantDetail.tscn" id="2_jgxsb"]
 [ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
 
-[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription", "ProfileIcon")]
+[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription")]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -13,113 +13,15 @@ anchor_bottom = 1.0
 offset_top = -100.0
 grow_horizontal = 2
 grow_vertical = 0
+rotation = -0.00178603
+size_flags_vertical = 4
 script = ExtResource("1_6uhtl")
 ActionButtonContainer = NodePath("ActionButtonContainer")
-ActionDetailTitle = NodePath("")
-ActionDetailDescription = NodePath("")
-ProfileIcon = NodePath("CombatantIcon")
+ActionDetailTitle = NodePath("ActionDetailBox/ActionDetailTitle")
+ActionDetailDescription = NodePath("ActionDetailBox/ActionDetailDescription")
 
-[node name="CombatantIcon" type="TextureRect" parent="."]
+[node name="CombatantDetail" parent="." instance=ExtResource("2_jgxsb")]
 layout_mode = 2
-texture = ExtResource("2_lkpc5")
-expand_mode = 2
-
-[node name="CombatantDetail" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="CombatantName" type="Label" parent="CombatantDetail"]
-layout_mode = 2
-text = "Combatant Name"
-
-[node name="CombatantStatContainer" type="GridContainer" parent="CombatantDetail"]
-layout_mode = 2
-columns = 2
-
-[node name="CombatantInitiativeContainer" type="HBoxContainer" parent="CombatantDetail/CombatantStatContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CombatantInitiativeTitle" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer"]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
-
-[node name="CombatantInitiativeContainer2" type="HBoxContainer" parent="CombatantDetail/CombatantStatContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CombatantInitiativeTitle" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer2"]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
-
-[node name="CombatantInitiativeContainer3" type="HBoxContainer" parent="CombatantDetail/CombatantStatContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CombatantInitiativeTitle" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer3"]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
-
-[node name="CombatantInitiativeContainer4" type="HBoxContainer" parent="CombatantDetail/CombatantStatContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CombatantInitiativeTitle" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer4"]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer4"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
-
-[node name="CombatantInitiativeContainer5" type="HBoxContainer" parent="CombatantDetail/CombatantStatContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CombatantInitiativeTitle" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer5"]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer5"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
-
-[node name="CombatantInitiativeContainer6" type="HBoxContainer" parent="CombatantDetail/CombatantStatContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CombatantInitiativeTitle" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer6"]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="CombatantDetail/CombatantStatContainer/CombatantInitiativeContainer6"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
 
 [node name="ActionButtonContainer" type="GridContainer" parent="."]
 layout_mode = 2

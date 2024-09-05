@@ -8,8 +8,7 @@ namespace Combat {
         private static ActionDisplay Current;
 
         [Export] private Container ActionButtonContainer;
-        [Export] private RichTextLabel ActionDetailTitle, ActionDetailDescription;
-        [Export] private TextureRect ProfileIcon;
+        [Export] private Label ActionDetailTitle, ActionDetailDescription;
 
         private List<ActionButton> Buttons;
 
@@ -26,8 +25,6 @@ namespace Combat {
 
         public static void RequestAction (Combatant combatant) {
             ShowActionList();
-
-            Current.ProfileIcon.Texture = combatant.Icon;
 
             if (combatant.Controller is not PlayerController) {
                 Dev.Error($"Requesting actions from non-player combatant");

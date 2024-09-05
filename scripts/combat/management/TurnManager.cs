@@ -18,6 +18,7 @@ namespace Combat {
         public static async void BeginLoop () {
             while (true) {
                 ActiveCombatant = RoundManager.ActiveCombatant;
+                CombatantDetail.Combatant = ActiveCombatant;
 
                 State = "Starting";
                 Dev.Log(Dev.Tags.CombatManagement, $"Starting turn of {ActiveCombatant}");

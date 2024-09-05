@@ -20,7 +20,7 @@ namespace Combat {
         public static Combatant GetCombatant (int index) {
             if (index < CurrentRound.Count) return CurrentRound[index].Combatant;
             else {
-                var new_index = index - (CurrentRound.Count - 1);
+                var new_index = index - CurrentRound.Count;
                 if (new_index < NextRound.Count) return NextRound[new_index].Combatant; 
             }
 
@@ -40,7 +40,7 @@ namespace Combat {
             var new_item = new RoundItem (CurrentRound[0].Combatant);
             CurrentRound.RemoveAt(0);
 
-            NextRound.Append(new_item).OrderBy(item => item.Priority);
+            NextRound = NextRound.Append(new_item).OrderBy(item => item.Priority).ToList();
 
             if (CurrentRound.Count < 1) {
                 CurrentRound = NextRound;
