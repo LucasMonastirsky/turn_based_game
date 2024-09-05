@@ -12,6 +12,9 @@ namespace Combat {
         public int MaxBullets = 6;
         public int Bullets => GetStatusEffect<BulletsEffect>()?.Level ?? 0;
 
+        public bool IsLockedOn => Enemies.Any(enemy => enemy.GetStatusEffect<LockedOn>()?.Caster == this);
+        public Combatant LockedOnTarget => Enemies.Where(enemy => enemy.GetStatusEffect<LockedOn>()?.Caster == this).FirstOrDefault();
+
         private void SpendBullet () {
             if (Bullets < 1) Dev.Error("Tried to spend bullets without any");
 
@@ -42,8 +45,10 @@ namespace Combat {
 
         public override CombatAction GetRiposte (AttackResult attack_result) {
             if (attack_result.Dodged) {
-                //if (attack_result.Attack.IsMelee) return Actions.Kick.Bind(attack_result.Attacker);
-                if (Bullets > 0) return Actions.Shoot.Bind(attack_result.Attacker);
+                if (attack_result.Attack.IsMelee) return Actions.Kick.Bind(attack_result.Attacker);
+                if (Bullets > 0 && (!IsLockedOn || LockedOnTarget == attack_result.Attacker)) {
+                    return Actions.Shoot.Bind(attack_result.Attacker);
+                }
             }
 
             return null;
@@ -54,7 +59,7 @@ namespace Combat {
         }
 
         public override void ResetAnimation() {
-            if (HasStatusEffect<Overwatch>() || Enemies.Any(enemy => enemy.GetStatusEffect<LockedOn>()?.Caster == this)) {
+            if (HasStatusEffect<Overwatch>() || IsLockedOn) {
                 Play(Animations.Shoot);
             }
             else {

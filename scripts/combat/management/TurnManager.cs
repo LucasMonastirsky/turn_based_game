@@ -44,7 +44,7 @@ namespace Combat {
 
                         CombatantDisplayManager.Hide();
                         ActiveCombatant.Tempo -= CurrentAction.TempoCost;
-                        await CurrentAction.Act();
+                        if (!ActiveCombatant.IsDead) await CurrentAction.Act();
 
                         if (!IsPassQueued) await Timing.Delay();
 
