@@ -49,5 +49,15 @@ namespace Combat {
 
             RoundDisplay.UpdateIcons();
         }
+
+        public static void Remove (List<Combatant> combatants) {
+            CurrentRound.RemoveAll(item => combatants.Contains(item.Combatant));
+            NextRound.RemoveAll(item => combatants.Contains(item.Combatant));
+
+            if (CurrentRound.Count < 1) {
+                CurrentRound = NextRound;
+                NextRound = new ();
+            }
+        }
     }
 }

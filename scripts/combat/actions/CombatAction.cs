@@ -56,10 +56,28 @@ namespace Combat {
             return Bind(RNG.SelectFrom(target_sets).ToArray());
         }
 
+        public CombatAction RandomBind (List<List<Targetable>> targetable_sets) {
+            var target_sets = targetable_sets.Select(target_set => target_set.Select(targetable => targetable.ToTarget()));
+            return Bind(RNG.SelectFrom(target_sets).ToArray());
+        }
+
+        public CombatAction RandomBind (List<Targetable> targets) {
+            return RandomBind(new List<List<Targetable>> () { targets });
+        }
+
+        public CombatAction RandomBind (CombatantStore combatants) {
+            return RandomBind(combatants.ToList());
+        }
+
+        public CombatAction RandomBind (List<Combatant> combatants) {
+            return RandomBind(new List<List<Target>> () { combatants.Select(x => x.ToTarget()).ToList() });
+        }
+
         public CombatAction RandomBind () {
             var target_sets = GetValidTargets();
+            var targetable_sets = target_sets.Select(set => set.Select(target => target as Targetable).ToList()).ToList();
 
-            return target_sets.Count > 0 ? RandomBind(target_sets) : null;
+            return target_sets.Count() > 0 ? RandomBind(targetable_sets) : null;
         }
 
         public void Unbind () {

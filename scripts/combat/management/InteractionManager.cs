@@ -38,6 +38,7 @@ namespace Combat {
             var dead = Battle.Combatants.Where(combatant => combatant.DeathCheck()).ToList();
             if (dead.Count > 0) {
                 Battle.Combatants.Remove(dead);
+                RoundManager.Remove(dead);
                 await Positioner.AdjustPositionsAfterDeath();
                 
                 foreach (var combatant in dead) {

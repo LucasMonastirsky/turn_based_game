@@ -14,8 +14,8 @@ public partial class CombatantDisplay : Node2D {
     public void AddStatusEffect (StatusEffect effect) {
         var label = new Label {
             Text = effect.Name,
-            Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10 * (EffectLabels.Count + 1), },
-            Scale = new Vector2 { X = 0.75f, Y = 0.75f },
+            Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 20 * (EffectLabels.Count + 1), },
+            Scale = new Vector2 { X = 1f, Y = 1f },
         };
         AddChild(label);
         EffectLabels.TryAdd(effect.Name, label);

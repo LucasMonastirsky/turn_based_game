@@ -4,7 +4,7 @@ using Combat;
 public partial class Shooter : Combatant {
     public override string Name => "Shooter";
 
-    public override Type DefaultControllerType => typeof (PlayerController);
+    public override Type DefaultControllerType => typeof (ShooterController);
 
     protected override void Setup () {
         base.Setup();

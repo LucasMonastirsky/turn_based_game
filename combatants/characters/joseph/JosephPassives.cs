@@ -12,7 +12,7 @@ namespace Combat {
 
             public Frontliner(Combatant user) : base(user) {
                 CombatEvents.AfterMovement.Always(after_movement_handler = async movement => {
-                    if (User.Row != 0 || movement.Side == User.Side) return;
+                    if (User.Row != 0 || User.IsDead || movement.Side == User.Side) return;
 
                     if (movement.End.Row != movement.Start.Row) {
                         var target = movement.End.Row == 0 ? movement.End : movement.Start;
