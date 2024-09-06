@@ -42,7 +42,7 @@ namespace Combat {
                     var target = Targets[0];
 
                     var attack = new Attack () {
-                        DamageRoll = Dice.D4.Plus(2),
+                        DamageAmount = 6,
                         CanBeParried = false,
                         CanBeDodged = false,
                         Sprite = User.Animations.Spew,
@@ -115,7 +115,7 @@ namespace Combat {
                     var damage = User.Roll(Dice.D6.Plus(2).Times(build_up_level + 1), Stat.Damage);
 
                     foreach (var victim in victims) {
-                        victim.Damage(damage, User);
+                        User.SendDamage(victim, 10 * (build_up_level + 1), Deviation.High);
                     }
 
                     if (User.Health > 0) User.Health = 0;

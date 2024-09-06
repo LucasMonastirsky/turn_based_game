@@ -41,7 +41,8 @@ namespace Combat {
                     var attack = new Attack {
                         IsMelee = true,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D6.Plus(2),
+                        DamageAmount = 10,
+                        DamageDeviation = Deviation.High,
                         Sprite = User.Animations.Punch,
                         ParryNegation = 1,
                         DodgeNegation = 3,
@@ -90,7 +91,8 @@ namespace Combat {
                         DodgeNegation = 6,
                         IsMelee = true,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D10.Plus(2),
+                        DamageAmount = 12,
+                        DamageDeviation = Deviation.Low,
                         Sprite = User.Animations.Charge,
                     };
 

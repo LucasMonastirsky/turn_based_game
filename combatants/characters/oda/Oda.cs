@@ -5,6 +5,9 @@ namespace Combat {
         public override string Name => "Oda";
         public override Type DefaultControllerType => typeof(PlayerController);
 
+        public int SwordDamage = 8;
+        public int ShurikenDamage = 3;
+
         protected override void Setup () {
             base.Setup();
             Actions = new ActionStore(this);
@@ -13,7 +16,7 @@ namespace Combat {
             BaseMaxHealth = 20;
 
             BaseHitBonus = 5;
-            BaseParryBonus = 15;
+            BaseParryBonus = 8;
             BaseDodgeBonus = 3;
 
             Passives = new () {
@@ -28,7 +31,7 @@ namespace Combat {
             }
 
             if (!attack_result.Attack.IsMelee && attack_result.Parried) { // todo: make an action for this
-                attack_result.Attacker.Damage(Roll(attack_result.Attack.DamageRoll, Stat.Damage), this);
+                SendDamage(attack_result.Attacker, 5, 0, is_crit: false); // TODO: do this properly
             }
 
             return null;

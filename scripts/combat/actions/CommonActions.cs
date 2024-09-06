@@ -3,7 +3,13 @@ using System.Threading.Tasks;
 using ResourceHelpers;
 
 namespace Combat {
-    public abstract class MeleeAction : CombatAction {
+    public abstract class AttackAction : CombatAction {
+        public Attack BaseAttack;
+
+        public AttackAction (Combatant user) : base (user) {} // TODO: find way to do this so as to be able to show in action description...
+    }
+
+    public abstract class MeleeAction : AttackAction {
         public override List<ActionTag> Tags { get; init; } = new () { ActionTag.Melee, };
         public override List<Selector> Selectors { get; protected set; } = new () {
             CommonTargetSelectors.Melee,

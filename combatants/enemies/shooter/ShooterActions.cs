@@ -33,7 +33,8 @@ public partial class Shooter : Combatant {
 
             public override async Task Run () {
                 var attack = new Attack () {
-                    DamageRoll = Dice.D10,
+                    DamageAmount = 8,
+                    DamageDeviation = Deviation.High,
                     ParryNegation = 6,
                     DodgeNegation = 8,
                     IsMelee = true,
@@ -61,8 +62,9 @@ public partial class Shooter : Combatant {
 
             public override async Task Run () {
                 var attack = new Attack () {
-                    DamageRoll = Dice.D10,
-                    ParryNegation = 6,
+                    DamageAmount = 10,
+                    DamageDeviation = Deviation.Mid,
+                    ParryNegation = 15,
                     DodgeNegation = 8,
                     IsMelee = false,
                     Sprite = User.Animations.Shoot,

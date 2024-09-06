@@ -50,7 +50,8 @@ namespace Combat {
                         ParryNegation = 4,
                         DodgeNegation = 2,
                         MoveToMeleeDistance = true,
-                        DamageRoll = D4.Plus(2),
+                        DamageAmount = 6,
+                        DamageDeviation = Deviation.Mid,
                         Sprite = User.Animations.Kick,
                     };
 
@@ -117,7 +118,8 @@ namespace Combat {
                     var attack_options = new Attack () {
                         ParryNegation = 10,
                         DodgeNegation = 3,
-                        DamageRoll = User.BulletDamageRoll,
+                        DamageAmount = User.BulletDamage,
+                        DamageDeviation = Deviation.Mid,
                         IsRanged = true,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
@@ -201,7 +203,8 @@ namespace Combat {
                     var attack_options = new Attack () {
                         ParryNegation = 15,
                         DodgeNegation = 4,
-                        DamageRoll = User.BulletDamageRoll.WithDisadvantage(),
+                        DamageAmount = Utils.Numbers.Times(User.BulletDamage, 0.5f),
+                        DamageDeviation = Deviation.High,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
                     };
@@ -237,7 +240,8 @@ namespace Combat {
                     var attack_options = new Attack () {
                         ParryNegation = 15,
                         DodgeNegation = 8,
-                        DamageRoll = User.BulletDamageRoll,
+                        DamageAmount = User.BulletDamage,
+                        DamageDeviation = Deviation.Mid,
                         IsRanged = true,
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,

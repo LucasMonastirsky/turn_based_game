@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Development;
+using Godot;
 using static Dice;
 
 namespace Combat {
@@ -21,7 +22,7 @@ namespace Combat {
             GetStatusEffect<BulletsEffect>().Level -= 1;
         }
 
-        public DiceRoll BulletDamageRoll = D4.Plus(2);
+        public int BulletDamage = 6;
 
         protected override void Setup () {
             base.Setup();
@@ -38,7 +39,7 @@ namespace Combat {
 
             CombatEvents.BeforeAttack.Always(async (attack) => {
                 if (attack.Attacker == this && attack.IsCrit) {
-                    attack.DamageRoll.Times(2);
+                    attack.DamageAmount = Mathf.RoundToInt(attack.DamageAmount * 1.5f);
                 }
             });
         }

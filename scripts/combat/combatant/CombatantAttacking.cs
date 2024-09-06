@@ -46,13 +46,13 @@ namespace Combat {
             if (attack.Sprite != null) Play(attack.Sprite);
             if (attack.Sound != null) Play(attack.Sound);
 
-            if (result.Hit && attack.DamageRoll != null) {
+            if (result.Hit) {
                 if (result.IsCrit) {
                     Play(CommonSounds.Crit);
-                    attack.DamageRoll = attack.DamageRoll.Times(2);
+                    attack.DamageAmount *= attack.CritMultiplier;
                 }
 
-                result.DamageDone = result.Defender.Damage(Roll(attack.DamageRoll, Stat.Damage), this);
+                result.DamageDone = SendDamage(result.Defender, attack.DamageAmount, attack.DamageDeviation, attack.IsCrit).TotalDealt;
                 if (result.DamageDone > 0) Play(attack.HitSound ?? CommonSounds.SwordWound);
             }
 

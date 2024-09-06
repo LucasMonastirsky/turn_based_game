@@ -7,10 +7,15 @@ namespace Combat {
         public Combatant Attacker;
         public Target Target;
 
+        public int DamageAmount;
+        public float DamageDeviation;
+
         public int HitBonus { get; init; } = 0;
         public int CritBonus { get; init; } = 0;
         public int ParryNegation { get; init; } = 0;
         public int DodgeNegation { get; init; } = 0;
+
+        public int CritMultiplier { get; set; } = 2;
 
         public List<Bonus> Bonuses = new ();
 
@@ -27,7 +32,6 @@ namespace Combat {
         public List<Tag> Tags = new ();
         public bool Is (Tag tag) => Tags.Contains(tag);
 
-        public DiceRoll DamageRoll = null;
         public Action<AttackResult> OnResult = null;
 
         public SimpleSprite Sprite = null;

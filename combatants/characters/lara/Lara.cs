@@ -7,8 +7,8 @@ namespace Combat {
 
         public override Type DefaultControllerType => typeof(PlayerController);
 
-        public DiceRoll AxeDamageRoll = D12.Plus(2);
-        public DiceRoll PunchDamageRoll = D4.Times(2).Plus(1);
+        public int AxeDamage = 12;
+        public int PunchDamage = 6;
 
         protected override void Setup () {
             base.Setup();

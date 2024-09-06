@@ -47,7 +47,8 @@ namespace Combat {
                     Attack attack = new () {
                         ParryNegation = 6,
                         DodgeNegation = 6,
-                        DamageRoll = Dice.D8.Plus(6),
+                        DamageAmount = User.HalberdDamage + 4,
+                        DamageDeviation = Deviation.Low,
                         IsMelee = true,
                     };
 
@@ -87,7 +88,7 @@ namespace Combat {
                         ParryNegation = 7,
                         DodgeNegation = 4,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D10.Plus(6),
+                        DamageAmount = User.HalberdDamage,
                         Sprite = User.Animations.Swing,
                     };
 
@@ -109,7 +110,8 @@ namespace Combat {
                         DodgeNegation = 7,
                         CritBonus = 5,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D6.Plus(4),
+                        DamageAmount = 4,
+                        DamageDeviation = Deviation.Low,
                         Sprite = User.Animations.Swing,
                     };
 
@@ -132,7 +134,8 @@ namespace Combat {
                         ParryNegation = 8,
                         DodgeNegation = 4,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D8.Plus(2),
+                        DamageAmount = Utils.Numbers.Times(User.HalberdDamage, 0.75f),
+                        DamageDeviation = Deviation.Low,
                         Sprite = User.Animations.BigSwing,
                     };
 

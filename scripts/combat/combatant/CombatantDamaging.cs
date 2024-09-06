@@ -1,38 +1,53 @@
-using System;
 using Development;
+using Utils;
 
 namespace Combat {
     public partial class Combatant {
+        public static class Deviation {
+            public static float Low = 0.1f;
+            public static float Mid = 0.25f;
+            public static float High = 0.5f;
+        }
 
-        public int Damage (int value, Combatant sender, bool is_crit = false) {
-            var damage_instance = new DamageInstance () {
-                Sender = sender,
-                Receiver = this,
-                Amount = value,
-                IsCrit = is_crit,
+        public Damage SendDamage (
+            Combatant receiver, int value, float deviation, bool is_crit = false, bool is_direct = true, bool roll_crit = false
+        ) {
+            if (roll_crit) is_crit = Roll(Dice.D20, Stat.Crit) > 20;
+
+            var rolled_amount = RNG.Deviate(value, deviation) + DamageBonus;
+
+            var damage = new Damage () {
+                Amount = rolled_amount, IsCrit = is_crit, IsDirect = is_direct,
+                Sender = this, Receiver = receiver,
             };
 
-            CombatEvents.BeforeDamage.Trigger(damage_instance);
+            return receiver.Damage(damage);
+        }
 
-            if (!is_crit) {
-                damage_instance.Amount -= Armor;
-                if (damage_instance.Amount < 0) damage_instance.Amount = 0;
+        public Damage Damage (Damage damage) {
+            CombatEvents.BeforeDamage.Trigger(damage);
+
+            var damage_amount = damage.Amount;
+
+            if (!damage.IsCrit) {
+                damage_amount -= Armor;
+                if (damage_amount < 0) damage_amount = 0;
             }
             
-            var amount = damage_instance.Amount;
             var previous_total_health = TotalHealth;
             
             if (ExtraHealth > 0) {
-                if ((ExtraHealth -= amount) < 0) {
+                if ((ExtraHealth -= damage_amount) < 0) {
                     Health -= -ExtraHealth;
                     ExtraHealth = 0;
                 }
             }
             else {
-                Health -= amount;
+                Health -= damage_amount;
             }
 
-            Dev.Log(Dev.Tags.Combat, $"{this} received {amount} damage");
+            damage.TotalDealt = damage_amount;
+            Dev.Log(Dev.Tags.Combat, $"{this} received {damage_amount} damage");
 
             if (previous_total_health > 0 && Health < 1) {
                 if (DeathEvent != null) InteractionManager.AddQueueEvent(DeathEvent);
@@ -41,11 +56,11 @@ namespace Combat {
             Animator.Play(Animations.Hurt);
             // Play(CommonSounds.SwordWound);
 
-            DamageLabel.Instantiate(this, $"{amount}");
+            DamageLabel.Instantiate(this, $"{damage.Amount}");
 
-            CombatEvents.AfterDamage.Trigger(damage_instance);
+            CombatEvents.AfterDamage.Trigger(damage);
 
-            return value;
+            return damage;
         }
 
         public int Heal (int value) {

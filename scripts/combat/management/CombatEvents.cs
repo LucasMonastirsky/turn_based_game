@@ -6,8 +6,8 @@ namespace Combat {
         public static EventManager<AttackResult> AfterAttack = new ();
 
 
-        public static EventManager<DamageInstance> BeforeDamage = new ();
-        public static EventManager<DamageInstance> AfterDamage = new ();
+        public static EventManager<Damage> BeforeDamage = new ();
+        public static EventManager<Damage> AfterDamage = new ();
 
         public static EventManager<Combatant> BeforeTurnEnd = new ();
     

@@ -54,7 +54,7 @@ partial class ShieldGuy : Combatant {
 
             CombatEvents.AfterAttack.Always(after_attack_handler = async attack_result => {
                 if (bonus.Enabled && attack_result.Defender == User && attack_result.Parried) {
-                    Level -= attack_result.Attacker.Roll(attack_result.Attack.DamageRoll, Stat.Damage);
+                    Level -= attack_result.Attack.DamageAmount;
 
                 }
 

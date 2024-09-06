@@ -22,7 +22,7 @@ namespace Combat {
                         await User.SendAttack(target, new () {
                             ParryNegation = 6,
                             DodgeNegation = 4,
-                            DamageRoll = Dice.D6.Plus(2),
+                            DamageAmount = User.HalberdDamage,
                             IsMelee = true,
                             MoveToMeleeDistance = true,
                             Sprite = User.Animations.Swing,

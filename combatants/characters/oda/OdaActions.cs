@@ -53,7 +53,8 @@ namespace Combat {
                     var options = new Attack () {
                         ParryNegation = 5,
                         DodgeNegation = 4,
-                        DamageRoll = D8.Plus(2),
+                        DamageAmount = User.SwordDamage,
+                        DamageDeviation = Deviation.Low,
                         Sprite = User.Animations.Swing,
                         MoveToMeleeDistance = true,
                         IsMelee = true,
@@ -99,7 +100,8 @@ namespace Combat {
                     var options = new Attack () {
                         ParryNegation = 10,
                         DodgeNegation = 6,
-                        DamageRoll = D4,
+                        DamageAmount = User.ShurikenDamage,
+                        DamageDeviation = Deviation.High,
                         Sprite = User.Animations.Throw,
                         MoveToMeleeDistance = false,
                         IsMelee = false,
@@ -140,7 +142,7 @@ namespace Combat {
 
                     while (enemies.Count > 0) {
                         foreach (var enemy in enemies.ToList()) {
-                            enemy.Damage(User.Roll(D4, Stat.Damage), User);
+                            User.SendDamage(enemy, 3, 0.33f, roll_crit: true);
                             
                             var effect = enemy.GetStatusEffect<LagCut>();
 
@@ -247,7 +249,8 @@ namespace Combat {
                     var attack = new Attack () {
                         ParryNegation = 5,
                         DodgeNegation = 4,
-                        DamageRoll = D8.Plus(2),
+                        DamageAmount = User.SwordDamage,
+                        DamageDeviation = Deviation.Mid,
                         Sprite = User.Animations.Swing,
                         MoveToMeleeDistance = true,
                         IsMelee = true,

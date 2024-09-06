@@ -9,6 +9,12 @@ namespace Utils {
         private static int last_id = 0;
         public static int NewId => last_id++;
 
+        public static int Deviate (int value, float deviation) {
+            var bonus = Mathf.RoundToInt(value * deviation);
+
+            return value + (bonus * (Bool() ? 1 : -1));
+        }
+
         public static int LessThan (int max) {
             var value = (int) (GD.Randi() % max);
             Dev.Log(Dev.Tags.Random, $"RNG.LessThan({max}): {value}");

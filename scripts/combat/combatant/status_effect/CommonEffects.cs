@@ -24,7 +24,9 @@ namespace Combat {
 
         public override void Tick () {
             InteractionManager.AddQueueEvent(async () => {
-                User.Damage(Level--, User);
+                User.Damage(new Damage () {
+                    Amount = Level--,
+                });
 
                 if (Level <= 0) {
                     User.RemoveStatusEffect(Name);

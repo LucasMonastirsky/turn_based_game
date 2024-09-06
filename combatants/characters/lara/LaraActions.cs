@@ -62,7 +62,8 @@ namespace Combat {
                     await User.SendAttack(target, new () {
                         ParryNegation = 4,
                         DodgeNegation = 1,
-                        DamageRoll = User.AxeDamageRoll,
+                        DamageAmount = User.AxeDamage,
+                        DamageDeviation = Deviation.High,
                         Sprite = User.Animations.Stab,
                         MoveToMeleeDistance = true,
                     });
@@ -97,7 +98,8 @@ namespace Combat {
                     var attack_options = new Attack () {
                         ParryNegation = 3,
                         DodgeNegation = 3,
-                        DamageRoll = User.AxeDamageRoll.Plus(-2),
+                        DamageAmount = Utils.Numbers.Times(User.AxeDamage, 0.75f),
+                        DamageDeviation = Deviation.High,
                         Sprite = User.Animations.Sweeps[0],
                         IsMelee = true,
                     };
@@ -138,7 +140,8 @@ namespace Combat {
 
                 public override async Task Run () {
                     var attack = new Attack {
-                        DamageRoll = D4,
+                        DamageAmount = User.PunchDamage,
+                        DamageDeviation = Deviation.Low,
                         ParryNegation = 2,
                         DodgeNegation = 6,
                         Sprite = User.Animations.Push,
@@ -238,7 +241,8 @@ namespace Combat {
                     Attack base_attack = new () {
                         ParryNegation = 2,
                         DodgeNegation = 2,
-                        DamageRoll = User.AxeDamageRoll,
+                        DamageAmount = User.AxeDamage,
+                        DamageDeviation = Deviation.High,
                     };
 
                     await User.SendAttack(target, base_attack with {
@@ -265,7 +269,8 @@ namespace Combat {
                     var punch_attack = new Attack () {
                         ParryNegation = 2,
                         DodgeNegation = 6,
-                        DamageRoll = User.PunchDamageRoll,
+                        DamageAmount = User.PunchDamage,
+                        DamageDeviation = Deviation.Low,
                         Sprite = User.Animations.Punch,
                     };
 

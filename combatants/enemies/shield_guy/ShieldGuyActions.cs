@@ -34,7 +34,8 @@ public partial class ShieldGuy {
 
             public override async Task Run () {
                 var attack = new Attack () {
-                    DamageRoll = Dice.D10,
+                    DamageAmount = 10,
+                    DamageDeviation = Deviation.Mid,
                     ParryNegation = 6,
                     DodgeNegation = 8,
                     IsMelee = true,
@@ -75,7 +76,8 @@ public partial class ShieldGuy {
                 if (movement.Prevented) return;
 
                 var attack = new Attack () {
-                    DamageRoll = Dice.D8,
+                    DamageAmount = 8,
+                    DamageDeviation = Deviation.Low,
                     ParryNegation = 6,
                     DodgeNegation = 3,
                     IsMelee = true,
@@ -119,7 +121,8 @@ public partial class ShieldGuy {
 
             public override async Task Run () {
                 var attack = new Attack () {
-                    DamageRoll = Dice.D10,
+                    DamageAmount = 10,
+                    DamageDeviation = Deviation.High,
                     ParryNegation = 6,
                     DodgeNegation = 8,
                     IsMelee = false,

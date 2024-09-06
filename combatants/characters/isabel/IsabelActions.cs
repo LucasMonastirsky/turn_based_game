@@ -40,7 +40,8 @@ namespace Combat {
                     var attack = new Attack () {
                         ParryNegation = 6,
                         DodgeNegation = 6,
-                        DamageRoll = Dice.D8.Plus(6),
+                        DamageAmount = 9,
+                        DamageDeviation = Deviation.Low,
                         IsMelee = true,
                     };
 
@@ -102,7 +103,9 @@ namespace Combat {
                     await Timing.Delay(1/4f);
 
                     var attack = new Attack () {
-                        DamageRoll = Dice.D6,
+                        DamageAmount = 10,
+                        DamageDeviation = Deviation.Low,
+                        CritMultiplier = 3,
                         CritBonus = 5,
                         Sprite = User.Animations.Swing,
                         IsMelee = true,
@@ -144,7 +147,7 @@ namespace Combat {
                 public class Imbued : StackableEffect {
                     public override string Name => "Imbued (Poison)";
 
-                    private Func<DamageInstance, Task> after_damage_handler;
+                    private Func<Damage, Task> after_damage_handler;
 
                     public Imbued (int level) : base (level) {}
 

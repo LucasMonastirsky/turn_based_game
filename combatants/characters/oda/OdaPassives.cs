@@ -6,7 +6,7 @@ namespace Combat {
         public class Dojutsu : Passive {
             public Dojutsu (Oda user) : base (user) {
                 User.Events.BeforeAttack.Always(async attack => {
-                    if (attack.Target.Combatant == user && !attack.IsMelee) { // TODO: add rolls directly to attack
+                    if (attack.Target.Combatant == user && !attack.IsMelee) { // TODO: verify that this works
                         user.AddRollModifier(new (this, Stat.Parry) { Bonus = 10, Temporary = true });
                     }
                 });
@@ -47,7 +47,7 @@ namespace Combat {
                     Oda.Play(Oda.Sounds.Unsheath);
 
                     attack.Bonuses.Add(new (this, Stat.Hit, 5));
-                    attack.DamageRoll.FaceCounts.Add(4);
+                    attack.DamageAmount *= 2;
 
                     User.RemoveStatusEffect(this);
                 });

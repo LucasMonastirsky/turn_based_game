@@ -54,7 +54,8 @@ namespace Combat {
                     var attack = new Attack {
                         IsMelee = true,
                         MoveToMeleeDistance = true,
-                        DamageRoll = Dice.D6.Plus(2),
+                        DamageAmount = 8,
+                        DamageDeviation = Deviation.Mid,
                         Sprite = User.Animations.Peck,
                         ParryNegation = 1,
                         DodgeNegation = 5,

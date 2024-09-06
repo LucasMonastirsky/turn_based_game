@@ -103,7 +103,8 @@ namespace Combat {
                     var attack_options = new Attack () {
                         ParryNegation = 10,
                         DodgeNegation = 3,
-                        DamageRoll = Dice.D6.Plus(2),
+                        DamageAmount = User.BulletDamage,
+                        DamageDeviation = Deviation.Mid, // TODO: put deviation in var to handle items
                         Sprite = User.Animations.Shoot,
                         Sound = User.Sounds.Shot,
                     };
