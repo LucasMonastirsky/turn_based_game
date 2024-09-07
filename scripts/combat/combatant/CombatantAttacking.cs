@@ -53,7 +53,10 @@ namespace Combat {
                 }
 
                 result.DamageDone = SendDamage(result.Defender, attack.DamageAmount, attack.DamageDeviation, attack.IsCrit).TotalDealt;
-                if (result.DamageDone > 0) Play(attack.HitSound ?? CommonSounds.SwordWound);
+                if (result.DamageDone > 0) {
+                    Play(attack.HitSound ?? CommonSounds.SwordWound);
+                    result.Defender.AddStatusEffect(attack.StatusEffect);
+                }
             }
 
             if (handler != null) await handler(result);

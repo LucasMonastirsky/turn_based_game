@@ -8,7 +8,7 @@ namespace Combat {
         private static ActionDisplay Current;
 
         [Export] private Container ActionButtonContainer;
-        [Export] private Label ActionDetailTitle, ActionDetailDescription;
+        [Export] private ActionDetail ActionDetail;
 
         private List<ActionButton> Buttons;
 
@@ -49,15 +49,13 @@ namespace Combat {
         }
 
         public static void SetHoveredAction (CombatAction action) {
-            Current.ActionDetailTitle.Text = action.Name;
+            Current.ActionDetail.Action = action;
         }
 
         public override void _Process (double delta) {
-            ActionDetailTitle.Text = "";
-
             Buttons.ForEach(button => {
-                if (button.IsHovered && button.Action is not null) {
-                    ActionDetailTitle.Text = button.Action.Name;
+                if (button.IsHovered) {
+                    SetHoveredAction(button.Action);
                 }
             });
         }

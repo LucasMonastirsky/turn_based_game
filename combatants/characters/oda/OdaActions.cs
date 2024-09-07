@@ -68,11 +68,21 @@ namespace Combat {
                 }
             }
 
-            public class Shuriken : CombatAction {
+            public class Shuriken : AttackAction {
                 public override string Name => "Shuriken";
                 public override string IconFileName => "icon_shuriken";
 
                 public override int TempoCost { get; set; } = 2;
+
+                public override Attack BaseAttack => new Attack () {
+                    ParryNegation = 10,
+                    DodgeNegation = 6,
+                    DamageAmount = User.ShurikenDamage,
+                    DamageDeviation = Deviation.High,
+                    Sprite = User.Animations.Throw,
+                    MoveToMeleeDistance = false,
+                    IsMelee = false,
+                };
 
                 public new Oda User => base.User as Oda;
                 public Shuriken(Combatant user) : base(user) {}
@@ -97,20 +107,10 @@ namespace Combat {
                 };
 
                 public override async Task Run () {
-                    var options = new Attack () {
-                        ParryNegation = 10,
-                        DodgeNegation = 6,
-                        DamageAmount = User.ShurikenDamage,
-                        DamageDeviation = Deviation.High,
-                        Sprite = User.Animations.Throw,
-                        MoveToMeleeDistance = false,
-                        IsMelee = false,
-                    };
-
                     var hit_combatants = new Dictionary<int, Combatant> ();
 
                     foreach (var target in Targets) {
-                        await User.SendAttack(target, options, async result => {
+                        await User.SendAttack(target, BaseAttack, async result => {
                             if (result.Hit) hit_combatants[result.Defender.Id] = result.Defender;
                         });
 
@@ -227,11 +227,21 @@ namespace Combat {
                 }
             }
         
-            public class Kirin : CombatAction {
+            public class Kirin : MeleeAction {
                 public override string Name => "Kirin";
                 public override string IconFileName => "icon_kirin";
 
                 public override int TempoCost { get; set; } = 3;
+
+                public override Attack BaseAttack => new Attack () {
+                    ParryNegation = 5,
+                    DodgeNegation = 4,
+                    DamageAmount = User.SwordDamage,
+                    DamageDeviation = Deviation.Mid,
+                    Sprite = User.Animations.Swing,
+                    MoveToMeleeDistance = true,
+                    IsMelee = true,
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee with {
@@ -244,22 +254,10 @@ namespace Combat {
                 public Kirin (Oda user) : base (user) {}
 
                 public override async Task Run() {
-                    var target = Targets[0];
-
-                    var attack = new Attack () {
-                        ParryNegation = 5,
-                        DodgeNegation = 4,
-                        DamageAmount = User.SwordDamage,
-                        DamageDeviation = Deviation.Mid,
-                        Sprite = User.Animations.Swing,
-                        MoveToMeleeDistance = true,
-                        IsMelee = true,
-                    };
-
-                    var effect = target.Combatant.GetStatusEffect<LagCut>();
+                    var effect = Target.Combatant.GetStatusEffect<LagCut>();
 
                     while (effect.Level-- > 0) {
-                        await User.SendAttack(target, attack);
+                        await User.SendAttack(Target, BaseAttack);
                         await Timing.Delay(1/6f);
                     }
 

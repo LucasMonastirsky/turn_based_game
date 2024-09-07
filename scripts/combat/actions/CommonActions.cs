@@ -4,9 +4,13 @@ using ResourceHelpers;
 
 namespace Combat {
     public abstract class AttackAction : CombatAction {
-        public Attack BaseAttack;
+        public abstract Attack BaseAttack { get; }
 
         public AttackAction (Combatant user) : base (user) {} // TODO: find way to do this so as to be able to show in action description...
+
+        public override async Task Run () {
+            await User.SendAttack(Target, BaseAttack);
+        }
     }
 
     public abstract class MeleeAction : AttackAction {

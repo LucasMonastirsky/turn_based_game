@@ -30,26 +30,21 @@ namespace Combat {
                 public override string Name => "Swing";
                 public override string IconFileName => "icon_swing";
 
+                public override Attack BaseAttack => new Attack () {
+                    ParryNegation = 6,
+                    DodgeNegation = 6,
+                    DamageAmount = 9,
+                    DamageDeviation = Deviation.Low,
+                    IsMelee = true,
+                    MoveToMeleeDistance = true,
+                    Sprite = User.Animations.Swing,
+                };
+
                 public override int TempoCost { get; set; } = 2;
 
                 public new Isabel User => base.User as Isabel;
 
                 public Swing (Isabel user) : base (user) {}
-
-                public override async Task Run () {
-                    var attack = new Attack () {
-                        ParryNegation = 6,
-                        DodgeNegation = 6,
-                        DamageAmount = 9,
-                        DamageDeviation = Deviation.Low,
-                        IsMelee = true,
-                    };
-
-                    var result_0 = await User.SendAttack(Target, attack with {
-                        MoveToMeleeDistance = true,
-                        Sprite = User.Animations.Swing,
-                    });
-                }
             }
         
             public class Hide : CombatAction {
@@ -72,8 +67,17 @@ namespace Combat {
             public class BackStab : MeleeAction {
                 public override string Name => "BackStab";
                 public override string IconFileName => "icon_backstab";
-
                 public override int TempoCost { get; set; } = 2;
+
+                public override Attack BaseAttack => new Attack () {
+                    DamageAmount = 10,
+                    DamageDeviation = Deviation.Low,
+                    CritMultiplier = 3,
+                    CritBonus = 5,
+                    Sprite = User.Animations.Swing,
+                    IsMelee = true,
+                    Tags = new () { Attack.Tag.Backhit },
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new () {
@@ -102,17 +106,7 @@ namespace Combat {
 
                     await Timing.Delay(1/4f);
 
-                    var attack = new Attack () {
-                        DamageAmount = 10,
-                        DamageDeviation = Deviation.Low,
-                        CritMultiplier = 3,
-                        CritBonus = 5,
-                        Sprite = User.Animations.Swing,
-                        IsMelee = true,
-                        Tags = new () { Attack.Tag.Backhit },
-                    };
-
-                    var result = await User.SendAttack(Target, attack);
+                    var result = await User.SendAttack(Target, BaseAttack);
                     if (result.Parried || result.Dodged) result.Defender.Node.Animator.FlipH ^= true; 
 
                     await Timing.Delay();

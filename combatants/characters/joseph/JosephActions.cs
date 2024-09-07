@@ -10,7 +10,6 @@ namespace Combat {
         public class ActionStore {
             public ActionClasses.Zornhau Swing;
             public ActionClasses.FlatStrike Stab;
-            public ActionClasses.CalfHook CalfHook;
             public ActionClasses.ApplyTheory ApplyTheory;
             public ActionClasses.Expose Study;
             public ActionClasses.Inspire Inspire;
@@ -31,6 +30,14 @@ namespace Combat {
                 public override string IconFileName => "icon_apply_theory";
                 public override int TempoCost { get; set; } = 3;
 
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 6,
+                    DodgeNegation = 6,
+                    DamageAmount = User.HalberdDamage,
+                    DamageDeviation = Deviation.Low,
+                    IsMelee = true,
+                };
+
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee with {
                         Validator = (target, _, _) => target.Combatant.HasStatusEffect<Studied>(),
@@ -44,29 +51,21 @@ namespace Combat {
                 public ApplyTheory (Joseph user) : base (user) {}
 
                 public override async Task Run () {
-                    Attack attack = new () {
-                        ParryNegation = 6,
-                        DodgeNegation = 6,
-                        DamageAmount = User.HalberdDamage + 4,
-                        DamageDeviation = Deviation.Low,
-                        IsMelee = true,
-                    };
-
-                    var result_0 = await User.SendAttack(Target, attack with {
+                    await User.SendAttack(Target, BaseAttack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Swing,
                     });
 
                     await Timing.Delay(1/2f);
 
-                    var result_1 = await User.SendAttack(Target, attack with {
+                    await User.SendAttack(Target, BaseAttack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Stab,
                     });
 
                     await Timing.Delay(1/2f);
 
-                    var result_2 = await User.SendAttack(Target, attack with {
+                    await User.SendAttack(Target, BaseAttack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.BigSwing,
                     });
@@ -78,22 +77,18 @@ namespace Combat {
                 public override string Name => "Zornhau";
                 public override string IconFileName => "icon_zornhau";
 
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 7,
+                    DodgeNegation = 4,
+                    MoveToMeleeDistance = true,
+                    DamageAmount = User.HalberdDamage,
+                    Sprite = User.Animations.Swing,
+                };
+
                 public override int TempoCost { get; set; } = 2;
 
                 public new Joseph User => base.User as Joseph;
                 public Zornhau (Joseph user) : base (user) {}
-
-                public override async Task Run() {
-                    Attack attack = new () {
-                        ParryNegation = 7,
-                        DodgeNegation = 4,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = User.HalberdDamage,
-                        Sprite = User.Animations.Swing,
-                    };
-
-                    await User.SendAttack(Target, attack);
-                }
             }
 
             public class FlatStrike : MeleeAction {
@@ -101,52 +96,21 @@ namespace Combat {
                 public override string IconFileName => "icon_flat_strike";
                 public override int TempoCost { get; set; } = 2;
 
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 5,
+                    DodgeNegation = 7,
+                    CritBonus = 5,
+                    MoveToMeleeDistance = true,
+                    DamageAmount = 4,
+                    DamageDeviation = Deviation.Low,
+                    Sprite = User.Animations.Swing,
+                    StatusEffect = new Stunned (),
+                };
+
                 public new Joseph User => base.User as Joseph;
                 public FlatStrike (Joseph user) : base (user) {}
-
-                public override async Task Run() {
-                    Attack attack = new () {
-                        ParryNegation = 5,
-                        DodgeNegation = 7,
-                        CritBonus = 5,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = 4,
-                        DamageDeviation = Deviation.Low,
-                        Sprite = User.Animations.Swing,
-                    };
-
-                    await User.SendAttack(Target, attack, async attack_result => {
-                        if (attack_result.Hit) attack_result.Defender.AddStatusEffect(new Stunned());
-                    });
-                }
             }
 
-            public class CalfHook : MeleeAction {
-                public override string Name => "Calf Hook";
-                public override string IconFileName => "icon_calf_hook";
-                public override int TempoCost { get; set; } = 2;
-
-                public new Joseph User => base.User as Joseph;
-                public CalfHook (Joseph user) : base (user) {}
-
-                public override async Task Run() {
-                    Attack attack = new () {
-                        ParryNegation = 8,
-                        DodgeNegation = 4,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = Utils.Numbers.Times(User.HalberdDamage, 0.75f),
-                        DamageDeviation = Deviation.Low,
-                        Sprite = User.Animations.BigSwing,
-                    };
-
-                    var result = await User.SendAttack(Target, attack);
-
-                    if (result.Hit) {
-                        result.Defender.AddStatusEffect(new Immobilized(result.IsCrit ? 5 : 1));
-                    }
-                }
-            }
-        
             public class Expose : CombatAction {
                 public override string Name => "Expose";
                 public override string IconFileName => "icon_expose";

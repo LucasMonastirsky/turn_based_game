@@ -44,6 +44,15 @@ namespace Combat {
                 public override string IconFileName => "icon_chop";
                 public override int TempoCost { get; set; } = 2;
 
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 4,
+                    DodgeNegation = 1,
+                    DamageAmount = User.AxeDamage,
+                    DamageDeviation = Deviation.High,
+                    Sprite = User.Animations.Stab,
+                    MoveToMeleeDistance = true,
+                };
+
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
                 };
@@ -55,19 +64,6 @@ namespace Combat {
                 public new Lara User => base.User as Lara;
 
                 public Chop (Lara user) : base (user) {}
-
-                public override async Task Run () {
-                    var target = Targets[0];
-
-                    await User.SendAttack(target, new () {
-                        ParryNegation = 4,
-                        DodgeNegation = 1,
-                        DamageAmount = User.AxeDamage,
-                        DamageDeviation = Deviation.High,
-                        Sprite = User.Animations.Stab,
-                        MoveToMeleeDistance = true,
-                    });
-                }
             }
         
             public class Sweep : MeleeAction {
@@ -75,12 +71,21 @@ namespace Combat {
                 public override string IconFileName => "icon_sweep";
                 public override int TempoCost { get; set; } = 2;
 
+                public override Attack BaseAttack => new Attack () {
+                    ParryNegation = 3,
+                    DodgeNegation = 3,
+                    DamageAmount = Numbers.Times(User.AxeDamage, 0.75f),
+                    DamageDeviation = Deviation.High,
+                    Sprite = User.Animations.Sweeps[0],
+                    IsMelee = true,
+                };
+
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Double) { Side = SideSelector.Opposite, Row = 0, VerticalRange = 1 }
                 };
 
                 public override List<Restrictor> Restrictors { get; init; } = new () {
-                    Combat.CommonRestrictors.FrontRow,
+                    CommonRestrictors.FrontRow,
                 };
                 
                 public new Lara User => base.User as Lara;
@@ -95,22 +100,13 @@ namespace Combat {
 
                     await User.DisplaceToMeleeDistance(target);
 
-                    var attack_options = new Attack () {
-                        ParryNegation = 3,
-                        DodgeNegation = 3,
-                        DamageAmount = Utils.Numbers.Times(User.AxeDamage, 0.75f),
-                        DamageDeviation = Deviation.High,
-                        Sprite = User.Animations.Sweeps[0],
-                        IsMelee = true,
-                    };
-
-                    var first_attack = await User.SendAttack(real_targets[0], attack_options);
+                    var first_attack = await User.SendAttack(real_targets[0], BaseAttack);
 
                     if (first_attack.Parried) return;
 
                     await Timing.Delay();
 
-                    await User.SendAttack(real_targets[1], attack_options with { Sprite = User.Animations.Sweeps[1] });
+                    await User.SendAttack(real_targets[1], BaseAttack with { Sprite = User.Animations.Sweeps[1] });
                 }
             }
         
@@ -118,6 +114,16 @@ namespace Combat {
                 public override string Name => "Push";
                 public override string IconFileName => "icon_push";
                 public override int TempoCost { get; set; } = 1;
+
+                public override Attack BaseAttack => new Attack {
+                    DamageAmount = User.PunchDamage,
+                    DamageDeviation = Deviation.Low,
+                    ParryNegation = 2,
+                    DodgeNegation = 6,
+                    Sprite = User.Animations.Push,
+                    IsMelee = true,
+                    MoveToMeleeDistance = true,
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
@@ -139,17 +145,7 @@ namespace Combat {
                 public Push (Lara user) : base (user) {}
 
                 public override async Task Run () {
-                    var attack = new Attack {
-                        DamageAmount = User.PunchDamage,
-                        DamageDeviation = Deviation.Low,
-                        ParryNegation = 2,
-                        DodgeNegation = 6,
-                        Sprite = User.Animations.Push,
-                        IsMelee = true,
-                        MoveToMeleeDistance = true,
-                    };
-
-                    User.SendAttack(Target, attack, async result => {
+                    await User.SendAttack(Target, BaseAttack, async result => {
                         if ((result.Hit || result.Parried) && result.Defender.CanBeMoved) {
                             Positioner.SwitchPosition(result.Defender, Targets[1].Position);
                         } 
@@ -160,6 +156,8 @@ namespace Combat {
                 public override string Name => "Charge";
                 public override string IconFileName => "icon_charge";
                 public override int TempoCost { get; set; } = 2;
+
+                public override Attack BaseAttack => User.Actions.Chop.BaseAttack;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Position) {
@@ -217,10 +215,17 @@ namespace Combat {
                 }
             }
 
-            public class Unleash : CombatAction {
+            public class Unleash : MeleeAction {
                 public override string Name => "Unleash";
                 public override string IconFileName => "icon_alternative_therapy";
                 public override int TempoCost { get; set; } = 3;
+
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 2,
+                    DodgeNegation = 2,
+                    DamageAmount = User.AxeDamage,
+                    DamageDeviation = Deviation.High,
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     CommonTargetSelectors.Melee,
@@ -236,30 +241,21 @@ namespace Combat {
                 public Unleash (Lara user) : base (user) {}
 
                 public override async Task Run () {
-                    var target = Targets[0];
-
-                    Attack base_attack = new () {
-                        ParryNegation = 2,
-                        DodgeNegation = 2,
-                        DamageAmount = User.AxeDamage,
-                        DamageDeviation = Deviation.High,
-                    };
-
-                    await User.SendAttack(target, base_attack with {
+                    await User.SendAttack(Target, BaseAttack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Sweeps[0],
                     });
 
                     await Timing.Delay();
 
-                    await User.SendAttack(target, base_attack with {
+                    await User.SendAttack(Target, BaseAttack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Sweeps[1],
                     });
 
                     await Timing.Delay();
 
-                    await User.SendAttack(target, base_attack with {
+                    await User.SendAttack(Target, BaseAttack with {
                         MoveToMeleeDistance = true,
                         Sprite = User.Animations.Stab
                     });
@@ -274,11 +270,11 @@ namespace Combat {
                         Sprite = User.Animations.Punch,
                     };
 
-                    await User.SendAttack(target, punch_attack, async result => {
+                    await User.SendAttack(Target, punch_attack, async result => {
                         if (!result.Dodged) {
-                            var switchers = target.Combatant.Allies.OnRow(1).Where(combatant => combatant.CanBeMoved).ToList();
+                            var switchers = Target.Combatant.Allies.OnRow(1).Where(combatant => combatant.CanBeMoved).ToList();
                             if (switchers.Count > 0) {
-                                await User.Move(target.Combatant, RNG.SelectFrom(switchers).Position);
+                                await User.Move(Target.Combatant, RNG.SelectFrom(switchers).Position);
                             }
                         }
                     });

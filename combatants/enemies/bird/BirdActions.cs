@@ -37,10 +37,20 @@ namespace Combat {
         }
 
         public class ActionClasses {
-            public class Peck : CombatAction {
+            public class Peck : MeleeAction {
                 public override string Name => "Peck";
 
                 public override int TempoCost { get; set; } = 2;
+
+                public override Attack BaseAttack => new Attack {
+                    IsMelee = true,
+                    MoveToMeleeDistance = true,
+                    DamageAmount = 8,
+                    DamageDeviation = Deviation.Mid,
+                    Sprite = User.Animations.Peck,
+                    ParryNegation = 1,
+                    DodgeNegation = 5,
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite },
@@ -51,17 +61,7 @@ namespace Combat {
                 public Peck (Bird user) : base (user) {}
 
                 public override async Task Run() {
-                    var attack = new Attack {
-                        IsMelee = true,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = 8,
-                        DamageDeviation = Deviation.Mid,
-                        Sprite = User.Animations.Peck,
-                        ParryNegation = 1,
-                        DodgeNegation = 5,
-                    };
-
-                    await User.SendAttack(Target, attack);
+                    await User.SendAttack(Target, BaseAttack);
                 }
             }
         

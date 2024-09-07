@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Development;
-using Utils;
 
 namespace Combat {
     public partial class Combatant {
         public List<StatusEffect> StatusEffects { get; } = new ();
 
         public StatusEffect AddStatusEffect (StatusEffect effect) {
+            if (effect is null) return null;
+
             var overriden_effect = StatusEffects.Find(x => x.Name == effect.Name);
 
             if (overriden_effect != null) {

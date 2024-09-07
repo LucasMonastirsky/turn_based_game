@@ -17,7 +17,7 @@ namespace Combat {
             public ActionClasses.Kick Kick;
             public ActionClasses.Aim Aim;
             public ActionClasses.Shoot Shoot;
-            // public ActionClasses.LegShot LegShot;
+
             public ActionClasses.Reload Reload;
             public ActionClasses.Smoke Smoke;
             public ActionClasses.Unload Unload;
@@ -37,6 +37,15 @@ namespace Combat {
             public class Kick : MeleeAction {
                 public override string Name => "Kick";
                 public override string IconFileName => "icon_kick";
+            
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 4,
+                    DodgeNegation = 2,
+                    MoveToMeleeDistance = true,
+                    DamageAmount = 6,
+                    DamageDeviation = Deviation.Mid,
+                    Sprite = User.Animations.Kick,
+                };
 
                 public override int TempoCost { get; set; } = 2;
 
@@ -44,22 +53,11 @@ namespace Combat {
                 public Kick (Anna user) : base (user) {}
 
                 public override async Task Run () {
-                    var target = Targets[0];
-
-                    Attack attack_options = new () {
-                        ParryNegation = 4,
-                        DodgeNegation = 2,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = 6,
-                        DamageDeviation = Deviation.Mid,
-                        Sprite = User.Animations.Kick,
-                    };
-
-                    var result = await User.SendAttack(target, attack_options);
+                    var result = await User.SendAttack(Target, BaseAttack);
 
                     if (result.Hit && User.Bullets > 0) {
                         await Timing.Delay();
-                        await User.Actions.Shoot.Act(target);
+                        await User.Actions.Shoot.Act(Target);
                     }
                 }
             }
@@ -95,11 +93,21 @@ namespace Combat {
                 }
             }
 
-            public class Shoot : CombatAction {
+            public class Shoot : AttackAction {
                 public override string Name => "Shoot";
                 public override string IconFileName => "icon_shoot";
 
                 public override int TempoCost { get; set; } = 1;
+
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 10,
+                    DodgeNegation = 3,
+                    DamageAmount = User.BulletDamage,
+                    DamageDeviation = Deviation.Mid,
+                    IsRanged = true,
+                    Sprite = User.Animations.Shoot,
+                    Sound = User.Sounds.Shot,
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, },
@@ -111,21 +119,9 @@ namespace Combat {
                 public Shoot (Anna user) : base (user) {}
 
                 public override async Task Run () {
-                    var target = Targets[0];
-
                     User.SpendBullet();
 
-                    var attack_options = new Attack () {
-                        ParryNegation = 10,
-                        DodgeNegation = 3,
-                        DamageAmount = User.BulletDamage,
-                        DamageDeviation = Deviation.Mid,
-                        IsRanged = true,
-                        Sprite = User.Animations.Shoot,
-                        Sound = User.Sounds.Shot,
-                    };
-
-                    await User.SendAttack(target, attack_options);
+                    await User.SendAttack(Target, BaseAttack);
                 }
             }
         
@@ -181,47 +177,21 @@ namespace Combat {
                 }
             }
         
-            public class LegShot : CombatAction {
-                public override string Name => "Leg-Shot";
-                public override int TempoCost { get; set; } = 1;
-
-                public override bool IsAvailable => base.IsAvailable && User.Bullets > 0;
-
-                public override List<Selector> Selectors { get; protected set; } = new () {
-                    new (TargetType.Single) { Side = SideSelector.Opposite, }
-                };
-
-                public new Anna User => base.User as Anna;
-
-                public LegShot (Anna user) : base (user) {}
-
-                public override async Task Run () {
-                    var target = Targets[0];
-
-                    User.SpendBullet();
-
-                    var attack_options = new Attack () {
-                        ParryNegation = 15,
-                        DodgeNegation = 4,
-                        DamageAmount = Utils.Numbers.Times(User.BulletDamage, 0.5f),
-                        DamageDeviation = Deviation.High,
-                        Sprite = User.Animations.Shoot,
-                        Sound = User.Sounds.Shot,
-                    };
-
-                    var result = await User.SendAttack(target, attack_options);
-
-                    if (result.Hit) {
-                        target.Combatant.AddStatusEffect(new Immobilized (2));
-                    }
-                }
-            }
-        
-            public class Unload : CombatAction {
+            public class Unload : AttackAction {
                 public override string Name => "Unload";
                 public override string IconFileName => "icon_unload";
 
                 public override int TempoCost { get; set; } = 3;
+
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 15,
+                    DodgeNegation = 8,
+                    DamageAmount = User.BulletDamage,
+                    DamageDeviation = Deviation.Mid,
+                    IsRanged = true,
+                    Sprite = User.Animations.Shoot,
+                    Sound = User.Sounds.Shot,
+                };
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) { Side = SideSelector.Opposite, },
@@ -233,24 +203,12 @@ namespace Combat {
                 public Unload (Anna user) : base (user) {}
 
                 public override async Task Run () {
-                    var target = Targets[0];
-
                     var hit_modifier = User.AddRollModifier(new (this, Stat.Hit) { Bonus = -1, Advantage = -1, }); // TODO: add crit and dmg
-
-                    var attack_options = new Attack () {
-                        ParryNegation = 15,
-                        DodgeNegation = 8,
-                        DamageAmount = User.BulletDamage,
-                        DamageDeviation = Deviation.Mid,
-                        IsRanged = true,
-                        Sprite = User.Animations.Shoot,
-                        Sound = User.Sounds.Shot,
-                    };
 
                     while (User.Bullets > 0) {
                         User.SpendBullet();
 
-                        await User.SendAttack(target, attack_options);
+                        await User.SendAttack(Target, BaseAttack);
 
                         hit_modifier.Bonus--;
 

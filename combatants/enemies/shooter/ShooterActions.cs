@@ -28,22 +28,18 @@ public partial class Shooter : Combatant {
             public override string Name => "Stab";
             public override int TempoCost { get; set; } = 2;
 
+            public override Attack BaseAttack => new Attack () {
+                DamageAmount = 8,
+                DamageDeviation = Deviation.High,
+                ParryNegation = 6,
+                DodgeNegation = 8,
+                IsMelee = true,
+                MoveToMeleeDistance = true,
+                Sprite = User.Animations.Punch,
+            };
+
             public new Shooter User => base.User as Shooter;
             public Punch (Shooter user) : base (user) {}
-
-            public override async Task Run () {
-                var attack = new Attack () {
-                    DamageAmount = 8,
-                    DamageDeviation = Deviation.High,
-                    ParryNegation = 6,
-                    DodgeNegation = 8,
-                    IsMelee = true,
-                    MoveToMeleeDistance = true,
-                    Sprite = User.Animations.Punch,
-                };
-
-                await User.SendAttack(Target, attack);
-            }
         }
 
         public class Shoot : CombatAction {

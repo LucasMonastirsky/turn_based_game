@@ -29,22 +29,18 @@ public partial class ShieldGuy {
             public override string Name => "Stab";
             public override int TempoCost { get; set; } = 2;
 
+            public override Attack BaseAttack => new Attack () {
+                DamageAmount = 10,
+                DamageDeviation = Deviation.Mid,
+                ParryNegation = 6,
+                DodgeNegation = 8,
+                IsMelee = true,
+                MoveToMeleeDistance = true,
+                Sprite = User.Animations.Stab,
+            };
+
             public new ShieldGuy User => base.User as ShieldGuy;
             public Stab (ShieldGuy user) : base (user) {}
-
-            public override async Task Run () {
-                var attack = new Attack () {
-                    DamageAmount = 10,
-                    DamageDeviation = Deviation.Mid,
-                    ParryNegation = 6,
-                    DodgeNegation = 8,
-                    IsMelee = true,
-                    MoveToMeleeDistance = true,
-                    Sprite = User.Animations.Stab,
-                };
-
-                await User.SendAttack(Target, attack);
-            }
         }
 
         public class Bash : CombatAction {

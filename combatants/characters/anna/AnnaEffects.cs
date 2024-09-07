@@ -36,7 +36,7 @@ namespace Combat {
                 });
 
                 CombatEvents.BeforeAction.Always(before_action_handler = async action => {
-                    if (action.User == Caster && !(action is Shoot or Unload or LegShot or CommonActions.Pass)) {
+                    if (action.User == Caster && !(action is Shoot or Unload or CommonActions.Pass)) {
                         User.RemoveStatusEffect(this);
                     }
                 });

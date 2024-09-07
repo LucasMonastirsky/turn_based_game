@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cnlxxooonoceh"]
+[gd_scene load_steps=13 format=3 uid="uid://cnlxxooonoceh"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
 [ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
@@ -6,8 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://doerpx5d6chaf" path="res://scripts/combat/interface/player/action_display/combatant_detail/stat_label/StatLabel.tscn" id="3_ljc2d"]
 [ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
 [ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="4_psvi2"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDetail.cs" id="6_ijw6k"]
+[ext_resource type="PackedScene" uid="uid://csor2jw81x2na" path="res://scripts/combat/interface/player/action_display/action_detail/ActionDetailStat.tscn" id="6_uu3hs"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_melee.png" id="7_k1njb"]
+[ext_resource type="Texture2D" uid="uid://df1wortnxxt8i" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_parry_negation.png" id="8_jgrgy"]
+[ext_resource type="Texture2D" uid="uid://bkdf0cq28kmo8" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_dodge_negation.png" id="9_uc0o1"]
+[ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_crit.png" id="10_ad0oy"]
 
-[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetailTitle", "ActionDetailDescription")]
+[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetail")]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -19,8 +25,7 @@ rotation = -0.00178603
 size_flags_vertical = 4
 script = ExtResource("1_6uhtl")
 ActionButtonContainer = NodePath("ActionButtonContainer")
-ActionDetailTitle = NodePath("ActionDetailBox/ActionDetailTitle")
-ActionDetailDescription = NodePath("ActionDetailBox/ActionDetailDescription")
+ActionDetail = NodePath("ActionDetail")
 
 [node name="CombatantDetail" type="HBoxContainer" parent="." node_paths=PackedStringArray("Icon", "LabelName", "StatLabelContainer")]
 layout_mode = 2
@@ -77,16 +82,70 @@ layout_mode = 2
 [node name="ActionButton7" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionDetailBox" type="VBoxContainer" parent="."]
+[node name="ActionDetail" type="VBoxContainer" parent="." node_paths=PackedStringArray("Title", "StatContainer", "StatDamage", "StatParryNegation", "StatDodgeNegation", "StatCrit")]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("6_ijw6k")
+Title = NodePath("ActionDetailTitle/ActionDetailTitleLabel")
+StatContainer = NodePath("ActionDetailTitle/ActionDetailStatContainer")
+StatDamage = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatDamage")
+StatParryNegation = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatParryNegation")
+StatDodgeNegation = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatDodgeNegation")
+StatCrit = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatCrit")
 
-[node name="ActionDetailTitle" type="Label" parent="ActionDetailBox"]
+[node name="ActionDetailTitle" type="HBoxContainer" parent="ActionDetail"]
+layout_mode = 2
+
+[node name="ActionDetailTitleLabel" type="Label" parent="ActionDetail/ActionDetailTitle"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Action Name"
 
-[node name="ActionDetailDescription" type="Label" parent="ActionDetailBox"]
+[node name="ActionDetailStatContainer" type="Control" parent="ActionDetail/ActionDetailTitle"]
+layout_mode = 2
+
+[node name="ActionDetailStatDamage" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -176.0
+offset_right = -136.0
+offset_bottom = 26.0
+Texture = ExtResource("7_k1njb")
+
+[node name="ActionDetailStatParryNegation" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -132.0
+offset_right = -92.0
+offset_bottom = 26.0
+Texture = ExtResource("8_jgrgy")
+
+[node name="ActionDetailStatDodgeNegation" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -88.0001
+offset_right = -48.0001
+offset_bottom = 26.0
+Texture = ExtResource("9_uc0o1")
+
+[node name="ActionDetailStatCrit" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -44.0
+offset_right = -4.0
+offset_bottom = 26.0
+Texture = ExtResource("10_ad0oy")
+
+[node name="ActionDetailDescription" type="Label" parent="ActionDetail"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "This is the action description, which will some day contain many characters and symbols, in any of many languages."

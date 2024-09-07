@@ -6,7 +6,7 @@ namespace Combat {
 
         public override Type DefaultControllerType => typeof (PlayerController);
 
-        public int HalberdDamage = 12;
+        public int HalberdDamage = 8;
 
         public Joseph () {
             Actions = new (this);

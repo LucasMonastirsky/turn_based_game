@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://csor2jw81x2na"]
+
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/action_detail/ActionDetailStat.cs" id="1_eknk3"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_melee.png" id="2_uw05e"]
+
+[node name="ActionDetailStat" type="HBoxContainer" node_paths=PackedStringArray("Icon", "Label")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_eknk3")
+Icon = NodePath("TextureRect")
+Label = NodePath("Label")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_uw05e")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "0"
