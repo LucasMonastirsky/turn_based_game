@@ -32,4 +32,10 @@ public partial class ActionDetail : VBoxContainer {
 			}
 		}
 	}
+
+	public override void _Process (double delta) {
+		if (TurnManager.State != TurnManager.TurnState.Requesting) {
+			Action = null;
+		}
+	}
 }

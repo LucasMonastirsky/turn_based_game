@@ -1,4 +1,5 @@
 using Combat;
+using Development;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,6 @@ public partial class CombatantDetail : HBoxContainer {
 	[Export] private Container StatLabelContainer;
 	[Export] PackedScene StatLabelScene;
 
-	private List<StatLabel> StatLabels = new ();
-
 	private static Combatant _combatant;
 	public static Combatant Combatant {
 		get => _combatant;
@@ -20,7 +19,6 @@ public partial class CombatantDetail : HBoxContainer {
 			_combatant = value;
 			Current.Icon.Texture = value.Icon;
 			Current.LabelName.Text = value.Name;
-			Current.StatLabels.ForEach(label => label.Combatant = value);
 		}
 	}
 

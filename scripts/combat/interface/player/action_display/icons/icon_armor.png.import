@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bj7im0slub20f"
-path="res://.godot/imported/icon_melee.png-6d9b5c985bddff955dd23422dd10ac6e.ctex"
+uid="uid://5somtb51o6gu"
+path="res://.godot/imported/icon_armor.png-37d01616b1b9795305c5e468c7ec8b0b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_melee.png"
-dest_files=["res://.godot/imported/icon_melee.png-6d9b5c985bddff955dd23422dd10ac6e.ctex"]
+source_file="res://scripts/combat/interface/player/action_display/icons/icon_armor.png"
+dest_files=["res://.godot/imported/icon_armor.png-37d01616b1b9795305c5e468c7ec8b0b.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://csor2jw81x2na"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/action_detail/ActionDetailStat.cs" id="1_eknk3"]
-[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_melee.png" id="2_uw05e"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/icons/icon_melee.png" id="2_moblw"]
 
 [node name="ActionDetailStat" type="HBoxContainer" node_paths=PackedStringArray("Icon", "Label")]
 anchors_preset = 15
@@ -15,7 +15,7 @@ Label = NodePath("Label")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2
-texture = ExtResource("2_uw05e")
+texture = ExtResource("2_moblw")
 expand_mode = 2
 stretch_mode = 4
 

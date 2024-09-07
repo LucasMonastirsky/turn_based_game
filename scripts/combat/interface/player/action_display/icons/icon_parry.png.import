@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://df1wortnxxt8i"
-path="res://.godot/imported/icon_parry_negation.png-1613c9bee20debaf26a677cae4c6303c.ctex"
+uid="uid://dfx8cngwtitwo"
+path="res://.godot/imported/icon_parry.png-65d5aa1c13adc88186212e22f5911ea3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_parry_negation.png"
-dest_files=["res://.godot/imported/icon_parry_negation.png-1613c9bee20debaf26a677cae4c6303c.ctex"]
+source_file="res://scripts/combat/interface/player/action_display/icons/icon_parry.png"
+dest_files=["res://.godot/imported/icon_parry.png-65d5aa1c13adc88186212e22f5911ea3.ctex"]
 
 [params]
 

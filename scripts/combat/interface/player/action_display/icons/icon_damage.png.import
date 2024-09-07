@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cddmnrlhwfuqa"
-path="res://.godot/imported/icon_crit.png-a4cd264ee21a743fd4275f399a5b5721.ctex"
+uid="uid://comxk58orqvwc"
+path="res://.godot/imported/icon_damage.png-d5eba65636aff35d6e6631ab9c398023.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_crit.png"
-dest_files=["res://.godot/imported/icon_crit.png-a4cd264ee21a743fd4275f399a5b5721.ctex"]
+source_file="res://scripts/combat/interface/player/action_display/icons/icon_damage.png"
+dest_files=["res://.godot/imported/icon_damage.png-d5eba65636aff35d6e6631ab9c398023.ctex"]
 
 [params]
 

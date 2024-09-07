@@ -1,18 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://doerpx5d6chaf"]
+[gd_scene load_steps=3 format=3 uid="uid://doerpx5d6chaf"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_detail/stat_label/StatLabel.cs" id="1_5pbuh"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/icons/icon_melee.png" id="2_8ue04"]
 
-[node name="StatLabel" type="HBoxContainer" node_paths=PackedStringArray("LabelTitle", "LabelValue")]
+[node name="StatLabel" type="HBoxContainer" node_paths=PackedStringArray("Icon", "LabelValue")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_5pbuh")
-LabelTitle = NodePath("CombatantInitiativeTitle")
-LabelValue = NodePath("CombatantInitiativeValue")
+Icon = NodePath("MarginContainer/CombatantInitiativeValue")
+LabelValue = NodePath("CombatantInitiativeIcon")
 
-[node name="CombatantInitiativeTitle" type="Label" parent="."]
-layout_mode = 2
-text = "Initiative"
-
-[node name="CombatantInitiativeValue" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "4"
-horizontal_alignment = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="CombatantInitiativeValue" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_8ue04")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="CombatantInitiativeIcon" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 13
+text = "99"
+vertical_alignment = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cnlxxooonoceh"]
+[gd_scene load_steps=18 format=3 uid="uid://cnlxxooonoceh"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
 [ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
@@ -6,12 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://doerpx5d6chaf" path="res://scripts/combat/interface/player/action_display/combatant_detail/stat_label/StatLabel.tscn" id="3_ljc2d"]
 [ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
 [ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="4_psvi2"]
+[ext_resource type="Texture2D" uid="uid://comxk58orqvwc" path="res://scripts/combat/interface/player/action_display/icons/icon_damage.png" id="5_fmdfk"]
+[ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_detail/CombatantStatContainer.cs" id="5_osfxy"]
+[ext_resource type="Texture2D" uid="uid://5somtb51o6gu" path="res://scripts/combat/interface/player/action_display/icons/icon_armor.png" id="6_2kcft"]
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDetail.cs" id="6_ijw6k"]
 [ext_resource type="PackedScene" uid="uid://csor2jw81x2na" path="res://scripts/combat/interface/player/action_display/action_detail/ActionDetailStat.tscn" id="6_uu3hs"]
-[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_melee.png" id="7_k1njb"]
-[ext_resource type="Texture2D" uid="uid://df1wortnxxt8i" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_parry_negation.png" id="8_jgrgy"]
-[ext_resource type="Texture2D" uid="uid://bkdf0cq28kmo8" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_dodge_negation.png" id="9_uc0o1"]
-[ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://scripts/combat/interface/player/action_display/action_detail/icons/icon_crit.png" id="10_ad0oy"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/icons/icon_melee.png" id="8_1nnk4"]
+[ext_resource type="Texture2D" uid="uid://df1wortnxxt8i" path="res://scripts/combat/interface/player/action_display/icons/icon_parry_negation.png" id="9_bqoj2"]
+[ext_resource type="Texture2D" uid="uid://dfx8cngwtitwo" path="res://scripts/combat/interface/player/action_display/icons/icon_parry.png" id="9_p2nc0"]
+[ext_resource type="Texture2D" uid="uid://bkdf0cq28kmo8" path="res://scripts/combat/interface/player/action_display/icons/icon_dodge_negation.png" id="10_oa5gh"]
+[ext_resource type="Texture2D" uid="uid://eusto0ta2f3f" path="res://scripts/combat/interface/player/action_display/icons/icon_dodge.png" id="10_ylfxd"]
+[ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://scripts/combat/interface/player/action_display/icons/icon_crit.png" id="11_hb1tf"]
 
 [node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetail")]
 anchors_preset = 12
@@ -48,9 +53,42 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Combatant Name"
 
-[node name="CombatantStatContainer" type="GridContainer" parent="CombatantDetail/CombatantDescription"]
+[node name="CombatantStatContainer" type="GridContainer" parent="CombatantDetail/CombatantDescription" node_paths=PackedStringArray("CombatantDetail", "Damage", "Armor", "Hit", "Crit", "Parry", "Dodge")]
 layout_mode = 2
+size_flags_vertical = 3
 columns = 2
+script = ExtResource("5_osfxy")
+CombatantDetail = NodePath("../..")
+Damage = NodePath("StatLabel")
+Armor = NodePath("StatLabel2")
+Hit = NodePath("StatLabel3")
+Crit = NodePath("StatLabel4")
+Parry = NodePath("StatLabel5")
+Dodge = NodePath("StatLabel6")
+
+[node name="StatLabel" parent="CombatantDetail/CombatantDescription/CombatantStatContainer" instance=ExtResource("3_ljc2d")]
+layout_mode = 2
+Texture = ExtResource("5_fmdfk")
+
+[node name="StatLabel2" parent="CombatantDetail/CombatantDescription/CombatantStatContainer" instance=ExtResource("3_ljc2d")]
+layout_mode = 2
+Texture = ExtResource("6_2kcft")
+
+[node name="StatLabel3" parent="CombatantDetail/CombatantDescription/CombatantStatContainer" instance=ExtResource("3_ljc2d")]
+layout_mode = 2
+Texture = ExtResource("8_1nnk4")
+
+[node name="StatLabel4" parent="CombatantDetail/CombatantDescription/CombatantStatContainer" instance=ExtResource("3_ljc2d")]
+layout_mode = 2
+Texture = ExtResource("11_hb1tf")
+
+[node name="StatLabel5" parent="CombatantDetail/CombatantDescription/CombatantStatContainer" instance=ExtResource("3_ljc2d")]
+layout_mode = 2
+Texture = ExtResource("9_p2nc0")
+
+[node name="StatLabel6" parent="CombatantDetail/CombatantDescription/CombatantStatContainer" instance=ExtResource("3_ljc2d")]
+layout_mode = 2
+Texture = ExtResource("10_ylfxd")
 
 [node name="ActionButtonContainer" type="GridContainer" parent="."]
 layout_mode = 2
@@ -113,7 +151,7 @@ anchor_bottom = 0.0
 offset_left = -176.0
 offset_right = -136.0
 offset_bottom = 26.0
-Texture = ExtResource("7_k1njb")
+Texture = ExtResource("8_1nnk4")
 
 [node name="ActionDetailStatParryNegation" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
@@ -123,7 +161,7 @@ anchor_bottom = 0.0
 offset_left = -132.0
 offset_right = -92.0
 offset_bottom = 26.0
-Texture = ExtResource("8_jgrgy")
+Texture = ExtResource("9_bqoj2")
 
 [node name="ActionDetailStatDodgeNegation" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
@@ -133,7 +171,7 @@ anchor_bottom = 0.0
 offset_left = -88.0001
 offset_right = -48.0001
 offset_bottom = 26.0
-Texture = ExtResource("9_uc0o1")
+Texture = ExtResource("10_oa5gh")
 
 [node name="ActionDetailStatCrit" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
@@ -143,12 +181,11 @@ anchor_bottom = 0.0
 offset_left = -44.0
 offset_right = -4.0
 offset_bottom = 26.0
-Texture = ExtResource("10_ad0oy")
+Texture = ExtResource("11_hb1tf")
 
 [node name="ActionDetailDescription" type="Label" parent="ActionDetail"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "This is the action description, which will some day contain many characters and symbols, in any of many languages."
 autowrap_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="."]

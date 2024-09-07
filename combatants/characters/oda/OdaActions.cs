@@ -7,8 +7,10 @@ using static Dice;
 
 namespace Combat {
     public partial class Oda {
-        public override List<CombatAction> ActionList => new () {
-            Actions.Swing, Actions.Kirin, Actions.Shuriken, Actions.Release, Actions.Substitution, null, Actions.Move, Actions.Pass,
+        public override List<CombatAction> ActionList => Row == 0 ? new () {
+            Actions.Swing, Actions.Kirin, null, null, null, null, Actions.Move, Actions.Pass,
+        } : new () {
+            Actions.Shuriken, Actions.Release, Actions.Substitution, null, null, null, Actions.Move, Actions.Pass,
         };
 
         public ActionStore Actions;

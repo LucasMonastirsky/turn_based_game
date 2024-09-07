@@ -90,6 +90,7 @@ public partial class ShieldGuy {
                         var targets = Positioner.GetAvailablePositions().Where(position => 
                             position.Side == enemy.Side
                             && enemy.VerticalDistanceTo(position) <= 1
+                            && position.Row != enemy.Row
                         ).Select(pos => pos.ToTarget());
 
                         if (targets.Count() < 1) return;

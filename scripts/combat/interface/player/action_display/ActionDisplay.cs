@@ -30,6 +30,8 @@ namespace Combat {
                 Dev.Error($"Requesting actions from non-player combatant");
             }
 
+            CombatantDetail.Combatant = combatant;
+
             var actions = combatant.ActionList; // TODO: handle display index
 
 			for (var i = 0; i < Current.Buttons.Count; i++) {
@@ -54,7 +56,7 @@ namespace Combat {
 
         public override void _Process (double delta) {
             Buttons.ForEach(button => {
-                if (button.IsHovered) {
+                if (button.IsHovered && TurnManager.State == TurnManager.TurnState.Requesting) {
                     SetHoveredAction(button.Action);
                 }
             });
