@@ -26,6 +26,10 @@ namespace Combat {
             return combatants;
         }
 
+        public List<Target> ToTargets () {
+            return combatants.Select(combatant => combatant.ToTarget()).ToList();
+        }
+
         public Combatant this [int index] {
             get => combatants[index];
             set => combatants[index] = value;

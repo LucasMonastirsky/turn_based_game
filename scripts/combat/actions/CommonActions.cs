@@ -8,8 +8,14 @@ namespace Combat {
 
         public AttackAction (Combatant user) : base (user) {} // TODO: find way to do this so as to be able to show in action description...
 
+        public virtual int AttackCount => 1;
+        public virtual float AttackDelayMultiplier => 1f;
+
         public override async Task Run () {
-            await User.SendAttack(Target, BaseAttack);
+            for (var i = 0; i < AttackCount; i++) {
+                await User.SendAttack(Target, BaseAttack);
+                if (AttackCount > 0 && AttackCount - i > 1) await Timing.Delay(AttackDelayMultiplier);
+            }
         }
     }
 

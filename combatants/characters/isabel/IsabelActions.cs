@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Combat {
     public partial class Isabel {
         public override List<CombatAction> ActionList => new () {
-            Actions.Swing, Actions.BackStab, Actions.Poison, Actions.Hide, null, null, Actions.Move, Actions.Pass,
+            Actions.Swing, Actions.Spree, Actions.BackStab, Actions.Poison, Actions.Hide, null, Actions.Move, Actions.Pass,
         };
 
         public ActionStore Actions;
         public class ActionStore {
             public ActionClasses.Swing Swing;
+            public ActionClasses.Spree Spree;
             public ActionClasses.Hide Hide;
             public ActionClasses.BackStab BackStab;
             public ActionClasses.Poison Poison;
@@ -33,7 +35,7 @@ namespace Combat {
                 public override Attack BaseAttack => new Attack () {
                     ParryNegation = 6,
                     DodgeNegation = 6,
-                    DamageAmount = 9,
+                    DamageAmount = 6,
                     DamageDeviation = Deviation.Low,
                     IsMelee = true,
                     MoveToMeleeDistance = true,
@@ -46,7 +48,42 @@ namespace Combat {
 
                 public Swing (Isabel user) : base (user) {}
             }
-        
+
+            public class Spree : MeleeAction {
+                public override string Name => "Spree";
+                public override int TempoCost { get; set; } = 3;
+
+                public override Attack BaseAttack => new Attack () {
+                    ParryNegation = 6,
+                    DodgeNegation = 8,
+                    DamageAmount = 6,
+                    DamageDeviation = Deviation.Low,
+                    IsMelee = true,
+                    MoveToMeleeDistance = true,
+                    Sprite = User.Animations.Swing,
+                };
+
+                public new Isabel User => base.User as Isabel;
+                public Spree (Isabel user) : base (user) {}
+
+                public override async Task Run () {
+                    var target = Target;
+                    var multiplier = 1;
+
+                    while (target != null) {
+                        var result = await User.SendAttack(target, BaseAttack with { DamageAmount = BaseAttack.DamageAmount * multiplier });
+
+                        if ((result.Defender?.IsDead ?? false) && User.Enemies.Alive.Count > 0) {
+                            var possible_targets = User.Enemies.Alive.ToTargets();
+                            target = Positioner.SelectClosest(result.Defender, possible_targets);
+                            multiplier++;
+                            await Timing.Delay();
+                        }
+                        else target = null;
+                    }
+                }
+            }
+
             public class Hide : CombatAction {
                 public override string Name => "Hide";
                 public override string IconFileName => "icon_hide";
@@ -70,9 +107,9 @@ namespace Combat {
                 public override int TempoCost { get; set; } = 2;
 
                 public override Attack BaseAttack => new Attack () {
-                    DamageAmount = 10,
+                    DamageAmount = 6,
                     DamageDeviation = Deviation.Low,
-                    CritMultiplier = 3,
+                    CritMultiplier = 2,
                     CritBonus = 5,
                     Sprite = User.Animations.Swing,
                     IsMelee = true,

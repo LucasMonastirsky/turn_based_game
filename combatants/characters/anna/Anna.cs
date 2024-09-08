@@ -34,6 +34,7 @@ namespace Combat {
             BaseHitBonus = 5;
             BaseParryBonus = 0;
             BaseDodgeBonus = 3;
+            BaseCritBonus = 1;
 
             AddStatusEffect(new BulletsEffect (MaxBullets));
 

@@ -1,31 +1,30 @@
 using System.Collections.Generic;
-using Development;
-using Godot;
+using System.Linq;
 
 namespace Combat {
 	public partial class StandardBattle : BattleNode {
-		public override void _Ready () {
-			Battle.Node = this;
-
-			CommonSounds.Load();
-
-			Combatants = new List<Combatant> {
-				new Joseph { Position = new () { Side = Side.Left, Row = 0, Slot = 1, }},
-				new Lara { Position = new () { Side = Side.Left, Row = 0, Slot = 3, }},
-				new Oda { Position = new () { Side = Side.Left, Row = 1, Slot = 0, }},
-				new Isabel { Position = new () { Side = Side.Left, Row = 1, Slot = 2, }},
-				new Anna { Position = new () { Side = Side.Left, Row = 1, Slot = 4, }},
-				new Ghoul { Position = new () { Side = Side.Right, Row = 0, Slot = 1 }},
-				new ShieldGuy { Position = new () { Side = Side.Right, Row = 1, Slot = 2 }},
-				new Shooter { Position = new () { Side = Side.Right, Row = 1, Slot = 0 }},
-				new Bird { Position = new () { Side = Side.Right, Row = 0, Slot = 3 }},
-				new Boomer { Position = new () { Side = Side.Right, Row = 1, Slot = 4 }},
-			};
+		public void LoadCharacters (List<List<Combatant>> left_combatants, List<List<Combatant>> right_combatants) {
+			Combatants = new ();
+			Combatants = Combatants.Concat(left_combatants[0]).Concat(left_combatants[1]).Concat(right_combatants[0]).Concat(right_combatants[1]).ToList();
 
 			foreach (var combatant in Combatants) {
+				AddChild(combatant.Node);
 				combatant.LoadIn();
 			}
 
+			left_combatants[0].ForEach(combatant => combatant.Position = new () { Side = Side.Left, Row = 0, });
+			left_combatants[1].ForEach(combatant => combatant.Position = new () { Side = Side.Left, Row = 1, });
+
+			right_combatants[0].ForEach(combatant => combatant.Position = new () { Side = Side.Right, Row = 0, });
+			right_combatants[1].ForEach(combatant => combatant.Position = new () { Side = Side.Right, Row = 1, });
+		}
+
+		public override void _EnterTree () {
+			Battle.Node = this;
+		}
+
+		public void Start () {
+			CommonSounds.Load();
 			Positioner.Setup();
 			RoundManager.Begin();
 			TurnManager.BeginLoop();

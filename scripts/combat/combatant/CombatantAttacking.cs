@@ -37,7 +37,7 @@ namespace Combat {
 
             var result = attack.Target.Combatant.ReceiveAttack(this, attack);
 
-            if (result.Hit && !result.IsCrit && Roll(Dice.D20.Plus(attack.CritBonus), Stat.Crit) > 20) {
+            if (result.Hit && !result.IsCrit && Roll(Dice.D20.Plus(attack.CritBonus), Stat.Crit, attack.Bonuses) > 20) {
                 result.IsCrit = true;
             }
 
@@ -66,7 +66,7 @@ namespace Combat {
             return TurnManager.LastAttack = result;
         }
         public AttackResult ReceiveAttack (Combatant attacker, Attack attack) {
-            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus), Stat.Hit);
+            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus), Stat.Hit, attack.Bonuses);
 
             var parry_roll = (!attack.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, Stat.Parry);
             var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, Stat.Dodge);

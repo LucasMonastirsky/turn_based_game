@@ -79,6 +79,7 @@ namespace Combat {
 
                     if (attack.Attacker == Caster && attack.Target.Combatant == User) {
                         attack.Bonuses.Add(new (this, Stat.Hit, Level));
+                        attack.Bonuses.Add(new (this, Stat.Crit, Level));
                     }
                 });
             }

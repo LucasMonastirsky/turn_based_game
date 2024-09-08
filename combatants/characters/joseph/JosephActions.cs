@@ -4,14 +4,16 @@ using System.Threading.Tasks;
 
 namespace Combat {
     public partial class Joseph {
-        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+        public override List<CombatAction> ActionList => new () {
+            Actions.Swing, Actions.FlatStrike, Actions.ApplyTheory, Actions.Expose, Actions.Inspire, null, Actions.Move, Actions.Pass,
+        };
 
         public ActionStore Actions;
         public class ActionStore {
             public ActionClasses.Zornhau Swing;
-            public ActionClasses.FlatStrike Stab;
+            public ActionClasses.FlatStrike FlatStrike;
             public ActionClasses.ApplyTheory ApplyTheory;
-            public ActionClasses.Expose Study;
+            public ActionClasses.Expose Expose;
             public ActionClasses.Inspire Inspire;
 
             public CommonActions.Move Move;
@@ -114,7 +116,7 @@ namespace Combat {
             public class Expose : CombatAction {
                 public override string Name => "Expose";
                 public override string IconFileName => "icon_expose";
-                public override int TempoCost { get; set; } = 2;
+                public override int TempoCost { get; set; } = 1;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
                     new (TargetType.Single) {
@@ -150,8 +152,13 @@ namespace Combat {
                         User.AddBonus(new (this, Stat.Hit, -Level));
 
                         CombatEvents.BeforeAttack.Always(before_attack_handler = async attack => {
-                            if (attack.Target.Combatant == User) {
+                            if (attack.Target.Combatant == User) { // TODO: this would still apply to swaps...
                                 attack.Bonuses.Add(new (this, Stat.Hit, Level));
+                                attack.Bonuses.Add(new (this, Stat.Crit, Level));
+                            }
+
+                            if (attack.Attacker == User) {
+                                attack.Bonuses.Add(new (this, Stat.Hit, -Level));
                             }
                         });
                     }

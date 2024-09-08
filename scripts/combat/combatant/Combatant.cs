@@ -27,9 +27,6 @@ namespace Combat {
         public CombatantNode Node;
 
         public Combatant () {
-            Node = new () { Name = Name };
-            Animator = Node.Animator;
-
             StatBonuses = new ();
             foreach (Stat stat in Enum.GetValues(typeof(Stat))) {
                 StatBonuses.Add(stat, new ());

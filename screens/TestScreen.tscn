@@ -1,0 +1,50 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2fyhkk1u04wt"]
+
+[ext_resource type="Script" path="res://screens/TestScreen.cs" id="1_clqby"]
+[ext_resource type="PackedScene" uid="uid://c8impj2vemvl" path="res://TestBattle.tscn" id="2_saagi"]
+
+[node name="TestScreen" type="Node2D" node_paths=PackedStringArray("ButtonContainer", "Random", "Balanced", "Ghoul")]
+script = ExtResource("1_clqby")
+BattleScene = ExtResource("2_saagi")
+ButtonContainer = NodePath("CanvasLayer/Control/CenterContainer/VBoxContainer")
+Random = NodePath("CanvasLayer/Control/CenterContainer/VBoxContainer/Button")
+Balanced = NodePath("CanvasLayer/Control/CenterContainer/VBoxContainer/Button2")
+Ghoul = NodePath("CanvasLayer/Control/CenterContainer/VBoxContainer/Button3")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/CenterContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Random"
+
+[node name="Button2" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Balanced"
+
+[node name="Button3" type="Button" parent="CanvasLayer/Control/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Ghouls"

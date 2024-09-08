@@ -76,6 +76,8 @@ namespace Combat {
 
                 public override int TempoCost { get; set; } = 2;
 
+                public override int AttackCount => 3;
+                public override float AttackDelayMultiplier => 1/8f;
                 public override Attack BaseAttack => new Attack () {
                     ParryNegation = 10,
                     DodgeNegation = 6,
@@ -84,6 +86,7 @@ namespace Combat {
                     Sprite = User.Animations.Throw,
                     MoveToMeleeDistance = false,
                     IsMelee = false,
+                    StatusEffect = new LagCut (1),
                 };
 
                 public new Oda User => base.User as Oda;
@@ -108,7 +111,7 @@ namespace Combat {
                     },
                 };
 
-                public override async Task Run () {
+                /* public override async Task Run () {
                     var hit_combatants = new Dictionary<int, Combatant> ();
 
                     foreach (var target in Targets) {
@@ -122,7 +125,7 @@ namespace Combat {
                     foreach (var combatant in hit_combatants.Values) {
                         combatant.AddStatusEffect(new LagCut (1));
                     }
-                }
+                } */
             }
             public class Release : CombatAction {
                 public override string Name => "Release";

@@ -22,6 +22,8 @@ namespace Combat {
             }
 
             Battle.Combatants.ForEach(combatant => combatant.Node.Scale = new Vector2(current.combatant_scale, current.combatant_scale));
+            recalculate_side(Side.Left);
+            recalculate_side(Side.Right);
         }
 
         public static Vector2 GetWorldPosition (CombatPosition position) {
