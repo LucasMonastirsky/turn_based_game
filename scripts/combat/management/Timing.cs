@@ -9,7 +9,7 @@ namespace Combat {
         public static async Task Delay (float multiplier = 1) {
             Dev.Log(Dev.Tags.Timing, "Delay");
             if (MANUAL_DELAY) await AsyncInput.Continue.Wait();
-            else await Task.Delay((int) (DelayUnit * multiplier));
+            await Task.Delay((int) (DelayUnit * multiplier));
         }
     }
 }

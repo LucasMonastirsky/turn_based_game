@@ -147,7 +147,7 @@ namespace Combat {
 
                     while (enemies.Count > 0) {
                         foreach (var enemy in enemies.ToList()) {
-                            User.SendDamage(enemy, 3, 0.33f, roll_crit: true);
+                            User.SendDamage(enemy, 3, 0.33f);
                             
                             var effect = enemy.GetStatusEffect<LagCut>();
 

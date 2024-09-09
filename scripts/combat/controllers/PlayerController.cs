@@ -7,7 +7,6 @@ public class PlayerController : Controller {
 	private int a = 0;
 
 	public override async Task<CombatAction> RequestAction () {
-		Dev.Log($"Requested action {a} {this.GetHashCode()}");
 		RequestActionCompletionSource = new ();
 		
 		ActionDisplay.RequestAction(this.Combatant);
@@ -16,7 +15,6 @@ public class PlayerController : Controller {
 	}
 
 	public override void DeliverAction (CombatAction action) {
-		Dev.Log($"Delivered action {a} {this.GetHashCode()}");
 		RequestActionCompletionSource.SetResult(action);
 	}
 

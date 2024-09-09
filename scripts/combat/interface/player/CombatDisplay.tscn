@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/CombatDisplay.cs" id="1_nssrw"]
 [ext_resource type="PackedScene" uid="uid://cnlxxooonoceh" path="res://scripts/combat/interface/player/action_display/ActionDisplay.tscn" id="2_3ocpw"]
-[ext_resource type="PackedScene" uid="uid://bcfrnqly5pa20" path="res://scripts/combat/interface/player/round_display/RoundDisplay.tscn" id="3_on2ui"]
+[ext_resource type="PackedScene" uid="uid://dasu0n4kga3ih" path="res://scripts/combat/interface/player/round_display/RoundDisplay.tscn" id="3_on2ui"]
 
 [node name="CombatDisplay" type="Control"]
 layout_mode = 3

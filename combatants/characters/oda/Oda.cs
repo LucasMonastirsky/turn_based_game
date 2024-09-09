@@ -31,7 +31,7 @@ namespace Combat {
             }
 
             if (!attack_result.Attack.IsMelee && attack_result.Parried) { // todo: make an action for this
-                SendDamage(attack_result.Attacker, 5, 0, is_crit: false); // TODO: do this properly
+                InteractionManager.AddQueueEvent(async () => SendDamage(attack_result.Attacker, 5, 0, is_crit: false)); // TODO: do this properly
             }
 
             return null;

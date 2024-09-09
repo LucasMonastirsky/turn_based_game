@@ -14,7 +14,7 @@ public partial class RoundDisplay : Control {
 	}
 
 	public override void _EnterTree () {
-		var children = GetChildren()[0].GetChildren();
+		var children = GetChildren()[0].GetChildren()[0].GetChildren();
 
 		Icons = children.Where(child => child is RoundDisplayIcon).Select(child => child as RoundDisplayIcon).ToList();
 		SwapButtons = children.Where(child => child is RoundDisplaySwapButton).Select(child => child as RoundDisplaySwapButton).ToList();

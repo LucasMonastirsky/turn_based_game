@@ -43,7 +43,6 @@ namespace Combat {
 
         public override void _EnterTree () {
             Button.Pressed += () => {
-                Dev.Log($"Pressed button while disabled == {Disabled}");
                 if (!Disabled) Action.RequestBind();
             };
         }

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2kp002hv4cfo"]
+
+[ext_resource type="Script" path="res://scripts/combat/interface/player/round_display/roll_display/RollDisplay.cs" id="1_67xks"]
+
+[node name="RollDisplay" type="CenterContainer" node_paths=PackedStringArray("LabelContainer")]
+script = ExtResource("1_67xks")
+LabelContainer = NodePath("RollDisplayLabelContainer")
+
+[node name="RollDisplayLabelContainer" type="VBoxContainer" parent="."]
+layout_mode = 2

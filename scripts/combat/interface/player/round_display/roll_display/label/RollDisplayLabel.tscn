@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c27lvabvf20op"]
+
+[node name="RollDisplayLabel" type="Label"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+text = "Combatant rolled Stat 10 (8 + 2)"

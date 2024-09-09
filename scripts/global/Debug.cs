@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Development {
     public static class Dev {
-        public static bool LogAll = true;
+        public static bool LogAll = false;
         public static bool IsActive = true;
         public static bool LogTags = true;
         public static bool LogColor = false;

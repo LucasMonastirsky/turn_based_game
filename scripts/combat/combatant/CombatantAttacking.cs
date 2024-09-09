@@ -27,6 +27,8 @@ namespace Combat {
         }
 
         public async Task<AttackResult> SendAttack (Targetable targetable, Attack attack, Func<AttackResult, Task> handler = null) {
+            RollDisplay.Clear();
+
             attack.Attacker = this;
             attack.Target = targetable.ToTarget();
 
@@ -37,8 +39,12 @@ namespace Combat {
 
             var result = attack.Target.Combatant.ReceiveAttack(this, attack);
 
-            if (result.Hit && !result.IsCrit && Roll(Dice.D20.Plus(attack.CritBonus), Stat.Crit, attack.Bonuses) > 20) {
-                result.IsCrit = true;
+            if (result.Hit && !result.IsCrit) {
+                var crit_roll = Roll(Dice.D20.Plus(attack.CritBonus), Stat.Crit, attack.Bonuses);
+
+                RollDisplay.ShowRoll(crit_roll, 20);
+
+                if (crit_roll.Total >= 20) result.IsCrit = true;
             }
 
             if (attack.OnResult != null) attack.OnResult(result);
@@ -48,7 +54,6 @@ namespace Combat {
 
             if (result.Hit) {
                 if (result.IsCrit) {
-                    Play(CommonSounds.Crit);
                     attack.DamageAmount *= attack.CritMultiplier;
                 }
 
@@ -66,10 +71,16 @@ namespace Combat {
             return TurnManager.LastAttack = result;
         }
         public AttackResult ReceiveAttack (Combatant attacker, Attack attack) {
-            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus), Stat.Hit, attack.Bonuses);
+            var can_parry = attack.CanBeParried && !IsDead && CanParry;
+            var can_dodge = attack.CanBeDodged && !IsDead && CanMove && CanDodge;
 
-            var parry_roll = (!attack.CanBeParried || IsDead || !CanParry) ? 0 : Roll(Dice.D10, Stat.Parry);
-            var dodge_roll = (!attack.CanBeDodged || IsDead || !CanMove || !CanDodge) ? 0 : Roll(Dice.D10, Stat.Dodge);
+            var hit_roll = attacker.Roll(Dice.D10.Plus(attack.HitBonus), Stat.Hit, attack.Bonuses);
+            var parry_roll = !can_parry ? RollResult.AutoFail : Roll(Dice.D10, Stat.Parry);
+            var dodge_roll = !can_dodge ? RollResult.AutoFail : Roll(Dice.D10, Stat.Dodge);
+
+            RollDisplay.ShowRoll(hit_roll);
+            RollDisplay.ShowRoll(parry_roll, attack.ParryNegation + hit_roll.Total);
+            RollDisplay.ShowRoll(dodge_roll, attack.DodgeNegation + hit_roll.Total);
 
             var result = new AttackResult {
                 Attack = attack,
@@ -90,9 +101,8 @@ namespace Combat {
                 DamageLabel.Instantiate(this, "Miss");
             }
 
-            var anti_parry = result.HitRoll + result.ParryNegation;
-            var anti_dodge = result.HitRoll + result.DodgeNegation;
-            Dev.Log(Dev.Tags.Combat, $"{result} P{result.ParryRoll}/{anti_parry} D{result.DodgeRoll}/{anti_dodge}");
+            var anti_parry = result.HitRoll.Total + result.ParryNegation;
+            var anti_dodge = result.HitRoll.Total + result.DodgeNegation;
 
             return result;
         }

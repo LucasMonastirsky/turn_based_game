@@ -6,7 +6,7 @@ using Utils;
 
 namespace Combat {
     public partial class Combatant {
-        public int Roll (DiceRoll dice_roll, Stat stat, List<Bonus> bonuses = null) {
+        public RollResult Roll (DiceRoll dice_roll, Stat stat, List<Bonus> bonuses = null) {
             var bonus = dice_roll.Bonus;
             var advantage = dice_roll.Advantage;
 
@@ -45,7 +45,7 @@ namespace Combat {
                 if (mod.Temporary) RemoveRollModifier(mod);
             }
 
-            return total;
+            return new RollResult { Combatant = this, Stat = stat, Total = total, DiceValue = rolls[0], Bonus = bonus };
         }
 
         public RollModifier AddRollModifier (RollModifier roll_modifier) {

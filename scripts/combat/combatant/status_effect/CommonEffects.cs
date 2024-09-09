@@ -22,7 +22,7 @@ namespace Combat {
 
         public override void Tick () {
             InteractionManager.AddQueueEvent(async () => {
-                User.Damage(new Damage () {
+                User.ReceiveDamage(new Damage () {
                     Amount = Level--,
                 });
 
@@ -42,7 +42,7 @@ namespace Combat {
 
         public override void Tick () {
             InteractionManager.AddQueueEvent(async () => {
-                User.Damage(new Damage () {
+                User.ReceiveDamage(new Damage () {
                     Amount = Level,
                 });
 

@@ -28,7 +28,6 @@ namespace Combat {
 
                 while (!ActiveCombatant.IsDead) {
                     if (ActiveCombatant.Tempo < 1 || IsPassQueued) {
-                        await Timing.Delay();
                         break;
                     }
 

@@ -9,7 +9,7 @@ namespace Combat {
 
             public RoundItem (Combatant combatant) {
                 Combatant = combatant;
-                Priority = combatant.Roll(Dice.D10, Stat.Initiative);
+                Priority = combatant.Roll(Dice.D10, Stat.Initiative).Total;
             }
         }
 

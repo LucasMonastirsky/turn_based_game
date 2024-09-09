@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bcfrnqly5pa20"]
+[gd_scene load_steps=5 format=3 uid="uid://dasu0n4kga3ih"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/round_display/RoundDisplay.cs" id="1_08tnb"]
 [ext_resource type="PackedScene" uid="uid://u58gb7725qyu" path="res://scripts/combat/interface/player/round_display/icon/RoundDisplaySwapButton.tscn" id="2_up7db"]
 [ext_resource type="PackedScene" uid="uid://b5rl4ae3p3jon" path="res://scripts/combat/interface/player/round_display/icon/RoundDisplayIcon.tscn" id="2_xhktk"]
+[ext_resource type="PackedScene" uid="uid://c2kp002hv4cfo" path="res://scripts/combat/interface/player/round_display/roll_display/RollDisplay.tscn" id="4_wthc0"]
 
 [node name="RoundDisplay" type="Control"]
 layout_mode = 3
@@ -13,67 +14,73 @@ rotation = 0.00221778
 size_flags_horizontal = 3
 script = ExtResource("1_08tnb")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 82.0
+offset_bottom = 4.0
 grow_horizontal = 2
 
-[node name="RoundDisplayIcon0" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RoundDisplayIcon0" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 expand_mode = 4
 
-[node name="RoundDisplaySwapButton0" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton0" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon1" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon1" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton1" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton1" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon2" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton2" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton2" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon3" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton3" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton3" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon4" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton4" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton4" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon5" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon5" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton5" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton5" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon6" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon6" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton6" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton6" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon7" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon7" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton7" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton7" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon8" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon8" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
 layout_mode = 2
 
-[node name="RoundDisplaySwapButton8" parent="HBoxContainer" instance=ExtResource("2_up7db")]
+[node name="RoundDisplaySwapButton8" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_up7db")]
 layout_mode = 2
 
-[node name="RoundDisplayIcon9" parent="HBoxContainer" instance=ExtResource("2_xhktk")]
+[node name="RoundDisplayIcon9" parent="VBoxContainer/HBoxContainer" instance=ExtResource("2_xhktk")]
+layout_mode = 2
+
+[node name="RollDisplay" parent="VBoxContainer" instance=ExtResource("4_wthc0")]
 layout_mode = 2

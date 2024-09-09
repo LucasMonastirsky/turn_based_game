@@ -10,10 +10,8 @@ namespace Combat {
         }
 
         public Damage SendDamage (
-            Combatant receiver, int value, float deviation, bool is_crit = false, bool is_direct = true, bool roll_crit = false
+            Combatant receiver, int value, float deviation, bool is_crit = false, bool is_direct = true
         ) {
-            if (roll_crit) is_crit = Roll(Dice.D20, Stat.Crit) > 20;
-
             var rolled_amount = RNG.Deviate(value, deviation) + DamageBonus;
 
             var damage = new Damage () {
@@ -21,10 +19,10 @@ namespace Combat {
                 Sender = this, Receiver = receiver,
             };
 
-            return receiver.Damage(damage);
+            return receiver.ReceiveDamage(damage);
         }
 
-        public Damage Damage (Damage damage) {
+        public Damage ReceiveDamage (Damage damage) {
             CombatEvents.BeforeDamage.Trigger(damage);
 
             var damage_amount = damage.Amount;
@@ -54,9 +52,9 @@ namespace Combat {
             }
 
             Animator.Play(Animations.Hurt);
-            // Play(CommonSounds.SwordWound);
-
+            if (damage.IsCrit) Play(CommonSounds.Crit);
             DamageLabel.Instantiate(this, $"{damage.Amount}");
+            
 
             CombatEvents.AfterDamage.Trigger(damage);
 
