@@ -4,7 +4,7 @@ namespace Combat {
             Type = TargetType.Single,
             Side = SideSelector.Opposite,
             Row = 0,
-            VerticalRange = 1,
+            VerticalRange = 2,
         };
     }
 }

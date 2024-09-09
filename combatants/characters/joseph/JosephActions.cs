@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 
 namespace Combat {
     public partial class Joseph {
-        public override List<CombatAction> ActionList => new () {
-            Actions.Swing, Actions.FlatStrike, Actions.ApplyTheory, Actions.Expose, Actions.Inspire, null, Actions.Move, Actions.Pass,
+        public override List<CombatAction> ActionList => Row == 0 ? new () {
+            Actions.Swing, Actions.FlatStrike, Actions.ButtEnd, Actions.ApplyTheory, Actions.Inspire, null, Actions.Move, Actions.Pass,
+        } : new () {
+            Actions.Expose, null, null, null, Actions.Inspire, null, Actions.Move, Actions.Pass,
         };
 
         public ActionStore Actions;
@@ -13,6 +15,7 @@ namespace Combat {
             public ActionClasses.Zornhau Swing;
             public ActionClasses.FlatStrike FlatStrike;
             public ActionClasses.ApplyTheory ApplyTheory;
+            public ActionClasses.ButtEnd ButtEnd;
             public ActionClasses.Expose Expose;
             public ActionClasses.Inspire Inspire;
 
@@ -26,7 +29,7 @@ namespace Combat {
             }
         }
 
-        public class ActionClasses {
+        public partial class ActionClasses {
             public class ApplyTheory : MeleeAction {
                 public override string Name => "Apply Theory";
                 public override string IconFileName => "icon_apply_theory";
@@ -83,6 +86,7 @@ namespace Combat {
                     ParryNegation = 7,
                     DodgeNegation = 4,
                     MoveToMeleeDistance = true,
+                    IsMelee = true,
                     DamageAmount = User.HalberdDamage,
                     Sprite = User.Animations.Swing,
                 };

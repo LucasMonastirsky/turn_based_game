@@ -26,7 +26,12 @@ namespace Combat {
                 IsPassQueued = false;
                 ActiveCombatant.OnTurnStart();
 
-                while (!ActiveCombatant.IsDead && ActiveCombatant.Tempo > 0 && !IsPassQueued) {
+                while (!ActiveCombatant.IsDead) {
+                    if (ActiveCombatant.Tempo < 1 || IsPassQueued) {
+                        await Timing.Delay();
+                        break;
+                    }
+
                     State = TurnState.Requesting;
                     Dev.Log(Dev.Tags.CombatManagement, $"Requesting action from {ActiveCombatant}");
 

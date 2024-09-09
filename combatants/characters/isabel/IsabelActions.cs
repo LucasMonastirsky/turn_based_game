@@ -40,6 +40,7 @@ namespace Combat {
                     IsMelee = true,
                     MoveToMeleeDistance = true,
                     Sprite = User.Animations.Swing,
+                    StatusEffect = new Bleeding (2),
                 };
 
                 public override int TempoCost { get; set; } = 2;
@@ -51,6 +52,8 @@ namespace Combat {
 
             public class Spree : MeleeAction {
                 public override string Name => "Spree";
+                public override string IconFileName => "icon_spree";
+
                 public override int TempoCost { get; set; } = 3;
 
                 public override Attack BaseAttack => new Attack () {
@@ -185,7 +188,7 @@ namespace Combat {
                     public override void OnApplied () {
                         CombatEvents.AfterDamage.Always(after_damage_handler = async damage_instance => {
                             if (damage_instance.Sender == User && damage_instance.Amount > 0) {
-                                damage_instance.Receiver.AddStatusEffect(new Poisoned(3));
+                                damage_instance.Receiver.AddStatusEffect(new Poisoned(4));
                                 if (--Level < 1) Remove();
                             }
                         });

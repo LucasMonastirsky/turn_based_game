@@ -44,6 +44,7 @@ namespace Combat {
                 new Selector (TargetType.Position) {
                     Side = SideSelector.Same,
                     IsValidMovement = true,
+                    VerticalRange = 2,
                 },
             };
 

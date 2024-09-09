@@ -13,7 +13,6 @@ namespace Combat {
                         LoadSprite("idle_1"),
                     }
                 },
-                Dead = LoadSprite("dead"),
                 Hurt = LoadSprite("hurt"),
                 Spew = LoadSprite("spew"),
                 Charge = LoadSprite("charge"),

@@ -1,10 +1,9 @@
 using Combat;
-using Development;
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
-public partial class RoundDisplay : HBoxContainer {
+public partial class RoundDisplay : Control {
 	private static RoundDisplay Current;
 
 	private List<RoundDisplayIcon> Icons;
@@ -15,11 +14,7 @@ public partial class RoundDisplay : HBoxContainer {
 	}
 
 	public override void _EnterTree () {
-		var children = GetChildren();
-
-		foreach (var child in children) {
-			Dev.Log($"{child.Name}: {child is RoundDisplayIcon}/{child is RoundDisplaySwapButton}");
-		}
+		var children = GetChildren()[0].GetChildren();
 
 		Icons = children.Where(child => child is RoundDisplayIcon).Select(child => child as RoundDisplayIcon).ToList();
 		SwapButtons = children.Where(child => child is RoundDisplaySwapButton).Select(child => child as RoundDisplaySwapButton).ToList();

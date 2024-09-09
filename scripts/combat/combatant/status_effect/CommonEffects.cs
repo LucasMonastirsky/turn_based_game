@@ -15,12 +15,10 @@ namespace Combat {
         }
     }
 
-    public class Poisoned : StatusEffect {
-        public override string Name => "Poison";
+    public class Bleeding : StackableEffect {
+        public override string Name => "Bleeding";
 
-        public Poisoned (int duration) {
-            Level = duration;
-        }
+        public Bleeding (int level) : base (level) {}
 
         public override void Tick () {
             InteractionManager.AddQueueEvent(async () => {
@@ -31,6 +29,27 @@ namespace Combat {
                 if (Level <= 0) {
                     User.RemoveStatusEffect(Name);
                 }
+            });
+        }
+    }
+
+    public class Poisoned : StatusEffect {
+        public override string Name => "Poison";
+
+        public Poisoned (int duration) {
+            Level = duration;
+        }
+
+        public override void Tick () {
+            InteractionManager.AddQueueEvent(async () => {
+                User.Damage(new Damage () {
+                    Amount = Level,
+                });
+
+                if (Level <= 1) {
+                    User.RemoveStatusEffect(Name);
+                }
+                else Level = Level / 2;
             });
         }
     }

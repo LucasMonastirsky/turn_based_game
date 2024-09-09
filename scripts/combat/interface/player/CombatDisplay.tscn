@@ -13,8 +13,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nssrw")
 
-[node name="ActionDisplay" parent="." instance=ExtResource("2_3ocpw")]
+[node name="RoundDisplay" parent="." instance=ExtResource("3_on2ui")]
 layout_mode = 1
 
-[node name="RoundDisplay" parent="." instance=ExtResource("3_on2ui")]
+[node name="ActionDisplay" parent="." instance=ExtResource("2_3ocpw")]
 layout_mode = 1

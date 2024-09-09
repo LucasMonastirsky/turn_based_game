@@ -21,7 +21,6 @@ namespace Combat {
                 Hurt = LoadSprite("hurt"),
                 Parry = LoadSprite("parry"),
                 Dodge = LoadSprite("dodge"),
-                Dead = LoadSprite("dead"),
                 Peck = LoadSprite("peck"),
                 Screech = LoadSprite("screech"),
             };

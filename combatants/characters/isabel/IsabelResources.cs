@@ -22,7 +22,6 @@ namespace Combat {
                 Hurt = LoadSprite("hurt"),
                 Parry = LoadSprite("parry"),
                 Dodge = LoadSprite("dodge"),
-                Dead = LoadSprite("dead"),
                 Swing = LoadSprite("swing"),
                 Teleport = LoadSprite("teleport"),
                 Jutsu = LoadSprite("jutsu"),

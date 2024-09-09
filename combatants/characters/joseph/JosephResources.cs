@@ -10,6 +10,7 @@ namespace Combat {
             public SimpleSprite BigSwing { get; set; }
             public SimpleSprite Stab { get; set; }
             public SimpleSprite Point { get; set; }
+            public SimpleSprite ButtEnd { get; set; }
         }
 
         protected override void LoadSprites () {
@@ -23,11 +24,11 @@ namespace Combat {
                 Hurt = LoadSprite("hurt"),
                 Parry = LoadSprite("parry"),
                 Dodge = LoadSprite("dodge"),
-                Dead = LoadSprite("dead"),
                 Swing = LoadSprite("swing"),
                 BigSwing = LoadSprite("big_swing"),
                 Stab = LoadSprite("stab"),
                 Point = LoadSprite("point"),
+                ButtEnd = LoadSprite("buttend"),
             };
         }
     }
