@@ -57,7 +57,7 @@ namespace Combat {
                     attack.DamageAmount *= attack.CritMultiplier;
                 }
 
-                result.DamageDone = SendDamage(result.Defender, attack.DamageAmount, attack.DamageDeviation, attack.IsCrit).TotalDealt;
+                result.DamageDone = SendDamage(result.Defender, attack.DamageAmount, attack.DamageDeviation, result.IsCrit).TotalDealt;
                 if (result.DamageDone > 0) {
                     Play(attack.HitSound ?? CommonSounds.SwordWound);
                     result.Defender.AddStatusEffect(attack.StatusEffect);
@@ -100,9 +100,6 @@ namespace Combat {
                 if (Health > 0) Play(Animations.Idle);
                 DamageLabel.Instantiate(this, "Miss");
             }
-
-            var anti_parry = result.HitRoll.Total + result.ParryNegation;
-            var anti_dodge = result.HitRoll.Total + result.DodgeNegation;
 
             return result;
         }

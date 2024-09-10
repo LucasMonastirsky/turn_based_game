@@ -14,15 +14,15 @@ namespace Combat {
             _animations = new () {
                 Idle = new () {
                     Sprites = new [] {
-                        LoadSprite("idle_0"),
-                        LoadSprite("idle_1"),
+                        LoadSprite("idle_0", new (0, -10)),
+                        LoadSprite("idle_1", new (0, -10)),
                     },
                 },
-                Hurt = LoadSprite("hurt"),
-                Parry = LoadSprite("parry"),
-                Dodge = LoadSprite("dodge"),
-                Peck = LoadSprite("peck"),
-                Screech = LoadSprite("screech"),
+                Hurt = LoadSprite("hurt", new (0, -10)),
+                Parry = LoadSprite("parry", new (0, -10)),
+                Dodge = LoadSprite("dodge", new (0, -10)),
+                Peck = LoadSprite("peck", new (0, -10)),
+                Screech = LoadSprite("screech", new (0, -10)),
             };
         }
     }

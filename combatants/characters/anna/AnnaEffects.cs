@@ -6,6 +6,8 @@ namespace Combat {
     public partial class Anna {
         public class LockedOn : StatusEffect {
             public override string Name => "Locked-On";
+            public override string IconFilePath => "res://combatants/characters/anna/resources/icons/effects/icon_locked_on.png";
+
             public Anna Caster;
 
             public LockedOn (Anna caster) {
@@ -83,6 +85,7 @@ namespace Combat {
     
         public class Overwatch : StatusEffect {
             public override string Name => "Overwatch";
+            public override string IconFilePath => "res://combatants/characters/anna/resources/icons/effects/icon_guarding.png";
 
             public new Anna User => base.User as Anna;
 

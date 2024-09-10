@@ -15,7 +15,7 @@ namespace Combat {
 
             BaseDamageBonus = 2;
             BaseHitBonus = 6;
-            BaseCritBonus = 2;
+            BaseCritBonus = 1;
             BaseParryBonus = 6;
             BaseDodgeBonus = 3;
 

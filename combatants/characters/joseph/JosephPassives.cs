@@ -29,6 +29,7 @@ namespace Combat {
                         });
 
                         await Timing.Delay();
+                        User.Play(User.Animations.Idle);
                         await User.ReturnToPosition();
                     } 
                 });
@@ -62,6 +63,7 @@ namespace Combat {
 
         public class Studied : StackableEffect {
             public override string Name => "Studied";
+            public override string IconFilePath => "res://combatants/characters/joseph/resources/icons/effects/icon_studied.png";
 
             public Combatant Caster;
 
@@ -86,6 +88,7 @@ namespace Combat {
 
             public override void OnRemoved () {
                 CombatEvents.BeforeAttack.Remove(before_attack_handler);
+                User.Enemies.ForEach(enemy => enemy.RemoveStatusEffectIf<Studied>(effect => effect.Caster == User));
             }
         }
     }

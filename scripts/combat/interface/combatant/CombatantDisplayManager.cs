@@ -3,15 +3,24 @@ using Combat;
 using Godot;
 
 public partial class CombatantDisplayManager : Node {
+	[Export] PackedScene DisplayScene;
+
 	private static CombatantDisplayManager instance;
 	private static List<CombatantDisplay> displays = new ();
+
+	public static CombatantDisplayManager Current;
+
+	public CombatantDisplayManager () {
+		Current = this;
+	}
 
 	public override void _Ready () {
 		instance = this;
 	}
 
 	public static CombatantDisplay CreateDisplay (Combatant combatant) {
-		var display = new CombatantDisplay () { User = combatant };
+		var display = Current.DisplayScene.Instantiate<CombatantDisplay> ();
+		display.User = combatant;
 		instance.AddChild(display);
 		displays.Add(display);
 		return display;

@@ -1,58 +1,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using Combat;
+using Development;
 using Godot;
+using ResourceHelpers;
 
-public partial class CombatantDisplay : Node2D {
-    public Combatant User;
+public partial class CombatantDisplay : Control {
+	[Export] Label MainLabel;
+	[Export] Container EffectIconContainer;
+	[Export] PackedScene EffectIconScene;
 
-    private List<Label> labels = new ();
+	private Dictionary<StatusEffect, TextureRect> Icons = new ();
 
-    private Label LabelHealth, LabelTempo;
-    private Dictionary<string, Label> EffectLabels = new ();
+	public Combatant User;
 
-    public void AddStatusEffect (StatusEffect effect) {
-        var label = new Label {
-            Text = effect.Name,
-            Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 20 * (EffectLabels.Count + 1), },
-            Scale = new Vector2 { X = 1f, Y = 1f },
-        };
-        AddChild(label);
-        EffectLabels.TryAdd(effect.Name, label);
-    }
+	public void AddStatusEffect (StatusEffect effect) {
+		var icon = EffectIconScene.Instantiate<CombatantDisplayEffectIcon> ();
+		icon.Effect = effect;
+		EffectIconContainer.AddChild(icon);
+		Icons[effect] = icon;
+	}
 
-    public void RemoveStatusEffect (StatusEffect effect) {
-        if (EffectLabels.ContainsKey(effect.Name)) {
-            EffectLabels[effect.Name].QueueFree();
-            EffectLabels.Remove(effect.Name);
+	public void RemoveStatusEffect (StatusEffect effect) {
+		Icons[effect].QueueFree();
+		Icons.Remove(effect);
+	}
 
-            var effect_label_list = EffectLabels.Values.ToList();
-            for (var i = 0; i < effect_label_list.Count(); i++) {
-                effect_label_list[i].Position = LabelHealth.Position with { Y = LabelHealth.Position.Y + 10 * (i + 1) };
-            }
-        }
-    }
+	public override void _Process (double delta) {
+		var health = User.ExtraHealth > 0 ? $"{User.Health}+{User.ExtraHealth}" : $"{User.Health}";
+		MainLabel.Text = $"{User.Name} {health}/{User.MaxHealth} ({User.Tempo}T)";
 
-    public override void _Ready () {
-        var health_label = new Label {
-            Position = new Vector2 { X = 0, Y = -75, },
-        };
-
-        AddChild(health_label);
-        LabelHealth = health_label;
-        labels.Add(health_label);
-    }
-
-    public override void _Process (double delta) {
-        var health = User.ExtraHealth > 0 ? $"{User.Health}+{User.ExtraHealth}" : $"{User.Health}";
-        LabelHealth.Text = $"{User.Name} {health}/{User.MaxHealth} ({User.Tempo}T) {User.HitBonus}";
-
-        var position = Positioner.GetWorldPosition(User.Position);
-        Position = position with { Y = position.Y - 75, X = position.X - 40 };
-
-        foreach (var kvp in EffectLabels) {
-            kvp.Value.Text = User.StatusEffects.Find(x => x.Name == kvp.Key)?.ToString();
-        }
-    }
+		var position = Positioner.GetWorldPosition(User.Position);
+		Position = position with { Y = position.Y - User.Node.Animator.Height * User.Node.Scale.Y - 20 };
+	}
 
 }

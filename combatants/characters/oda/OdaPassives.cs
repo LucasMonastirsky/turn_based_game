@@ -32,6 +32,7 @@ namespace Combat {
 
         public class Sheathed : StatusEffect {
             public override string Name => "Sheathed";
+            public override string IconFilePath => "res://combatants/characters/oda/resources/icons/effects/icon_sheathed.png";
 
             private Func<Attack, Task> before_attack_handler;
             private Func<AttackResult, Task> after_attack_handler;

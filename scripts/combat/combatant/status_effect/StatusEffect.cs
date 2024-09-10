@@ -5,6 +5,7 @@ namespace Combat {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }
+        public virtual string IconFilePath => null;
 
         public virtual bool Decays { get; set; } = false;
         public virtual bool Stackable { get; protected set; } = false;

@@ -5,6 +5,7 @@ namespace Combat {
     public partial class Lara {
         public class Rage : StatusEffect {
             public override string Name => "Rage";
+            public override string IconFilePath => "res://combatants/characters/lara/resources/icons/effects/icon_enraged.png";
 
             public override bool Stackable => true;
 

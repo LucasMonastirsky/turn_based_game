@@ -151,7 +151,7 @@ namespace Combat {
                         if (i < step_count - 1) await Timing.Delay((float) 1/step_count);
                     }
 
-                    var effect = User.GetStatusEffect<BulletsEffect>() ?? User.AddStatusEffect(new BulletsEffect (0));
+                    var effect = User.GetStatusEffect<Loaded>() ?? User.AddStatusEffect(new Loaded (0));
                     effect.Level += Amount;
 
                     if (effect.Level > User.MaxBullets) effect.Level = User.MaxBullets;

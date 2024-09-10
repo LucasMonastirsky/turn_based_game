@@ -52,8 +52,10 @@ namespace Combat {
             }
 
             Animator.Play(Animations.Hurt);
-            if (damage.IsCrit) Play(CommonSounds.Crit);
-            DamageLabel.Instantiate(this, $"{damage.Amount}");
+            if (damage.IsCrit) {
+                Play(CommonSounds.Crit);
+            }
+            DamageLabel.Instantiate(this, $"{damage.Amount}{(damage.IsCrit ? "!" : "")}");
             
 
             CombatEvents.AfterDamage.Trigger(damage);

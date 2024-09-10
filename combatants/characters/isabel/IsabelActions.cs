@@ -179,7 +179,8 @@ namespace Combat {
                 }
 
                 public class Imbued : StackableEffect {
-                    public override string Name => "Imbued (Poison)";
+                    public override string Name => "Imbued";
+                    public override string IconFilePath => "res://combatants/characters/isabel/resources/icons/effects/icon_imbued.png";
 
                     private Func<Damage, Task> after_damage_handler;
 

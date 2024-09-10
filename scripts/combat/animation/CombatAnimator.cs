@@ -29,6 +29,8 @@ namespace Combat {
 		private double elapsed_time;
 		private int frame_index;
 
+		public float Height => Texture?.GetSize().Y ?? 0;
+
 		private void SetSprite (SimpleSprite sprite) {
 			if (sprite == null) {
                 Dev.Error($"Null sprite in animator");
@@ -36,7 +38,7 @@ namespace Combat {
 			}
 
 			Texture = sprite.Texture;
-			Position = sprite.Offset;
+			Position = sprite.Offset with { Y = sprite.Offset.Y - sprite.Texture.GetSize().Y / 2};
 		}
 
 		public void SetInvisible () {
@@ -52,12 +54,17 @@ namespace Combat {
 		public void Play (SimpleAnimation animation) {
 			if (animation == current_animation) return;
 
+			SetSprite(animation.Sprites[0]);
 			current_animation = animation;
 			elapsed_time = 0;
 			frame_index = 0;
 		}
 
 		public override void _Process (double delta) {
+			if (Input.IsActionJustPressed("Test1")) {
+				Dev.Log($"{Texture.GetSize()}");
+			}
+
 			if (current_animation == null) return;
 
 			elapsed_time += delta;

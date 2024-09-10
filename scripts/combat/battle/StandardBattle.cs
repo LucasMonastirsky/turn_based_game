@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 namespace Combat {
 	public partial class StandardBattle : BattleNode {

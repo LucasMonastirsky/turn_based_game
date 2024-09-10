@@ -104,8 +104,7 @@ namespace Combat {
 
                 public override Attack BaseAttack => new () {
                     ParryNegation = 5,
-                    DodgeNegation = 7,
-                    CritBonus = 5,
+                    DodgeNegation = 2,
                     MoveToMeleeDistance = true,
                     DamageAmount = 4,
                     DamageDeviation = Deviation.Low,
@@ -147,6 +146,7 @@ namespace Combat {
 
                 public class Exposed : StackableEffect {
                     public override string Name => "Exposed";
+                    public override string IconFilePath => "res://combatants/characters/joseph/resources/icons/effects/icon_exposed.png";
 
                     private Func<Attack, Task> before_attack_handler;
 

@@ -11,7 +11,7 @@ namespace Combat {
         public override Type DefaultControllerType => typeof (PlayerController);
 
         public int MaxBullets = 6;
-        public int Bullets => GetStatusEffect<BulletsEffect>()?.Level ?? 0;
+        public int Bullets => GetStatusEffect<Loaded>()?.Level ?? 0;
 
         public bool IsLockedOn => Enemies.Any(enemy => enemy.GetStatusEffect<LockedOn>()?.Caster == this);
         public Combatant LockedOnTarget => Enemies.Where(enemy => enemy.GetStatusEffect<LockedOn>()?.Caster == this).FirstOrDefault();
@@ -19,7 +19,7 @@ namespace Combat {
         private void SpendBullet () {
             if (Bullets < 1) Dev.Error("Tried to spend bullets without any");
 
-            GetStatusEffect<BulletsEffect>().Level -= 1;
+            GetStatusEffect<Loaded>().Level -= 1;
         }
 
         public int BulletDamage = 6;
@@ -36,7 +36,7 @@ namespace Combat {
             BaseDodgeBonus = 3;
             BaseCritBonus = 1;
 
-            AddStatusEffect(new BulletsEffect (MaxBullets));
+            AddStatusEffect(new Loaded (MaxBullets));
 
             CombatEvents.BeforeAttack.Always(async (attack) => {
                 if (attack.Attacker == this && attack.IsCrit) {
@@ -69,10 +69,11 @@ namespace Combat {
             }
         }
 
-        public class BulletsEffect : StatusEffect {
-            public override string Name => "Bullets";
+        public class Loaded : StatusEffect {
+            public override string Name => "Loaded";
+            public override string IconFilePath => "res://combatants/characters/anna/resources/icons/effects/icon_loaded.png";
 
-            public BulletsEffect (int amount) {
+            public Loaded (int amount) {
                 Level = amount;
             }
         }

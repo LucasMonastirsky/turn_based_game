@@ -76,13 +76,13 @@ namespace Combat {
 
                 public override int TempoCost { get; set; } = 2;
 
-                public override int AttackCount => 3;
+                public override int AttackCount => Selectors.Count;
                 public override float AttackDelayMultiplier => 1/8f;
                 public override Attack BaseAttack => new Attack () {
                     ParryNegation = 10,
                     DodgeNegation = 6,
                     DamageAmount = User.ShurikenDamage,
-                    DamageDeviation = Deviation.High,
+                    DamageDeviation = Deviation.Mid,
                     Sprite = User.Animations.Throw,
                     MoveToMeleeDistance = false,
                     IsMelee = false,
@@ -111,21 +111,11 @@ namespace Combat {
                     },
                 };
 
-                /* public override async Task Run () {
-                    var hit_combatants = new Dictionary<int, Combatant> ();
-
-                    foreach (var target in Targets) {
-                        await User.SendAttack(target, BaseAttack, async result => {
-                            if (result.Hit) hit_combatants[result.Defender.Id] = result.Defender;
-                        });
-
-                        await Timing.Delay(1/6f);
+                public override async Task Run () {
+                    for (var i = 0; i < AttackCount; i++) {
+                        User.SendAttack(Targets[i], BaseAttack);
                     }
-
-                    foreach (var combatant in hit_combatants.Values) {
-                        combatant.AddStatusEffect(new LagCut (1));
-                    }
-                } */
+                }
             }
             public class Release : CombatAction {
                 public override string Name => "Release";

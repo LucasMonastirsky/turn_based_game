@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://bssr1x24nc633"]
+
+[ext_resource type="Texture2D" uid="uid://cqtvylkn5elyv" path="res://assets/textures/combat/status_effect_icons/icon_bleeding.png" id="1_u0xi3"]
+[ext_resource type="Script" path="res://scripts/combat/interface/combatant/label/CombatantDisplayEffectIcon.cs" id="2_in3m8"]
+
+[node name="CombatantDisplayEffectIcon" type="TextureRect" node_paths=PackedStringArray("LevelLabel", "NameLabel")]
+custom_minimum_size = Vector2(16, 16)
+offset_right = 16.0
+offset_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
+texture = ExtResource("1_u0xi3")
+expand_mode = 1
+stretch_mode = 4
+script = ExtResource("2_in3m8")
+LevelLabel = NodePath("LabelLevel")
+NameLabel = NodePath("LabelName")
+
+[node name="LabelLevel" type="Label" parent="."]
+custom_minimum_size = Vector2(0.155, 0)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+offset_right = 20.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 10
+text = "3"
+horizontal_alignment = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="LabelName" type="Label" parent="."]
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 164.0
+offset_bottom = 42.0
+text = "Status Effect Name"

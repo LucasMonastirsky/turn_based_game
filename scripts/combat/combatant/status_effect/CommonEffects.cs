@@ -17,6 +17,7 @@ namespace Combat {
 
     public class Bleeding : StackableEffect {
         public override string Name => "Bleeding";
+        public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_bleeding.png";
 
         public Bleeding (int level) : base (level) {}
 
@@ -35,6 +36,7 @@ namespace Combat {
 
     public class Poisoned : StatusEffect {
         public override string Name => "Poison";
+        public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_poisoned.png";
 
         public Poisoned (int duration) {
             Level = duration;
@@ -56,6 +58,7 @@ namespace Combat {
 
     public class Stunned : StatusEffect {
         public override string Name => "Stunned";
+        public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_stunned.png";
 
         private Func<Combatant, Task> before_turn_end_handler; 
 
@@ -69,12 +72,14 @@ namespace Combat {
         }
 
         public override void OnRemoved () {
+            CombatEvents.BeforeTurnEnd.Remove(before_turn_end_handler);
             User.RemoveBonusesFromSource(this);
         }
     }
 
     public class Hidden : StatusEffect {
         public override string Name => "Hidden";
+        public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_hidden.png";
 
         private Func<AttackResult, Task> after_attack_handler;
         private Func<CombatAction, Task> after_action_handler;

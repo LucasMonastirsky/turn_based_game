@@ -7,7 +7,13 @@ namespace Combat {
 
         public Texture2D Icon = null;
 
-        protected SimpleSprite LoadSprite (string name) => new SimpleSprite (resources_path, $"sprites/{name}");
+        protected SimpleSprite LoadSprite (string name, Vector2? offset = null) {
+            var sprite = new SimpleSprite (resources_path, $"sprites/{name}");
+
+            if (offset != null) sprite.Offset = (Vector2) offset;
+
+            return sprite;
+        }
         protected virtual void LoadSprites () {} // TODO: abstract this
 
         public void LoadResources () {
