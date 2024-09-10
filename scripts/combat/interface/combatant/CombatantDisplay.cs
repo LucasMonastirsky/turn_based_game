@@ -7,10 +7,12 @@ using ResourceHelpers;
 
 public partial class CombatantDisplay : Control {
 	[Export] Label MainLabel;
-	[Export] Container EffectIconContainer;
+	[Export] Container EffectIconContainer, TempoIconContainer;
 	[Export] PackedScene EffectIconScene;
+	[Export] Texture2D TempoIconTexture;
 
 	private Dictionary<StatusEffect, TextureRect> Icons = new ();
+	private List<TextureRect> TempoIcons = new ();
 
 	public Combatant User;
 
@@ -32,6 +34,24 @@ public partial class CombatantDisplay : Control {
 
 		var position = Positioner.GetWorldPosition(User.Position);
 		Position = position with { Y = position.Y - User.Node.Animator.Height * User.Node.Scale.Y - 20 };
+
+		if (User.Tempo != TempoIcons.Count) {
+			TempoIcons.ForEach(icon => icon.QueueFree());
+
+			TempoIcons = new ();
+
+			for (var i = 0; i < User.Tempo; i++) {
+				var icon = new TextureRect {
+					Texture = TempoIconTexture,
+					ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+					Size = new (16, 16),
+					Position = new (8 * i, 0),
+				};
+
+				TempoIconContainer.AddChild(icon);
+				TempoIcons.Add(icon);
+			}
+		}
 	}
 
 }

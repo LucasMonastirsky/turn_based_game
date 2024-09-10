@@ -113,7 +113,8 @@ namespace Combat {
 
                 public override async Task Run () {
                     for (var i = 0; i < AttackCount; i++) {
-                        User.SendAttack(Targets[i], BaseAttack);
+                        await User.SendAttack(Targets[i], BaseAttack);
+                        await Timing.Delay(1/6f);
                     }
                 }
             }
