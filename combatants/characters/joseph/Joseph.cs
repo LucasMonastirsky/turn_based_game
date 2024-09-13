@@ -11,7 +11,7 @@ namespace Combat {
         public Joseph () {
             Actions = new (this);
 
-            BaseMaxHealth = 20;
+            BaseMaxHealth = 50;
 
             BaseDamageBonus = 2;
             BaseHitBonus = 6;

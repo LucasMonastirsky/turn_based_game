@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Development;
-using static Dice;
 
 namespace Combat {
     public partial class Oda {
         public override List<CombatAction> ActionList => Row == 0 ? new () {
-            Actions.Swing, Actions.Kirin, null, null, null, null, Actions.Move, Actions.Pass,
+            Actions.Swing, Actions.Kirin, null, null, null, Actions.SmokeBomb, Actions.Move, Actions.Pass,
         } : new () {
-            Actions.Shuriken, Actions.Release, Actions.Substitution, null, null, null, Actions.Move, Actions.Pass,
+            Actions.Shuriken, Actions.Release, Actions.Substitution, null, null, Actions.SmokeBomb, Actions.Move, Actions.Pass,
         };
 
         public ActionStore Actions;
@@ -21,6 +19,7 @@ namespace Combat {
             public ActionClasses.Release Release;
             public ActionClasses.Substitution Substitution;
             public ActionClasses.Shuriken Shuriken;
+            public ActionClasses.SmokeBomb SmokeBomb;
 
             public CommonActions.Move Move;
             public CommonActions.Pass Pass;
@@ -32,7 +31,7 @@ namespace Combat {
             }
         }
 
-        public class ActionClasses {
+        public partial class ActionClasses {
             public class Swing : CombatAction {
                 public override string Name => "Swing";
                 public override string IconFileName => "icon_cut";

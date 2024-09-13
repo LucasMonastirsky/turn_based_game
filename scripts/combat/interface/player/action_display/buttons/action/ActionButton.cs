@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using Development;
 using Godot;
 
 namespace Combat {
@@ -45,6 +42,12 @@ namespace Combat {
             Button.Pressed += () => {
                 if (!Disabled) Action.RequestBind();
             };
+        }
+
+        public override void _Process (double delta) {
+            if (IsHovered && TurnManager.State == TurnManager.TurnState.Requesting) {
+                ActionDisplay.SetHoveredAction(Action);
+            }
         }
     }
 }

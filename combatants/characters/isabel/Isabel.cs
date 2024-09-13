@@ -9,7 +9,7 @@ namespace Combat {
         public Isabel () {
             Actions = new (this);
 
-            BaseMaxHealth = 20;
+            BaseMaxHealth = 30;
 
             BaseDamageBonus = 2;
             BaseHitBonus = 8;

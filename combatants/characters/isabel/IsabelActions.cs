@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Combat {
     public partial class Isabel {
         public override List<CombatAction> ActionList => new () {
-            Actions.Swing, Actions.Spree, Actions.BackStab, Actions.Poison, Actions.Hide, null, Actions.Move, Actions.Pass,
+            Actions.Swing, Actions.Spree, Actions.BackStab, Actions.ThrowingKnife, Actions.Poison, Actions.Hide, Actions.Move, Actions.Pass,
         };
 
         public ActionStore Actions;
@@ -15,6 +15,7 @@ namespace Combat {
             public ActionClasses.Spree Spree;
             public ActionClasses.Hide Hide;
             public ActionClasses.BackStab BackStab;
+            public ActionClasses.ThrowingKnife ThrowingKnife;
             public ActionClasses.Poison Poison;
 
             public CommonActions.Move Move;
@@ -163,6 +164,28 @@ namespace Combat {
                 }
             }
         
+            public class ThrowingKnife : AttackAction {
+                public override string Name => "Throwing Knife";
+                public override string IconFileName => "icon_throwing_knife";
+
+                public override int TempoCost { get; set; } = 1;
+
+                public override Attack BaseAttack => new () {
+                    ParryNegation = 8,
+                    DodgeNegation = 4,
+                    DamageAmount = 4,
+                    DamageDeviation = Deviation.High,
+                    IsRanged = true,
+                    Sprite = User.Animations.Swing,
+                };
+
+                public override List<Selector> Selectors => new () {
+                    new (TargetType.Single) { Side = SideSelector.Opposite, }
+                };
+
+                public new Isabel User => base.User as Isabel;
+                public ThrowingKnife (Isabel user) : base (user) {}
+            }
             public class Poison : CombatAction {
                 public override string Name => "Poison";
                 public override string IconFileName => "icon_poison";
@@ -189,7 +212,7 @@ namespace Combat {
                     public override void OnApplied () {
                         CombatEvents.AfterDamage.Always(after_damage_handler = async damage_instance => {
                             if (damage_instance.Sender == User && damage_instance.Amount > 0) {
-                                damage_instance.Receiver.AddStatusEffect(new Poisoned(4));
+                                damage_instance.Receiver.AddStatusEffect(new Poisoned(1));
                                 if (--Level < 1) Remove();
                             }
                         });

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cnlxxooonoceh"]
+[gd_scene load_steps=19 format=3 uid="uid://cnlxxooonoceh"]
 
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDisplay.cs" id="1_6uhtl"]
 [ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://bkdf0cq28kmo8" path="res://scripts/combat/interface/player/action_display/icons/icon_dodge_negation.png" id="10_oa5gh"]
 [ext_resource type="Texture2D" uid="uid://eusto0ta2f3f" path="res://scripts/combat/interface/player/action_display/icons/icon_dodge.png" id="10_ylfxd"]
 [ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://scripts/combat/interface/player/action_display/icons/icon_crit.png" id="11_hb1tf"]
+[ext_resource type="Texture2D" uid="uid://deb0np5dh3o4k" path="res://scripts/combat/interface/player/action_display/icons/icon_tempo.png" id="15_g5t7j"]
 
 [node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetail")]
 anchors_preset = 12
@@ -120,12 +121,13 @@ layout_mode = 2
 [node name="ActionButton7" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionDetail" type="VBoxContainer" parent="." node_paths=PackedStringArray("Title", "StatContainer", "StatDamage", "StatParryNegation", "StatDodgeNegation", "StatCrit")]
+[node name="ActionDetail" type="VBoxContainer" parent="." node_paths=PackedStringArray("Title", "StatContainer", "StatTempo", "StatDamage", "StatParryNegation", "StatDodgeNegation", "StatCrit")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("6_ijw6k")
 Title = NodePath("ActionDetailTitle/ActionDetailTitleLabel")
 StatContainer = NodePath("ActionDetailTitle/ActionDetailStatContainer")
+StatTempo = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatTempo")
 StatDamage = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatDamage")
 StatParryNegation = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatParryNegation")
 StatDodgeNegation = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatDodgeNegation")
@@ -140,48 +142,28 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Action Name"
 
-[node name="ActionDetailStatContainer" type="Control" parent="ActionDetail/ActionDetailTitle"]
+[node name="ActionDetailStatContainer" type="HBoxContainer" parent="ActionDetail/ActionDetailTitle"]
 layout_mode = 2
 
 [node name="ActionDetailStatDamage" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -176.0
-offset_right = -136.0
-offset_bottom = 26.0
 Texture = ExtResource("8_1nnk4")
 
 [node name="ActionDetailStatParryNegation" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -132.0
-offset_right = -92.0
-offset_bottom = 26.0
 Texture = ExtResource("9_bqoj2")
 
 [node name="ActionDetailStatDodgeNegation" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -88.0001
-offset_right = -48.0001
-offset_bottom = 26.0
 Texture = ExtResource("10_oa5gh")
 
 [node name="ActionDetailStatCrit" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
 layout_mode = 2
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = -44.0
-offset_right = -4.0
-offset_bottom = 26.0
 Texture = ExtResource("11_hb1tf")
+
+[node name="ActionDetailStatTempo" parent="ActionDetail/ActionDetailTitle/ActionDetailStatContainer" instance=ExtResource("6_uu3hs")]
+layout_mode = 2
+Texture = ExtResource("15_g5t7j")
 
 [node name="ActionDetailDescription" type="Label" parent="ActionDetail"]
 layout_mode = 2

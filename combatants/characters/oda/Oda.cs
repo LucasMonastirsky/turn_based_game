@@ -12,8 +12,7 @@ namespace Combat {
             base.Setup();
             Actions = new ActionStore(this);
 
-            Health = 20;
-            BaseMaxHealth = 20;
+            BaseMaxHealth = 40;
 
             BaseHitBonus = 5;
             BaseParryBonus = 8;

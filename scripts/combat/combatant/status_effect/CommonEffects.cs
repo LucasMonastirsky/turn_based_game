@@ -34,12 +34,14 @@ namespace Combat {
         }
     }
 
-    public class Poisoned : StatusEffect {
-        public override string Name => "Poison";
+    public class Poisoned : StackableEffect {
+        public override string Name => $"Poison";
         public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_poisoned.png";
 
-        public Poisoned (int duration) {
-            Level = duration;
+        public Poisoned (int level) : base (level) {}
+
+        public override void Stack (StatusEffect new_effect) {
+            Level++;
         }
 
         public override void Tick () {
@@ -51,7 +53,7 @@ namespace Combat {
                 if (Level <= 1) {
                     User.RemoveStatusEffect(Name);
                 }
-                else Level = Level / 2;
+                else Level = Level--;
             });
         }
     }

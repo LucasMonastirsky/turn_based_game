@@ -11,7 +11,7 @@ partial class ShieldGuy : Combatant {
 
         Actions = new (this);
 
-        BaseMaxHealth = 30;
+        BaseMaxHealth = 40;
         BaseParryBonus = 5;
         BaseDodgeBonus = 2;
         BaseHitBonus = 3;

@@ -9,7 +9,6 @@ namespace Combat {
 			Combatants = Combatants.Concat(left_combatants[0]).Concat(left_combatants[1]).Concat(right_combatants[0]).Concat(right_combatants[1]).ToList();
 
 			foreach (var combatant in Combatants) {
-				AddChild(combatant.Node);
 				combatant.LoadIn();
 			}
 

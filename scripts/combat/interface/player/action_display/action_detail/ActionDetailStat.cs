@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class ActionDetailStat : HBoxContainer {
 	[Export] public TextureRect Icon;

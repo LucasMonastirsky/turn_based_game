@@ -11,7 +11,7 @@ namespace Combat {
 
             Actions = new (this);
 
-            BaseMaxHealth = 15;
+            BaseMaxHealth = 30;
 
             BaseDodgeBonus = 8;
         }

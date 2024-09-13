@@ -1,10 +1,8 @@
 using Combat;
-using Development;
 using System.Threading.Tasks;
 
 public class PlayerController : Controller {
 	private TaskCompletionSource<CombatAction> RequestActionCompletionSource;
-	private int a = 0;
 
 	public override async Task<CombatAction> RequestAction () {
 		RequestActionCompletionSource = new ();

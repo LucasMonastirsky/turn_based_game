@@ -11,7 +11,7 @@ public partial class Shooter : Combatant {
 
         Actions = new (this);
 
-        BaseMaxHealth = 20;
+        BaseMaxHealth = 30;
         BaseParryBonus = 5;
         BaseDodgeBonus = 7;
         BaseInitiativeBonus = 5;

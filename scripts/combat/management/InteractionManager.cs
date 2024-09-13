@@ -35,7 +35,7 @@ namespace Combat {
         }
 
         public static async Task ResetCombatants () {
-            RollDisplay.Clear();
+            // RollDisplay.Clear();
 
             var dead = Battle.Combatants.Where(combatant => combatant.DeathCheck()).ToList();
             if (dead.Count > 0) {
