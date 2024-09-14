@@ -12,8 +12,15 @@ public partial class NavScreen : Control {
 	public override void _Ready () {
 		TestButton.Pressed += () => {
 			Journey.StartBattle(new () {
-				new Ghoul (),
-				new Ghoul (),
+				new () {
+					new Ghoul (),
+					new Ghoul (),
+					new Ghoul (),
+				},
+				new () {
+					new Ghoul (),
+					new Ghoul (),
+				}
 			});
 		};
 	}
