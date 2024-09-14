@@ -15,6 +15,8 @@ namespace Combat {
         }
 
         public static void Setup () {
+            AdjustPositionsAfterDeath();
+
             foreach (var combatant in Battle.Combatants) {
                 var pos = combatant.Position;
                 combatant.DisplaceTo(GetWorldPosition(pos));

@@ -10,7 +10,8 @@ namespace Combat {
             get => _position;
             set {
                 _position = value;
-                Animator.Flipped = _position.Side == Side.Right;
+
+                if (Animator != null) Animator.Flipped = _position.Side == Side.Right;
             }
         }
         public int Slot { get => Position.Slot; }
