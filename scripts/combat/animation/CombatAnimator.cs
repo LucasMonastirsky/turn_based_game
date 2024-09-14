@@ -24,12 +24,18 @@ namespace Combat {
 	}
 
 	public partial class CombatAnimator : Sprite2D {
+		public Combatant Combatant;
+
 		public bool Flipped { get => FlipH; set => FlipH = value; }
 
 		private double elapsed_time;
 		private int frame_index;
 
 		public float Height => Texture?.GetSize().Y ?? 0;
+
+		public CombatAnimator (Combatant combatant) {
+			Combatant = combatant;
+		}
 
 		private void SetSprite (SimpleSprite sprite) {
 			if (sprite == null) {
@@ -79,6 +85,8 @@ namespace Combat {
 
 				SetSprite(current_animation.Sprites[frame_index]);
 			}
+
+			ZIndex = (int) Combatant.Node.Position.Y;
 		}
 	}
 }

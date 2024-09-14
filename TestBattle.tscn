@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://c8impj2vemvl"]
 
-[ext_resource type="Script" path="res://scripts/combat/battle/StandardBattle.cs" id="1_ufhvr"]
+[ext_resource type="Script" path="res://scripts/combat/battle/Battle.cs" id="1_jnqdb"]
 [ext_resource type="Script" path="res://scripts/combat/management/InteractionManager.cs" id="2_4brod"]
 [ext_resource type="PackedScene" uid="uid://c6r1y1xbor3j3" path="res://scripts/combat/interface/player/targeting/TargetingInterface.tscn" id="3_c64x3"]
 [ext_resource type="PackedScene" uid="uid://ba2w5micxhmo8" path="res://scripts/combat/interface/player/CombatDisplay.tscn" id="3_jla18"]
@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ejg2u08c72xc" path="res://scripts/combat/interface/debug/DebugInterface.tscn" id="10_baxse"]
 
 [node name="TestBattle" type="Node2D"]
-script = ExtResource("1_ufhvr")
+script = ExtResource("1_jnqdb")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

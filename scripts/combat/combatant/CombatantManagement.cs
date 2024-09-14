@@ -27,7 +27,7 @@ namespace Combat {
         }
 
         public void LoadIn () {
-            Node = new () { Name = Name };
+            Node = new (this) { Name = Name };
             Animator = Node.Animator;
 
             LoadResources();

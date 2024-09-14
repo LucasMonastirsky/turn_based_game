@@ -4,6 +4,7 @@ using Godot;
 
 namespace Combat {
     public partial class CombatantNode : Node2D {
+        public Combatant Combatant;
         public CombatAnimator Animator;
         public List<AudioStreamPlayer> AudioPlayers = new ();
 
@@ -13,9 +14,11 @@ namespace Combat {
         private double moving_time, movement_skip_threshold;
         private TaskCompletionSource move_completion_source;
 
-        public CombatantNode () {
-            Battle.Node.AddChild(this);
-            Animator = new CombatAnimator ();
+        public CombatantNode (Combatant combatant) {
+            Combatant = combatant;
+
+            Battle.RegisterCombatantNode(this);
+            Animator = new CombatAnimator (combatant);
             AddChild(Animator);
 
             for (var i = 0; i < 3; i++) {

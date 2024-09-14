@@ -18,10 +18,10 @@ public partial class TestScreen : Node2D {
 	void CreateBattle (List<List<Combatant>> enemies) {
 		ButtonContainer.Visible = false;
 
-		var battle = BattleScene.Instantiate() as StandardBattle;
+		var battle = BattleScene.Instantiate() as Battle;
 		AddChild(battle);
 
-		battle.LoadCharacters(
+		battle.LoadCombatants(
 			PlayerCombatants,
 			enemies
 		);
