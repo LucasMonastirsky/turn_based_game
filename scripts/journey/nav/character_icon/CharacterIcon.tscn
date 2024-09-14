@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://n0t7w2wno4ho" path="res://assets/textures/combat/action_icons/default.png" id="1_wql28"]
 
 [node name="CharacterIcon" type="TextureRect"]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(64, 64)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

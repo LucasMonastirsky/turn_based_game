@@ -35,4 +35,8 @@ public partial class NavScreen : Control {
 			icon.Texture = Resources.LoadTexture(character.IconFilePath);
 		});
 	}
+
+	public void DeLoad () {
+		QueueFree();
+	}
 }

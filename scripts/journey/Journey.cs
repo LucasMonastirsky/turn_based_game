@@ -6,6 +6,9 @@ using Godot;
 public partial class Journey : Control {
 	[Export] PackedScene NavScreenScene, BattleScene;
 
+	private NavScreen NavScreen;
+	private Battle Battle;
+
 	public List<Character> Characters = new () {
 		new OdaCharacter () { Row = 0 },
 		new JosephCharacter () { Row = 0 },
@@ -20,17 +23,17 @@ public partial class Journey : Control {
 	}
 
 	public override void _Ready () {
-		var nav = NavScreenScene.Instantiate<NavScreen>();
-		nav.Load(Characters);
-		AddChild(nav);
+		NavScreen = NavScreenScene.Instantiate<NavScreen>();
+		NavScreen.Load(Characters);
+		AddChild(NavScreen);
 	}
 
 	public static void StartBattle (List<List<Combatant>> enemies) {
-		var battle = Current.BattleScene.Instantiate<Battle>();
+		Current.Battle = Current.BattleScene.Instantiate<Battle>();
 		
-		Current.AddChild(battle);
+		Current.AddChild(Current.Battle);
 
-		battle.LoadCombatants(
+		Current.Battle.LoadCombatants(
 			new List<List<Combatant>> () {
 				Current.Characters.Where(combatant => combatant.Row == 0).Select(character => character.Spawn()).ToList(),
 				Current.Characters.Where(combatant => combatant.Row == 1).Select(character => character.Spawn()).ToList(),
@@ -38,6 +41,15 @@ public partial class Journey : Control {
 			enemies
 		);
 
-		battle.Start();
+		Current.NavScreen.DeLoad();
+		Current.Battle.Start();
+	}
+
+	public static void EndBattle () {
+		Current.NavScreen = Current.NavScreenScene.Instantiate<NavScreen>();
+		Current.NavScreen.Load(Current.Characters);
+		Current.AddChild(Current.NavScreen);
+
+		Current.Battle.QueueFree();
 	}
 }

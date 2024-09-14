@@ -1,3 +1,4 @@
+using System.Linq;
 using Development;
 
 namespace Combat {
@@ -17,6 +18,11 @@ namespace Combat {
 
         public static async void BeginLoop () {
             while (true) {
+                if (Combatants.OnSide(Side.Right).ToList().All(combatant => combatant.IsDead)) {
+                    Journey.EndBattle();
+                    break;
+                }
+
                 ActiveCombatant = RoundManager.ActiveCombatant;
                 CombatantDetail.Combatant = ActiveCombatant;
 

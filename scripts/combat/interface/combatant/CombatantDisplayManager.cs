@@ -6,19 +6,20 @@ public partial class CombatantDisplayManager : Node {
 	[Export] PackedScene DisplayScene;
 
 	private static CombatantDisplayManager instance;
-	private static List<CombatantDisplay> displays = new ();
+	private static List<CombatantDisplay> displays;
 
 	public static CombatantDisplayManager Current;
 
 	public CombatantDisplayManager () {
 		Current = this;
+		displays = new ();
 	}
 
 	public override void _Ready () {
 		instance = this;
 	}
 
-	public static CombatantDisplay CreateDisplay (Combatant combatant) {
+    public static CombatantDisplay CreateDisplay (Combatant combatant) {
 		var display = Current.DisplayScene.Instantiate<CombatantDisplay> ();
 		display.User = combatant;
 		instance.AddChild(display);
