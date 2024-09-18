@@ -131,7 +131,7 @@ public partial class ShieldGuy {
                 User.RemoveStatusEffect<BackupJavelin>();
             }
 
-            public class BackupJavelin : StatusEffect {
+            public class BackupJavelin : Effect {
                 public override string Name => "Backup Javelin";
             }
         }

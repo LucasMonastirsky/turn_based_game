@@ -26,7 +26,7 @@ namespace Combat {
         public bool IsRanged = false;
         public bool MoveToMeleeDistance = false;
 
-        public StatusEffect StatusEffect = null;
+        public Effect StatusEffect = null;
 
         public enum Tag {
             Backhit,

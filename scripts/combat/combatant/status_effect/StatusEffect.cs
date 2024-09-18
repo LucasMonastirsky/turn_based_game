@@ -1,7 +1,7 @@
 using Utils;
 
 namespace Combat {
-    public abstract class StatusEffect : Source {
+    public abstract class Effect : Source {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }
@@ -15,7 +15,7 @@ namespace Combat {
 
         public Combatant User { get; set; }
 
-        public StatusEffect () {}
+        public Effect () {}
 
         public virtual void Tick () {
             if (Decays) {
@@ -32,7 +32,7 @@ namespace Combat {
 
         }
 
-        public virtual void Stack (StatusEffect new_effect) {
+        public virtual void Stack (Effect new_effect) {
 
         }
 

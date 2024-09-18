@@ -5,7 +5,7 @@ using ResourceHelpers;
 public partial class CombatantDisplayEffectIcon : TextureRect {
 	[Export] public Label LevelLabel, NameLabel;
 
-	public StatusEffect Effect;
+	public Effect Effect;
 
 	private bool Hovered = false;
 

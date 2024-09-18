@@ -28,7 +28,7 @@ namespace Combat {
                 public override int TempoCost { get; set; } = 2;
 
                 public override List<Selector> Selectors { get; protected set; } = new () {
-                    CommonTargetSelectors.Melee,
+                    CommonSelectors.Melee,
                 };
 
                 public new Ghoul User => base.User as Ghoul;

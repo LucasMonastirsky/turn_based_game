@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace Combat {
-    public class Immobilized : StatusEffect {
+    public class Immobilized : Effect {
         public override string Name => "Immobilized";
 
         public Immobilized (int duration = 0) {
@@ -40,7 +40,7 @@ namespace Combat {
 
         public Poisoned (int level) : base (level) {}
 
-        public override void Stack (StatusEffect new_effect) {
+        public override void Stack (Effect new_effect) {
             Level++;
         }
 
@@ -58,7 +58,7 @@ namespace Combat {
         }
     }
 
-    public class Stunned : StatusEffect {
+    public class Stunned : Effect {
         public override string Name => "Stunned";
         public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_stunned.png";
 
@@ -79,7 +79,7 @@ namespace Combat {
         }
     }
 
-    public class Hidden : StatusEffect {
+    public class Hidden : Effect {
         public override string Name => "Hidden";
         public override string IconFilePath => "res://assets/textures/combat/status_effect_icons/icon_hidden.png";
 

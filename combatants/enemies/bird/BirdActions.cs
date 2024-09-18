@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Utils;
 
 namespace Combat {
-    public class Evading : StatusEffect {
+    public class Evading : Effect {
         public override string Name => "Evading";
         public override bool Decays { get; set; } = true;
         

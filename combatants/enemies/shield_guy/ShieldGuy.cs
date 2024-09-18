@@ -35,7 +35,7 @@ partial class ShieldGuy : Combatant {
         }
     }
 
-    public class Shield : StatusEffect {
+    public class Shield : Effect {
         public override string Name => "Shield";
             public override string IconFilePath => "res://combatants/enemies/shield_guy/resources/icons/effects/icon_shielded.png";
 

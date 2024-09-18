@@ -22,7 +22,7 @@ namespace Combat {
     public abstract class MeleeAction : AttackAction {
         public override List<ActionTag> Tags { get; init; } = new () { ActionTag.Melee, };
         public override List<Selector> Selectors { get; protected set; } = new () {
-            CommonTargetSelectors.Melee,
+            CommonSelectors.Melee,
         };
 
         public override List<Restrictor> Restrictors { get; init; } = new () {

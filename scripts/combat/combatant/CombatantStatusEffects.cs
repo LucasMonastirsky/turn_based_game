@@ -5,9 +5,9 @@ using Development;
 
 namespace Combat {
     public partial class Combatant {
-        public List<StatusEffect> StatusEffects { get; } = new ();
+        public List<Effect> StatusEffects { get; } = new ();
 
-        public StatusEffect AddStatusEffect (StatusEffect effect) {
+        public Effect AddStatusEffect (Effect effect) {
             if (effect is null) return null;
 
             var overriden_effect = StatusEffects.Find(x => x.Name == effect.Name);
@@ -49,7 +49,7 @@ namespace Combat {
             Display.RemoveStatusEffect(effect);
         }
 
-        public void RemoveStatusEffect (StatusEffect effect) {
+        public void RemoveStatusEffect (Effect effect) {
             effect.Removed = true;
             StatusEffects.Remove(effect);
             effect.OnRemoved();
@@ -62,7 +62,7 @@ namespace Combat {
             StatusEffects.RemoveAt(index);
         }
 
-        public void RemoveStatusEffectIf <T> (Predicate<T> predicate) where T : StatusEffect {
+        public void RemoveStatusEffectIf <T> (Predicate<T> predicate) where T : Effect {
             T effect = StatusEffects.FirstOrDefault(effect => effect is T) as T;
 
             if (effect != null && predicate(effect)) {
@@ -70,11 +70,11 @@ namespace Combat {
             }
         }
 
-        public T GetStatusEffect <T> () where T : StatusEffect {
+        public T GetStatusEffect <T> () where T : Effect {
             return StatusEffects.Find(effect => effect.GetType() == typeof(T)) as T;
         }
 
-        public bool HasStatusEffect (StatusEffect effect) {
+        public bool HasStatusEffect (Effect effect) {
             return StatusEffects.Contains(effect);
         }
 

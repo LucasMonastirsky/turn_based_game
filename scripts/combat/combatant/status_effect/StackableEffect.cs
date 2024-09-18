@@ -1,7 +1,7 @@
 using Development;
 
 namespace Combat {
-    public abstract class StackableEffect : StatusEffect {
+    public abstract class StackableEffect : Effect {
         public override bool Stackable => true;
 
         public virtual int? MaxLevel { get; protected set; } = null;
@@ -11,7 +11,7 @@ namespace Combat {
             if (MaxLevel != null && Level > MaxLevel) Level = MaxLevel ?? -1;
         }
 
-        public override void Stack(StatusEffect new_effect) {
+        public override void Stack(Effect new_effect) {
             Dev.Log($"Stacking {this.Level} {new_effect.Level}");
             Level += new_effect.Level;
 

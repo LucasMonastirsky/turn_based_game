@@ -36,27 +36,17 @@ namespace Combat {
             BaseCritBonus = 1;
 
             AddStatusEffect(new Loaded (MaxBullets));
-
-            CombatEvents.BeforeAttack.Always(async (attack) => {
-                if (attack.Attacker == this && attack.IsCrit) {
-                    attack.DamageAmount = Mathf.RoundToInt(attack.DamageAmount * 1.5f);
-                }
-            });
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {
             if (attack_result.Dodged) {
-                if (attack_result.Attack.IsMelee) return Actions.Kick.Bind(attack_result.Attacker);
+                if (attack_result.Attack.IsMelee) return Actions.Bayonet.Bind(attack_result.Attacker);
                 if (Bullets > 0 && (!IsLockedOn || LockedOnTarget == attack_result.Attacker)) {
                     return Actions.Shoot.Bind(attack_result.Attacker);
                 }
             }
 
             return null;
-        }
-
-        public override void OnTurnEnd () {
-            AddStatusEffect(new TheShakes ());
         }
 
         public override void ResetAnimation() {
@@ -68,7 +58,7 @@ namespace Combat {
             }
         }
 
-        public class Loaded : StatusEffect {
+        public class Loaded : Effect {
             public override string Name => "Loaded";
             public override string IconFilePath => "res://combatants/characters/anna/resources/icons/effects/icon_loaded.png";
 

@@ -1,5 +1,4 @@
 using System;
-using Combat;
 
 public class OdaCharacter : Character {
     public override string IconFilePath => "res://combatants/characters/oda/resources/icons/icon_profile.png";

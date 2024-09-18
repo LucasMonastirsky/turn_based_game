@@ -11,19 +11,19 @@ public partial class CombatantDisplay : Control {
 	[Export] PackedScene EffectIconScene;
 	[Export] Texture2D TempoIconTexture;
 
-	private Dictionary<StatusEffect, TextureRect> Icons = new ();
+	private Dictionary<Effect, TextureRect> Icons = new ();
 	private List<TextureRect> TempoIcons = new ();
 
 	public Combatant User;
 
-	public void AddStatusEffect (StatusEffect effect) {
+	public void AddStatusEffect (Effect effect) {
 		var icon = EffectIconScene.Instantiate<CombatantDisplayEffectIcon> ();
 		icon.Effect = effect;
 		EffectIconContainer.AddChild(icon);
 		Icons[effect] = icon;
 	}
 
-	public void RemoveStatusEffect (StatusEffect effect) {
+	public void RemoveStatusEffect (Effect effect) {
 		Icons[effect].QueueFree();
 		Icons.Remove(effect);
 	}

@@ -67,7 +67,7 @@ namespace Combat {
                     User.AddStatusEffect(new Pressurized());
                 }
 
-                public class Pressurized : StatusEffect {
+                public class Pressurized : Effect {
                     public override string Name => "Pressurized";
                     public override bool Stackable => true;
 
@@ -77,7 +77,7 @@ namespace Combat {
                         Level = 1;
                     }
 
-                    public override void Stack (StatusEffect new_effect) {
+                    public override void Stack (Effect new_effect) {
                         Level += new_effect.Level;
                         if (Level > MaxLevel) Level = MaxLevel;
                     }
