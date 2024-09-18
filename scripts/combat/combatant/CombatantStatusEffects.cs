@@ -10,6 +10,8 @@ namespace Combat {
         public Effect AddStatusEffect (Effect effect) {
             if (effect is null) return null;
 
+            effect.User = this;
+
             var overriden_effect = StatusEffects.Find(x => x.Name == effect.Name);
 
             if (overriden_effect != null) {
@@ -29,7 +31,6 @@ namespace Combat {
                 Dev.Log(Dev.Tags.Combat, $"{Name} adding status effect {effect.Name}");
 
                 StatusEffects.Add(effect);
-                effect.User = this;
                 effect.OnApplied();
 
                 Display.AddStatusEffect(effect);

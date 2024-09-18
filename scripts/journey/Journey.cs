@@ -12,9 +12,8 @@ public partial class Journey : Control {
 	public List<Character> Characters = new () {
 		new OdaCharacter () { Row = 0 },
 		new JosephCharacter () { Row = 0 },
-		new LaraCharacter () { Row = 0 },
-		new AnnaCharacter () { Row = 1 },
-		new IsabelCharacter () { Row = 1 },
+		new LaraCharacter () { Row = 0, Mementos = new () { new LiquidCourage () } },
+
 	};
 
 	public static Journey Current;

@@ -26,6 +26,8 @@ namespace Combat {
 
         public CombatantNode Node;
 
+        public List<Memento> Mementos = new ();
+
         public Combatant () {
             StatBonuses = new ();
             foreach (Stat stat in Enum.GetValues(typeof(Stat))) {

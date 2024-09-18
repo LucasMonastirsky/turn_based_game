@@ -23,6 +23,11 @@ namespace Combat {
 
             Display = CombatantDisplayManager.CreateDisplay(this);
 
+            Mementos.ForEach(memento => {
+                memento.User = this;
+                memento.Setup();
+            });
+
             Animator.Play(Animations.Idle);
         }
 
@@ -58,8 +63,9 @@ namespace Combat {
         }
 
         public bool DeathCheck () {
-            if (Health < 1) {
+            if (Health < 1) { // clear shouldn't happen here
                 StatusEffects.ToList().ForEach(effect => RemoveStatusEffect(effect));
+                Mementos.ForEach(memento => memento.Clear());
                 return true;
             }
 

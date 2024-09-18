@@ -11,11 +11,15 @@ public partial class Lara {
 
         Func<AttackResult, Task> attack_event_handler;
 
+        public new Lara User => base.User as Lara;
+
         public Rage (int level) {
             Level = level;
         }
 
         public override void OnApplied() {
+            Level += User.RageBonus;
+
             User.AddBonus(new (this, Stat.Damage, this.Level));
 
             CombatEvents.AfterAttack.Always(attack_event_handler = async attack_result => {
@@ -36,7 +40,7 @@ public partial class Lara {
         }
 
         public override void Stack (Effect new_effect) {
-            Level += new_effect.Level;
+            Level += new_effect.Level + User.RageBonus;
 
             if (Level > 10) Level = 10;
 

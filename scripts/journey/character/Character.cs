@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Combat;
 using Godot;
 
@@ -11,7 +12,11 @@ public abstract class Character {
 
     public int Row;
 
+    public List<Memento> Mementos = new ();
+
     public Combatant Spawn () {
-        return Activator.CreateInstance(CombatantType) as Combatant;
+        var combatant = Activator.CreateInstance(CombatantType) as Combatant;
+        combatant.Mementos = Mementos;
+        return combatant;
     }
 }

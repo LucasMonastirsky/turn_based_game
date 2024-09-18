@@ -8,6 +8,7 @@ public partial class Lara : Combatant {
 
     public int AxeDamage = 12;
     public int PunchDamage = 6;
+    public int RageBonus = 0;
 
     protected override void Setup () {
         base.Setup();
