@@ -16,9 +16,13 @@ namespace Combat {
         }
         protected virtual void LoadSprites () {} // TODO: abstract this
 
+        public void LoadIcons () {
+            if (Icon == null) Icon = Resources.LoadTexture(resources_path, "icons/icon_profile");
+        }
+
         public void LoadResources () {
+            LoadIcons();
             LoadSprites();
-            Icon = Resources.LoadTexture(resources_path, "icons/icon_profile");
         }
 
         protected void LoadStandardSprites () {

@@ -9,11 +9,12 @@ public partial class Journey : Control {
 	private NavScreen NavScreen;
 	private Battle Battle;
 
-	public List<Character> Characters = new () {
-		new OdaCharacter () { Row = 0 },
-		new JosephCharacter () { Row = 0 },
-		new LaraCharacter () { Row = 0, Mementos = new () { new LiquidCourage () } },
-
+	public List<Combatant> Characters = new () {
+		new Oda () { Position = new () { Row = 0 } },
+		new Joseph () { Position = new () { Row = 0 } },
+		new Lara () { Position = new () { Row = 0 }, Mementos = new () { new LiquidCourage () } },
+		new Anna () { Position = new () { Row = 1 } },
+		new Isabel () { Position = new () { Row = 1 } },
 	};
 
 	public static Journey Current;
@@ -34,8 +35,8 @@ public partial class Journey : Control {
 
 		Current.Battle.LoadCombatants(
 			new List<List<Combatant>> () {
-				Current.Characters.Where(combatant => combatant.Row == 0).Select(character => character.Spawn()).ToList(),
-				Current.Characters.Where(combatant => combatant.Row == 1).Select(character => character.Spawn()).ToList(),
+				Current.Characters.Where(combatant => combatant.Row == 0).ToList(),
+				Current.Characters.Where(combatant => combatant.Row == 1).ToList(),
 			},
 			enemies
 		);

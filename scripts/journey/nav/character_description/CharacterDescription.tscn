@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://clqm27p6juc80"]
+
+[ext_resource type="PackedScene" uid="uid://pvmrdcau70o3" path="res://scripts/journey/nav/character_description/stat_icon/StatIcon.tscn" id="1_fv2sw"]
+[ext_resource type="Script" path="res://scripts/journey/nav/character_description/CharacterDescription.cs" id="1_omvwa"]
+[ext_resource type="Texture2D" uid="uid://comxk58orqvwc" path="res://assets/textures/icons/stats/icon_damage.png" id="2_t2kgr"]
+[ext_resource type="Texture2D" uid="uid://5somtb51o6gu" path="res://assets/textures/icons/stats/icon_armor.png" id="3_ro35w"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://assets/textures/icons/stats/icon_melee.png" id="4_jfgyw"]
+[ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://assets/textures/icons/stats/icon_crit.png" id="5_icyvy"]
+[ext_resource type="Texture2D" uid="uid://dfx8cngwtitwo" path="res://assets/textures/icons/stats/icon_parry.png" id="6_3prb1"]
+[ext_resource type="Texture2D" uid="uid://eusto0ta2f3f" path="res://assets/textures/icons/stats/icon_dodge.png" id="7_vgmxe"]
+
+[node name="VBoxContainer" type="PanelContainer" node_paths=PackedStringArray("LabelName")]
+script = ExtResource("1_omvwa")
+LabelName = NodePath("VBoxContainer/Label")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Combatant Name"
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="StatIcon" parent="VBoxContainer/GridContainer" instance=ExtResource("1_fv2sw")]
+layout_mode = 2
+Texture = ExtResource("2_t2kgr")
+
+[node name="StatIcon2" parent="VBoxContainer/GridContainer" instance=ExtResource("1_fv2sw")]
+layout_mode = 2
+Texture = ExtResource("3_ro35w")
+
+[node name="StatIcon3" parent="VBoxContainer/GridContainer" instance=ExtResource("1_fv2sw")]
+layout_mode = 2
+Texture = ExtResource("4_jfgyw")
+
+[node name="StatIcon4" parent="VBoxContainer/GridContainer" instance=ExtResource("1_fv2sw")]
+layout_mode = 2
+Texture = ExtResource("5_icyvy")
+
+[node name="StatIcon5" parent="VBoxContainer/GridContainer" instance=ExtResource("1_fv2sw")]
+layout_mode = 2
+Texture = ExtResource("6_3prb1")
+
+[node name="StatIcon6" parent="VBoxContainer/GridContainer" instance=ExtResource("1_fv2sw")]
+layout_mode = 2
+Texture = ExtResource("7_vgmxe")

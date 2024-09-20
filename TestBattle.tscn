@@ -27,7 +27,7 @@ CenterDistance = 125
 VerticalDistance = 275
 HorizontalDistance = 275
 VerticalOffset = 50
-SlotOffset = 75
+SlotOffset = 50
 CombatantScale = 3.0
 
 [node name="TargetingInterface" parent="." instance=ExtResource("3_c64x3")]

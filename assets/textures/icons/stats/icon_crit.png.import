@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5somtb51o6gu"
-path="res://.godot/imported/icon_armor.png-37d01616b1b9795305c5e468c7ec8b0b.ctex"
+uid="uid://cddmnrlhwfuqa"
+path="res://.godot/imported/icon_crit.png-2df42abe4b523970e113bd3d20590099.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/icons/icon_armor.png"
-dest_files=["res://.godot/imported/icon_armor.png-37d01616b1b9795305c5e468c7ec8b0b.ctex"]
+source_file="res://assets/textures/icons/stats/icon_crit.png"
+dest_files=["res://.godot/imported/icon_crit.png-2df42abe4b523970e113bd3d20590099.ctex"]
 
 [params]
 

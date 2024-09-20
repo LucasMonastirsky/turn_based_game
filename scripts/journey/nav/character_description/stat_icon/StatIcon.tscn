@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://pvmrdcau70o3"]
+
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://assets/textures/icons/stats/icon_melee.png" id="1_7ug0f"]
+[ext_resource type="Script" path="res://scripts/journey/nav/character_description/stat_icon/StatIcon.cs" id="1_fw2oe"]
+
+[node name="StatIcon" type="CenterContainer" node_paths=PackedStringArray("TextureRect")]
+size_flags_horizontal = 3
+script = ExtResource("1_fw2oe")
+TextureRect = NodePath("HBoxContainer/TextureRect")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("1_7ug0f")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "0"

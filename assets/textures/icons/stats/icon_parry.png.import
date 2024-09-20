@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cddmnrlhwfuqa"
-path="res://.godot/imported/icon_crit.png-063e64fcf263f42966efd1235815e5dc.ctex"
+uid="uid://dfx8cngwtitwo"
+path="res://.godot/imported/icon_parry.png-52b2d430d254621b48706ab62c22b289.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/icons/icon_crit.png"
-dest_files=["res://.godot/imported/icon_crit.png-063e64fcf263f42966efd1235815e5dc.ctex"]
+source_file="res://assets/textures/icons/stats/icon_parry.png"
+dest_files=["res://.godot/imported/icon_parry.png-52b2d430d254621b48706ab62c22b289.ctex"]
 
 [params]
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dv41apebh6yco"]
+[gd_scene load_steps=4 format=3 uid="uid://dv41apebh6yco"]
 
 [ext_resource type="Script" path="res://scripts/journey/nav/NavScreen.cs" id="1_yrw1p"]
 [ext_resource type="PackedScene" uid="uid://8bwqq5fwvqyf" path="res://scripts/journey/nav/character_icon/CharacterIcon.tscn" id="2_bo5d3"]
+[ext_resource type="PackedScene" uid="uid://clqm27p6juc80" path="res://scripts/journey/nav/character_description/CharacterDescription.tscn" id="3_x2pa8"]
 
 [node name="NavScreen" type="Control" node_paths=PackedStringArray("TestButton", "LowerIconContainer", "UpperIconContainer")]
 layout_mode = 3
@@ -11,49 +12,52 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_yrw1p")
-TestButton = NodePath("CenterContainer/Button")
-LowerIconContainer = NodePath("HBoxContainer/CenterContainer/VBoxContainer/HBoxContainer2")
-UpperIconContainer = NodePath("HBoxContainer/CenterContainer/VBoxContainer/HBoxContainer")
+TestButton = NodePath("VBoxContainer/HBoxContainer/CenterContainer/Button")
+LowerIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer2")
+UpperIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer")
 CharacterIconScene = ExtResource("2_bo5d3")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -45.5
-offset_top = -20.0
-offset_right = 45.5
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Button" type="Button" parent="CenterContainer"]
-layout_mode = 2
-text = "Test Battle"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_x2pa8")]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/CenterContainer"]
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/CenterContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "Test Battle"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/CenterContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/CenterContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4

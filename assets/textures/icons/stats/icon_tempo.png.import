@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfx8cngwtitwo"
-path="res://.godot/imported/icon_parry.png-65d5aa1c13adc88186212e22f5911ea3.ctex"
+uid="uid://deb0np5dh3o4k"
+path="res://.godot/imported/icon_tempo.png-e5b9ebcbbb70de66b80e27cb6c029a6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/icons/icon_parry.png"
-dest_files=["res://.godot/imported/icon_parry.png-65d5aa1c13adc88186212e22f5911ea3.ctex"]
+source_file="res://assets/textures/icons/stats/icon_tempo.png"
+dest_files=["res://.godot/imported/icon_tempo.png-e5b9ebcbbb70de66b80e27cb6c029a6d.ctex"]
 
 [params]
 

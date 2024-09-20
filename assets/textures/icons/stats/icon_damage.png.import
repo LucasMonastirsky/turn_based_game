@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkdf0cq28kmo8"
-path="res://.godot/imported/icon_dodge_negation.png-e0af208a9a03098c80641b83db30433a.ctex"
+uid="uid://comxk58orqvwc"
+path="res://.godot/imported/icon_damage.png-5a34e05aac9f181835cbdc3b4049ca80.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/icons/icon_dodge_negation.png"
-dest_files=["res://.godot/imported/icon_dodge_negation.png-e0af208a9a03098c80641b83db30433a.ctex"]
+source_file="res://assets/textures/icons/stats/icon_damage.png"
+dest_files=["res://.godot/imported/icon_damage.png-5a34e05aac9f181835cbdc3b4049ca80.ctex"]
 
 [params]
 

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Combat;
 using Godot;
-using ResourceHelpers;
 
 public partial class NavScreen : Control {
 	[Export] Button TestButton;
@@ -25,14 +23,16 @@ public partial class NavScreen : Control {
 		};
 	}
 
-	public void Load (List<Character> characters) {
-		characters.ForEach(character => {
+	public void Load (List<Combatant> combatants) {
+		combatants.ForEach(combatant => {
+			combatant.LoadIcons();
+
 			var icon = CharacterIconScene.Instantiate<CharacterIcon>();
 			
-			if (character.Row == 0) UpperIconContainer.AddChild(icon);
+			if (combatant.Row == 0) UpperIconContainer.AddChild(icon);
 			else LowerIconContainer.AddChild(icon);
 
-			icon.Texture = Resources.LoadTexture(character.IconFilePath);
+			icon.Combatant = combatant;
 		});
 	}
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://deb0np5dh3o4k"
-path="res://.godot/imported/icon_tempo.png-4e6742875273da8c6834787246bdb399.ctex"
+uid="uid://bj7im0slub20f"
+path="res://.godot/imported/icon_melee.png-deed9a94e9bc33b62f58ef4b1d296299.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/combat/interface/player/action_display/icons/icon_tempo.png"
-dest_files=["res://.godot/imported/icon_tempo.png-4e6742875273da8c6834787246bdb399.ctex"]
+source_file="res://assets/textures/icons/stats/icon_melee.png"
+dest_files=["res://.godot/imported/icon_melee.png-deed9a94e9bc33b62f58ef4b1d296299.ctex"]
 
 [params]
 

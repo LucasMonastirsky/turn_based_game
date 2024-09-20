@@ -3,16 +3,15 @@
 [ext_resource type="Script" path="res://scripts/journey/nav/character_icon/CharacterIcon.cs" id="1_c2bdr"]
 [ext_resource type="Texture2D" uid="uid://n0t7w2wno4ho" path="res://assets/textures/combat/action_icons/default.png" id="1_wql28"]
 
-[node name="CharacterIcon" type="TextureRect"]
-custom_minimum_size = Vector2(64, 64)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -1170.0
-offset_bottom = -620.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("1_wql28")
-expand_mode = 1
-stretch_mode = 4
+[node name="CharacterIcon" type="CenterContainer" node_paths=PackedStringArray("Button")]
+offset_right = 64.0
+offset_bottom = 64.0
 script = ExtResource("1_c2bdr")
+Button = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureButton" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture_normal = ExtResource("1_wql28")
+ignore_texture_size = true
+stretch_mode = 5
