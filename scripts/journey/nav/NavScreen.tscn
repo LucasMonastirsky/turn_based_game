@@ -29,7 +29,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_x2pa8")]
+[node name="CharacterDescription" parent="VBoxContainer/HBoxContainer" instance=ExtResource("3_x2pa8")]
 layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/HBoxContainer"]

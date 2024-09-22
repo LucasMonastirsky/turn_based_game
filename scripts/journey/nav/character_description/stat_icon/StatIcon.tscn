@@ -3,10 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://assets/textures/icons/stats/icon_melee.png" id="1_7ug0f"]
 [ext_resource type="Script" path="res://scripts/journey/nav/character_description/stat_icon/StatIcon.cs" id="1_fw2oe"]
 
-[node name="StatIcon" type="CenterContainer" node_paths=PackedStringArray("TextureRect")]
+[node name="StatIcon" type="CenterContainer" node_paths=PackedStringArray("Label", "TextureRect")]
 size_flags_horizontal = 3
 script = ExtResource("1_fw2oe")
+Label = NodePath("HBoxContainer/Label")
 TextureRect = NodePath("HBoxContainer/TextureRect")
+Texture = ExtResource("1_7ug0f")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
