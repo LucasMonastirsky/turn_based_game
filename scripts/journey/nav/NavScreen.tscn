@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dv41apebh6yco"]
 
 [ext_resource type="Script" path="res://scripts/journey/nav/NavScreen.cs" id="1_yrw1p"]
-[ext_resource type="PackedScene" uid="uid://8bwqq5fwvqyf" path="res://scripts/journey/nav/character_icon/CharacterIcon.tscn" id="2_bo5d3"]
+[ext_resource type="PackedScene" uid="uid://8bwqq5fwvqyf" path="res://ui/common/slot_button/SlotButton.tscn" id="2_ffq8e"]
 [ext_resource type="PackedScene" uid="uid://clqm27p6juc80" path="res://scripts/journey/nav/character_description/CharacterDescription.tscn" id="3_x2pa8"]
 
 [node name="NavScreen" type="Control" node_paths=PackedStringArray("TestButton", "LowerIconContainer", "UpperIconContainer")]
@@ -15,7 +15,7 @@ script = ExtResource("1_yrw1p")
 TestButton = NodePath("VBoxContainer/HBoxContainer/CenterContainer/Button")
 LowerIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer2")
 UpperIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer")
-CharacterIconScene = ExtResource("2_bo5d3")
+CharacterIconScene = ExtResource("2_ffq8e")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1

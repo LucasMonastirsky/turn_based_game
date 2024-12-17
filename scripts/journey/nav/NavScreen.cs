@@ -1,11 +1,16 @@
 using System.Collections.Generic;
 using Combat;
+using Development;
 using Godot;
 
 public partial class NavScreen : Control {
 	[Export] Button TestButton;
 	[Export] Container LowerIconContainer, UpperIconContainer;
 	[Export] PackedScene CharacterIconScene;
+
+	List<SlotButton> CharacterIcons = new ();
+
+	public Combatant SelectedCombatant { get; private set; }
 
 	public override void _Ready () {
 		TestButton.Pressed += () => {
@@ -27,12 +32,20 @@ public partial class NavScreen : Control {
 		combatants.ForEach(combatant => {
 			combatant.LoadIcons();
 
-			var icon = CharacterIconScene.Instantiate<CharacterIcon>();
+			var slot_button = CharacterIconScene.Instantiate<SlotButton>();
 			
-			if (combatant.Row == 0) UpperIconContainer.AddChild(icon);
-			else LowerIconContainer.AddChild(icon);
+			if (combatant.Row == 0) UpperIconContainer.AddChild(slot_button);
+			else LowerIconContainer.AddChild(slot_button);
 
-			icon.Combatant = combatant;
+			CharacterIcons.Add(slot_button);
+
+			slot_button.Texture = combatant.Icon;
+			slot_button.OnPress = () => {
+				SelectedCombatant = combatant;
+				CharacterIcons.ForEach(x => x.Selected = false);
+				slot_button.Selected = true;
+				CharacterDescription.Combatant = combatant;
+			};
 		});
 	}
 
