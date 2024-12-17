@@ -9,6 +9,8 @@ namespace Combat {
         public Type OverrideControllerType { get; set; }
 
         public CombatantDisplay Display { get; set; }
+
+        public bool Loaded { get; private set; } = false;
         
         protected virtual void Setup () {
             var chosen_type = OverrideControllerType ?? DefaultControllerType;
@@ -32,6 +34,8 @@ namespace Combat {
         }
 
         public void LoadIn () {
+            Dev.Log(Dev.Tags.CombatManagement, $"{Name} loading in");
+
             Node = new (this) { Name = Name };
             Animator = Node.Animator;
 
@@ -40,11 +44,17 @@ namespace Combat {
 
             Tempo = TempoGain;
             Health = MaxHealth;
+
+            Loaded = true;
         }
 
-        public void LoadIn (CombatPosition position) {
-            Position = position;
-            LoadIn();
+        public void Unload () {
+            Loaded = false;
+
+            StatusEffects.ToList().ForEach(effect => RemoveStatusEffect(effect));
+
+            Node.QueueFree();
+            CombatantDisplayManager.RemoveDisplay(this);
         }
 
         public bool FirstTurnTaken { get; private set; } = false;
@@ -75,8 +85,7 @@ namespace Combat {
         protected virtual void OnDeath () {}
 
         public void Despawn () {
-            Node.QueueFree();
-            CombatantDisplayManager.RemoveDisplay(this);
+            Unload();
         }
 
         public override string ToString() {

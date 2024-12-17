@@ -9,17 +9,17 @@ public partial class NavScreen : Control {
 
 	public override void _Ready () {
 		TestButton.Pressed += () => {
-			Journey.StartBattle(new () {
+			List<List<Combatant>> ghouls = new () {
 				new () {
-					new Ghoul (),
 					new Ghoul (),
 					new Ghoul (),
 				},
 				new () {
 					new Ghoul (),
-					new Ghoul (),
 				}
-			});
+			};
+			ghouls.ForEach(list => list.ForEach(ghoul => ghoul.BaseMaxHealth = 5));
+			Journey.StartBattle(ghouls);
 		};
 	}
 

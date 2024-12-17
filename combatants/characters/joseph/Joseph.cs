@@ -23,6 +23,14 @@ namespace Combat {
                 new Frontliner (this),
                 new Study (this),
             };
+
+            CombatEvents.AfterAttack.Always(async attack_result => {
+                if (attack_result.Attacker == this && attack_result.Parried) {
+                    InteractionManager.AddQueueEvent(async () => {
+                        await Actions.ButtEnd.Bind(attack_result.Defender).Act();
+                    });
+                }
+            });
         }
 
         public override CombatAction GetRiposte (AttackResult attack_result) {

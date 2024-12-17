@@ -11,7 +11,7 @@ namespace Combat {
             set {
                 _position = value;
 
-                if (Animator != null) Animator.Flipped = _position.Side == Side.Right;
+                if (Loaded && Animator != null) Animator.Flipped = _position.Side == Side.Right;
             }
         }
         public int Slot { get => Position.Slot; }

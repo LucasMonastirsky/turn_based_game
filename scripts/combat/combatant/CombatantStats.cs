@@ -5,7 +5,7 @@ using Development;
 namespace Combat {
     public partial class Combatant {
         #region Base Stats
-        public int BaseMaxHealth { get; protected set; } = 1;
+        public int BaseMaxHealth { get; set; } = 1;
         public int BaseArmor { get; protected set; } = 0;
 
         public int BaseMaxTempo { get; protected set; } = 3;

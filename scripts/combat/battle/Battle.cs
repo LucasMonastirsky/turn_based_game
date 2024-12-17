@@ -38,5 +38,10 @@ namespace Combat {
 			RoundManager.Begin();
 			TurnManager.BeginLoop();
 		}
+
+		public void End () {
+			Combatants.ForEach(combatant => combatant.Unload());
+			Journey.EndBattle();
+		}
 	}
 }

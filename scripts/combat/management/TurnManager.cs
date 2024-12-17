@@ -19,7 +19,7 @@ namespace Combat {
         public static async void BeginLoop () {
             while (true) {
                 if (Combatants.OnSide(Side.Right).ToList().All(combatant => combatant.IsDead)) {
-                    Journey.EndBattle();
+                    Battle.Current.End();
                     break;
                 }
 

@@ -53,10 +53,14 @@ public partial class TestScreen : Node2D {
 		};
 
 		Ghoul.Pressed += () => {
-			CreateBattle(new () {
+			List<List<Combatant>> ghouls = new () {
 				new () { new Ghoul (), new Ghoul (), },
-				new () { new Ghoul (), new Ghoul (), new Ghoul (), },
-			});
+				// new () { new Ghoul (), new Ghoul (), new Ghoul (), },
+			};
+
+			ghouls.ForEach(list => list.ForEach(ghoul => ghoul.Health = 5));
+
+			CreateBattle(ghouls);
 		};
 	}
 }

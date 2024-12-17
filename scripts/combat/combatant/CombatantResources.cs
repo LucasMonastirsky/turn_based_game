@@ -1,3 +1,4 @@
+using Development;
 using Godot;
 using ResourceHelpers;
 
@@ -21,6 +22,8 @@ namespace Combat {
         }
 
         public void LoadResources () {
+            Dev.Log(Dev.Tags.CombatManagement, $"{Name} loading resources");
+
             LoadIcons();
             LoadSprites();
         }

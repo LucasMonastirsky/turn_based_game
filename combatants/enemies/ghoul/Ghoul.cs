@@ -10,7 +10,7 @@ namespace Combat {
             base.Setup();
             Actions = new (this);
 
-            BaseMaxHealth = 40;
+            BaseMaxHealth = 5;
 
             BaseDodgeBonus = 2;
         }
