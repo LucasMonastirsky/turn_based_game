@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://clqm27p6juc80" path="res://scripts/journey/nav/character_description/CharacterDescription.tscn" id="3_x2pa8"]
 [ext_resource type="PackedScene" uid="uid://dr4burjsrikxq" path="res://ui/common/slot_container/SlotContainer.tscn" id="4_qmqib"]
 
-[node name="NavScreen" type="Control" node_paths=PackedStringArray("TestButton", "LowerIconContainer", "UpperIconContainer", "SlotContainer")]
+[node name="NavScreen" type="Control" node_paths=PackedStringArray("TestButton", "LowerIconContainer", "UpperIconContainer", "MementoContainer", "ConsumableContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,7 +17,8 @@ TestButton = NodePath("VBoxContainer/HBoxContainer/CenterContainer/Button")
 LowerIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer2")
 UpperIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer")
 CharacterIconScene = ExtResource("2_ffq8e")
-SlotContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/SlotContainer")
+MementoContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/MementoContainer")
+ConsumableContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/ConsumableContainer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -49,6 +50,9 @@ layout_mode = 2
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
 
+[node name="MementoContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
+layout_mode = 2
+
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -64,5 +68,5 @@ size_flags_horizontal = 4
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="SlotContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
+[node name="ConsumableContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
 layout_mode = 2

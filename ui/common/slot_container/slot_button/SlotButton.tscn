@@ -6,14 +6,18 @@
 [ext_resource type="Texture2D" uid="uid://che0fpsyti3mq" path="res://assets/textures/combat/action_icons/focused.png" id="3_ybfc2"]
 
 [node name="SlotButton" type="CenterContainer" node_paths=PackedStringArray("Button", "OverlayTexture")]
-offset_right = 64.0
-offset_bottom = 64.0
+offset_right = 32.0
+offset_bottom = 32.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_b4kf2")
 Button = NodePath("TextureButton")
 OverlayTexture = NodePath("OverlayTexture")
+EmptyTexture = ExtResource("2_aqbvu")
+metadata/_edit_pinned_properties_ = [&"EmptyTexture"]
 
 [node name="TextureButton" type="TextureButton" parent="."]
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = ExtResource("2_aqbvu")
 texture_hover = ExtResource("3_0qow7")
@@ -24,3 +28,5 @@ stretch_mode = 5
 visible = false
 layout_mode = 2
 texture = ExtResource("3_ybfc2")
+expand_mode = 1
+stretch_mode = 5

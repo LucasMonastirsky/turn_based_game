@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
 using Utils;
+using static Godot.TranslationServer;
 
 public partial class Lara {
     public partial class ActionClasses {
         public class Unleash : MeleeAction {
-            public override string Name => "Unleash";
+            public override string Name => Translate("Alternative Therapy");
+            public override string Description => Translate("Consume 10 Rage to hit 3 times.");
             public override string IconFileName => "icon_alternative_therapy";
             public override int TempoCost { get; set; } = 3;
 

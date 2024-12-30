@@ -9,6 +9,7 @@ namespace Combat {
 
         [Export] private Container ActionButtonContainer;
         [Export] private ActionDetail ActionDetail;
+        [Export] private SlotContainer ConsumableContainer;
 
         private List<ActionButton> Buttons;
 
@@ -40,6 +41,8 @@ namespace Combat {
                 if (i < actions.Count) button.Action = actions[i];
                 else button.Action = null;
 			}
+
+            Current.ConsumableContainer.SetItems(combatant.Consumables.Cast<SlotItem>().ToList());
         }
 
         public static void ShowActionList () {

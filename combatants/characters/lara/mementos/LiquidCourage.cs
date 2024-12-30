@@ -1,7 +1,9 @@
+using static Godot.TranslationServer;
+
 public class LiquidCourage : Memento {
-    public override string Name => "Liquid Courage";
-    public override string Description => "Restores 10 HP temporarily";
-    public override string Flavor => "Makes you tell your friends that you love them";
+    public override string Name => Translate("Liquid Courage");
+    public override string Description => Translate("Restores 10 HP temporarily");
+    public override string Flavor => Translate("Makes you tell your friends that you love them");
 
     public override string IconFilePath => "res://combatants/characters/lara/resources/icons/mementos/icon_liquid_courage.png";
 

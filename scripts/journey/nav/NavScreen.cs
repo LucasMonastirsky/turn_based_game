@@ -7,7 +7,7 @@ public partial class NavScreen : Control {
 	[Export] Button TestButton;
 	[Export] Container LowerIconContainer, UpperIconContainer;
 	[Export] PackedScene CharacterIconScene;
-	[Export] SlotContainer SlotContainer;
+	[Export] SlotContainer MementoContainer, ConsumableContainer;
 
 	List<SlotButton> CharacterIcons = new ();
 
@@ -46,9 +46,13 @@ public partial class NavScreen : Control {
 				CharacterIcons.ForEach(x => x.Selected = false);
 				slot_button.Selected = true;
 				CharacterDescription.Combatant = combatant;
-				SlotContainer.SetItems(combatant.Mementos.Cast<SlotItem>().ToList());
+				MementoContainer.SetItems(combatant.Mementos.Cast<SlotItem>().ToList());
+				ConsumableContainer.SetItems(combatant.Consumables.Cast<SlotItem>().ToList());
 			};
 		});
+
+		CharacterDescription.Combatant = combatants.FirstOrDefault();
+		CharacterIcons[0].Selected = true;
 	}
 
 	public void DeLoad () {

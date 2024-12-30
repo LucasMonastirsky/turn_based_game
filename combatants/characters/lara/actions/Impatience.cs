@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
+using static Godot.TranslationServer;
 
 public partial class Lara {
     public partial class ActionClasses {
         public class Impatience : CombatAction {
-            public override string Name => "Impatience";
+            public override string Name => Translate("Impatience");
+            public override string Description => Translate("Gain 1 Rage.");
             public override string IconFileName => "icon_alternative_therapy";
             public override int TempoCost { get; set; } = 1;
 

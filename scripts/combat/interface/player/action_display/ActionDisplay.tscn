@@ -4,22 +4,22 @@
 [ext_resource type="PackedScene" uid="uid://52f5l8jv80e7" path="res://scripts/combat/interface/player/action_display/buttons/action/ActionButton.tscn" id="2_5ypy7"]
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_detail/CombatantDetail.cs" id="2_c2qaw"]
 [ext_resource type="PackedScene" uid="uid://doerpx5d6chaf" path="res://scripts/combat/interface/player/action_display/combatant_detail/stat_label/StatLabel.tscn" id="3_ljc2d"]
-[ext_resource type="PackedScene" uid="uid://bf57vf5r4tujs" path="res://scripts/combat/interface/player/action_display/buttons/item/ItemButton.tscn" id="4_pf0cr"]
 [ext_resource type="Texture2D" uid="uid://c0sc75g2twb14" path="res://scripts/combat/interface/player/action_display/jinx.png" id="4_psvi2"]
-[ext_resource type="Texture2D" uid="uid://comxk58orqvwc" path="res://scripts/combat/interface/player/action_display/icons/icon_damage.png" id="5_fmdfk"]
+[ext_resource type="Texture2D" uid="uid://comxk58orqvwc" path="res://assets/textures/icons/stats/icon_damage.png" id="5_fmdfk"]
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/combatant_detail/CombatantStatContainer.cs" id="5_osfxy"]
-[ext_resource type="Texture2D" uid="uid://5somtb51o6gu" path="res://scripts/combat/interface/player/action_display/icons/icon_armor.png" id="6_2kcft"]
+[ext_resource type="Texture2D" uid="uid://5somtb51o6gu" path="res://assets/textures/icons/stats/icon_armor.png" id="6_2kcft"]
 [ext_resource type="Script" path="res://scripts/combat/interface/player/action_display/ActionDetail.cs" id="6_ijw6k"]
 [ext_resource type="PackedScene" uid="uid://csor2jw81x2na" path="res://scripts/combat/interface/player/action_display/action_detail/ActionDetailStat.tscn" id="6_uu3hs"]
-[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://scripts/combat/interface/player/action_display/icons/icon_melee.png" id="8_1nnk4"]
-[ext_resource type="Texture2D" uid="uid://df1wortnxxt8i" path="res://scripts/combat/interface/player/action_display/icons/icon_parry_negation.png" id="9_bqoj2"]
-[ext_resource type="Texture2D" uid="uid://dfx8cngwtitwo" path="res://scripts/combat/interface/player/action_display/icons/icon_parry.png" id="9_p2nc0"]
-[ext_resource type="Texture2D" uid="uid://bkdf0cq28kmo8" path="res://scripts/combat/interface/player/action_display/icons/icon_dodge_negation.png" id="10_oa5gh"]
-[ext_resource type="Texture2D" uid="uid://eusto0ta2f3f" path="res://scripts/combat/interface/player/action_display/icons/icon_dodge.png" id="10_ylfxd"]
-[ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://scripts/combat/interface/player/action_display/icons/icon_crit.png" id="11_hb1tf"]
-[ext_resource type="Texture2D" uid="uid://deb0np5dh3o4k" path="res://scripts/combat/interface/player/action_display/icons/icon_tempo.png" id="15_g5t7j"]
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://assets/textures/icons/stats/icon_melee.png" id="8_1nnk4"]
+[ext_resource type="Texture2D" uid="uid://df1wortnxxt8i" path="res://assets/textures/icons/stats/icon_parry_negation.png" id="9_bqoj2"]
+[ext_resource type="Texture2D" uid="uid://dfx8cngwtitwo" path="res://assets/textures/icons/stats/icon_parry.png" id="9_p2nc0"]
+[ext_resource type="Texture2D" uid="uid://bkdf0cq28kmo8" path="res://assets/textures/icons/stats/icon_dodge_negation.png" id="10_oa5gh"]
+[ext_resource type="Texture2D" uid="uid://eusto0ta2f3f" path="res://assets/textures/icons/stats/icon_dodge.png" id="10_ylfxd"]
+[ext_resource type="Texture2D" uid="uid://cddmnrlhwfuqa" path="res://assets/textures/icons/stats/icon_crit.png" id="11_hb1tf"]
+[ext_resource type="Texture2D" uid="uid://deb0np5dh3o4k" path="res://assets/textures/icons/stats/icon_tempo.png" id="15_g5t7j"]
+[ext_resource type="PackedScene" uid="uid://dr4burjsrikxq" path="res://ui/common/slot_container/SlotContainer.tscn" id="18_jqbrd"]
 
-[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetail")]
+[node name="ActionDisplay" type="HBoxContainer" node_paths=PackedStringArray("ActionButtonContainer", "ActionDetail", "ConsumableContainer")]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -32,6 +32,7 @@ size_flags_vertical = 4
 script = ExtResource("1_6uhtl")
 ActionButtonContainer = NodePath("ActionButtonContainer")
 ActionDetail = NodePath("ActionDetail")
+ConsumableContainer = NodePath("MarginContainer")
 
 [node name="CombatantDetail" type="HBoxContainer" parent="." node_paths=PackedStringArray("Icon", "LabelName", "StatLabelContainer")]
 layout_mode = 2
@@ -121,11 +122,12 @@ layout_mode = 2
 [node name="ActionButton7" parent="ActionButtonContainer" instance=ExtResource("2_5ypy7")]
 layout_mode = 2
 
-[node name="ActionDetail" type="VBoxContainer" parent="." node_paths=PackedStringArray("Title", "StatContainer", "StatTempo", "StatDamage", "StatParryNegation", "StatDodgeNegation", "StatCrit")]
+[node name="ActionDetail" type="VBoxContainer" parent="." node_paths=PackedStringArray("Title", "Description", "StatContainer", "StatTempo", "StatDamage", "StatParryNegation", "StatDodgeNegation", "StatCrit")]
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("6_ijw6k")
 Title = NodePath("ActionDetailTitle/ActionDetailTitleLabel")
+Description = NodePath("ActionDetailDescription")
 StatContainer = NodePath("ActionDetailTitle/ActionDetailStatContainer")
 StatTempo = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatTempo")
 StatDamage = NodePath("ActionDetailTitle/ActionDetailStatContainer/ActionDetailStatDamage")
@@ -170,37 +172,5 @@ layout_mode = 2
 size_flags_vertical = 3
 autowrap_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="MarginContainer" parent="." instance=ExtResource("18_jqbrd")]
 layout_mode = 2
-columns = 4
-
-[node name="ItemButton0" parent="GridContainer" instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-
-[node name="ItemButton1" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")
-
-[node name="ItemButton2" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")
-
-[node name="ItemButton3" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")
-
-[node name="ItemButton4" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")
-
-[node name="ItemButton5" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")
-
-[node name="ItemButton6" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")
-
-[node name="ItemButton7" parent="GridContainer" node_paths=PackedStringArray("Button") instance=ExtResource("4_pf0cr")]
-layout_mode = 2
-Button = NodePath("../ItemButton0/ActionDisplayButton")

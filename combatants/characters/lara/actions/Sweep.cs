@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Combat;
 using Utils;
+using static Godot.TranslationServer;
 
 public partial class Lara {
     public partial class ActionClasses {
         public class Sweep : MeleeAction {
-            public override string Name => "Sweep";
+            public override string Name => Translate("Sweep");
+            public override string Description => Translate("Hit 2 targets.");
             public override string IconFileName => "icon_sweep";
             public override int TempoCost { get; set; } = 2;
 

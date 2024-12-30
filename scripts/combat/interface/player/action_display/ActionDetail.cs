@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using Combat;
-using Development;
 using Godot;
 
 public partial class ActionDetail : VBoxContainer {
-	[Export] public Label Title;
+	[Export] public Label Title, Description;
 	[Export] Control StatContainer;
 	[Export] ActionDetailStat StatTempo, StatDamage, StatParryNegation, StatDodgeNegation, StatCrit;
 
@@ -19,6 +17,7 @@ public partial class ActionDetail : VBoxContainer {
 			}
 			else {
 				Title.Text = _action.Name;
+				Description.Text = _action.Description;
 				StatContainer.Visible = true;
 				StatTempo.Value = _action.TempoCost;
 

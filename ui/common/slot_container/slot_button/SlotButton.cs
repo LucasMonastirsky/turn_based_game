@@ -12,13 +12,14 @@ public partial class SlotButton : CenterContainer {
 
 	[Export] TextureButton Button;
 	[Export] TextureRect OverlayTexture;
+	[Export] Texture2D EmptyTexture;
 
 	private SlotItem _item;
 	public SlotItem Item {
 		get => _item;
 		set {
 			_item = value;
-			Button.TextureNormal = Item.IconTexture;
+			Texture = Item?.IconTexture ?? EmptyTexture;
 		}
 	}
 

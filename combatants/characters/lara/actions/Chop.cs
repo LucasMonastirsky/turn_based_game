@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Combat;
+using static Godot.TranslationServer;
 
 public partial class Lara {
     public partial class ActionClasses {
         public class Chop : MeleeAction {
-            public override string Name => "Chop";
+            public override string Name => Translate("Chop");
+            public override string Description => Translate("Hit an enemy.");
             public override string IconFileName => "icon_chop";
             public override int TempoCost { get; set; } = 2;
 

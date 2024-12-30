@@ -2,7 +2,7 @@ using Combat;
 using Godot;
 
 public partial class CharacterDescription : PanelContainer {
-	[Export] public Label LabelName;
+	[Export] public Label LabelName, LabelHealth;
 	[Export] StatIcon StatDamage, StatArmor, StatHit, StatCrit, StatParry, StatDodge;
 
 	private static Combatant _combatant;
@@ -17,6 +17,7 @@ public partial class CharacterDescription : PanelContainer {
 			else {
 				Current.Visible = true;
 				Current.LabelName.Text = value.Name;
+				Current.LabelHealth.Text = $"{value.Health}/{value.MaxHealth}";
 
 				Current.StatDamage.Value = value.DamageBonus;
 				Current.StatArmor.Value = value.Armor;

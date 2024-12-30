@@ -16,6 +16,7 @@ namespace Combat {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }
+        public virtual string Description { get; } = "";
 
         public virtual string IconFileName => null;
         public Texture2D IconTexture = null;

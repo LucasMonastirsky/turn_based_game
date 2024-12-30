@@ -12,7 +12,11 @@ public partial class Journey : Control {
 	public List<Combatant> Characters = new () {
 		new Oda () { Position = new () { Row = 0 } },
 		new Joseph () { Position = new () { Row = 0 } },
-		new Lara () { Position = new () { Row = 0 }, Mementos = new () { new LiquidCourage (), new TraitorsRing (), new FamilyHeirloom () } },
+		new Lara () {
+			Position = new () { Row = 0 },
+			Mementos = new () { new LiquidCourage (), new TraitorsRing (), new FamilyHeirloom () },
+			Consumables = new () { new HealingTonic (), },
+		},
 		new Anna () { Position = new () { Row = 1 } },
 		new Isabel () { Position = new () { Row = 1 } },
 	};

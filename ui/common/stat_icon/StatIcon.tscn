@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://32n5eehfp8b5"]
+
+[ext_resource type="Texture2D" uid="uid://bj7im0slub20f" path="res://assets/textures/icons/stats/icon_melee.png" id="1_aafor"]
+
+[node name="TextureRect" type="TextureRect"]
+custom_minimum_size = Vector2(16, 16)
+texture = ExtResource("1_aafor")
+expand_mode = 1
+stretch_mode = 5
