@@ -1,9 +1,32 @@
 using System;
+using Development;
 using Godot;
 
 public partial class SlotButton : CenterContainer {
+	public static int id_count = 0;
+	public int id;
+
+	public SlotButton () {
+		id = id_count++;
+	}
+
 	[Export] TextureButton Button;
 	[Export] TextureRect OverlayTexture;
+
+	private SlotItem _item;
+	public SlotItem Item {
+		get => _item;
+		set {
+			_item = value;
+			Button.TextureNormal = Item.IconTexture;
+		}
+	}
+
+	public Texture2D Texture {
+		set {
+			Button.TextureNormal = value;
+		}
+	}
 
 	private bool _selected = false;
 	public bool Selected {
@@ -15,19 +38,13 @@ public partial class SlotButton : CenterContainer {
 	}
 
 	public bool Hovered { get; private set; }
-
-	public Texture2D Texture {
-		get => Button.TextureNormal;
-		set { Button.TextureNormal = value; }
-	}
+	public Action OnHovered = () => {};
 
 	public Action OnPress {
 		set {
 			Button.Pressed += value;
 		}
 	}
-
-	public Action OnHovered = () => {};
 
 	public override void _Process (double delta) {
 		if (!Hovered && Button.IsHovered()) {

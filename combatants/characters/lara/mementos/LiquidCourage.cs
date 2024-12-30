@@ -1,7 +1,9 @@
 public class LiquidCourage : Memento {
     public override string Name => "Liquid Courage";
+    public override string Description => "Restores 10 HP temporarily";
+    public override string Flavor => "Makes you tell your friends that you love them";
 
-    public override string IconFilePath => null;
+    public override string IconFilePath => "res://combatants/characters/lara/resources/icons/mementos/icon_liquid_courage.png";
 
     public new Lara User => base.User as Lara;
 

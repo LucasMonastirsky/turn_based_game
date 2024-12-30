@@ -1,17 +1,26 @@
 using System;
 using Combat;
+using Godot;
+using ResourceHelpers;
 using Utils;
 
-public abstract class Memento : Source {
+public abstract class Memento : Source, SlotItem {
     private int _id = RNG.NewId;
     public int Id => _id;
 
-    public abstract string Name { get; }
     public abstract string IconFilePath { get; }
+    public Texture2D IconTexture { get; private set; }
+    public abstract string Name { get; }
+    public abstract string Description { get; }
+    public abstract string Flavor { get; }
 
     public Type CombatantType { get; }
 
     public Combatant User { get; set; }
+
+    public Memento () {
+        IconTexture = Resources.LoadTexture(IconFilePath);
+    }
 
     public virtual void Setup () {}
     public virtual void Clear () {}

@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using Combat;
-using Development;
 using Godot;
 
 public partial class NavScreen : Control {
 	[Export] Button TestButton;
 	[Export] Container LowerIconContainer, UpperIconContainer;
 	[Export] PackedScene CharacterIconScene;
+	[Export] SlotContainer SlotContainer;
 
 	List<SlotButton> CharacterIcons = new ();
 
@@ -45,6 +46,7 @@ public partial class NavScreen : Control {
 				CharacterIcons.ForEach(x => x.Selected = false);
 				slot_button.Selected = true;
 				CharacterDescription.Combatant = combatant;
+				SlotContainer.SetItems(combatant.Mementos.Cast<SlotItem>().ToList());
 			};
 		});
 	}
