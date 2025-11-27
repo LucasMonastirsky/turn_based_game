@@ -3,104 +3,104 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Combat {
-    partial class Ghoul {
-        public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
+	partial class Ghoul {
+		public override List<CombatAction> ActionList => FetchActionsFrom(Actions);
 
-        public ActionStore Actions;
-        public class ActionStore {
-            public ActionClasses.Punch Punch;
-            public ActionClasses.Charge Charge;
+		public ActionStore Actions;
+		public class ActionStore {
+			public ActionClasses.Punch Punch;
+			public ActionClasses.Charge Charge;
 
-            public CommonActions.Move Move;
-            public CommonActions.Pass Pass;
+			public CommonActions.Move Move;
+			public CommonActions.Pass Pass;
 
-            public ActionStore (Ghoul ghoul) {
-                foreach (var field in typeof(ActionStore).GetFields()) {
-                    field.SetValue(this, Activator.CreateInstance(field.FieldType, ghoul));
-                }
-            }
-        }
+			public ActionStore (Ghoul ghoul) {
+				foreach (var field in typeof(ActionStore).GetFields()) {
+					field.SetValue(this, Activator.CreateInstance(field.FieldType, ghoul));
+				}
+			}
+		}
 
-        public class ActionClasses {
-            public class Punch : CombatAction {
-                public override string Name => "Punch";
+		public class ActionClasses {
+			public class Punch : CombatAction {
+				public override string Name => "Punch";
 
-                public override int TempoCost { get; set; } = 2;
+				public override int TempoCost { get; set; } = 2;
 
-                public override List<Selector> Selectors { get; protected set; } = new () {
-                    CommonSelectors.Melee,
-                };
+				public override List<Selector> Selectors { get; protected set; } = new () {
+					CommonSelectors.Melee,
+				};
 
-                public new Ghoul User => base.User as Ghoul;
+				public new Ghoul User => base.User as Ghoul;
 
-                public Punch (Ghoul user) : base (user) {}
+				public Punch (Ghoul user) : base (user) {}
 
-                public override async Task Run() {
-                    var target = Targets[0];
+				public override async Task Run() {
+					var target = Targets[0];
 
-                    var attack = new Attack {
-                        IsMelee = true,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = 10,
-                        DamageDeviation = Deviation.High,
-                        Sprite = User.Animations.Punch,
-                        ParryNegation = 1,
-                        DodgeNegation = 3,
-                    };
+					var attack = new Attack {
+						IsMelee = true,
+						MoveToMeleeDistance = true,
+						DamageAmount = 10,
+						DamageDeviation = Deviation.High,
+						Sprite = User.Animations.Punch,
+						ParryNegation = 1,
+						DodgeNegation = 3,
+					};
 
-                    await User.SendAttack(target, attack);
-                }
-            }
-        
-            public class Charge : CombatAction {
-                public override string Name => "Charge";
-                public override int TempoCost { get; set; } = 2;
+					await User.SendAttack(target, attack);
+				}
+			}
+		
+			public class Charge : CombatAction {
+				public override string Name => "Charge";
+				public override int TempoCost { get; set; } = 2;
 
-                public override List<Selector> Selectors { get; protected set; } = new () {
-                    new (TargetType.Position) {
-                        Side = SideSelector.Same,
-                        Row = 0,
-                        IsValidMovement = true,
-                    },
-                    new (TargetType.Single) {
-                        Side = SideSelector.Opposite,
-                        Row = 0,
-                        Validator = (target, user, previous_targets) => (
-                            Math.Abs(target.Slot - previous_targets[0].Slot) <= 1
-                        ),
-                    }
-                };
+				public override List<Selector> Selectors { get; protected set; } = new () {
+					new (TargetType.Position) {
+						Side = SideSelector.Same,
+						Row = 0,
+						IsValidMovement = true,
+					},
+					new (TargetType.Single) {
+						Side = SideSelector.Opposite,
+						Row = 0,
+						Validator = (target, user, previous_targets) => (
+							Math.Abs(target.Slot - previous_targets[0].Slot) <= 1
+						),
+					}
+				};
 
-                public override List<Restrictor> Restrictors { get; init; } = new () {
-                    Combat.CommonRestrictors.BackRow,
-                };
+				public override List<Restrictor> Restrictors { get; init; } = new () {
+					Combat.CommonRestrictors.BackRow,
+				};
 
-                public new Ghoul User => base.User as Ghoul;
-                public Charge (Ghoul user) : base (user) {}
+				public new Ghoul User => base.User as Ghoul;
+				public Charge (Ghoul user) : base (user) {}
 
-                public override async Task Run () {
-                    var target_position = Targets[0];
-                    var target_enemy = Targets[1];
+				public override async Task Run () {
+					var target_position = Targets[0];
+					var target_enemy = Targets[1];
 
-                    var movement = await User.MoveTo(target_position);
+					var movement = await User.MoveTo(target_position);
 
-                    if (movement.Prevented) return;
+					if (movement.Prevented) return;
 
-                    var attack = new Attack {
-                        ParryNegation = 5,
-                        DodgeNegation = 6,
-                        IsMelee = true,
-                        MoveToMeleeDistance = true,
-                        DamageAmount = 12,
-                        DamageDeviation = Deviation.Low,
-                        Sprite = User.Animations.Charge,
-                    };
+					var attack = new Attack {
+						ParryNegation = 5,
+						DodgeNegation = 6,
+						IsMelee = true,
+						MoveToMeleeDistance = true,
+						DamageAmount = 12,
+						DamageDeviation = Deviation.Low,
+						Sprite = User.Animations.Charge,
+					};
 
-                    await User.SendAttack(target_enemy, attack, async result => {
-                        if (result.DamageDone > 0) User.Heal(result.DamageDone / 2);
-                    });
-                }
-            }
-        }
-    }
+					await User.SendAttack(target_enemy, attack, async result => {
+						if (result.DamageDone > 0) User.Heal(result.DamageDone / 2);
+					});
+				}
+			}
+		}
+	}
 }

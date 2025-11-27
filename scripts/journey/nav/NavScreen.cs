@@ -24,7 +24,7 @@ public partial class NavScreen : Control {
 					new Ghoul (),
 				}
 			};
-			ghouls.ForEach(list => list.ForEach(ghoul => ghoul.BaseMaxHealth = 5));
+			ghouls.ForEach(list => list.ForEach(ghoul => ghoul.BaseMaxHealth = 20));
 			Journey.StartBattle(ghouls);
 		};
 	}

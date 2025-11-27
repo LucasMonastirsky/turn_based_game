@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c3dvaf8wl8ynh"]
 
-[ext_resource type="Script" path="res://scripts/journey/Journey.cs" id="1_5536m"]
+[ext_resource type="Script" uid="uid://8y3tmh6qx0um" path="res://scripts/journey/Journey.cs" id="1_5536m"]
 [ext_resource type="PackedScene" uid="uid://dv41apebh6yco" path="res://scripts/journey/nav/NavScreen.tscn" id="2_s8exm"]
 [ext_resource type="PackedScene" uid="uid://c8impj2vemvl" path="res://TestBattle.tscn" id="3_e3tga"]
 
