@@ -1,6 +1,6 @@
 using static Godot.TranslationServer;
 
-public class HealingTonic : Consumable {
+public class HealingTonic : Item {
     public override string Name => Translate("Healing Tonic");
     public override string Description => Translate("Heal 10 Health");
     public override string Flavor => Translate("One would think it'd take a while to take effect.");

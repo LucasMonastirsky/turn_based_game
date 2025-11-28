@@ -1,7 +1,7 @@
 using Combat;
 using static Godot.TranslationServer;
 
-public class TraitorsRing : Memento {
+public class TraitorsRing : Item {
 	public override string Name => Translate("Traitor's Ring");
 	public override string Description => Translate("Gain 1 Rage at the end of each turn.");
 	public override string Flavor => Translate("The memory of just considering it is enough to make her blood boil.");

@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Combat;
 using Godot;
 using ResourceHelpers;
 using Utils;
 
-public abstract class Memento : Source, SlotItem {
+public abstract class Item : Source, SlotItem {
     private int _id = RNG.NewId;
     public int Id => _id;
 
@@ -14,11 +15,11 @@ public abstract class Memento : Source, SlotItem {
     public abstract string Description { get; }
     public abstract string Flavor { get; }
 
-    public Type CombatantType { get; }
+    public List<Type> CombatantTypeRestrictions { get; }
 
     public Combatant User { get; set; }
 
-    public Memento () {
+    public Item () {
         IconTexture = Resources.LoadTexture(IconFilePath);
     }
 

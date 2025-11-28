@@ -12,14 +12,16 @@ namespace Combat {
         Melee,
     }
 
-    public abstract partial class CombatAction : Source {
+    public abstract partial class CombatAction : Source, SlotItem {
         private int _id { get; } = RNG.NewId;
         public int Id => _id;
         public abstract string Name { get; }
         public virtual string Description { get; } = "";
+        public string Flavor { get; } = "";
 
         public virtual string IconFileName => null;
-        public Texture2D IconTexture = null;
+        public Texture2D IconTexture { get; set; } = null;
+
         public virtual int? DisplayIndex => null;
 
         public abstract int TempoCost { get; set; }

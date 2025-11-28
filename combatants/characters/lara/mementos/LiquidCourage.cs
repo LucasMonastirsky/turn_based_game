@@ -1,6 +1,6 @@
 using static Godot.TranslationServer;
 
-public class LiquidCourage : Memento {
+public class LiquidCourage : Item {
 	public override string Name => Translate("Liquid Courage");
 	public override string Description => Translate("Restores 10 HP temporarily");
 	public override string Flavor => Translate("Makes you tell your friends that you love them");

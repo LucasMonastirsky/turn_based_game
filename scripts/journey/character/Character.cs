@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Combat;
-using Godot;
+using Development;
 
-public abstract class Character {
-    public abstract string IconFilePath { get; }
-
-    public abstract Type CombatantType { get; }
+public class Character {
+    public Type CombatantType { get; }
+    public Combatant Combatant;
 
     public int Health, MaxHealth;
 
     public int Row;
 
-    public List<Memento> Mementos = new ();
+    public Character (Type combatant_type) {
+        if (!combatant_type.IsSubclassOf(typeof(Combatant))) Dev.Error("Tried to assign non-combatant type to character");
 
-    public Combatant Spawn () {
-        var combatant = Activator.CreateInstance(CombatantType) as Combatant;
-        combatant.Mementos = Mementos;
-        return combatant;
+        CombatantType = combatant_type;
+        Combatant = Activator.CreateInstance(CombatantType) as Combatant;
+        Combatant.LoadResources();
     }
 }

@@ -24,8 +24,7 @@ namespace Combat {
 
         public int BulletDamage = 6;
 
-        protected override void Setup () {
-            base.Setup();
+        public Anna () {
             Actions = new (this);
 
             BaseMaxHealth = 30;
@@ -34,6 +33,10 @@ namespace Combat {
             BaseParryBonus = 0;
             BaseDodgeBonus = 3;
             BaseCritBonus = 1;
+        }
+
+        protected override void Setup () {
+            base.Setup();
 
             AddStatusEffect(new Loaded (MaxBullets));
         }

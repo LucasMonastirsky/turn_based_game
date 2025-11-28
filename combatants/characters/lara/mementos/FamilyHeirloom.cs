@@ -1,6 +1,6 @@
 using static Godot.TranslationServer;
 
-public class FamilyHeirloom : Memento {
+public class FamilyHeirloom : Item {
 	public override string Name => Translate("Family Heirloom");
 	public override string Description => Translate("+2 dodge bonus.");
 	public override string Flavor => Translate("Had she sold it, she wouldn't have had to work a single day.");

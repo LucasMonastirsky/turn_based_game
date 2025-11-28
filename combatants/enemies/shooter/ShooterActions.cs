@@ -58,7 +58,7 @@ public partial class Shooter : Combatant {
 
             public override async Task Run () {
                 var attack = new Attack () {
-                    DamageAmount = 10,
+                    DamageAmount = 20,
                     DamageDeviation = Deviation.Mid,
                     ParryNegation = 15,
                     DodgeNegation = 8,

@@ -1,11 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://dv41apebh6yco"]
 
-[ext_resource type="Script" path="res://scripts/journey/nav/NavScreen.cs" id="1_yrw1p"]
+[ext_resource type="Script" uid="uid://kuvfmr5eevpp" path="res://scripts/journey/nav/NavScreen.cs" id="1_yrw1p"]
 [ext_resource type="PackedScene" uid="uid://8bwqq5fwvqyf" path="res://ui/common/slot_container/slot_button/SlotButton.tscn" id="2_ffq8e"]
 [ext_resource type="PackedScene" uid="uid://clqm27p6juc80" path="res://scripts/journey/nav/character_description/CharacterDescription.tscn" id="3_x2pa8"]
 [ext_resource type="PackedScene" uid="uid://dr4burjsrikxq" path="res://ui/common/slot_container/SlotContainer.tscn" id="4_qmqib"]
 
-[node name="NavScreen" type="Control" node_paths=PackedStringArray("TestButton", "LowerIconContainer", "UpperIconContainer", "MementoContainer", "ConsumableContainer")]
+[node name="NavScreen" type="Control" node_paths=PackedStringArray("TestButton", "LowerIconContainer", "UpperIconContainer", "SkillContainer", "ItemContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,8 +17,8 @@ TestButton = NodePath("VBoxContainer/HBoxContainer/CenterContainer/Button")
 LowerIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer2")
 UpperIconContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/CenterContainer/VBoxContainer/HBoxContainer")
 CharacterIconScene = ExtResource("2_ffq8e")
-MementoContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/MementoContainer")
-ConsumableContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/ConsumableContainer")
+SkillContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/SkillContainer")
+ItemContainer = NodePath("VBoxContainer/PanelContainer/HBoxContainer2/ItemContainer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -50,7 +50,7 @@ layout_mode = 2
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="MementoContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
+[node name="SkillContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
 layout_mode = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2"]
@@ -68,5 +68,5 @@ size_flags_horizontal = 4
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="ConsumableContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
+[node name="ItemContainer" parent="VBoxContainer/PanelContainer/HBoxContainer2" instance=ExtResource("4_qmqib")]
 layout_mode = 2

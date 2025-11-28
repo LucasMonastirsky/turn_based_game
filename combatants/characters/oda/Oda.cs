@@ -8,8 +8,7 @@ public partial class Oda : Combatant {
     public int SwordDamage = 8;
     public int ShurikenDamage = 3;
 
-    protected override void Setup () {
-        base.Setup();
+    public Oda () {
         Actions = new ActionStore(this);
 
         BaseMaxHealth = 40;
@@ -17,6 +16,10 @@ public partial class Oda : Combatant {
         BaseHitBonus = 5;
         BaseParryBonus = 8;
         BaseDodgeBonus = 3;
+    }
+
+    protected override void Setup () {
+        base.Setup();
 
         Passives = new () {
             new Dojutsu (this),

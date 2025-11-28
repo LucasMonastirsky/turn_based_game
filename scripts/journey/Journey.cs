@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Combat;
+using Development;
 using Godot;
 
 public partial class Journey : Control {
@@ -9,21 +11,19 @@ public partial class Journey : Control {
 	private NavScreen NavScreen;
 	private Battle Battle;
 
-	public List<Combatant> Characters = new () {
-		new Oda () { Position = new () { Row = 0 } },
-		new Joseph () { Position = new () { Row = 0 } },
-		new Lara () {
-			Position = new () { Row = 0 },
-			Mementos = new () { new LiquidCourage (), new TraitorsRing (), new FamilyHeirloom () },
-			Consumables = new () { new HealingTonic (), },
-		},
-		new Anna () { Position = new () { Row = 1 } },
-		new Isabel () { Position = new () { Row = 1 } },
+	public List<Character> Characters = new () {
+		new (typeof(Oda)) { Row = 0 },
+		new (typeof(Joseph)) { Row = 0 },
+		new (typeof(Lara)) { Row = 0, },
+		new (typeof(Isabel)) { Row = 1 },
+		new (typeof(Anna)) { Row = 1 },
 	};
 
 	public static Journey Current;
 	public Journey () {
 		Current = this;
+
+		Characters.Find(c => c.Combatant.Name == "Lara").Combatant.Items = new () { new LiquidCourage (), new TraitorsRing (), new FamilyHeirloom (), new HealingTonic () };
 	}
 
 	public override void _Ready () {
@@ -39,8 +39,8 @@ public partial class Journey : Control {
 
 		Current.Battle.LoadCombatants(
 			new List<List<Combatant>> () {
-				Current.Characters.Where(combatant => combatant.Row == 0).ToList(),
-				Current.Characters.Where(combatant => combatant.Row == 1).ToList(),
+				Current.Characters.Where(character => character.Row == 0).Select(character => character.Combatant).ToList(),
+				Current.Characters.Where(character => character.Row == 1).Select(character => character.Combatant).ToList(),
 			},
 			enemies
 		);

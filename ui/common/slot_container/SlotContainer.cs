@@ -44,6 +44,7 @@ public partial class SlotContainer : MarginContainer {
     }
 
 	public void SetItems (List<SlotItem> items) {
+		Dev.Log($"Set items to {items.Count()}");
 		for (var i = 0; i < Buttons.Count; i++) {
 			Buttons[i].Item = items.ElementAtOrDefault(i);
 		}

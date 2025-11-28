@@ -10,8 +10,7 @@ public partial class Lara : Combatant {
 	public int PunchDamage = 6;
 	public int RageBonus = 0;
 
-	protected override void Setup () {
-		base.Setup();
+	public Lara () {
 		Actions = new (this);
 
 		BaseMaxHealth = 50;
@@ -19,6 +18,10 @@ public partial class Lara : Combatant {
 		BaseHitBonus = 2;
 		BaseParryBonus = 1;
 		BaseDodgeBonus = 3;
+    }
+
+	protected override void Setup () {
+		base.Setup();
 
 		CombatEvents.AfterDamage.Always(async damage_instance => {
 			if (damage_instance.Receiver == this) AddStatusEffect(new Rage(1));

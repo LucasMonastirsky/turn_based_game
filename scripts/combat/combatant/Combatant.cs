@@ -26,8 +26,7 @@ namespace Combat {
 
         public CombatantNode Node;
 
-        public List<Memento> Mementos = new ();
-        public List<Consumable> Consumables = new ();
+        public List<Item> Items = new ();
 
         public Combatant () {
             StatBonuses = new ();
